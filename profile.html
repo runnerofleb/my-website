@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your Profile — PrivateCreditMCA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Sora:wght@300;400;500;600;700;800&family=Geist+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a10;--sf:#0e1422;--el:#131b2e;--teal:#00d4c8;--t4:#00e8db;--cyan:#00c8ff;--grn:#00e676;--amb:#ffc446;--red:#ff5252;--pur:#b388ff;--org:#ff7b42;--gold:#ffd700;--t1:#f0f4fc;--t2:#c8d0e0;--t3:#8b97b0;--tx4:#586580;--tx5:#3a4560;--bd:rgba(255,255,255,.04);--bd2:rgba(255,255,255,.07);--bdt:rgba(0,212,200,.15);--r:16px;--r2:12px;--ex:cubic-bezier(.16,1,.3,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#00b0a6 var(--bg)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+::selection{background:rgba(0,212,200,.3)}a{color:inherit;text-decoration:none}
+.grain{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:180px}
+
+.nav{position:sticky;top:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,32px);background:rgba(6,10,16,.8);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--bd2)}
+.nav-l{display:flex;align-items:center;gap:12px}
+.logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
+.logo::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.2))}
+.logo svg{position:relative;z-index:1}
+.nav-brand{font-weight:700;font-size:14px;letter-spacing:-.3px}.nav-brand em{font-style:normal;color:var(--t4)}
+.nav-sub{font-size:10px;color:var(--tx4);font-weight:600}
+.nav-pills{display:flex;gap:4px;background:var(--sf);border:1px solid var(--bd2);border-radius:100px;padding:3px}
+.nl{padding:6px 12px;border-radius:100px;font-size:11px;font-weight:500;color:var(--t3);transition:all .25s}
+.nl:hover{color:var(--t1)}.nl.active{color:var(--t1);background:rgba(0,212,200,.1);border:1px solid var(--bdt)}
+.nav-r{display:flex;gap:8px;align-items:center}
+.btn{padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;border:1px solid var(--bd2);background:var(--sf);color:var(--t2);cursor:pointer;font-family:'Sora',sans-serif;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--bdt);color:var(--t4);transform:translateY(-1px)}
+.btn-p{background:var(--teal);color:var(--bg);border-color:transparent}.btn-p:hover{box-shadow:0 6px 20px rgba(0,212,200,.25);color:var(--bg)}
+.btn-g{background:rgba(0,230,118,.06);border-color:rgba(0,230,118,.2);color:var(--grn)}
+.btn-d{background:rgba(255,82,82,.06);border-color:rgba(255,82,82,.2);color:var(--red)}
+.btn-sm{padding:6px 10px;font-size:11px;border-radius:8px}
+.btn-lg{padding:14px 28px;font-size:14px;border-radius:12px}
+.inp{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--bd2);background:rgba(0,0,0,.2);color:var(--t1);font-size:13px;font-family:'Sora',sans-serif;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,212,200,.06)}.inp::placeholder{color:rgba(139,151,176,.4)}
+select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23586580' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:28px}
+textarea.inp{resize:vertical;min-height:70px;line-height:1.5}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:100px;border:1px solid var(--bd2);background:rgba(0,0,0,.12);font-size:9px;font-weight:700;white-space:nowrap;color:var(--t3)}
+.pill.tl{border-color:var(--bdt);background:rgba(0,212,200,.06);color:var(--t4)}.pill.gn{border-color:rgba(0,230,118,.2);background:rgba(0,230,118,.06);color:var(--grn)}.pill.wn{border-color:rgba(255,196,70,.2);background:rgba(255,196,70,.06);color:var(--amb)}.pill.rd{border-color:rgba(255,82,82,.2);background:rgba(255,82,82,.06);color:var(--red)}.pill.gold{border-color:rgba(255,215,0,.25);background:rgba(255,215,0,.06);color:var(--gold)}
+
+.wrap{max-width:720px;margin:0 auto;padding:24px clamp(16px,3vw,32px)}
+.wrap-wide{max-width:960px;margin:0 auto;padding:24px clamp(16px,3vw,32px)}
+
+/* AUTH CARD */
+.auth-wrap{min-height:calc(100vh - 56px);display:flex;align-items:center;justify-content:center;padding:40px 16px}
+.auth-card{width:min(440px,100%);background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);overflow:hidden;position:relative}
+.auth-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--cyan),var(--grn))}
+.auth-body{padding:32px 28px}
+.auth-title{font-family:'Instrument Serif',serif;font-size:28px;letter-spacing:-.5px;text-align:center;margin-bottom:6px}
+.auth-title em{font-style:italic;color:var(--t4)}
+.auth-sub{font-size:13px;color:var(--tx4);text-align:center;margin-bottom:24px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--tx4);margin-bottom:5px}
+.field label .req{color:var(--teal)}
+.auth-toggle{text-align:center;margin-top:16px;font-size:12px;color:var(--tx4)}
+.auth-toggle a{color:var(--t4);font-weight:700;cursor:pointer}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--tx5);font-size:10px;font-weight:700;letter-spacing:1px}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--bd2)}
+
+/* ONBOARDING */
+.ob-step-bar{display:flex;align-items:center;gap:6px;justify-content:center;margin-bottom:24px}
+.ob-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.06);transition:all .3s}
+.ob-dot.active{background:var(--teal);box-shadow:0 0 10px rgba(0,212,200,.3)}
+.ob-dot.done{background:var(--grn)}
+.ob-line{width:24px;height:2px;background:var(--bd2);border-radius:1px}
+
+/* ROLE SELECT */
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.role-card{background:rgba(0,0,0,.08);border:2px solid var(--bd2);border-radius:var(--r2);padding:20px 16px;text-align:center;cursor:pointer;transition:all .3s}
+.role-card:hover{border-color:var(--bdt)}
+.role-card.selected{border-color:var(--teal);background:rgba(0,212,200,.04);box-shadow:0 0 20px rgba(0,212,200,.08)}
+.role-card .rc-icon{font-size:28px;margin-bottom:8px;display:block}
+.role-card .rc-name{font-size:14px;font-weight:800}
+.role-card .rc-desc{font-size:10px;color:var(--tx4);margin-top:4px;line-height:1.4}
+
+/* SPECIALTY CHIPS */
+.spec-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.spec-chip{padding:8px 14px;border-radius:100px;border:1px solid var(--bd2);background:rgba(0,0,0,.08);font-size:11px;font-weight:700;color:var(--t3);cursor:pointer;transition:all .2s;user-select:none}
+.spec-chip:hover{border-color:var(--bdt);color:var(--t1)}
+.spec-chip.selected{border-color:var(--teal);background:rgba(0,212,200,.06);color:var(--t4)}
+
+/* PROFILE DASHBOARD */
+.profile-grid{display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start}
+.profile-sidebar{position:sticky;top:80px}
+.ps-card{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);overflow:hidden;text-align:center}
+.ps-card::before{content:'';display:block;height:60px;background:linear-gradient(135deg,rgba(0,212,200,.08),rgba(0,200,255,.05))}
+.ps-avatar{width:72px;height:72px;border-radius:16px;margin:-36px auto 0;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:24px;font-weight:800;color:#fff;border:3px solid var(--sf);position:relative}
+.ps-name{font-size:17px;font-weight:800;margin-top:10px;letter-spacing:-.2px}
+.ps-handle{font-size:11px;color:var(--tx4);margin-top:2px}
+.ps-role{margin-top:8px}
+.ps-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--bd2);margin-top:16px}
+.ps-stat{background:var(--sf);padding:12px 8px;text-align:center}
+.ps-stat .ps-v{font-family:'Geist Mono',monospace;font-size:16px;font-weight:800}
+.ps-stat .ps-k{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--tx5);margin-top:2px}
+.ps-nav{padding:12px 16px;display:flex;flex-direction:column;gap:4px}
+.ps-nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:600;color:var(--tx4);cursor:pointer;transition:all .2s}
+.ps-nav-item:hover{background:rgba(0,212,200,.04);color:var(--t1)}
+.ps-nav-item.active{background:rgba(0,212,200,.06);color:var(--t4)}
+.ps-nav-item svg{flex-shrink:0}
+
+/* SECTIONS */
+.section{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+.sec-head{padding:16px 20px;border-bottom:1px solid var(--bd2);display:flex;align-items:center;justify-content:space-between}
+.sec-title{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.sec-body{padding:20px}
+.m-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tx4);margin-bottom:8px;margin-top:14px;display:flex;align-items:center;gap:8px}
+.m-label::after{content:'';flex:1;height:1px;background:var(--bd2)}
+.m-label:first-child{margin-top:0}
+
+/* DETAIL GRID */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.detail{background:rgba(0,0,0,.08);border:1px solid var(--bd2);border-radius:10px;padding:10px 12px}
+.detail .dk{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--tx5)}
+.detail .dv{font-size:13px;font-weight:700;margin-top:3px}
+
+/* SCORE RING */
+.score-ring{position:relative;display:inline-block;flex-shrink:0}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring circle{fill:none;stroke-linecap:round}
+.score-ring .bg{stroke:rgba(255,255,255,.06)}
+.score-ring .fg{transition:stroke-dashoffset .8s var(--ex)}
+.score-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-num .sn{font-family:'Geist Mono',monospace;font-weight:800;line-height:1}
+.score-num .sg{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx4);margin-top:2px}
+
+/* QUICK ACTIONS */
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qa-item{display:flex;align-items:center;gap:10px;padding:12px;background:rgba(0,0,0,.06);border:1px solid var(--bd2);border-radius:var(--r2);cursor:pointer;transition:all .25s}
+.qa-item:hover{border-color:var(--bdt);background:rgba(0,212,200,.02)}
+.qa-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.qa-text{font-size:12px;font-weight:700}.qa-sub{font-size:10px;color:var(--tx4);margin-top:1px}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(14,20,34,.96);border:1px solid var(--bdt);padding:10px 24px;border-radius:var(--r2);box-shadow:0 12px 40px rgba(0,0,0,.4);font-weight:700;font-size:12px;display:none;z-index:300;backdrop-filter:blur(16px);color:var(--t4)}
+.toast.show{display:block;animation:ti .25s var(--ex)}
+@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+@media(max-width:768px){.nav-pills{display:none}.profile-grid{grid-template-columns:1fr}.profile-sidebar{position:static}.detail-grid{grid-template-columns:1fr 1fr}.qa-grid{grid-template-columns:1fr}.role-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<nav class="nav">
+  <div class="nav-l"><a href="index.html" class="logo"><svg width="13" height="13" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div><div class="nav-brand">Private<em>Credit</em>MCA</div><div class="nav-sub" id="navSub">Profile</div></div></div>
+  <div class="nav-pills"><a href="index.html" class="nl">Home</a><a href="marketplace.html" class="nl">Marketplace</a><a href="deallab.html" class="nl">Deal Lab</a><a href="funders.html" class="nl">Funders</a><a href="pipeline.html" class="nl">Pipeline</a><a href="profile.html" class="nl active">Profile</a></div>
+  <div class="nav-r"><a href="index.html" class="btn">Home</a><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="btn btn-p">Community</a></div>
+</nav>
+
+<!-- AUTH VIEW -->
+<div id="authView" style="display:none">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-body">
+        <div style="text-align:center;margin-bottom:20px"><a href="index.html" class="logo" style="margin:0 auto;width:40px;height:40px;border-radius:11px"><svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        <div id="authSignup">
+          <div class="auth-title">Create your <em>account</em></div>
+          <div class="auth-sub">Join the platform that's replacing spreadsheets and email chains for MCA professionals.</div>
+          <div class="field"><label>Full Name <span class="req">*</span></label><input class="inp" id="aName" placeholder="Your full name"></div>
+          <div class="field"><label>Email <span class="req">*</span></label><input class="inp" id="aEmail" type="email" placeholder="you@company.com"></div>
+          <div class="field"><label>Password <span class="req">*</span></label><input class="inp" id="aPass" type="password" placeholder="Min 6 characters"></div>
+          <button class="btn btn-p btn-lg" style="width:100%;justify-content:center" id="btnSignup">Create Account</button>
+          <div class="auth-toggle">Already have an account? <a id="toLogin">Log in</a></div>
+        </div>
+        <div id="authLogin" style="display:none">
+          <div class="auth-title">Welcome <em>back</em></div>
+          <div class="auth-sub">Log in to access your profile, pipeline, and deals.</div>
+          <div class="field"><label>Email</label><input class="inp" id="lEmail" type="email" placeholder="you@company.com"></div>
+          <div class="field"><label>Password</label><input class="inp" id="lPass" type="password" placeholder="Your password"></div>
+          <button class="btn btn-p btn-lg" style="width:100%;justify-content:center" id="btnLogin">Log In</button>
+          <div class="auth-toggle">New here? <a id="toSignup">Create an account</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING VIEW -->
+<div id="onboardView" style="display:none">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:6px;margin-top:20px"><div class="auth-title">Set up your <em>profile</em></div><div class="auth-sub" id="obSubtitle">Tell us about yourself so we can personalize the platform.</div></div>
+    <div class="ob-step-bar" id="obSteps"></div>
+    <div class="auth-card" style="width:100%;max-width:540px;margin:0 auto">
+      <div class="auth-body">
+        <!-- OB STEP 1: ROLE -->
+        <div id="ob1">
+          <div style="font-size:14px;font-weight:800;margin-bottom:14px;text-align:center">What's your role?</div>
+          <div class="role-grid" id="roleGrid"></div>
+          <button class="btn btn-p btn-lg" style="width:100%;justify-content:center" id="obNext1">Continue</button>
+        </div>
+        <!-- OB STEP 2: SPECIALTIES -->
+        <div id="ob2" style="display:none">
+          <div style="font-size:14px;font-weight:800;margin-bottom:6px;text-align:center">Select your specialties</div>
+          <div style="font-size:11px;color:var(--tx4);text-align:center;margin-bottom:14px">Pick all industries you work with.</div>
+          <div class="spec-grid" id="specGrid"></div>
+          <div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-lg" style="flex:1;justify-content:center" id="obBack2">Back</button><button class="btn btn-p btn-lg" style="flex:1;justify-content:center" id="obNext2">Continue</button></div>
+        </div>
+        <!-- OB STEP 3: DETAILS -->
+        <div id="ob3" style="display:none">
+          <div style="font-size:14px;font-weight:800;margin-bottom:14px;text-align:center">Complete your profile</div>
+          <div class="field"><label>Company / ISO Name</label><input class="inp" id="obCompany" placeholder="Your company or ISO"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="field"><label>State</label><input class="inp" id="obState" placeholder="NY" maxlength="2" style="text-transform:uppercase"></div>
+            <div class="field"><label>Phone</label><input class="inp" id="obPhone" type="tel" placeholder="(555) 123-4567"></div>
+          </div>
+          <div class="field"><label>Bio / About</label><textarea class="inp" id="obBio" placeholder="Brief description — what you specialize in, your experience, what makes you different..."></textarea></div>
+          <div style="display:flex;gap:8px;margin-top:6px"><button class="btn btn-lg" style="flex:1;justify-content:center" id="obBack3">Back</button><button class="btn btn-p btn-lg" style="flex:1;justify-content:center" id="obFinish">Launch Profile →</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE DASHBOARD -->
+<div id="dashView" style="display:none">
+  <div class="wrap-wide">
+    <div class="profile-grid">
+      <!-- SIDEBAR -->
+      <div class="profile-sidebar">
+        <div class="ps-card" id="sidebarCard"></div>
+      </div>
+      <!-- MAIN -->
+      <div id="dashMain"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var $=function(id){return document.getElementById(id)};
+var toast=function(m){var t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},1400)};
+var esc=function(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")};
+var LS="pcmca_user_v1";
+var COLORS=["#2563eb","#059669","#dc2626","#7c3aed","#0891b2","#ea580c","#d946ef","#0d9488","#e11d48","#4f46e5"];
+
+function getUser(){try{return JSON.parse(localStorage.getItem(LS))}catch(e){return null}}
+function saveUser(u){localStorage.setItem(LS,JSON.stringify(u))}
+function avatarColor(name){var h=0;for(var i=0;i<name.length;i++)h=((h<<5)-h)+name.charCodeAt(i);return COLORS[Math.abs(h)%COLORS.length]}
+function initials(name){return name.split(" ").map(function(w){return w[0]}).join("").slice(0,2).toUpperCase()}
+
+var ROLES=[
+{id:"broker",name:"Broker / ISO",icon:"💼",desc:"I submit deals for merchants and earn commission on funded deals."},
+{id:"funder",name:"Funder",icon:"🏦",desc:"I review and fund MCA deals from brokers and direct merchants."},
+{id:"merchant",name:"Merchant",icon:"🏪",desc:"I own a business and need working capital or a merchant cash advance."},
+{id:"other",name:"Other",icon:"👤",desc:"Consultant, employee, curious professional, or just learning the industry."}
+];
+var INDUSTRIES=["Restaurant","Retail","Construction","Trucking","Medical","E-Commerce","Auto Repair","Services","Manufacturing","Real Estate","Hospitality"];
+var obStep=1;var obRole="";var obSpecs=[];
+var currentTab="overview";
+
+function shake(id){var el=$(id);if(!el)return;el.style.borderColor="var(--red)";el.style.animation="shake .4s";el.focus();setTimeout(function(){el.style.borderColor="";el.style.animation=""},500)}
+
+function showView(view){
+  $("authView").style.display=view==="auth"?"block":"none";
+  $("onboardView").style.display=view==="onboard"?"block":"none";
+  $("dashView").style.display=view==="dash"?"block":"none";
+}
+
+function route(){
+  var user=getUser();
+  if(!user){showView("auth");return}
+  if(!user.onboarded){showView("onboard");renderOnboard();return}
+  showView("dash");renderDashboard();
+}
+
+// ── AUTH ──
+$("toLogin").addEventListener("click",function(){$("authSignup").style.display="none";$("authLogin").style.display="block"});
+$("toSignup").addEventListener("click",function(){$("authLogin").style.display="none";$("authSignup").style.display="block"});
+
+$("btnSignup").addEventListener("click",function(){
+  var name=$("aName").value.trim();var email=$("aEmail").value.trim();var pass=$("aPass").value;
+  if(!name){shake("aName");return}if(!email||!email.includes("@")){shake("aEmail");return}if(!pass||pass.length<6){shake("aPass");return}
+  var user={name:name,email:email,handle:"@"+name.split(" ")[0].toLowerCase()+Math.floor(Math.random()*99),role:"",specialties:[],company:"",state:"",phone:"",bio:"",onboarded:false,joined:new Date().toISOString().slice(0,10),deals:0,funded:0,rating:0,docRate:0,tier:"new"};
+  saveUser(user);toast("Account created!");route();
+});
+
+$("btnLogin").addEventListener("click",function(){
+  var email=$("lEmail").value.trim();
+  if(!email){shake("lEmail");return}
+  var user=getUser();
+  if(user&&user.email===email){toast("Welcome back, "+user.name+"!");route();return}
+  // Demo: create stub user
+  var user={name:"Demo User",email:email,handle:"@demo",role:"broker",specialties:["Restaurant","Construction"],company:"Demo ISO",state:"NY",phone:"",bio:"",onboarded:true,joined:"2025-06-01",deals:12,funded:8,rating:4.3,docRate:88,tier:"verified"};
+  saveUser(user);toast("Welcome back!");route();
+});
+
+// ── ONBOARDING ──
+function renderOnboard(){
+  // Step dots
+  var dots="";
+  for(var i=1;i<=3;i++){
+    var cls=i===obStep?"active":i<obStep?"done":"";
+    dots+='<div class="ob-dot '+cls+'"></div>';
+    if(i<3)dots+='<div class="ob-line"></div>';
+  }
+  $("obSteps").innerHTML=dots;
+  $("ob1").style.display=obStep===1?"block":"none";
+  $("ob2").style.display=obStep===2?"block":"none";
+  $("ob3").style.display=obStep===3?"block":"none";
+}
+
+// Roles
+var roleHtml="";
+ROLES.forEach(function(r){
+  roleHtml+='<div class="role-card'+(obRole===r.id?" selected":"")+'" data-role="'+r.id+'"><span class="rc-icon">'+r.icon+'</span><div class="rc-name">'+r.name+'</div><div class="rc-desc">'+r.desc+'</div></div>';
+});
+$("roleGrid").innerHTML=roleHtml;
+document.querySelectorAll(".role-card").forEach(function(c){
+  c.addEventListener("click",function(){obRole=c.dataset.role;document.querySelectorAll(".role-card").forEach(function(x){x.classList.remove("selected")});c.classList.add("selected")});
+});
+
+// Specialties
+var specHtml="";
+INDUSTRIES.forEach(function(ind){
+  specHtml+='<div class="spec-chip" data-spec="'+ind+'">'+ind+'</div>';
+});
+$("specGrid").innerHTML=specHtml;
+document.querySelectorAll(".spec-chip").forEach(function(c){
+  c.addEventListener("click",function(){
+    var spec=c.dataset.spec;
+    if(obSpecs.indexOf(spec)>=0){obSpecs=obSpecs.filter(function(s){return s!==spec});c.classList.remove("selected")}
+    else{obSpecs.push(spec);c.classList.add("selected")}
+  });
+});
+
+$("obNext1").addEventListener("click",function(){
+  if(!obRole){toast("Select your role");return}
+  obStep=2;renderOnboard();
+});
+$("obBack2").addEventListener("click",function(){obStep=1;renderOnboard()});
+$("obNext2").addEventListener("click",function(){
+  if(!obSpecs.length){toast("Pick at least one specialty");return}
+  obStep=3;renderOnboard();
+});
+$("obBack3").addEventListener("click",function(){obStep=2;renderOnboard()});
+$("obFinish").addEventListener("click",function(){
+  var user=getUser();
+  user.role=obRole;user.specialties=obSpecs;
+  user.company=$("obCompany").value.trim();
+  user.state=($("obState").value||"").toUpperCase().slice(0,2);
+  user.phone=$("obPhone").value.trim();
+  user.bio=$("obBio").value.trim();
+  user.onboarded=true;
+  // Seed starter stats
+  if(user.role==="broker"){user.deals=0;user.funded=0;user.rating=0;user.docRate=0;user.tier="new"}
+  else if(user.role==="funder"){user.deals=0;user.funded=0;user.rating=0;user.tier="new"}
+  saveUser(user);toast("Profile live!");route();
+});
+
+// ── DASHBOARD ──
+function tierData(t){
+  var map={elite:{label:"Elite",cls:"gold"},trusted:{label:"Trusted",cls:"gn"},verified:{label:"Verified",cls:"tl"},new:{label:"New",cls:"pill"}};
+  return map[t]||map["new"];
+}
+function roleLabel(r){return{broker:"Broker",funder:"Funder",merchant:"Merchant",other:"Member"}[r]||"Member"}
+function scoreRing(score,size){
+  size=size||64;var r=(size-8)/2,circ=2*Math.PI*r,offset=circ-(score/100)*circ;
+  var color="var(--red)";if(score>=80)color="var(--grn)";else if(score>=60)color="var(--teal)";else if(score>=40)color="var(--amb)";
+  return'<div class="score-ring" style="width:'+size+'px;height:'+size+'px"><svg width="'+size+'" height="'+size+'"><circle class="bg" cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+r+'" stroke-width="4"/><circle class="fg" cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+r+'" stroke="'+color+'" stroke-width="4" stroke-dasharray="'+circ+'" stroke-dashoffset="'+offset+'"/></svg><div class="score-num"><div class="sn" style="font-size:'+(size>50?18:12)+'px">'+score+'</div></div></div>';
+}
+
+function renderDashboard(){
+  var u=getUser();if(!u)return;
+  $("navSub").textContent=u.name;
+  var td=tierData(u.tier);var col=avatarColor(u.name);
+  var isBroker=u.role==="broker";
+
+  // Sidebar
+  $("sidebarCard").innerHTML='<div style="height:60px;background:linear-gradient(135deg,'+col+'22,'+col+'11)"></div><div class="ps-avatar" style="background:'+col+'">'+initials(u.name)+'</div><div style="padding:0 16px 16px"><div class="ps-name">'+esc(u.name)+'</div><div class="ps-handle">'+esc(u.handle)+' · '+esc(u.state||"—")+'</div><div class="ps-role"><span class="pill '+td.cls+'">'+td.label+' '+roleLabel(u.role)+'</span></div></div><div class="ps-stats">'+(isBroker?'<div class="ps-stat"><div class="ps-v" style="color:var(--t4)">'+u.deals+'</div><div class="ps-k">Deals</div></div><div class="ps-stat"><div class="ps-v" style="color:var(--grn)">'+u.funded+'</div><div class="ps-k">Funded</div></div><div class="ps-stat"><div class="ps-v" style="color:var(--amb)">'+(u.rating?u.rating.toFixed(1):"—")+'</div><div class="ps-k">Rating</div></div>':'<div class="ps-stat"><div class="ps-v" style="color:var(--grn)">'+u.funded+'</div><div class="ps-k">Funded</div></div><div class="ps-stat"><div class="ps-v" style="color:var(--amb)">'+(u.rating?u.rating.toFixed(1):"—")+'</div><div class="ps-k">Rating</div></div><div class="ps-stat"><div class="ps-v">'+td.label+'</div><div class="ps-k">Tier</div></div>')+'</div><div class="ps-nav"><div class="ps-nav-item active" data-tab="overview"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Overview</div><div class="ps-nav-item" data-tab="edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Profile</div><div class="ps-nav-item" data-tab="settings"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg> Settings</div></div>';
+
+  document.querySelectorAll(".ps-nav-item").forEach(function(item){
+    item.addEventListener("click",function(){
+      document.querySelectorAll(".ps-nav-item").forEach(function(x){x.classList.remove("active")});
+      item.classList.add("active");currentTab=item.dataset.tab;renderMainContent(u);
+    });
+  });
+  renderMainContent(u);
+}
+
+function renderMainContent(u){
+  var isBroker=u.role==="broker";
+  var main=$("dashMain");
+  if(currentTab==="overview")renderOverview(u,main);
+  else if(currentTab==="edit")renderEdit(u,main);
+  else if(currentTab==="settings")renderSettings(u,main);
+}
+
+function renderOverview(u,main){
+  var isBroker=u.role==="broker";
+  var td=tierData(u.tier);
+  var html="";
+
+  // Quick Actions
+  html+='<div class="section"><div class="sec-head"><div class="sec-title">Quick Actions</div></div><div class="sec-body"><div class="qa-grid">';
+  html+='<a href="packet.html" class="qa-item"><div class="qa-icon" style="background:rgba(0,212,200,.08)">📦</div><div><div class="qa-text">Build Deal Packet</div><div class="qa-sub">Upload once, submit everywhere</div></div></a>';
+  html+='<a href="pipeline.html" class="qa-item"><div class="qa-icon" style="background:rgba(0,230,118,.06)">📋</div><div><div class="qa-text">Pipeline CRM</div><div class="qa-sub">Track your active deals</div></div></a>';
+  html+='<a href="offerbattle.html" class="qa-item"><div class="qa-icon" style="background:rgba(255,82,82,.06)">⚔️</div><div><div class="qa-text">Offer Battle</div><div class="qa-sub">Compare live funder offers</div></div></a>';
+  html+='<a href="bankiq.html" class="qa-item"><div class="qa-icon" style="background:rgba(0,200,255,.06)">🧠</div><div><div class="qa-text">BankIQ</div><div class="qa-sub">AI statement analysis</div></div></a>';
+  html+='<a href="marketplace.html" class="qa-item"><div class="qa-icon" style="background:rgba(179,136,255,.06)">🏪</div><div><div class="qa-text">Marketplace</div><div class="qa-sub">Browse live deal listings</div></div></a>';
+  html+='<a href="heatmap.html" class="qa-item"><div class="qa-icon" style="background:rgba(255,123,66,.06)">🔥</div><div><div class="qa-text">Heat Map</div><div class="qa-sub">Market intelligence</div></div></a>';
+  html+='</div></div></div>';
+
+  // Profile Details
+  html+='<div class="section"><div class="sec-head"><div class="sec-title">Profile Details</div><span class="pill '+td.cls+'">'+td.label+'</span></div><div class="sec-body"><div class="detail-grid">';
+  html+='<div class="detail"><div class="dk">Role</div><div class="dv">'+({broker:"Broker",funder:"Funder",merchant:"Merchant",other:"Member"}[u.role]||"Member")+'</div></div>';
+  html+='<div class="detail"><div class="dk">Company</div><div class="dv">'+(esc(u.company)||"—")+'</div></div>';
+  html+='<div class="detail"><div class="dk">State</div><div class="dv">'+(u.state||"—")+'</div></div>';
+  html+='<div class="detail"><div class="dk">Email</div><div class="dv" style="font-size:11px">'+esc(u.email)+'</div></div>';
+  html+='<div class="detail"><div class="dk">Joined</div><div class="dv">'+u.joined+'</div></div>';
+  html+='<div class="detail"><div class="dk">Handle</div><div class="dv">'+esc(u.handle)+'</div></div>';
+  html+='</div>';
+  if(u.specialties&&u.specialties.length){
+    html+='<div class="m-label">Specialties</div><div style="display:flex;gap:5px;flex-wrap:wrap">';
+    u.specialties.forEach(function(s){html+='<span class="pill tl">'+esc(s)+'</span>'});
+    html+='</div>';
+  }
+  if(u.bio){html+='<div class="m-label">Bio</div><div style="font-size:12px;color:var(--t3);line-height:1.55">'+esc(u.bio)+'</div>'}
+  html+='</div></div>';
+
+  // Reputation (brokers)
+  if(isBroker){
+    var repScore=u.funded>0?Math.min(99,Math.round(40+(u.funded/Math.max(u.deals,1))*30+(u.docRate||0)*.2+(u.rating||0)*3)):0;
+    html+='<div class="section"><div class="sec-head"><div class="sec-title">Reputation</div></div><div class="sec-body"><div style="display:flex;gap:20px;align-items:center">';
+    html+=scoreRing(repScore,64);
+    html+='<div><div style="font-size:14px;font-weight:800">Reputation Score: <span style="color:var(--t4)">'+repScore+'</span>/99</div><div style="font-size:11px;color:var(--tx4);margin-top:4px">Based on deal quality, fund rate, document completeness, and funder feedback.</div></div></div>';
+    html+='<div style="margin-top:14px;display:flex;gap:8px"><a href="trust.html" class="btn btn-sm">View on Trust Layer →</a></div>';
+    html+='</div></div>';
+  }
+  main.innerHTML=html;
+}
+
+function renderEdit(u,main){
+  main.innerHTML='<div class="section"><div class="sec-head"><div class="sec-title">Edit Profile</div></div><div class="sec-body"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="field"><label>Full Name</label><input class="inp" id="eName" value="'+esc(u.name)+'"></div><div class="field"><label>Handle</label><input class="inp" id="eHandle" value="'+esc(u.handle)+'"></div><div class="field"><label>Company</label><input class="inp" id="eCompany" value="'+esc(u.company||"")+'"></div><div class="field"><label>State</label><input class="inp" id="eState" value="'+esc(u.state||"")+'" maxlength="2" style="text-transform:uppercase"></div><div class="field"><label>Email</label><input class="inp" id="eEmail" value="'+esc(u.email)+'"></div><div class="field"><label>Phone</label><input class="inp" id="ePhone" value="'+esc(u.phone||"")+'"></div></div><div class="field" style="margin-top:10px"><label>Bio</label><textarea class="inp" id="eBio">'+esc(u.bio||"")+'</textarea></div><div class="m-label">Specialties</div><div class="spec-grid" id="editSpecs"></div><button class="btn btn-p" style="margin-top:14px" id="eSave">Save Changes</button></div></div>';
+
+  // Render edit specialties
+  var specHtml="";
+  INDUSTRIES.forEach(function(ind){
+    var sel=u.specialties&&u.specialties.indexOf(ind)>=0;
+    specHtml+='<div class="spec-chip'+(sel?" selected":"")+'" data-spec="'+ind+'">'+ind+'</div>';
+  });
+  $("editSpecs").innerHTML=specHtml;
+  var editSpecs=u.specialties?u.specialties.slice():[];
+  document.querySelectorAll("#editSpecs .spec-chip").forEach(function(c){
+    c.addEventListener("click",function(){
+      var spec=c.dataset.spec;
+      if(editSpecs.indexOf(spec)>=0){editSpecs=editSpecs.filter(function(s){return s!==spec});c.classList.remove("selected")}
+      else{editSpecs.push(spec);c.classList.add("selected")}
+    });
+  });
+
+  $("eSave").addEventListener("click",function(){
+    u.name=$("eName").value.trim()||u.name;
+    u.handle=$("eHandle").value.trim()||u.handle;
+    u.company=$("eCompany").value.trim();
+    u.state=($("eState").value||"").toUpperCase().slice(0,2);
+    u.email=$("eEmail").value.trim()||u.email;
+    u.phone=$("ePhone").value.trim();
+    u.bio=$("eBio").value.trim();
+    u.specialties=editSpecs;
+    saveUser(u);toast("Profile updated!");renderDashboard();
+  });
+}
+
+function renderSettings(u,main){
+  main.innerHTML='<div class="section"><div class="sec-head"><div class="sec-title">Notification Preferences</div></div><div class="sec-body"><div style="display:flex;flex-direction:column;gap:10px"><label style="display:flex;align-items:center;gap:10px;font-size:12px;cursor:pointer"><input type="checkbox" checked style="accent-color:var(--teal)"> Email me when a funder responds to my deal</label><label style="display:flex;align-items:center;gap:10px;font-size:12px;cursor:pointer"><input type="checkbox" checked style="accent-color:var(--teal)"> Email me weekly market intelligence digest</label><label style="display:flex;align-items:center;gap:10px;font-size:12px;cursor:pointer"><input type="checkbox" style="accent-color:var(--teal)"> Email me when new funders join the platform</label><label style="display:flex;align-items:center;gap:10px;font-size:12px;cursor:pointer"><input type="checkbox" checked style="accent-color:var(--teal)"> Push notifications for offer battle updates</label></div></div></div><div class="section"><div class="sec-head"><div class="sec-title">Platform Preferences</div></div><div class="sec-body"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="field"><label>Default Currency</label><select class="inp"><option>USD ($)</option></select></div><div class="field"><label>Timezone</label><select class="inp"><option>Eastern (ET)</option><option>Central (CT)</option><option>Mountain (MT)</option><option>Pacific (PT)</option></select></div></div></div></div><div class="section"><div class="sec-head"><div class="sec-title" style="color:var(--red)">Danger Zone</div></div><div class="sec-body"><div style="display:flex;gap:8px"><button class="btn btn-d" id="btnLogout">Log Out</button><button class="btn btn-d" id="btnReset">Reset Profile</button></div></div></div>';
+  
+  $("btnLogout").addEventListener("click",function(){
+    localStorage.removeItem(LS);toast("Logged out");setTimeout(function(){route()},600);
+  });
+  $("btnReset").addEventListener("click",function(){
+    if(confirm("This will erase your profile permanently. Continue?")){
+      localStorage.removeItem(LS);toast("Profile reset");setTimeout(function(){route()},600);
+    }
+  });
+}
+
+route();
+</script>
+</body>
+</html>
