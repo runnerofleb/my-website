@@ -2,393 +2,278 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Underwriter's Dilemma: V3 Expanded</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boiler Room Tycoon</title>
   <style>
-    /* ALL PREVIOUS CSS IS RETAINED AND EXPANDED */
     :root {
-      --bg: #0b1121; --panel: #162032; --text: #f8fafc;
-      --green: #10b981; --red: #ef4444; --blue: #3b82f6; --yellow: #f59e0b;
+      --bg: #0a0a0a; --panel: #171717; --text: #fafafa;
+      --green: #22c55e; --green-glow: rgba(34, 197, 94, 0.4);
+      --blue: #3b82f6; --gray: #404040;
     }
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; user-select: none; }
-    body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; height: 100vh; overflow: hidden; }
+    body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
 
-    /* New Global Economy Bar */
-    #global-top-bar {
-      width: 100%; background: #040714; padding: 12px 20px;
-      display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 2px solid #1e293b; z-index: 20; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    /* Top Bar */
+    #top-bar {
+      position: absolute; top: 0; left: 0; width: 100%; height: 80px; background: #000;
+      border-bottom: 2px solid #262626; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; z-index: 10;
     }
-    .top-stat { font-weight: 800; font-size: 16px; color: #94a3b8; }
-    .top-stat span { color: white; margin-left: 8px; font-size: 18px; }
-    #bank-val { color: var(--green); text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
-
-    /* Header & Stats (Retained) */
-    #header { width: 100%; max-width: 420px; padding: 15px 20px 5px; display: flex; justify-content: space-between; align-items: flex-end; }
-    .fund-title { font-size: 24px; font-weight: 900; letter-spacing: -1px; color: #e2e8f0; }
-    .score { font-size: 16px; font-weight: 700; color: var(--yellow); cursor: pointer; text-decoration: underline;}
-
-    #stats-container { width: 100%; max-width: 420px; padding: 10px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 25px; z-index: 10; }
-    .stat-box { display: flex; flex-direction: column; gap: 6px; position: relative;}
-    .stat-label { font-size: 12px; font-weight: 800; text-transform: uppercase; color: #94a3b8; display: flex; justify-content: space-between;}
-    .stat-bar-bg { width: 100%; height: 8px; background: rgba(0,0,0,0.5); border-radius: 4px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);}
-    .stat-bar-fill { height: 100%; width: 50%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-
-    /* Game Area (Retained) */
-    #game-area { flex: 1; width: 100%; max-width: 420px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; perspective: 1000px; }
+    .brand { font-size: 24px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase; color: #737373;}
+    .brand span { color: var(--blue); }
     
-    .card {
-      position: absolute; width: 340px; height: 440px;
-      background: linear-gradient(145deg, #ffffff, #f1f5f9); color: #0f172a; 
-      border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 2px 0 rgba(255,255,255,0.8);
-      display: flex; flex-direction: column; padding: 24px;
-      transform-origin: 50% 150%; transition: transform 0.3s ease, opacity 0.3s ease;
-      cursor: grab; will-change: transform;
+    .bank-container { text-align: right; }
+    .bank-label { font-size: 14px; font-weight: 700; color: #a3a3a3; text-transform: uppercase; }
+    #bank-balance { font-size: 36px; font-weight: 900; color: var(--green); text-shadow: 0 0 15px var(--green-glow); }
+    #revenue-rate { font-size: 16px; color: #a3a3a3; font-weight: 600; }
+
+    /* Main Layout */
+    .col { height: calc(100vh - 80px); margin-top: 80px; overflow-y: auto; padding: 20px; }
+    #col-left { width: 300px; background: var(--panel); border-right: 1px solid #262626; }
+    #col-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+    #col-right { width: 340px; background: var(--panel); border-left: 1px solid #262626; }
+
+    /* The Big Button */
+    #dial-btn {
+      width: 280px; height: 280px; border-radius: 50%; background: linear-gradient(145deg, #16a34a, #22c55e);
+      border: 8px solid #000; box-shadow: 0 0 50px var(--green-glow), inset 0 10px 20px rgba(255,255,255,0.3);
+      color: white; font-size: 48px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
+      cursor: pointer; outline: none; transition: transform 0.05s, box-shadow 0.1s;
+      display: flex; align-items: center; justify-content: center; flex-direction: column;
     }
-    .card:active { cursor: grabbing; }
-    .merchant-type { font-size: 15px; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;}
-    .merchant-pitch { font-size: 20px; font-weight: 800; flex: 1; line-height: 1.35; letter-spacing: -0.5px;}
-    .merchant-data { background: #e2e8f0; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 700; color: #334155; border: 1px solid #cbd5e1; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);}
-    .data-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
-    .data-row:last-child { margin-bottom: 0; }
-    .data-label { color: #64748b; font-weight: 600; }
+    #dial-btn:active { transform: scale(0.92); box-shadow: 0 0 20px var(--green-glow); }
+    #dial-btn span { font-size: 18px; font-weight: 700; opacity: 0.8; margin-top: 5px;}
+
+    /* Floating Click Text */
+    .float-text {
+      position: absolute; color: white; font-size: 24px; font-weight: 900; pointer-events: none;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8); animation: floatUp 1s ease-out forwards;
+    }
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-80px) scale(1.5); }
+    }
+
+    /* Lists (Brokers & Upgrades) */
+    .section-title { font-size: 18px; font-weight: 900; text-transform: uppercase; color: #737373; margin-bottom: 15px; border-bottom: 2px solid #262626; padding-bottom: 10px; }
     
-    .stamp {
-      position: absolute; top: 40px; font-size: 34px; font-weight: 900; text-transform: uppercase;
-      border: 5px solid; border-radius: 12px; padding: 8px 16px; opacity: 0; pointer-events: none;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2); letter-spacing: 2px;
+    .item-card {
+      background: #000; border: 1px solid #262626; border-radius: 12px; padding: 15px; margin-bottom: 15px;
+      display: flex; justify-content: space-between; align-items: center; transition: 0.2s; cursor: pointer;
     }
-    #stamp-decline { right: 20px; color: var(--red); border-color: var(--red); transform: rotate(15deg); }
-    #stamp-fund { left: 20px; color: var(--green); border-color: var(--green); transform: rotate(-15deg); }
-
-    /* Controls (Retained) */
-    #controls { width: 100%; max-width: 420px; padding: 10px 25px 30px; display: flex; justify-content: space-between; gap: 20px; z-index: 10; }
-    .btn { flex: 1; padding: 16px; border: none; border-radius: 16px; font-size: 18px; font-weight: 900; cursor: pointer; transition: transform 0.1s; color: white; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
-    .btn:active { transform: scale(0.95); filter: brightness(0.8); }
-    .btn small { font-size: 12px; opacity: 0.8; font-weight: 700; }
-    .btn-decline { background: linear-gradient(180deg, #ef4444, #dc2626); box-shadow: 0 6px 0 #991b1b; }
-    .btn-fund { background: linear-gradient(180deg, #10b981, #059669); box-shadow: 0 6px 0 #065f46; }
-
-    /* New Shop Modal */
-    #shop-modal {
-      position: fixed; bottom: -100%; left: 0; width: 100%; height: 75%;
-      background: var(--panel); border-top-left-radius: 24px; border-top-right-radius: 24px;
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.8); z-index: 150; transition: bottom 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-      padding: 24px; display: flex; flex-direction: column;
-    }
-    #shop-modal.open { bottom: 0; }
-    .shop-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; padding-bottom: 12px; margin-bottom: 16px;}
-    .shop-title { font-size: 24px; font-weight: 900; color: white; }
-    .close-btn { background: transparent; border: none; color: #94a3b8; font-size: 24px; font-weight: bold; cursor: pointer; }
-    .upgrade-item { background: #0f172a; padding: 16px; border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155;}
-    .upg-info h3 { margin: 0 0 4px 0; font-size: 16px; color: var(--blue); }
-    .upg-info p { margin: 0; font-size: 12px; color: #94a3b8; }
-    .buy-btn { background: var(--green); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer;}
-    .buy-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
-
-    /* Float Text & Game Over */
-    .float-text { position: absolute; font-weight: 900; font-size: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); pointer-events: none; z-index: 100; opacity: 0; animation: floatUpAndFade 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-    @keyframes floatUpAndFade { 0% { opacity: 0; transform: translateY(0) scale(0.5); } 20% { opacity: 1; transform: translateY(-20px) scale(1.2); } 100% { opacity: 0; transform: translateY(-80px) scale(1); } }
+    .item-card:hover { border-color: var(--blue); background: #0a0a0a; }
+    .item-card.disabled { opacity: 0.5; cursor: not-allowed; border-color: #262626; }
+    .item-card.disabled:hover { background: #000; }
     
-    #game-over { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 17, 33, 0.98); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 200; padding: 30px; text-align: center; backdrop-filter: blur(5px); }
-    #game-over h1 { font-size: 48px; font-weight: 900; margin-bottom: 10px; color: var(--red);}
-    #game-over p { font-size: 20px; line-height: 1.6; margin-bottom: 40px; color: #cbd5e1; font-weight: 600;}
-    #restart-btn { background: var(--blue); padding: 18px 40px; border: none; border-radius: 12px; color: white; font-weight: 900; font-size: 20px; cursor: pointer; box-shadow: 0 6px 0 #1e3a8a;}
+    .item-info h3 { margin: 0 0 4px 0; font-size: 16px; color: #fafafa; }
+    .item-info p { margin: 0; font-size: 12px; color: #a3a3a3; font-weight: 600; }
+    .item-cost { background: #171717; padding: 6px 10px; border-radius: 6px; font-size: 14px; font-weight: 800; color: var(--green); }
+    
+    .owned-count { font-size: 20px; font-weight: 900; color: var(--blue); margin-right: 15px; width: 30px; text-align: center;}
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gray); border-radius: 4px; }
   </style>
 </head>
 <body>
 
-  <div id="global-top-bar">
-    <div class="top-stat">DAY <span id="day-val">1</span></div>
-    <div class="top-stat">CAPITAL <span id="bank-val">$500,000</span></div>
-  </div>
-
-  <div id="header">
-    <div class="fund-title">CAPITAL<span style="color:var(--blue)">FUND</span></div>
-    <div class="score" onclick="toggleShop()">🛒 SHOP / UPGRADES</div>
-  </div>
-
-  <div id="stats-container">
-    <div class="stat-box" id="box-liquidity">
-      <div class="stat-label"><span>Liquidity %</span> <span id="val-liquidity">50%</span></div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-liquidity" style="background: var(--blue);"></div></div>
-    </div>
-    <div class="stat-box" id="box-yield">
-      <div class="stat-label"><span>Yield</span> <span id="val-yield">50%</span></div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-yield" style="background: var(--green);"></div></div>
-    </div>
-    <div class="stat-box" id="box-brokers">
-      <div class="stat-label"><span>Brokers</span> <span id="val-brokers">70%</span></div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-brokers" style="background: var(--yellow);"></div></div>
-    </div>
-    <div class="stat-box" id="box-defaults">
-      <div class="stat-label"><span>Defaults</span> <span id="val-defaults">20%</span></div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-defaults" style="background: var(--red);"></div></div>
+  <div id="top-bar">
+    <div class="brand">Wolf of <span>MCA</span></div>
+    <div class="bank-container">
+      <div class="bank-label">Liquid Capital</div>
+      <div id="bank-balance">$0</div>
+      <div id="revenue-rate">$0 / sec</div>
     </div>
   </div>
 
-  <div id="game-area"></div>
-
-  <div id="controls">
-    <button class="btn btn-decline" onclick="handleChoice('decline')">Swipe Left<small>DECLINE</small></button>
-    <button class="btn btn-fund" onclick="handleChoice('fund')">Swipe Right<small>FUND</small></button>
+  <div class="col" id="col-left">
+    <div class="section-title">The Bullpen (Hires)</div>
+    <div id="brokers-list"></div>
   </div>
 
-  <div id="shop-modal">
-    <div class="shop-header">
-      <div class="shop-title">Upgrades</div>
-      <button class="close-btn" onclick="toggleShop()">✕</button>
-    </div>
-    <div class="upgrade-item">
-      <div class="upg-info">
-        <h3>Plaid Integration</h3>
-        <p>Removes 10% Default Risk on all future deals.</p>
-      </div>
-      <button class="buy-btn" id="upg-plaid" onclick="buyUpgrade('plaid', 100000)">$100k</button>
-    </div>
-    <div class="upgrade-item">
-      <div class="upg-info">
-        <h3>Golf Memberships</h3>
-        <p>Brokers are 20% less angry when you decline deals.</p>
-      </div>
-      <button class="buy-btn" id="upg-golf" onclick="buyUpgrade('golf', 250000)">$250k</button>
-    </div>
-    <div class="upgrade-item">
-      <div class="upg-info">
-        <h3>Credit Facility</h3>
-        <p>Double your starting capital limit.</p>
-      </div>
-      <button class="buy-btn" id="upg-credit" onclick="buyUpgrade('credit', 500000)">$500k</button>
-    </div>
+  <div class="col" id="col-center">
+    <button id="dial-btn" onpointerdown="manualClick(event)">
+      DIAL
+      <span id="click-power-display">+$50 / click</span>
+    </button>
   </div>
 
-  <div id="game-over">
-    <h1 id="go-title">BANKRUPT</h1>
-    <p id="go-desc">Description</p>
-    <button id="restart-btn" onclick="location.reload()">Start New Fund</button>
+  <div class="col" id="col-right">
+    <div class="section-title">Hustle Upgrades</div>
+    <div id="upgrades-list"></div>
   </div>
 
   <script>
-    // --- EXPANDED GAME STATE ---
-    let stats = { liquidity: 50, yield: 50, brokers: 70, defaults: 20 };
-    let economy = { bank: 500000, day: 1, dealsDone: 0 };
-    let perks = { plaid: false, golf: false, credit: false };
-    
-    let currentCardEl = null;
-    let currentMerchant = null;
-    let isDragging = false, startX = 0, currentX = 0;
+    // --- CORE GAME STATE ---
+    let cash = 0;
+    let cashPerClick = 50; // Starting commission per manual dial
+    let cashPerSec = 0;    // Starting passive income
 
-    // --- PROCEDURAL MERCHANT GENERATOR ---
-    // Instead of a static array, this builds dynamic files.
-    const industries = ["Trucking", "Restaurant", "Construction", "E-Commerce", "Medical Spa", "Bodega", "HVAC", "Plumbing", "Retail"];
-    const pitches = [
-      "Needs capital to buy new equipment.",
-      "Expanding to a second location. Wants to float construction costs.",
-      "Owes back taxes to the IRS. Needs a bridge loan.",
-      "Inventory order stuck in customs. Needs cash to release it.",
-      "Payroll is tomorrow and accounts receivable are late.",
-      "Broker swears 'this guy is solid, just ignore the bank statements.'"
+    // --- BROKERS (Generate passive income) ---
+    const brokers = [
+      { id: "b1", name: "Junior Opener", desc: "Dials randomly from phonebook.", baseCost: 100, cps: 10, owned: 0 },
+      { id: "b2", name: "Aggressive Closer", desc: "Yells at merchants until they sign.", baseCost: 1500, cps: 100, owned: 0 },
+      { id: "b3", name: "ISO Manager", desc: "Bribes other brokers for their deals.", baseCost: 12000, cps: 800, owned: 0 },
+      { id: "b4", name: "Underwriter", desc: "Approves deals that shouldn't be approved.", baseCost: 50000, cps: 4000, owned: 0 }
     ];
 
-    function generateMerchant() {
-      const type = industries[Math.floor(Math.random() * industries.length)];
-      const pitch = pitches[Math.floor(Math.random() * pitches.length)];
-      
-      // Procedural Math Generation
-      const bal = Math.floor(Math.random() * 50000) + 500;
-      const nsfs = Math.floor(Math.random() * 15);
-      const fico = Math.floor(Math.random() * 300) + 450; // 450 to 750
-      
-      // Calculate Risk/Reward mathematically based on stats!
-      let risk = 0;
-      if (bal < 5000) risk += 15;
-      if (nsfs > 5) risk += 20;
-      if (fico < 550) risk += 15;
-      if (perks.plaid) risk -= 10; // Upgrade effect!
+    // --- UPGRADES (Boost click power or global production) ---
+    const upgrades = [
+      { id: "u1", name: "Red Bull Fridge", desc: "+$50 per manual dial.", cost: 300, owned: false, action: () => { cashPerClick += 50; } },
+      { id: "u2", name: "Aged UCC Leads", desc: "Double your manual click power.", cost: 2500, owned: false, action: () => { cashPerClick *= 2; } },
+      { id: "u3", name: "Predictive Dialer", desc: "All Junior Openers are 2x faster.", cost: 5000, owned: false, action: () => { brokers[0].cps *= 2; updateCPS(); } },
+      { id: "u4", name: "Fake Rolex", desc: "Double manual click power (Flexing works).", cost: 15000, owned: false, action: () => { cashPerClick *= 2; } }
+    ];
 
-      const rewardYield = Math.floor(risk / 1.5) + 5;
-      const liqCost = Math.floor(bal / 2000) + 5;
-      
-      // Broker logic
-      let brokerHit = (fico > 650) ? -20 : -5; // Harder hit if you decline good paper
-      if (perks.golf) brokerHit = Math.floor(brokerHit * 0.8); // Upgrade effect!
+    // --- DOM ELEMENTS ---
+    const elBank = document.getElementById('bank-balance');
+    const elRev = document.getElementById('revenue-rate');
+    const elClickPower = document.getElementById('click-power-display');
+    const elBrokersList = document.getElementById('brokers-list');
+    const elUpgradesList = document.getElementById('upgrades-list');
+    const elCenterCol = document.getElementById('col-center');
 
-      return {
-        type: type,
-        pitch: pitch,
-        data: `Avg Bal: $${bal.toLocaleString()} | NSFs: ${nsfs} | FICO: ${fico}`,
-        fund: [-liqCost, +rewardYield, +10, +risk],
-        decline: [+5, 0, brokerHit, 0], // Saves liquidity to decline, hurts brokers
-        dollarValue: Math.floor(bal * 1.3) // Actual money generated
-      };
+    // --- INITIALIZATION ---
+    function init() {
+      renderBrokers();
+      renderUpgrades();
+      
+      // The Engine: Runs 10 times a second for smooth number climbing
+      setInterval(() => {
+        cash += cashPerSec / 10;
+        updateUI();
+      }, 100);
     }
 
-    // --- UI UPDATES ---
-    function updateUI() {
-      for (let key in stats) stats[key] = Math.max(0, Math.min(100, stats[key]));
-
-      document.getElementById('bar-liquidity').style.width = stats.liquidity + '%';
-      document.getElementById('val-liquidity').innerText = stats.liquidity + '%';
-      document.getElementById('bar-yield').style.width = stats.yield + '%';
-      document.getElementById('val-yield').innerText = stats.yield + '%';
-      document.getElementById('bar-brokers').style.width = stats.brokers + '%';
-      document.getElementById('val-brokers').innerText = stats.brokers + '%';
-      document.getElementById('bar-defaults').style.width = stats.defaults + '%';
-      document.getElementById('val-defaults').innerText = stats.defaults + '%';
-
-      // Colors
-      document.getElementById('bar-liquidity').style.background = stats.liquidity < 20 ? 'var(--red)' : 'var(--blue)';
-      document.getElementById('bar-yield').style.background = stats.yield < 20 ? 'var(--red)' : 'var(--green)';
-      document.getElementById('bar-brokers').style.background = stats.brokers < 20 ? 'var(--red)' : 'var(--yellow)';
-      document.getElementById('bar-defaults').style.background = stats.defaults > 80 ? 'var(--red)' : 'var(--red)';
-
-      // Global Top Bar
-      document.getElementById('day-val').innerText = economy.day;
-      document.getElementById('bank-val').innerText = "$" + economy.bank.toLocaleString();
-
-      checkShopButtons();
-      checkGameOver();
+    // --- ACTIONS ---
+    function manualClick(e) {
+      cash += cashPerClick;
+      spawnFloatingText(e.clientX, e.clientY, `+$${cashPerClick.toLocaleString()}`);
+      updateUI();
+      
+      // Play a tiny vibration on mobile
+      if (navigator.vibrate) navigator.vibrate(15);
     }
 
-    function toggleShop() {
-      document.getElementById('shop-modal').classList.toggle('open');
-    }
-
-    function buyUpgrade(type, cost) {
-      if (economy.bank >= cost && !perks[type]) {
-        economy.bank -= cost;
-        perks[type] = true;
-        document.getElementById('upg-' + type).innerText = "OWNED";
-        document.getElementById('upg-' + type).disabled = true;
-        if (type === 'credit') stats.liquidity = 100; // Refills liquidity instantly
+    function buyBroker(index) {
+      let b = brokers[index];
+      let cost = Math.floor(b.baseCost * Math.pow(1.15, b.owned)); // Price scales up by 15% each purchase
+      
+      if (cash >= cost) {
+        cash -= cost;
+        b.owned++;
+        updateCPS();
+        renderBrokers();
         updateUI();
       }
     }
 
-    function checkShopButtons() {
-      if(!perks.plaid) document.getElementById('upg-plaid').disabled = economy.bank < 100000;
-      if(!perks.golf) document.getElementById('upg-golf').disabled = economy.bank < 250000;
-      if(!perks.credit) document.getElementById('upg-credit').disabled = economy.bank < 500000;
+    function buyUpgrade(index) {
+      let u = upgrades[index];
+      if (cash >= u.cost && !u.owned) {
+        cash -= u.cost;
+        u.owned = true;
+        u.action(); // Apply the boost
+        renderUpgrades();
+        elClickPower.innerText = `+$${cashPerClick.toLocaleString()} / click`;
+        updateUI();
+      }
     }
 
-    function checkGameOver() {
-      const go = document.getElementById('game-over');
-      const title = document.getElementById('go-title');
-      const desc = document.getElementById('go-desc');
-      let lost = true;
-
-      if (stats.liquidity <= 0) { title.innerText = "OUT OF CAPITAL"; desc.innerText = `You ran out of liquidity on Day ${economy.day}.`; }
-      else if (stats.yield <= 0) { title.innerText = "UNPROFITABLE"; desc.innerText = `Your fund bled money. You made it to Day ${economy.day}.`; }
-      else if (stats.brokers <= 0) { title.innerText = "BLACKLISTED"; desc.innerText = `Brokers cut you off. You lasted ${economy.day} days.`; }
-      else if (stats.defaults >= 100) { title.innerText = "DEFAULT CRISIS"; desc.innerText = `Your portfolio blew up on Day ${economy.day}.`; }
-      else { lost = false; }
-
-      if (lost) go.style.display = 'flex';
+    // --- LOGIC UPDATES ---
+    function updateCPS() {
+      cashPerSec = 0;
+      brokers.forEach(b => {
+        cashPerSec += (b.owned * b.cps);
+      });
+      elRev.innerText = `+$${cashPerSec.toLocaleString()} / sec`;
     }
 
-    // --- CARD SPAWNING & PHYSICS (Retained) ---
-    function spawnCard() {
-      currentMerchant = generateMerchant(); // NOW CALLING PROCEDURAL GENERATOR
-      
-      const dataParts = currentMerchant.data.split(' | ');
-      let dataHtml = '';
-      dataParts.forEach(part => {
-        const [label, val] = part.split(': ');
-        dataHtml += `<div class="data-row"><span class="data-label">${label}</span> <span style="font-weight:800">${val || ''}</span></div>`;
+    function updateUI() {
+      // Update Bank (no decimals)
+      elBank.innerText = "$" + Math.floor(cash).toLocaleString();
+
+      // Check button states for Brokers
+      brokers.forEach((b, i) => {
+        let cost = Math.floor(b.baseCost * Math.pow(1.15, b.owned));
+        let card = document.getElementById(`broker-card-${i}`);
+        if (card) {
+          if (cash >= cost) card.classList.remove('disabled');
+          else card.classList.add('disabled');
+        }
       });
 
-      const gameArea = document.getElementById('game-area');
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <div class="stamp" id="stamp-decline">DECLINED</div>
-        <div class="stamp" id="stamp-fund">FUNDED</div>
-        <div class="merchant-type">${currentMerchant.type}</div>
-        <div class="merchant-pitch">"${currentMerchant.pitch}"</div>
-        <div class="merchant-data">${dataHtml}</div>
-      `;
-      
-      gameArea.appendChild(card);
-      currentCardEl = card;
-
-      card.addEventListener('pointerdown', startDrag);
-      window.addEventListener('pointermove', drag);
-      window.addEventListener('pointerup', endDrag);
+      // Check button states for Upgrades
+      upgrades.forEach((u, i) => {
+        if (!u.owned) {
+          let card = document.getElementById(`upgrade-card-${i}`);
+          if (card) {
+            if (cash >= u.cost) card.classList.remove('disabled');
+            else card.classList.add('disabled');
+          }
+        }
+      });
     }
 
-    function startDrag(e) { isDragging = true; startX = e.clientX; currentCardEl.style.transition = 'none'; }
-    function drag(e) {
-      if (!isDragging || !currentCardEl) return;
-      currentX = e.clientX - startX;
-      currentCardEl.style.transform = `translateX(${currentX}px) rotate(${currentX * 0.05}deg)`;
-      const dec = currentCardEl.querySelector('#stamp-decline'), fnd = currentCardEl.querySelector('#stamp-fund');
-      if (currentX < -40) { dec.style.opacity = Math.min(1, Math.abs(currentX)/100); fnd.style.opacity = 0; }
-      else if (currentX > 40) { fnd.style.opacity = Math.min(1, Math.abs(currentX)/100); dec.style.opacity = 0; }
-      else { dec.style.opacity = 0; fnd.style.opacity = 0; }
-    }
-    function endDrag() {
-      if (!isDragging || !currentCardEl) return;
-      isDragging = false;
-      currentCardEl.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease';
-      if (currentX > 100) handleChoice('fund', true);
-      else if (currentX < -100) handleChoice('decline', true);
-      else { currentCardEl.style.transform = `translateX(0px) rotate(0deg)`; currentCardEl.querySelectorAll('.stamp').forEach(s=>s.style.opacity=0); }
-      currentX = 0;
+    // --- RENDERING ---
+    function renderBrokers() {
+      elBrokersList.innerHTML = '';
+      brokers.forEach((b, i) => {
+        let cost = Math.floor(b.baseCost * Math.pow(1.15, b.owned));
+        elBrokersList.innerHTML += `
+          <div class="item-card disabled" id="broker-card-${i}" onclick="buyBroker(${i})">
+            <div style="display:flex; align-items:center;">
+              <div class="owned-count">${b.owned}</div>
+              <div class="item-info">
+                <h3>${b.name}</h3>
+                <p>+$${b.cps.toLocaleString()}/sec</p>
+              </div>
+            </div>
+            <div class="item-cost">$${cost.toLocaleString()}</div>
+          </div>
+        `;
+      });
     }
 
-    function spawnFloatText(text, color, boxId) {
-      const box = document.getElementById(boxId);
-      const rect = box.getBoundingClientRect();
+    function renderUpgrades() {
+      elUpgradesList.innerHTML = '';
+      upgrades.forEach((u, i) => {
+        if (!u.owned) {
+          elUpgradesList.innerHTML += `
+            <div class="item-card disabled" id="upgrade-card-${i}" onclick="buyUpgrade(${i})">
+              <div class="item-info">
+                <h3>${u.name}</h3>
+                <p>${u.desc}</p>
+              </div>
+              <div class="item-cost">$${u.cost.toLocaleString()}</div>
+            </div>
+          `;
+        }
+      });
+    }
+
+    // --- GAME JUICE (Floating text) ---
+    function spawnFloatingText(x, y, text) {
       const el = document.createElement('div');
       el.className = 'float-text';
-      el.innerText = text; el.style.color = color;
-      el.style.left = (rect.left + rect.width / 2 - 20) + 'px'; el.style.top = (rect.top + 10) + 'px';
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 1200);
+      el.innerText = text;
+      
+      // Randomize position slightly around the cursor
+      const offsetX = (Math.random() - 0.5) * 60;
+      el.style.left = (x + offsetX - 30) + 'px';
+      el.style.top = (y - 30) + 'px';
+      
+      // Make crits green
+      el.style.color = 'var(--green)';
+
+      elCenterCol.appendChild(el);
+      setTimeout(() => el.remove(), 1000);
     }
 
-    function handleChoice(action, fromDrag = false) {
-      if (!currentCardEl) return;
-      economy.dealsDone++;
-      if(economy.dealsDone % 3 === 0) economy.day++; // Advance days every 3 deals
+    // Start the game
+    init();
 
-      const effects = action === 'fund' ? currentMerchant.fund : currentMerchant.decline;
-      const keys = ['liquidity', 'yield', 'brokers', 'defaults'];
-      const boxes = ['box-liquidity', 'box-yield', 'box-brokers', 'box-defaults'];
-      
-      for(let i=0; i<4; i++) {
-        if (effects[i] !== 0) {
-          stats[keys[i]] += effects[i];
-          const color = (keys[i] === 'defaults') ? (effects[i] > 0 ? 'var(--red)' : 'var(--green)') : (effects[i] > 0 ? 'var(--green)' : 'var(--red)');
-          spawnFloatText(`${effects[i]>0?'+':''}${effects[i]}`, color, boxes[i]);
-        }
-      }
-
-      // Economy Math
-      if (action === 'fund') {
-        // Did it default?
-        if (Math.random() * 100 < currentMerchant.fund[3]) {
-          // Defaulted! Lose money.
-          economy.bank -= currentMerchant.dollarValue;
-          spawnFloatText("DEFAULT!", "var(--red)", "bank-val");
-        } else {
-          // Paid back! Make money.
-          economy.bank += currentMerchant.dollarValue;
-          spawnFloatText("+$" + currentMerchant.dollarValue.toLocaleString(), "var(--green)", "bank-val");
-        }
-      }
-
-      stats.liquidity += 3; stats.defaults = Math.max(0, stats.defaults - 1);
-      
-      if (!fromDrag) currentCardEl.querySelector(action === 'fund' ? '#stamp-fund' : '#stamp-decline').style.opacity = 1;
-      currentCardEl.style.transform = `translateX(${action==='fund'?500:-500}px) rotate(${action==='fund'?45:-45}deg)`;
-      currentCardEl.style.opacity = 0;
-      
-      const oldCard = currentCardEl; currentCardEl = null;
-      setTimeout(() => { oldCard.remove(); updateUI(); if (document.getElementById('game-over').style.display !== 'flex') spawnCard(); }, 300);
-    }
-
-    updateUI(); spawnCard();
   </script>
 </body>
 </html>
