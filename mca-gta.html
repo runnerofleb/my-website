@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>BrokerOS • MCA GTA (MVP)</title>
+  <style>
+    :root{
+      --bg:#070a18; --panel:rgba(10,20,51,.72); --line:rgba(120,160,255,.18);
+      --txt:#eaf1ff; --muted:rgba(234,241,255,.72);
+      --good:#22c55e; --warn:#f59e0b; --bad:#ef4444; --blue:#38bdf8; --vio:#a78bfa;
+      --shadow: 0 18px 45px rgba(0,0,0,.45);
+    }
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:
+        radial-gradient(900px 520px at 15% 15%, rgba(56,189,248,.18), transparent 55%),
+        radial-gradient(900px 520px at 80% 20%, rgba(34,197,94,.12), transparent 55%),
+        radial-gradient(900px 520px at 80% 80%, rgba(167,139,250,.10), transparent 55%),
+        var(--bg);
+      color: var(--txt);
+      overflow:hidden;
+    }
+    header{
+      position:fixed; left:0; right:0; top:0; z-index:20;
+      display:flex; justify-content:space-between; align-items:center; gap:12px;
+      padding:12px 16px;
+      background: rgba(9,12,25,.75);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(28,43,102,.65);
+    }
+    header .brand{display:flex; align-items:center; gap:10px; font-weight:950;}
+    header .logo{
+      width:30px;height:30px;border-radius:12px;
+      background: linear-gradient(90deg, var(--good), var(--blue), var(--vio));
+      box-shadow: 0 14px 40px rgba(56,189,248,.14);
+    }
+    header .tip{color:var(--muted); font-weight:800; font-size:12px;}
+    .hud{
+      position:fixed; top:56px; left:12px; z-index:20;
+      width: 320px;
+      background: var(--panel);
+      border:1px solid rgba(28,43,102,.80);
+      border-radius:16px;
+      box-shadow: var(--shadow);
+      padding:12px;
+    }
+    .row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+    .k{color:var(--muted); font-size:12px; font-weight:900;}
+    .v{font-weight:950;}
+    .bar{
+      margin-top:8px;
+      height:10px; border-radius:999px;
+      background: rgba(7,12,28,.65);
+      border:1px solid rgba(44,70,160,.55);
+      overflow:hidden;
+    }
+    .fill{height:100%; width:50%; background: var(--blue);}
+    .fill.good{background: var(--good);}
+    .fill.warn{background: var(--warn);}
+    .fill.bad{background: var(--bad);}
+    .legend{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+      font-weight:800;
+    }
+    canvas{
+      display:block;
+      position:fixed;
+      top:56px; left:0; right:0; bottom:0;
+    }
+    .dialog{
+      position:fixed; right:12px; top:56px; z-index:30;
+      width: 380px; max-width: calc(100vw - 24px);
+      background: rgba(10,20,51,.85);
+      border:1px solid rgba(28,43,102,.80);
+      border-radius:16px;
+      box-shadow: var(--shadow);
+      padding:12px;
+      display:none;
+    }
+    .dialog.show{display:block;}
+    .dialog h3{margin:0; font-size:16px;}
+    .dialog p{margin:8px 0 0; color:var(--muted); font-weight:800; line-height:1.35;}
+    .dialog .buttons{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
+    .btn{
+      border:1px solid rgba(28,43,102,.85);
+      background: rgba(10,20,51,.70);
+      color: var(--txt);
+      padding:10px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      cursor:pointer;
+      transition: transform .08s ease, border-color .15s ease;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(56,189,248,.40); }
+    .btn.primary{
+      background: linear-gradient(90deg, rgba(34,197,94,.22), rgba(56,189,248,.18));
+      border-color: rgba(34,197,94,.35);
+    }
+    .toast{
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10,20,51,.95);
+      border: 1px solid rgba(28,43,102,.85);
+      padding: 10px 12px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      font-weight: 950;
+      display:none;
+      z-index: 200;
+    }
+    .toast.show{ display:block; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo"></div> MCA GTA <span class="tip">WASD / Arrows to move • walk into zones</span></div>
+  <div class="tip">BrokerOS Prototype • GitHub Pages ready</div>
+</header>
+
+<div class="hud">
+  <div class="row"><div class="k">Cash</div><div class="v" id="cash">$0</div></div>
+  <div class="row" style="margin-top:6px;"><div class="k">Reputation</div><div class="v" id="rep">0</div></div>
+
+  <div style="margin-top:10px;">
+    <div class="row"><div class="k">Heat</div><div class="v" id="heatText">0%</div></div>
+    <div class="bar"><div class="fill" id="heatBar"></div></div>
+  </div>
+
+  <div style="margin-top:10px;">
+    <div class="row"><div class="k">Deal Health</div><div class="v" id="healthText">100%</div></div>
+    <div class="bar"><div class="fill good" id="healthBar"></div></div>
+  </div>
+
+  <div class="legend">
+    Zones: 🟦 Leads • 🟩 Merchant • 🟪 Funder HQ • 🟧 Bank • 🟥 ISO Lounge<br/>
+    Goal: stack cash + rep without overheating (heat).
+  </div>
+</div>
+
+<canvas id="game"></canvas>
+
+<div class="dialog" id="dialog">
+  <h3 id="dTitle">Title</h3>
+  <p id="dBody">Body</p>
+  <div class="buttons" id="dButtons"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ----- Canvas setup
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d");
+
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - 56; // header
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  // ----- HUD elements
+  const elCash = document.getElementById("cash");
+  const elRep = document.getElementById("rep");
+  const elHeatText = document.getElementById("heatText");
+  const elHeatBar = document.getElementById("heatBar");
+  const elHealthText = document.getElementById("healthText");
+  const elHealthBar = document.getElementById("healthBar");
+
+  // ----- UI helpers
+  const dialog = document.getElementById("dialog");
+  const dTitle = document.getElementById("dTitle");
+  const dBody = document.getElementById("dBody");
+  const dButtons = document.getElementById("dButtons");
+
+  const toastEl = document.getElementById("toast");
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    setTimeout(()=>toastEl.classList.remove("show"), 1300);
+  }
+
+  function showDialog(title, body, buttons){
+    dTitle.textContent = title;
+    dBody.innerHTML = body;
+    dButtons.innerHTML = "";
+    buttons.forEach(b=>{
+      const btn = document.createElement("button");
+      btn.className = "btn " + (b.primary ? "primary" : "");
+      btn.textContent = b.label;
+      btn.onclick = () => { b.onClick(); };
+      dButtons.appendChild(btn);
+    });
+    dialog.classList.add("show");
+  }
+  function hideDialog(){ dialog.classList.remove("show"); }
+
+  // ----- Game state
+  const state = {
+    cash: 0,
+    rep: 0,
+    heat: 0,      // 0..100
+    health: 100,  // 0..100
+    mission: null,
+    paused: false
+  };
+
+  // Player
+  const player = {
+    x: 140, y: 140,
+    r: 12,
+    speed: 3.2
+  };
+
+  // City bounds (world larger than screen)
+  const world = { w: 1400, h: 900 };
+
+  // Zones
+  const zones = [
+    { id:"leads",   label:"Lead Alley", color:"#38bdf8", x:120,  y:540, w:260, h:220, icon:"🟦" },
+    { id:"merchant",label:"Merchant Row", color:"#22c55e", x:520, y:140, w:300, h:220, icon:"🟩" },
+    { id:"funder",  label:"Funder HQ", color:"#a78bfa", x:980, y:520, w:300, h:250, icon:"🟪" },
+    { id:"bank",    label:"Bank District", color:"#f59e0b", x:980, y:140, w:300, h:240, icon:"🟧" },
+    { id:"iso",     label:"ISO Lounge", color:"#ef4444", x:520, y:520, w:300, h:220, icon:"🟥" },
+  ];
+
+  // Keyboard input
+  const keys = {};
+  window.addEventListener("keydown", (e)=>{
+    keys[e.key.toLowerCase()] = true;
+    if (["arrowup","arrowdown","arrowleft","arrowright"].includes(e.key.toLowerCase())) e.preventDefault();
+  });
+  window.addEventListener("keyup", (e)=>{ keys[e.key.toLowerCase()] = false; });
+
+  function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
+
+  // ----- Missions / encounters
+  const missions = {
+    leads(){
+      if (state.paused) return;
+      state.paused = true;
+      showDialog(
+        "Lead Alley 🟦",
+        "You found a fresh stack of leads. Choose a strategy:",
+        [
+          {
+            label:"Spray & Pray (fast)",
+            primary:true,
+            onClick: ()=>{
+              // Quick money, high heat, unstable health
+              state.cash += 600;
+              state.rep += 1;
+              state.heat = clamp(state.heat + 18, 0, 100);
+              state.health = clamp(state.health - 10, 0, 100);
+              toast("+$600 • +Heat");
+              hideDialog(); state.paused = false;
+            }
+          },
+          {
+            label:"Targeted Outreach (smart)",
+            onClick: ()=>{
+              state.cash += 350;
+              state.rep += 2;
+              state.heat = clamp(state.heat + 6, 0, 100);
+              state.health = clamp(state.health - 2, 0, 100);
+              toast("+$350 • +Rep");
+              hideDialog(); state.paused = false;
+            }
+          },
+          {
+            label:"Back",
+            onClick: ()=>{ hideDialog(); state.paused = false; }
+          }
+        ]
+      );
+    },
+
+    merchant(){
+      if (state.paused) return;
+      state.paused = true;
+      showDialog(
+        "Merchant Row 🟩",
+        "A merchant wants $50k ASAP. The file is messy. What do you do?",
+        [
+          {
+            label:"Clean package (slow)",
+            primary:true,
+            onClick: ()=>{
+              state.cash += 900;
+              state.rep += 3;
+              state.heat = clamp(state.heat + 4, 0, 100);
+              state.health = clamp(state.health + 6, 0, 100);
+              toast("+$900 • cleaner deal");
+              hideDialog(); state.paused = false;
+            }
+          },
+          {
+            label:"Jam it through (risky)",
+            onClick: ()=>{
+              state.cash += 1300;
+              state.rep += 1;
+              state.heat = clamp(state.heat + 16, 0, 100);
+              state.health = clamp(state.health - 14, 0, 100);
+              toast("+$1300 • risky");
+              hideDialog(); state.paused = false;
+            }
+          },
+          {
+            label:"Back",
+            onClick: ()=>{ hideDialog(); state.paused = false; }
+          }
+        ]
+      );
+    },
+
+    bank(){
+      if (state.paused) return;
+      state.paused = true;
+      showDialog(
+        "Bank District 🟧",
+        "Bank statements unlocked. Choose how you use them:",
+        [
+          {
+            label:"Underwrite properly",
+            primary:true,
+            onClick: ()=>{
+              state.rep += 3;
+              state.heat = clamp(state.heat - 10, 0, 100);
+              state.health = clamp(state.health + 10, 0, 100);
+              toast("+Rep • -Heat");
+              hideDialog(); state.paused = false;
+            }
+          },
+          {
+            label:"Cherry-pick pages",
+            onClick: ()=>{
+              state.cash += 400;
+              state.rep -= 1;
+              state.heat = clamp(state.heat + 10, 0, 100);
+              state.health = clamp(state.health - 10, 0, 100);
+              toast("fast but dirty");
+              hideDialog(); state.paused = false;
+            }
+          },
+          {
+            label:"Back",
+            onClick: ()=>{ hideDialog(); state.paused = false; }
+          }
+        ]
+      );
+    },
+
+    iso(){
+      if (state.paused) return;
+      state.paused = true;
+      showDialog(
+        "ISO Lounge 🟥",
+        "ISO drama. A rep offers you ‘exclusive’ pricing if you push volume today.",
+        [
+          {
+            label:"Take the deal (heat up)",
+            primary:true,
+            onClick: ()=>{
+              state.cash += 1000;
+              state.rep += 1;
+              state.heat = clamp(state.heat + 22, 0, 100);
+              toast("+$1000 • heat ↑");
+              hideDialog(); state.paused = false;
+            }
+          },
+          {
+            label:"Decline & build brand",
+            onClick: ()=>{
+              state.rep += 4;
+              state.heat = clamp(state.heat - 6, 0, 100);
+              toast("+Rep • heat ↓");
+              hideDialog(); state.paused = false;
+            }
+          },
+          {
+            label:"Back",
+            onClick: ()=>{ hideDialog(); state.paused = false; }
+          }
+        ]
+      );
+    },
+
+    funder(){
+      if (state.paused) return;
+      state.paused = true;
+
+      const p = state.health;
+      const heat = state.heat;
+
+      let offer = 0;
+      if (p > 80) offer = 1800;
+      else if (p > 60) offer = 1200;
+      else if (p > 40) offer = 700;
+      else offer = 250;
+
+      // heat reduces outcome
+      offer = Math.max(100, Math.round(offer * (1 - (heat/140))));
+
+      showDialog(
+        "Funder HQ 🟪",
+        `They reviewed your file.<br/>
+         <span style="color:rgba(234,241,255,.75); font-weight:800;">
+           Deal Health: <b>${p}%</b> • Heat: <b>${heat}%</b>
+         </span><br/><br/>
+         You can close now or renegotiate.`,
+        [
+          {
+            label:`Close deal (+$${offer})`,
+            primary:true,
+            onClick: ()=>{
+              state.cash += offer;
+              state.rep += 2;
+              state.health = clamp(state.health - 8, 0, 100);
+              state.heat = clamp(state.heat + 8, 0, 100);
+              toast(`Closed +$${offer}`);
+              hideDialog(); state.paused = false;
+            }
+          },
+          {
+            label:"Renegotiate (reduce heat)",
+            onClick: ()=>{
+              state.rep += 1;
+              state.heat = clamp(state.heat - 12, 0, 100);
+              state.health = clamp(state.health + 4, 0, 100);
+              toast("Better terms");
+              hideDialog(); state.paused = false;
+            }
+          },
+          {
+            label:"Back",
+            onClick: ()=>{ hideDialog(); state.paused = false; }
+          }
+        ]
+      );
+    }
+  };
+
+  // ----- Heat events
+  function heatCheck(){
+    if (state.heat >= 90){
+      // Compliance raid mini penalty
+      state.cash = Math.max(0, state.cash - 800);
+      state.rep = Math.max(0, state.rep - 2);
+      state.health = clamp(state.health - 12, 0, 100);
+      state.heat = 60;
+      toast("🚨 Compliance raid! -$800");
+    }
+  }
+
+  // Camera (center on player)
+  function camera(){
+    const viewW = canvas.width;
+    const viewH = canvas.height;
+    const cx = clamp(player.x - viewW/2, 0, world.w - viewW);
+    const cy = clamp(player.y - viewH/2, 0, world.h - viewH);
+    return { x: cx, y: cy };
+  }
+
+  function intersects(px, py, r, z){
+    // circle vs rect
+    const nx = clamp(px, z.x, z.x + z.w);
+    const ny = clamp(py, z.y, z.y + z.h);
+    const dx = px - nx;
+    const dy = py - ny;
+    return (dx*dx + dy*dy) <= r*r;
+  }
+
+  let lastZoneId = null;
+
+  function update(){
+    // movement
+    if (!state.paused){
+      let vx = 0, vy = 0;
+      if (keys["w"] || keys["arrowup"]) vy -= 1;
+      if (keys["s"] || keys["arrowdown"]) vy += 1;
+      if (keys["a"] || keys["arrowleft"]) vx -= 1;
+      if (keys["d"] || keys["arrowright"]) vx += 1;
+
+      // normalize
+      if (vx !== 0 || vy !== 0){
+        const len = Math.hypot(vx, vy);
+        vx /= len; vy /= len;
+      }
+
+      player.x = clamp(player.x + vx * player.speed, player.r, world.w - player.r);
+      player.y = clamp(player.y + vy * player.speed, player.r, world.h - player.r);
+
+      // passive cooling + health drift
+      state.heat = clamp(state.heat - 0.015, 0, 100);
+      state.health = clamp(state.health - 0.003, 0, 100);
+
+      heatCheck();
+
+      // zone triggers
+      const inZone = zones.find(z=>intersects(player.x, player.y, player.r, z));
+      if (inZone){
+        if (inZone.id !== lastZoneId){
+          lastZoneId = inZone.id;
+          // trigger mission
+          (missions[inZone.id] || (()=>{}))();
+        }
+      } else {
+        lastZoneId = null;
+      }
+    }
+
+    // HUD
+    elCash.textContent = "$" + state.cash.toLocaleString();
+    elRep.textContent = state.rep.toLocaleString();
+
+    const h = Math.round(state.heat);
+    elHeatText.textContent = h + "%";
+    elHeatBar.style.width = h + "%";
+    elHeatBar.className = "fill " + (h < 40 ? "good" : (h < 75 ? "warn" : "bad"));
+
+    const hp = Math.round(state.health);
+    elHealthText.textContent = hp + "%";
+    elHealthBar.style.width = hp + "%";
+    elHealthBar.className = "fill " + (hp > 70 ? "good" : (hp > 40 ? "warn" : "bad"));
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,canvas.width, canvas.height);
+
+    const cam = camera();
+    const ox = -cam.x;
+    const oy = -cam.y;
+
+    // background grid
+    ctx.globalAlpha = 0.35;
+    ctx.strokeStyle = "rgba(120,160,255,.12)";
+    for (let x=0; x<=world.w; x+=60){
+      ctx.beginPath();
+      ctx.moveTo(x+ox, 0+oy);
+      ctx.lineTo(x+ox, world.h+oy);
+      ctx.stroke();
+    }
+    for (let y=0; y<=world.h; y+=60){
+      ctx.beginPath();
+      ctx.moveTo(0+ox, y+oy);
+      ctx.lineTo(world.w+ox, y+oy);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    // zones
+    zones.forEach(z=>{
+      ctx.fillStyle = z.color + "22";
+      ctx.strokeStyle = z.color + "88";
+      ctx.lineWidth = 2;
+      roundRect(ctx, z.x+ox, z.y+oy, z.w, z.h, 16, true, true);
+
+      ctx.fillStyle = "rgba(234,241,255,.9)";
+      ctx.font = "900 14px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial";
+      ctx.fillText(`${z.icon} ${z.label}`, z.x+ox+12, z.y+oy+24);
+    });
+
+    // player
+    ctx.fillStyle = "rgba(56,189,248,.25)";
+    ctx.beginPath();
+    ctx.arc(player.x+ox, player.y+oy, player.r+10, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.fillStyle = "rgba(234,241,255,1)";
+    ctx.beginPath();
+    ctx.arc(player.x+ox, player.y+oy, player.r, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.fillStyle = "rgba(10,20,51,1)";
+    ctx.beginPath();
+    ctx.arc(player.x+ox+4, player.y+oy-2, 3, 0, Math.PI*2);
+    ctx.fill();
+
+    // mini objective
+    ctx.fillStyle = "rgba(234,241,255,.75)";
+    ctx.font = "800 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial";
+    ctx.fillText("Tip: Keep Heat < 75% to avoid a raid. Build Deal Health at the Bank.", 14, canvas.height - 18);
+  }
+
+  function roundRect(ctx, x, y, w, h, r, fill, stroke){
+    if (typeof r === "number") r = {tl:r,tr:r,br:r,bl:r};
+    ctx.beginPath();
+    ctx.moveTo(x+r.tl, y);
+    ctx.lineTo(x+w-r.tr, y);
+    ctx.quadraticCurveTo(x+w, y, x+w, y+r.tr);
+    ctx.lineTo(x+w, y+h-r.br);
+    ctx.quadraticCurveTo(x+w, y+h, x+w-r.br, y+h);
+    ctx.lineTo(x+r.bl, y+h);
+    ctx.quadraticCurveTo(x, y+h, x, y+h-r.bl);
+    ctx.lineTo(x, y+r.tl);
+    ctx.quadraticCurveTo(x, y, x+r.tl, y);
+    ctx.closePath();
+    if (fill) ctx.fill();
+    if (stroke) ctx.stroke();
+  }
+
+  function loop(){
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>
