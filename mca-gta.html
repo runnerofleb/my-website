@@ -3,123 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Underwriter's Dilemma: Elite Edition</title>
+  <title>Underwriter's Dilemma: V3 Expanded</title>
   <style>
+    /* ALL PREVIOUS CSS IS RETAINED AND EXPANDED */
     :root {
       --bg: #0b1121; --panel: #162032; --text: #f8fafc;
       --green: #10b981; --red: #ef4444; --blue: #3b82f6; --yellow: #f59e0b;
     }
-    
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; user-select: none; }
-    
-    body {
-      margin: 0; padding: 0; background-color: var(--bg); color: var(--text);
-      display: flex; flex-direction: column; align-items: center; height: 100vh; overflow: hidden;
-    }
+    body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; height: 100vh; overflow: hidden; }
 
-    /* Scoreboard */
-    #header {
-      width: 100%; max-width: 420px; padding: 15px 20px 5px;
-      display: flex; justify-content: space-between; align-items: flex-end;
+    /* New Global Economy Bar */
+    #global-top-bar {
+      width: 100%; background: #040714; padding: 12px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 2px solid #1e293b; z-index: 20; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
+    .top-stat { font-weight: 800; font-size: 16px; color: #94a3b8; }
+    .top-stat span { color: white; margin-left: 8px; font-size: 18px; }
+    #bank-val { color: var(--green); text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+
+    /* Header & Stats (Retained) */
+    #header { width: 100%; max-width: 420px; padding: 15px 20px 5px; display: flex; justify-content: space-between; align-items: flex-end; }
     .fund-title { font-size: 24px; font-weight: 900; letter-spacing: -1px; color: #e2e8f0; }
-    .score { font-size: 16px; font-weight: 700; color: var(--yellow); }
+    .score { font-size: 16px; font-weight: 700; color: var(--yellow); cursor: pointer; text-decoration: underline;}
 
-    /* Top Stats Bar */
-    #stats-container {
-      width: 100%; max-width: 420px; padding: 15px 20px;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 15px 25px;
-      background: transparent; z-index: 10;
-    }
-    
+    #stats-container { width: 100%; max-width: 420px; padding: 10px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 25px; z-index: 10; }
     .stat-box { display: flex; flex-direction: column; gap: 6px; position: relative;}
     .stat-label { font-size: 12px; font-weight: 800; text-transform: uppercase; color: #94a3b8; display: flex; justify-content: space-between;}
-    .stat-bar-bg { width: 100%; height: 10px; background: rgba(0,0,0,0.5); border-radius: 5px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);}
+    .stat-bar-bg { width: 100%; height: 8px; background: rgba(0,0,0,0.5); border-radius: 4px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);}
     .stat-bar-fill { height: 100%; width: 50%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 
-    /* Card Play Area */
-    #game-area {
-      flex: 1; width: 100%; max-width: 420px; position: relative;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      perspective: 1000px;
-    }
-
+    /* Game Area (Retained) */
+    #game-area { flex: 1; width: 100%; max-width: 420px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; perspective: 1000px; }
+    
     .card {
-      position: absolute; width: 340px; height: 460px;
+      position: absolute; width: 340px; height: 440px;
       background: linear-gradient(145deg, #ffffff, #f1f5f9); color: #0f172a; 
       border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 2px 0 rgba(255,255,255,0.8);
-      display: flex; flex-direction: column; padding: 28px;
+      display: flex; flex-direction: column; padding: 24px;
       transform-origin: 50% 150%; transition: transform 0.3s ease, opacity 0.3s ease;
       cursor: grab; will-change: transform;
     }
     .card:active { cursor: grabbing; }
-    
     .merchant-type { font-size: 15px; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;}
-    .merchant-pitch { font-size: 22px; font-weight: 800; flex: 1; line-height: 1.35; letter-spacing: -0.5px;}
-    .merchant-data { background: #e2e8f0; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 700; color: #334155; border: 1px solid #cbd5e1; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);}
+    .merchant-pitch { font-size: 20px; font-weight: 800; flex: 1; line-height: 1.35; letter-spacing: -0.5px;}
+    .merchant-data { background: #e2e8f0; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 700; color: #334155; border: 1px solid #cbd5e1; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);}
     .data-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
     .data-row:last-child { margin-bottom: 0; }
     .data-label { color: #64748b; font-weight: 600; }
     
     .stamp {
-      position: absolute; top: 50px; font-size: 38px; font-weight: 900; text-transform: uppercase;
+      position: absolute; top: 40px; font-size: 34px; font-weight: 900; text-transform: uppercase;
       border: 5px solid; border-radius: 12px; padding: 8px 16px; opacity: 0; pointer-events: none;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2); letter-spacing: 2px;
     }
     #stamp-decline { right: 20px; color: var(--red); border-color: var(--red); transform: rotate(15deg); }
     #stamp-fund { left: 20px; color: var(--green); border-color: var(--green); transform: rotate(-15deg); }
 
-    /* Action Buttons */
-    #controls {
-      width: 100%; max-width: 420px; padding: 20px 25px 40px;
-      display: flex; justify-content: space-between; gap: 20px; z-index: 10;
-    }
-    .btn {
-      flex: 1; padding: 18px; border: none; border-radius: 16px; font-size: 18px; font-weight: 900;
-      cursor: pointer; transition: transform 0.1s, filter 0.2s; color: white; text-transform: uppercase;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-    }
+    /* Controls (Retained) */
+    #controls { width: 100%; max-width: 420px; padding: 10px 25px 30px; display: flex; justify-content: space-between; gap: 20px; z-index: 10; }
+    .btn { flex: 1; padding: 16px; border: none; border-radius: 16px; font-size: 18px; font-weight: 900; cursor: pointer; transition: transform 0.1s; color: white; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
     .btn:active { transform: scale(0.95); filter: brightness(0.8); }
     .btn small { font-size: 12px; opacity: 0.8; font-weight: 700; }
-    .btn-decline { background: linear-gradient(180deg, #ef4444, #dc2626); box-shadow: 0 6px 0 #991b1b, 0 10px 20px rgba(239, 68, 68, 0.4); }
-    .btn-fund { background: linear-gradient(180deg, #10b981, #059669); box-shadow: 0 6px 0 #065f46, 0 10px 20px rgba(16, 185, 129, 0.4); }
+    .btn-decline { background: linear-gradient(180deg, #ef4444, #dc2626); box-shadow: 0 6px 0 #991b1b; }
+    .btn-fund { background: linear-gradient(180deg, #10b981, #059669); box-shadow: 0 6px 0 #065f46; }
 
-    /* Floating Text Juice */
-    .float-text {
-      position: absolute; font-weight: 900; font-size: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);
-      pointer-events: none; z-index: 100; opacity: 0;
-      animation: floatUpAndFade 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    /* New Shop Modal */
+    #shop-modal {
+      position: fixed; bottom: -100%; left: 0; width: 100%; height: 75%;
+      background: var(--panel); border-top-left-radius: 24px; border-top-right-radius: 24px;
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.8); z-index: 150; transition: bottom 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      padding: 24px; display: flex; flex-direction: column;
     }
-    @keyframes floatUpAndFade {
-      0% { opacity: 0; transform: translateY(0) scale(0.5); }
-      20% { opacity: 1; transform: translateY(-20px) scale(1.2); }
-      100% { opacity: 0; transform: translateY(-80px) scale(1); }
-    }
+    #shop-modal.open { bottom: 0; }
+    .shop-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; padding-bottom: 12px; margin-bottom: 16px;}
+    .shop-title { font-size: 24px; font-weight: 900; color: white; }
+    .close-btn { background: transparent; border: none; color: #94a3b8; font-size: 24px; font-weight: bold; cursor: pointer; }
+    .upgrade-item { background: #0f172a; padding: 16px; border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155;}
+    .upg-info h3 { margin: 0 0 4px 0; font-size: 16px; color: var(--blue); }
+    .upg-info p { margin: 0; font-size: 12px; color: #94a3b8; }
+    .buy-btn { background: var(--green); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer;}
+    .buy-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
 
-    /* Game Over Screen */
-    #game-over {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(11, 17, 33, 0.98); display: none; flex-direction: column;
-      align-items: center; justify-content: center; z-index: 200; padding: 30px; text-align: center;
-      backdrop-filter: blur(5px);
-    }
-    #game-over h1 { font-size: 48px; font-weight: 900; margin-bottom: 10px; letter-spacing: 2px; text-transform: uppercase;}
+    /* Float Text & Game Over */
+    .float-text { position: absolute; font-weight: 900; font-size: 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); pointer-events: none; z-index: 100; opacity: 0; animation: floatUpAndFade 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+    @keyframes floatUpAndFade { 0% { opacity: 0; transform: translateY(0) scale(0.5); } 20% { opacity: 1; transform: translateY(-20px) scale(1.2); } 100% { opacity: 0; transform: translateY(-80px) scale(1); } }
+    
+    #game-over { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 17, 33, 0.98); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 200; padding: 30px; text-align: center; backdrop-filter: blur(5px); }
+    #game-over h1 { font-size: 48px; font-weight: 900; margin-bottom: 10px; color: var(--red);}
     #game-over p { font-size: 20px; line-height: 1.6; margin-bottom: 40px; color: #cbd5e1; font-weight: 600;}
-    #restart-btn { background: var(--blue); padding: 18px 40px; border: none; border-radius: 12px; color: white; font-weight: 900; font-size: 20px; cursor: pointer; box-shadow: 0 6px 0 #1e3a8a; text-transform: uppercase;}
-    #restart-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #1e3a8a; }
-
+    #restart-btn { background: var(--blue); padding: 18px 40px; border: none; border-radius: 12px; color: white; font-weight: 900; font-size: 20px; cursor: pointer; box-shadow: 0 6px 0 #1e3a8a;}
   </style>
 </head>
 <body>
 
+  <div id="global-top-bar">
+    <div class="top-stat">DAY <span id="day-val">1</span></div>
+    <div class="top-stat">CAPITAL <span id="bank-val">$500,000</span></div>
+  </div>
+
   <div id="header">
     <div class="fund-title">CAPITAL<span style="color:var(--blue)">FUND</span></div>
-    <div class="score">DEALS: <span id="score-val" style="color:white; font-size: 20px;">0</span></div>
+    <div class="score" onclick="toggleShop()">🛒 SHOP / UPGRADES</div>
   </div>
 
   <div id="stats-container">
     <div class="stat-box" id="box-liquidity">
-      <div class="stat-label"><span>Liquidity</span> <span id="val-liquidity">50%</span></div>
+      <div class="stat-label"><span>Liquidity %</span> <span id="val-liquidity">50%</span></div>
       <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-liquidity" style="background: var(--blue);"></div></div>
     </div>
     <div class="stat-box" id="box-yield">
@@ -143,71 +134,141 @@
     <button class="btn btn-fund" onclick="handleChoice('fund')">Swipe Right<small>FUND</small></button>
   </div>
 
+  <div id="shop-modal">
+    <div class="shop-header">
+      <div class="shop-title">Upgrades</div>
+      <button class="close-btn" onclick="toggleShop()">✕</button>
+    </div>
+    <div class="upgrade-item">
+      <div class="upg-info">
+        <h3>Plaid Integration</h3>
+        <p>Removes 10% Default Risk on all future deals.</p>
+      </div>
+      <button class="buy-btn" id="upg-plaid" onclick="buyUpgrade('plaid', 100000)">$100k</button>
+    </div>
+    <div class="upgrade-item">
+      <div class="upg-info">
+        <h3>Golf Memberships</h3>
+        <p>Brokers are 20% less angry when you decline deals.</p>
+      </div>
+      <button class="buy-btn" id="upg-golf" onclick="buyUpgrade('golf', 250000)">$250k</button>
+    </div>
+    <div class="upgrade-item">
+      <div class="upg-info">
+        <h3>Credit Facility</h3>
+        <p>Double your starting capital limit.</p>
+      </div>
+      <button class="buy-btn" id="upg-credit" onclick="buyUpgrade('credit', 500000)">$500k</button>
+    </div>
+  </div>
+
   <div id="game-over">
-    <h1 id="go-title" style="color: var(--red);">BANKRUPT</h1>
-    <p id="go-desc">You funded too many bad deals and the credit facility pulled your lines.</p>
+    <h1 id="go-title">BANKRUPT</h1>
+    <p id="go-desc">Description</p>
     <button id="restart-btn" onclick="location.reload()">Start New Fund</button>
   </div>
 
   <script>
-    // --- GAME STATE ---
+    // --- EXPANDED GAME STATE ---
     let stats = { liquidity: 50, yield: 50, brokers: 70, defaults: 20 };
-    let score = 0;
+    let economy = { bank: 500000, day: 1, dealsDone: 0 };
+    let perks = { plaid: false, golf: false, credit: false };
+    
     let currentCardEl = null;
-    let isDragging = false;
-    let startX = 0;
-    let currentX = 0;
+    let currentMerchant = null;
+    let isDragging = false, startX = 0, currentX = 0;
 
-    // --- THE ELITE DATABASE (25+ Scenarios) ---
-    // Arrays: [liquidity, yield, brokers, defaults]
-    const deck = [
-      { type: "Trucking", pitch: "Owner-operator needs $40k for a new transmission. Has 1 truck. It's currently impounded.", data: "Bal: $400 | NSFs: 8 | FICO: 520", fund: [-15, +5, +10, +25], decline: [0, 0, -10, 0] },
-      { type: "Bodega", pitch: "Corner store wants $15k to buy a Bitcoin ATM. Already signed a Confession of Judgment.", data: "Bal: $1,200 | NSFs: 3 | FICO: 600", fund: [-5, +10, +5, +15], decline: [0, 0, -5, 0] },
-      { type: "SaaS Startup", pitch: "Tech bro burning $50k/mo. Wants $200k. Perfect credit, but no profit.", data: "Bal: $150k | NSFs: 0 | FICO: 780", fund: [-30, -5, +5, +10], decline: [0, 0, -5, 0] },
-      { type: "Construction", pitch: "Contractor stacking 3 advances. 'I just need one more to finish this city contract!'", data: "Bal: $8,000 | Positions: 3rd | FICO: 550", fund: [-20, +25, +15, +30], decline: [0, 0, -15, -5] },
-      { type: "ISO Ultimatum", pitch: "Your biggest broker calls: 'If you don't fund this garbage file, I'm pulling my whole book.'", data: "Bal: -$40 | NSFs: 14 | FICO: 480", fund: [-10, -5, +30, +20], decline: [+5, 0, -40, -5] },
-      { type: "Dental Clinic", pitch: "Established practice doing $250k/mo. Needs $100k for 'marketing'. Clean paper.", data: "Bal: $45,000 | NSFs: 0 | FICO: 720", fund: [-25, +15, +10, -10], decline: [0, -5, -20, 0] },
-      { type: "Vape Shop", pitch: "Opening 3rd location. Pays mostly cash. Deposits exactly $9,999 to avoid IRS flags.", data: "Bal: $12k | NSFs: 1 | FICO: 680", fund: [-10, +15, +5, +10], decline: [0, 0, -10, 0] },
-      { type: "E-Commerce", pitch: "Amazon Dropshipper's ad account got banned. Needs $20k to pivot to TikTok.", data: "Bal: $200 (was $15k) | NSFs: 1", fund: [-10, +5, 0, +20], decline: [+5, 0, -5, 0] },
-      { type: "Restaurant", pitch: "Michelin star fine dining. Revenue is huge, but profit margins are 2%.", data: "Bal: $60k | NSFs: 0 | FICO: 700", fund: [-20, +10, +10, +5], decline: [0, -5, -10, 0] },
-      { type: "Used Car Lot", pitch: "Dealer needs $50k to buy inventory at auction. Floor plan is maxed out.", data: "Bal: $5,000 | NSFs: 4 | FICO: 610", fund: [-15, +15, +5, +15], decline: [0, 0, -5, 0] },
-      { type: "Landscaping", pitch: "Seasonal business entering winter. Needs $30k to 'float payroll till spring.'", data: "Bal: $2,000 | NSFs: 2 | FICO: 640", fund: [-10, +5, +5, +20], decline: [0, +5, -5, 0] },
-      { type: "Fraud Alert", pitch: "Bank statements look good, but the font size on the deposits changes halfway down.", data: "Bal: $80k | NSFs: 0 | FICO: 750", fund: [-20, -10, 0, +40], decline: [+10, 0, -5, -10] },
-      { type: "Medical Spa", pitch: "Buying a new $80k laser machine. High margins, recurring customers.", data: "Bal: $25k | NSFs: 0 | FICO: 710", fund: [-15, +20, +10, -5], decline: [0, -10, -15, 0] },
-      { type: "The Whale", pitch: "Manufacturing plant needs $1 MILLION for equipment. Will drain your liquidity but print money.", data: "Bal: $400k | NSFs: 0 | FICO: 790", fund: [-50, +40, +20, -15], decline: [+20, -15, -25, 0] },
-      { type: "Pizzeria", pitch: "Cash-heavy business. Owner swears he makes $50k a month, but banks show $5k.", data: "Bal: $1,500 | NSFs: 5 | FICO: 580", fund: [-5, +10, +5, +15], decline: [0, 0, -5, 0] },
-      { type: "Gym Franchise", pitch: "Opening a new location. Presales look great, but current location is bleeding cash.", data: "Bal: $8k | NSFs: 3 | FICO: 660", fund: [-15, +15, +10, +10], decline: [0, 0, -10, -5] },
-      { type: "Roofing Co.", pitch: "Hurricane just hit Florida. Needs $60k for materials right now. Guaranteed payout.", data: "Bal: $15k | NSFs: 1 | FICO: 690", fund: [-20, +25, +10, -5], decline: [0, -10, -10, 0] },
-      { type: "Nightclub", pitch: "Needs $40k to book a huge DJ. If the DJ doesn't show, the club goes under.", data: "Bal: $4k | NSFs: 6 | FICO: 600", fund: [-15, +30, +5, +25], decline: [0, 0, -5, 0] },
-      { type: "Syndication", pitch: "Another fund wants you to participate 50% in a monster $500k deal. Less risk.", data: "Bal: N/A | FICO: N/A", fund: [-25, +15, +15, -5], decline: [+10, -5, -10, 0] },
-      { type: "Default Recovery", pitch: "Collections agency offers to buy a chunk of your bad debt for pennies on the dollar.", data: "Bal: N/A | Recovery: 15%", fund: [+20, -10, 0, -20], decline: [0, 0, 0, +5] } // "Fund" means accept the deal
+    // --- PROCEDURAL MERCHANT GENERATOR ---
+    // Instead of a static array, this builds dynamic files.
+    const industries = ["Trucking", "Restaurant", "Construction", "E-Commerce", "Medical Spa", "Bodega", "HVAC", "Plumbing", "Retail"];
+    const pitches = [
+      "Needs capital to buy new equipment.",
+      "Expanding to a second location. Wants to float construction costs.",
+      "Owes back taxes to the IRS. Needs a bridge loan.",
+      "Inventory order stuck in customs. Needs cash to release it.",
+      "Payroll is tomorrow and accounts receivable are late.",
+      "Broker swears 'this guy is solid, just ignore the bank statements.'"
     ];
 
-    let currentMerchant = null;
+    function generateMerchant() {
+      const type = industries[Math.floor(Math.random() * industries.length)];
+      const pitch = pitches[Math.floor(Math.random() * pitches.length)];
+      
+      // Procedural Math Generation
+      const bal = Math.floor(Math.random() * 50000) + 500;
+      const nsfs = Math.floor(Math.random() * 15);
+      const fico = Math.floor(Math.random() * 300) + 450; // 450 to 750
+      
+      // Calculate Risk/Reward mathematically based on stats!
+      let risk = 0;
+      if (bal < 5000) risk += 15;
+      if (nsfs > 5) risk += 20;
+      if (fico < 550) risk += 15;
+      if (perks.plaid) risk -= 10; // Upgrade effect!
 
-    // --- CORE LOGIC ---
+      const rewardYield = Math.floor(risk / 1.5) + 5;
+      const liqCost = Math.floor(bal / 2000) + 5;
+      
+      // Broker logic
+      let brokerHit = (fico > 650) ? -20 : -5; // Harder hit if you decline good paper
+      if (perks.golf) brokerHit = Math.floor(brokerHit * 0.8); // Upgrade effect!
+
+      return {
+        type: type,
+        pitch: pitch,
+        data: `Avg Bal: $${bal.toLocaleString()} | NSFs: ${nsfs} | FICO: ${fico}`,
+        fund: [-liqCost, +rewardYield, +10, +risk],
+        decline: [+5, 0, brokerHit, 0], // Saves liquidity to decline, hurts brokers
+        dollarValue: Math.floor(bal * 1.3) // Actual money generated
+      };
+    }
+
+    // --- UI UPDATES ---
     function updateUI() {
       for (let key in stats) stats[key] = Math.max(0, Math.min(100, stats[key]));
 
       document.getElementById('bar-liquidity').style.width = stats.liquidity + '%';
       document.getElementById('val-liquidity').innerText = stats.liquidity + '%';
-      document.getElementById('bar-liquidity').style.background = stats.liquidity < 20 ? 'var(--red)' : 'var(--blue)';
-      
       document.getElementById('bar-yield').style.width = stats.yield + '%';
       document.getElementById('val-yield').innerText = stats.yield + '%';
-      document.getElementById('bar-yield').style.background = stats.yield < 20 ? 'var(--red)' : 'var(--green)';
-      
       document.getElementById('bar-brokers').style.width = stats.brokers + '%';
       document.getElementById('val-brokers').innerText = stats.brokers + '%';
-      document.getElementById('bar-brokers').style.background = stats.brokers < 20 ? 'var(--red)' : 'var(--yellow)';
-      
       document.getElementById('bar-defaults').style.width = stats.defaults + '%';
       document.getElementById('val-defaults').innerText = stats.defaults + '%';
-      // Defaults is bad if it gets high
+
+      // Colors
+      document.getElementById('bar-liquidity').style.background = stats.liquidity < 20 ? 'var(--red)' : 'var(--blue)';
+      document.getElementById('bar-yield').style.background = stats.yield < 20 ? 'var(--red)' : 'var(--green)';
+      document.getElementById('bar-brokers').style.background = stats.brokers < 20 ? 'var(--red)' : 'var(--yellow)';
       document.getElementById('bar-defaults').style.background = stats.defaults > 80 ? 'var(--red)' : 'var(--red)';
 
-      document.getElementById('score-val').innerText = score;
+      // Global Top Bar
+      document.getElementById('day-val').innerText = economy.day;
+      document.getElementById('bank-val').innerText = "$" + economy.bank.toLocaleString();
+
+      checkShopButtons();
       checkGameOver();
+    }
+
+    function toggleShop() {
+      document.getElementById('shop-modal').classList.toggle('open');
+    }
+
+    function buyUpgrade(type, cost) {
+      if (economy.bank >= cost && !perks[type]) {
+        economy.bank -= cost;
+        perks[type] = true;
+        document.getElementById('upg-' + type).innerText = "OWNED";
+        document.getElementById('upg-' + type).disabled = true;
+        if (type === 'credit') stats.liquidity = 100; // Refills liquidity instantly
+        updateUI();
+      }
+    }
+
+    function checkShopButtons() {
+      if(!perks.plaid) document.getElementById('upg-plaid').disabled = economy.bank < 100000;
+      if(!perks.golf) document.getElementById('upg-golf').disabled = economy.bank < 250000;
+      if(!perks.credit) document.getElementById('upg-credit').disabled = economy.bank < 500000;
     }
 
     function checkGameOver() {
@@ -216,19 +277,19 @@
       const desc = document.getElementById('go-desc');
       let lost = true;
 
-      if (stats.liquidity <= 0) { title.innerText = "OUT OF CAPITAL"; desc.innerText = `You ran out of money to fund deals. You survived ${score} files.`; }
-      else if (stats.yield <= 0) { title.innerText = "UNPROFITABLE"; desc.innerText = `Your fund bled money. Investors pulled out. You survived ${score} files.`; }
-      else if (stats.brokers <= 0) { title.innerText = "BLACKLISTED"; desc.innerText = `Brokers stopped sending you files. You starved. You survived ${score} files.`; }
-      else if (stats.defaults >= 100) { title.innerText = "DEFAULT CRISIS"; desc.innerText = `You funded absolute garbage. Your portfolio blew up. You survived ${score} files.`; }
+      if (stats.liquidity <= 0) { title.innerText = "OUT OF CAPITAL"; desc.innerText = `You ran out of liquidity on Day ${economy.day}.`; }
+      else if (stats.yield <= 0) { title.innerText = "UNPROFITABLE"; desc.innerText = `Your fund bled money. You made it to Day ${economy.day}.`; }
+      else if (stats.brokers <= 0) { title.innerText = "BLACKLISTED"; desc.innerText = `Brokers cut you off. You lasted ${economy.day} days.`; }
+      else if (stats.defaults >= 100) { title.innerText = "DEFAULT CRISIS"; desc.innerText = `Your portfolio blew up on Day ${economy.day}.`; }
       else { lost = false; }
 
       if (lost) go.style.display = 'flex';
     }
 
+    // --- CARD SPAWNING & PHYSICS (Retained) ---
     function spawnCard() {
-      currentMerchant = deck[Math.floor(Math.random() * deck.length)];
+      currentMerchant = generateMerchant(); // NOW CALLING PROCEDURAL GENERATOR
       
-      // Parse the data string to make it look like a clean table
       const dataParts = currentMerchant.data.split(' | ');
       let dataHtml = '';
       dataParts.forEach(part => {
@@ -255,97 +316,79 @@
       window.addEventListener('pointerup', endDrag);
     }
 
-    // --- SWIPE MECHANICS ---
     function startDrag(e) { isDragging = true; startX = e.clientX; currentCardEl.style.transition = 'none'; }
-
     function drag(e) {
       if (!isDragging || !currentCardEl) return;
       currentX = e.clientX - startX;
-      const rotate = currentX * 0.05;
-      currentCardEl.style.transform = `translateX(${currentX}px) rotate(${rotate}deg)`;
-
-      const declineStamp = currentCardEl.querySelector('#stamp-decline');
-      const fundStamp = currentCardEl.querySelector('#stamp-fund');
-      
-      if (currentX < -40) { declineStamp.style.opacity = Math.min(1, Math.abs(currentX)/100); fundStamp.style.opacity = 0; }
-      else if (currentX > 40) { fundStamp.style.opacity = Math.min(1, Math.abs(currentX)/100); declineStamp.style.opacity = 0; }
-      else { declineStamp.style.opacity = 0; fundStamp.style.opacity = 0; }
+      currentCardEl.style.transform = `translateX(${currentX}px) rotate(${currentX * 0.05}deg)`;
+      const dec = currentCardEl.querySelector('#stamp-decline'), fnd = currentCardEl.querySelector('#stamp-fund');
+      if (currentX < -40) { dec.style.opacity = Math.min(1, Math.abs(currentX)/100); fnd.style.opacity = 0; }
+      else if (currentX > 40) { fnd.style.opacity = Math.min(1, Math.abs(currentX)/100); dec.style.opacity = 0; }
+      else { dec.style.opacity = 0; fnd.style.opacity = 0; }
     }
-
     function endDrag() {
       if (!isDragging || !currentCardEl) return;
       isDragging = false;
       currentCardEl.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease';
-
       if (currentX > 100) handleChoice('fund', true);
       else if (currentX < -100) handleChoice('decline', true);
-      else { 
-        currentCardEl.style.transform = `translateX(0px) rotate(0deg)`; 
-        currentCardEl.querySelector('#stamp-decline').style.opacity = 0;
-        currentCardEl.querySelector('#stamp-fund').style.opacity = 0;
-      }
+      else { currentCardEl.style.transform = `translateX(0px) rotate(0deg)`; currentCardEl.querySelectorAll('.stamp').forEach(s=>s.style.opacity=0); }
       currentX = 0;
     }
 
-    // --- GAME JUICE (Floating Text) ---
     function spawnFloatText(text, color, boxId) {
       const box = document.getElementById(boxId);
       const rect = box.getBoundingClientRect();
       const el = document.createElement('div');
       el.className = 'float-text';
-      el.innerText = text;
-      el.style.color = color;
-      el.style.left = (rect.left + rect.width / 2 - 20) + 'px';
-      el.style.top = (rect.top + 10) + 'px';
+      el.innerText = text; el.style.color = color;
+      el.style.left = (rect.left + rect.width / 2 - 20) + 'px'; el.style.top = (rect.top + 10) + 'px';
       document.body.appendChild(el);
       setTimeout(() => el.remove(), 1200);
     }
 
     function handleChoice(action, fromDrag = false) {
       if (!currentCardEl) return;
-      score++;
+      economy.dealsDone++;
+      if(economy.dealsDone % 3 === 0) economy.day++; // Advance days every 3 deals
 
       const effects = action === 'fund' ? currentMerchant.fund : currentMerchant.decline;
       const keys = ['liquidity', 'yield', 'brokers', 'defaults'];
       const boxes = ['box-liquidity', 'box-yield', 'box-brokers', 'box-defaults'];
-      const colors = ['var(--blue)', 'var(--green)', 'var(--yellow)', 'var(--red)'];
-
-      // Apply Stats & Spawn Juice
+      
       for(let i=0; i<4; i++) {
         if (effects[i] !== 0) {
           stats[keys[i]] += effects[i];
-          const sign = effects[i] > 0 ? '+' : '';
           const color = (keys[i] === 'defaults') ? (effects[i] > 0 ? 'var(--red)' : 'var(--green)') : (effects[i] > 0 ? 'var(--green)' : 'var(--red)');
-          spawnFloatText(`${sign}${effects[i]}`, color, boxes[i]);
+          spawnFloatText(`${effects[i]>0?'+':''}${effects[i]}`, color, boxes[i]);
         }
       }
 
-      // Natural game progression (slowly collect money, old defaults wash out)
-      stats.liquidity += 3; 
-      stats.defaults = Math.max(0, stats.defaults - 1);
+      // Economy Math
+      if (action === 'fund') {
+        // Did it default?
+        if (Math.random() * 100 < currentMerchant.fund[3]) {
+          // Defaulted! Lose money.
+          economy.bank -= currentMerchant.dollarValue;
+          spawnFloatText("DEFAULT!", "var(--red)", "bank-val");
+        } else {
+          // Paid back! Make money.
+          economy.bank += currentMerchant.dollarValue;
+          spawnFloatText("+$" + currentMerchant.dollarValue.toLocaleString(), "var(--green)", "bank-val");
+        }
+      }
 
-      // Animate card away
-      const throwX = action === 'fund' ? window.innerWidth : -window.innerWidth;
-      const throwRot = action === 'fund' ? 45 : -45;
+      stats.liquidity += 3; stats.defaults = Math.max(0, stats.defaults - 1);
       
       if (!fromDrag) currentCardEl.querySelector(action === 'fund' ? '#stamp-fund' : '#stamp-decline').style.opacity = 1;
-
-      currentCardEl.style.transform = `translateX(${throwX}px) rotate(${throwRot}deg)`;
+      currentCardEl.style.transform = `translateX(${action==='fund'?500:-500}px) rotate(${action==='fund'?45:-45}deg)`;
       currentCardEl.style.opacity = 0;
       
-      const oldCard = currentCardEl;
-      currentCardEl = null;
-
-      setTimeout(() => {
-        oldCard.remove();
-        updateUI();
-        if (document.getElementById('game-over').style.display !== 'flex') spawnCard();
-      }, 300);
+      const oldCard = currentCardEl; currentCardEl = null;
+      setTimeout(() => { oldCard.remove(); updateUI(); if (document.getElementById('game-over').style.display !== 'flex') spawnCard(); }, 300);
     }
 
-    // Init
-    updateUI();
-    spawnCard();
+    updateUI(); spawnCard();
   </script>
 </body>
 </html>
