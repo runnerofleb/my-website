@@ -1845,3 +1845,316 @@
 </script>
 </body>
 </html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>MCA GTA • 3D Human (Web Prototype)</title>
+  <style>
+    html,body{margin:0;height:100%;overflow:hidden;background:#070a18;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#eaf1ff}
+    #ui{
+      position:fixed;top:12px;left:12px;z-index:10;
+      background:rgba(10,20,51,.78);border:1px solid rgba(28,43,102,.8);
+      border-radius:16px;padding:12px;box-shadow:0 18px 55px rgba(0,0,0,.55);
+      width:min(360px, calc(100vw - 24px));
+      backdrop-filter: blur(10px);
+    }
+    .row{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .k{opacity:.75;font-weight:800;font-size:12px}
+    .v{font-weight:950}
+    .tip{opacity:.75;font-weight:800;font-size:12px;line-height:1.35;margin-top:8px}
+    .pill{display:inline-flex;gap:8px;align-items:center;margin-top:10px;
+      border:1px solid rgba(44,70,160,.60);background:rgba(7,12,28,.45);
+      padding:6px 10px;border-radius:999px;font-size:12px;font-weight:950;opacity:.9
+    }
+    #toast{
+      position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:10;
+      background:rgba(10,20,51,.95);border:1px solid rgba(28,43,102,.85);
+      padding:10px 12px;border-radius:14px;box-shadow:0 18px 55px rgba(0,0,0,.55);
+      font-weight:950;display:none;max-width:min(720px,calc(100vw - 24px));
+    }
+    #toast.show{display:block;}
+    canvas{display:block;}
+  </style>
+</head>
+<body>
+  <div id="ui">
+    <div class="row"><div class="k">Mode</div><div class="v" id="mode">3D Human</div></div>
+    <div class="row" style="margin-top:6px;"><div class="k">Mission</div><div class="v" id="mission">Go to Lead Alley</div></div>
+    <div class="tip">
+      Controls: <b>WASD</b> move • <b>Shift</b> sprint • <b>Mouse</b> look (drag) • Walk into glowing markers.
+    </div>
+    <div class="pill">🟦 Leads • 🟩 Merchant • 🟪 Funder • 🟧 Bank • 🟥 ISO</div>
+  </div>
+  <div id="toast"></div>
+
+  <!-- Three.js via CDN (works on GitHub Pages) -->
+  <script type="module">
+    import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
+
+    // ---------- UI ----------
+    const missionEl = document.getElementById("mission");
+    const toastEl = document.getElementById("toast");
+    function toast(msg){
+      toastEl.textContent = msg;
+      toastEl.classList.add("show");
+      setTimeout(()=>toastEl.classList.remove("show"), 1200);
+    }
+
+    // ---------- Scene ----------
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x070a18, 20, 180);
+
+    const camera = new THREE.PerspectiveCamera(65, innerWidth/innerHeight, 0.1, 500);
+    camera.position.set(0, 4, 10);
+
+    const renderer = new THREE.WebGLRenderer({ antialias:true });
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    document.body.appendChild(renderer.domElement);
+
+    // Lights
+    const hemi = new THREE.HemisphereLight(0xaecbff, 0x0b1028, 0.9);
+    scene.add(hemi);
+
+    const sun = new THREE.DirectionalLight(0xffffff, 1.1);
+    sun.position.set(20, 35, 10);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.camera.near = 1;
+    sun.shadow.camera.far = 120;
+    sun.shadow.camera.left = -50;
+    sun.shadow.camera.right = 50;
+    sun.shadow.camera.top = 50;
+    sun.shadow.camera.bottom = -50;
+    scene.add(sun);
+
+    // Ground
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(600, 600),
+      new THREE.MeshStandardMaterial({ color: 0x0b1028, roughness: 1, metalness: 0 })
+    );
+    ground.rotation.x = -Math.PI/2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // Grid for vibe
+    const grid = new THREE.GridHelper(300, 60, 0x2a3aa8, 0x1a256b);
+    grid.position.y = 0.01;
+    scene.add(grid);
+
+    // Simple “city blocks” buildings
+    function building(x,z,w,h,d,color){
+      const b = new THREE.Mesh(
+        new THREE.BoxGeometry(w,h,d),
+        new THREE.MeshStandardMaterial({ color, roughness: 0.9, metalness: 0.05 })
+      );
+      b.position.set(x, h/2, z);
+      b.castShadow = true;
+      b.receiveShadow = true;
+      scene.add(b);
+      return b;
+    }
+    for(let i=0;i<40;i++){
+      const x = (Math.random()*200-100);
+      const z = (Math.random()*200-100);
+      if(Math.abs(x) < 12 && Math.abs(z) < 12) continue; // keep center clear
+      building(x, z, 6+Math.random()*12, 6+Math.random()*22, 6+Math.random()*12, 0x111a45);
+    }
+
+    // ---------- 3D Human (simple) ----------
+    // We’ll use a capsule-ish body: torso + head + legs
+    const human = new THREE.Group();
+
+    const matBody = new THREE.MeshStandardMaterial({ color: 0xeaf1ff, roughness: 0.85 });
+    const matAccent = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.65 });
+
+    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.55, 0.9, 6, 12), matAccent);
+    torso.castShadow = true;
+    torso.position.y = 1.55;
+    human.add(torso);
+
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.38, 20, 16), matBody);
+    head.castShadow = true;
+    head.position.y = 2.45;
+    human.add(head);
+
+    const hips = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.35, 0.4), matBody);
+    hips.castShadow = true;
+    hips.position.y = 1.05;
+    human.add(hips);
+
+    const legGeo = new THREE.CapsuleGeometry(0.20, 0.65, 6, 10);
+    const legL = new THREE.Mesh(legGeo, matBody);
+    const legR = new THREE.Mesh(legGeo, matBody);
+    legL.castShadow = legR.castShadow = true;
+    legL.position.set(-0.22, 0.55, 0);
+    legR.position.set( 0.22, 0.55, 0);
+    human.add(legL, legR);
+
+    scene.add(human);
+
+    // ---------- Mission markers ----------
+    function marker(color, x, z, label){
+      const g = new THREE.Group();
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(1.25, 0.12, 14, 32),
+        new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.6 })
+      );
+      ring.rotation.x = -Math.PI/2;
+      ring.position.y = 0.06;
+      ring.castShadow = false;
+      g.add(ring);
+
+      const beam = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.18, 0.18, 3.2, 16),
+        new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.9, transparent:true, opacity:0.65 })
+      );
+      beam.position.y = 1.7;
+      g.add(beam);
+
+      g.position.set(x, 0, z);
+      g.userData = { label };
+      scene.add(g);
+      return g;
+    }
+
+    const markers = {
+      leads:   marker(0x38bdf8, -28,  10, "Lead Alley"),
+      merchant:marker(0x22c55e,  22, -18, "Merchant Row"),
+      funder:  marker(0xa78bfa,  42,  26, "Funder HQ"),
+      bank:    marker(0xf59e0b,  10,  44, "Bank District"),
+      iso:     marker(0xef4444, -42, -26, "ISO Lounge"),
+    };
+
+    const missionOrder = ["leads","merchant","funder","bank","iso"];
+    let missionIndex = 0;
+    function setMission(){
+      const key = missionOrder[missionIndex];
+      missionEl.textContent = "Go to " + markers[key].userData.label;
+    }
+    setMission();
+
+    // ---------- Controls (simple third person) ----------
+    const keys = {};
+    addEventListener("keydown", e=> keys[e.key.toLowerCase()] = true);
+    addEventListener("keyup", e=> keys[e.key.toLowerCase()] = false);
+
+    // Mouse drag look
+    let dragging = false;
+    let yaw = 0;   // rotate around Y
+    let pitch = -0.25;
+    let lastX = 0, lastY = 0;
+
+    renderer.domElement.addEventListener("mousedown", (e)=>{
+      dragging = true;
+      lastX = e.clientX; lastY = e.clientY;
+    });
+    addEventListener("mouseup", ()=> dragging = false);
+    addEventListener("mousemove", (e)=>{
+      if(!dragging) return;
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+      lastX = e.clientX; lastY = e.clientY;
+
+      yaw   -= dx * 0.004;
+      pitch -= dy * 0.003;
+      pitch = Math.max(-0.85, Math.min(0.15, pitch));
+    });
+
+    const vel = new THREE.Vector3();
+    const dir = new THREE.Vector3();
+
+    function update(dt){
+      // movement direction in camera-relative space
+      const forward = (keys["w"]||keys["arrowup"]) ? 1 : 0;
+      const back    = (keys["s"]||keys["arrowdown"]) ? 1 : 0;
+      const left    = (keys["a"]||keys["arrowleft"]) ? 1 : 0;
+      const right   = (keys["d"]||keys["arrowright"]) ? 1 : 0;
+
+      const sprint = keys["shift"] ? 1.8 : 1.0;
+      const speed = 6.0 * sprint;
+
+      dir.set(0,0,0);
+      dir.z -= forward;
+      dir.z += back;
+      dir.x -= left;
+      dir.x += right;
+
+      if(dir.lengthSq() > 0){
+        dir.normalize();
+        // rotate by camera yaw
+        const angle = yaw;
+        const sin = Math.sin(angle), cos = Math.cos(angle);
+        const mx = dir.x * cos - dir.z * sin;
+        const mz = dir.x * sin + dir.z * cos;
+
+        vel.x = mx * speed;
+        vel.z = mz * speed;
+
+        // face the movement direction
+        human.rotation.y = Math.atan2(vel.x, vel.z);
+      } else {
+        vel.x = 0; vel.z = 0;
+      }
+
+      human.position.x += vel.x * dt;
+      human.position.z += vel.z * dt;
+
+      // keep within area
+      human.position.x = Math.max(-140, Math.min(140, human.position.x));
+      human.position.z = Math.max(-140, Math.min(140, human.position.z));
+
+      // simple walking animation
+      const moving = (Math.abs(vel.x)+Math.abs(vel.z)) > 0.01;
+      const t = performance.now() * 0.01;
+      legL.rotation.x = moving ? Math.sin(t) * 0.6 : 0;
+      legR.rotation.x = moving ? -Math.sin(t) * 0.6 : 0;
+
+      // check marker collisions
+      const currentKey = missionOrder[missionIndex];
+      const m = markers[currentKey];
+      const d = human.position.distanceTo(m.position);
+      if(d < 2.0){
+        toast("✅ Completed: " + m.userData.label);
+        missionIndex = (missionIndex + 1) % missionOrder.length;
+        setMission();
+      }
+
+      // camera follow (3rd person)
+      const target = new THREE.Vector3(human.position.x, 1.6, human.position.z);
+
+      const camDist = 9.5;
+      const camHeight = 3.2;
+
+      const cx = target.x + Math.sin(yaw) * camDist;
+      const cz = target.z + Math.cos(yaw) * camDist;
+      const cy = target.y + camHeight + pitch * 6.0;
+
+      camera.position.lerp(new THREE.Vector3(cx, cy, cz), 0.12);
+      camera.lookAt(target);
+    }
+
+    let last = performance.now();
+    function loop(){
+      const t = performance.now();
+      const dt = Math.min(0.04, (t-last)/1000);
+      last = t;
+
+      update(dt);
+      renderer.render(scene, camera);
+      requestAnimationFrame(loop);
+    }
+    loop();
+
+    // resize
+    addEventListener("resize", ()=>{
+      camera.aspect = innerWidth/innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+  </script>
+</body>
+</html>
