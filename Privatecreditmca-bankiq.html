@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrivateCreditMCA — AI BankIQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAFBFD;--bgw:#fff;--bgd:#0A0F1E;--sf:#F1F4F9;--bdr:#E2E7F0;--bdr2:#C9D1DE;--bdrf:rgba(0,85,255,.35);--tx:#0A0F1E;--tx2:#3D4A5C;--tx3:#7C8BA1;--brand:#0055FF;--brandd:#003FCC;--brandl:#E8F0FF;--teal:#00BFA6;--teall:#E6FAF7;--gn:#00C853;--gnl:#E8F8EF;--rd:#E53935;--rdl:#FDE8E8;--am:#F59E0B;--aml:#FEF3C7;--vl:#7C3AED;--vll:#F1EAFE;--r:14px;--rs:8px;--sh:0 1px 3px rgba(10,15,30,.04),0 4px 14px rgba(10,15,30,.06);--shl:0 4px 12px rgba(10,15,30,.04),0 16px 48px rgba(10,15,30,.08)}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;min-height:100vh}.mono{font-family:'IBM Plex Mono',monospace}a{text-decoration:none;color:inherit}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:18px;letter-spacing:-.3px}.logo .mark{width:28px;height:28px;border-radius:8px;background:var(--brand);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.logo .mark::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.2),transparent)}.logo .mark svg{width:16px;height:16px}.logo span.dim{color:var(--tx3);font-weight:600}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(250,251,253,.88);backdrop-filter:blur(16px) saturate(1.5);border-bottom:1px solid var(--bdr)}
+.nc{display:flex;gap:28px}.nc a{font-size:13px;font-weight:600;color:var(--tx3);padding:6px 0;border-bottom:2px solid transparent;transition:all .2s}.nc a:hover,.nc a.on{color:var(--tx);border-color:var(--brand)}
+.nr{display:flex;gap:12px}.nb{padding:8px 20px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;border:none;display:inline-flex;align-items:center;gap:6px;transition:all .2s}.nb.p{background:var(--brand);color:#fff}.nb.s{background:transparent;color:var(--tx2);border:1.5px solid var(--bdr)}
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+.page{max-width:960px;margin:0 auto;padding:88px 32px 60px}
+.page-h{text-align:center;margin-bottom:36px}.page-label{font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--brand);margin-bottom:8px}
+.page-h h1{font-size:40px;font-weight:900;letter-spacing:-1.5px;margin-bottom:8px}.page-h p{font-size:17px;color:var(--tx2);max-width:520px;margin:0 auto;line-height:1.5}
+
+.upload-zone{border:2px dashed var(--bdr2);border-radius:16px;padding:60px 40px;text-align:center;transition:all .3s;cursor:pointer;background:var(--bgw);margin-bottom:28px}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--brand);background:var(--brandl)}
+.upload-zone .ui{font-size:52px;margin-bottom:16px}.upload-zone h3{font-size:20px;font-weight:700;margin-bottom:4px}.upload-zone p{font-size:14px;color:var(--tx3)}.upload-zone input{display:none}
+.upload-zone .ub{display:inline-block;margin-top:20px;padding:12px 32px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:15px}
+
+.scan-box{display:none;background:var(--bgw);border:1px solid var(--bdr);border-radius:16px;padding:36px;text-align:center;margin-bottom:28px;position:relative;overflow:hidden}
+.scan-box.show{display:block;animation:fu .5s ease both}
+.scan-box::after{content:'';position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--brand),transparent);top:0;animation:scanMove 2s ease-in-out infinite}@keyframes scanMove{0%{top:0}50%{top:calc(100% - 3px)}100%{top:0}}
+.scan-icon{font-size:52px;margin-bottom:14px}.scan-title{font-size:20px;font-weight:700;margin-bottom:4px}.scan-sub{font-size:14px;color:var(--tx3)}
+.prog{margin:28px auto;max-width:400px}.prog-bar{height:6px;border-radius:3px;background:var(--bdr);overflow:hidden}.prog-fill{height:100%;border-radius:3px;background:var(--brand);width:0%;transition:width .3s}.prog-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--tx3);margin-top:6px}.prog-labels .pct{font-weight:600;color:var(--brand)}
+.feed{max-width:400px;margin:0 auto;text-align:left}.fi{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:14px;color:var(--tx3);opacity:0;animation:fu .4s ease forwards}.fi.done{color:var(--tx2)}.fi.active{color:var(--tx)}.fic{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;background:var(--sf);color:var(--tx3)}.fi.done .fic{background:var(--gnl);color:var(--gn)}.fi.active .fic{background:var(--aml);color:var(--am);animation:spin 1s linear infinite}
+
+.results{display:none}.results.show{display:block;animation:fu .6s ease both}
+.res-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.res-header h2{font-size:28px;font-weight:800;letter-spacing:-.5px}.res-header p{font-size:14px;color:var(--tx3);margin-top:4px}
+.score-circle{width:100px;height:100px;border-radius:50%;border:4px solid var(--brand);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 28px rgba(0,85,255,.12)}.score-circle .sn{font-size:36px;font-weight:900;color:var(--brand);line-height:1}.score-circle .sg{font-size:13px;font-weight:600;color:var(--tx2)}
+
+.met-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.met{background:var(--bgw);border:1px solid var(--bdr);border-radius:var(--rs);padding:20px;text-align:center}.met .ml{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--tx3);margin-bottom:6px}.met .mv{font-size:26px;font-weight:800}.met .mv.gd{color:var(--gn)}.met .mv.wn{color:var(--am)}.met .mv.bd{color:var(--rd)}
+
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.detail-card{background:var(--bgw);border:1px solid var(--bdr);border-radius:var(--r);padding:24px}
+.detail-card h4{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.dr{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bdr);font-size:14px}.dr:last-child{border:none}.dr .dl{color:var(--tx3)}.dr .dv{font-weight:600}.dr .dv.gd{color:var(--gn)}.dr .dv.wn{color:var(--am)}.dr .dv.bd{color:var(--rd)}
+
+.insights{background:var(--bgw);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;margin-bottom:28px}
+.insights h4{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ins{display:flex;align-items:start;gap:10px;padding:10px 0;border-bottom:1px solid var(--bdr);font-size:14px}.ins:last-child{border:none}.ins .it{color:var(--tx2);line-height:1.5}.ins .it strong{color:var(--tx)}
+
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:36px}
+.ab{padding:14px 32px;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;transition:all .2s;border:none;display:inline-flex;align-items:center;gap:8px}
+.ab.primary{background:var(--brand);color:#fff;box-shadow:0 4px 16px rgba(0,85,255,.2)}.ab.primary:hover{background:var(--brandd)}
+.ab.secondary{background:var(--bgw);color:var(--tx);border:1.5px solid var(--bdr)}.ab.secondary:hover{box-shadow:var(--sh)}
+
+@media(max-width:900px){.nc{display:none}.met-grid{grid-template-columns:1fr 1fr}.detail-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.met-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav><a href="privatecreditmca-landing.html" class="logo"><div class="mark"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="9" width="3" height="5" rx="1" fill="white"/><rect x="6.5" y="6" width="3" height="8" rx="1" fill="white"/><rect x="11" y="3" width="3" height="11" rx="1" fill="white"/></svg></div>PrivateCredit<span class="dim">MCA</span></a><div class="nc"><a href="privatecreditmca-landing.html">Home</a><a href="privatecreditmca-marketplace.html">Marketplace</a><a href="privatecreditmca-account.html?view=profile">Dashboard</a><a href="privatecreditmca-funders.html">Funder Directory</a></div><div class="nr"><a href="privatecreditmca-account.html?view=login" class="nb s">Log In</a><a href="privatecreditmca-submit.html" class="nb p">+ Submit a Deal</a></div></nav>
+
+<div class="page">
+<div class="page-h"><div class="page-label">AI BankIQ</div><h1>Know Your Deal Before Funders Do</h1><p>Upload bank statements. Get instant revenue analysis, risk scoring, and an approval range — in seconds, not hours.</p></div>
+
+<div id="uploadSection">
+<div class="upload-zone" id="uZ" onclick="document.getElementById('fIn').click()">
+  <input type="file" id="fIn" multiple onchange="startScan()">
+  <div class="ui">🧠</div>
+  <h3>Drop Bank Statements Here</h3>
+  <p>PDF or image — 3 to 6 months recommended</p>
+  <div class="ub">Upload & Analyze</div>
+</div>
+</div>
+
+<div class="scan-box" id="scanBox">
+  <div class="scan-icon">🧠</div>
+  <div class="scan-title">Analyzing Bank Statements...</div>
+  <div class="scan-sub">Processing 4 months of deposits and withdrawals</div>
+  <div class="prog"><div class="prog-bar"><div class="prog-fill" id="pFill"></div></div><div class="prog-labels"><span id="pLabel">Starting...</span><span class="pct mono" id="pPct">0%</span></div></div>
+  <div class="feed" id="feedEl"></div>
+</div>
+
+<div class="results" id="results">
+  <div class="res-header"><div><h2>Analysis Complete</h2><p>AI BankIQ reviewed 4 months of bank statements</p></div><div class="score-circle"><span class="sn">78</span><span class="sg">Grade B</span></div></div>
+  <div class="met-grid">
+    <div class="met"><div class="ml">Monthly Revenue</div><div class="mv gd">$74K</div></div>
+    <div class="met"><div class="ml">NSF Count</div><div class="mv wn">2</div></div>
+    <div class="met"><div class="ml">Approval Range</div><div class="mv">$45K–$62K</div></div>
+    <div class="met"><div class="ml">Neg Balance Days</div><div class="mv gd">0</div></div>
+  </div>
+  <div class="detail-grid">
+    <div class="detail-card"><h4>📊 Revenue Breakdown</h4><div class="dr"><span class="dl">Month 1 (Oct)</span><span class="dv mono">$71,240</span></div><div class="dr"><span class="dl">Month 2 (Nov)</span><span class="dv mono">$76,890</span></div><div class="dr"><span class="dl">Month 3 (Dec)</span><span class="dv mono">$72,410</span></div><div class="dr"><span class="dl">Month 4 (Jan)</span><span class="dv mono">$75,660</span></div><div class="dr"><span class="dl">Average</span><span class="dv mono gd" style="font-size:16px">$74,050</span></div><div class="dr"><span class="dl">Trend</span><span class="dv gd">Stable ↑</span></div></div>
+    <div class="detail-card"><h4>🏦 Banking Health</h4><div class="dr"><span class="dl">Avg Daily Balance</span><span class="dv mono gd">$18,420</span></div><div class="dr"><span class="dl">Lowest Balance</span><span class="dv mono wn">$2,140</span></div><div class="dr"><span class="dl">NSFs</span><span class="dv mono wn">2</span></div><div class="dr"><span class="dl">Neg Balance Days</span><span class="dv mono gd">0</span></div><div class="dr"><span class="dl">Deposits/Month</span><span class="dv mono">142 avg</span></div><div class="dr"><span class="dl">Existing MCAs</span><span class="dv wn">1 detected</span></div></div>
+  </div>
+  <div class="insights"><h4>⚡ AI Insights</h4>
+    <div class="ins"><span style="color:var(--gn)">✓</span><span class="it"><strong>Strong revenue consistency</strong> — less than 8% month-over-month variance. Funders like this.</span></div>
+    <div class="ins"><span style="color:var(--am)">⚠</span><span class="it"><strong>Existing MCA detected</strong> — one active position found. Some funders won't stack, others will.</span></div>
+    <div class="ins"><span style="color:var(--gn)">✓</span><span class="it"><strong>Zero negative balance days.</strong> Clean banking behavior across all 4 months.</span></div>
+    <div class="ins"><span style="color:var(--am)">⚠</span><span class="it"><strong>2 NSFs in month 3</strong> — minor flag but worth noting. Didn't repeat in month 4.</span></div>
+    <div class="ins"><span style="color:var(--gn)">✓</span><span class="it"><strong>Average daily balance of $18.4K</strong> — healthy cash reserves relative to revenue.</span></div>
+  </div>
+  <div class="actions">
+    <a href="privatecreditmca-submit.html"><button class="ab primary">Submit This Deal to Marketplace →</button></a>
+    <button class="ab secondary" onclick="reset()">Analyze Another</button>
+  </div>
+</div>
+</div>
+<script>
+const uz=document.getElementById('uZ');
+uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag')});
+uz.addEventListener('dragleave',()=>uz.classList.remove('drag'));
+uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('drag');startScan()});
+
+function startScan(){
+  document.getElementById('uploadSection').style.display='none';
+  const sb=document.getElementById('scanBox');sb.classList.add('show');
+  const steps=['Reading bank statement PDFs...','Extracting deposit & withdrawal data...','Calculating monthly revenue...','Identifying NSFs & overdrafts...','Detecting existing MCA positions...','Analyzing daily balance trends...','Computing risk score...','Generating underwriting summary...'];
+  const feed=document.getElementById('feedEl');feed.innerHTML='';
+  const pf=document.getElementById('pFill'),pl=document.getElementById('pLabel'),pp=document.getElementById('pPct');
+  steps.forEach((s,i)=>{setTimeout(()=>{
+    const prev=feed.querySelector('.fi.active');
+    if(prev){prev.classList.remove('active');prev.classList.add('done');prev.querySelector('.fic').textContent='✓'}
+    const el=document.createElement('div');el.className='fi active';el.innerHTML='<div class="fic">↻</div><span>'+s+'</span>';feed.appendChild(el);
+    const pct=Math.round((i+1)/steps.length*100);pf.style.width=pct+'%';pl.textContent=s;pp.textContent=pct+'%';
+  },i*700)});
+  setTimeout(()=>{
+    const prev=feed.querySelector('.fi.active');
+    if(prev){prev.classList.remove('active');prev.classList.add('done');prev.querySelector('.fic').textContent='✓'}
+    pf.style.width='100%';pp.textContent='100%';pl.textContent='Analysis complete!';
+  },steps.length*700);
+  setTimeout(()=>{sb.classList.remove('show');sb.style.display='none';document.getElementById('results').classList.add('show');window.scrollTo({top:0,behavior:'smooth'})},steps.length*700+800);
+}
+
+function reset(){
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('scanBox').style.display='';document.getElementById('scanBox').classList.remove('show');
+  document.getElementById('uploadSection').style.display='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body></html>
