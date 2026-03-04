@@ -1,349 +1,332 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>MCA Arcade Hustler</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Underwriter's Dilemma: MCA Simulator</title>
   <style>
-    html, body { margin: 0; height: 100%; overflow: hidden; background: #040714; font-family: system-ui, -apple-system, sans-serif; color: #eaf1ff; user-select: none; }
-    
-    /* UI Styling */
-    #ui {
-      position: fixed; top: 16px; left: 16px; z-index: 10;
-      background: rgba(10, 15, 30, 0.85); border: 2px solid rgba(50, 80, 200, 0.6);
-      border-radius: 12px; padding: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-      width: 280px; backdrop-filter: blur(12px);
+    :root {
+      --bg: #0f172a; --panel: #1e293b; --text: #f8fafc;
+      --green: #10b981; --red: #ef4444; --blue: #3b82f6; --yellow: #f59e0b;
     }
     
-    .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 800;}
-    .k { opacity: 0.8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;}
-    .v { font-size: 16px; text-align: right; }
-    .money { color: #22c55e; font-size: 24px; text-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; user-select: none; }
     
-    #rent-bar-container { width: 100%; height: 8px; background: #333; border-radius: 4px; overflow: hidden; margin-top: 10px; }
-    #rent-bar { width: 100%; height: 100%; background: #ef4444; transition: width 0.1s linear; }
-    
-    /* Upgrade Shop */
-    #shop {
-      position: fixed; top: 16px; right: 16px; z-index: 10;
-      background: rgba(10, 15, 30, 0.85); border: 2px solid rgba(245, 158, 11, 0.6);
-      border-radius: 12px; padding: 16px; width: 220px;
+    body {
+      margin: 0; padding: 0; background-color: var(--bg); color: var(--text);
+      display: flex; flex-direction: column; align-items: center; height: 100vh; overflow: hidden;
     }
-    .shop-title { color: #f59e0b; font-weight: 900; margin-bottom: 10px; text-align: center; text-transform: uppercase;}
-    .shop-btn {
-      width: 100%; background: #1c2b66; color: white; border: 1px solid #4466ff;
-      padding: 8px; margin-bottom: 8px; border-radius: 6px; font-weight: bold; cursor: pointer;
-      transition: 0.2s;
-    }
-    .shop-btn:hover { background: #4466ff; }
-    .shop-btn:disabled { background: #333; border-color: #555; color: #777; cursor: not-allowed; }
 
-    #interact {
-      position: fixed; left: 50%; transform: translateX(-50%); bottom: 60px; z-index: 10;
-      background: #eaf1ff; color: #040714; padding: 12px 24px; border-radius: 8px;
-      font-weight: 900; font-size: 18px; display: none; box-shadow: 0 0 20px rgba(234, 241, 255, 0.8);
-      cursor: pointer; text-transform: uppercase; transition: transform 0.1s;
+    /* Top Stats Bar */
+    #stats-container {
+      width: 100%; max-width: 400px; padding: 20px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+      background: var(--panel); border-bottom: 2px solid #334155; z-index: 10;
     }
-    #interact:active { transform: translateX(-50%) scale(0.95); }
+    
+    .stat-box { display: flex; flex-direction: column; gap: 5px; }
+    .stat-label { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #94a3b8; display: flex; justify-content: space-between;}
+    .stat-bar-bg { width: 100%; height: 8px; background: #0f172a; border-radius: 4px; overflow: hidden; }
+    .stat-bar-fill { height: 100%; width: 50%; transition: width 0.3s ease, background-color 0.3s ease; }
 
-    /* Floating Text Container */
-    #floating-container { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 20; }
-    .float-text {
-      position: absolute; font-weight: 900; font-size: 24px; text-shadow: 0 2px 4px rgba(0,0,0,1);
-      animation: floatUp 1.2s ease-out forwards;
+    /* Card Play Area */
+    #game-area {
+      flex: 1; width: 100%; max-width: 400px; position: relative;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
-    @keyframes floatUp {
-      0% { opacity: 1; transform: translateY(0) scale(1); }
-      100% { opacity: 0; transform: translateY(-60px) scale(1.2); }
+
+    .card {
+      position: absolute; width: 320px; height: 420px;
+      background: white; color: #0f172a; border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      display: flex; flex-direction: column; padding: 24px;
+      transform-origin: 50% 100%; transition: transform 0.3s ease, opacity 0.3s ease;
+      cursor: grab;
     }
+    .card:active { cursor: grabbing; }
+    
+    .merchant-type { font-size: 14px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;}
+    .merchant-pitch { font-size: 20px; font-weight: 700; flex: 1; line-height: 1.4; }
+    .merchant-data { background: #f1f5f9; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; margin-bottom: 20px;}
+    
+    .stamp {
+      position: absolute; top: 40px; font-size: 32px; font-weight: 900; text-transform: uppercase;
+      border: 4px solid; border-radius: 8px; padding: 5px 10px; opacity: 0; pointer-events: none;
+    }
+    #stamp-decline { right: 20px; color: var(--red); border-color: var(--red); transform: rotate(15deg); }
+    #stamp-fund { left: 20px; color: var(--green); border-color: var(--green); transform: rotate(-15deg); }
+
+    /* Action Buttons */
+    #controls {
+      width: 100%; max-width: 400px; padding: 20px;
+      display: flex; justify-content: space-between; gap: 20px; z-index: 10;
+    }
+    .btn {
+      flex: 1; padding: 16px; border: none; border-radius: 12px; font-size: 18px; font-weight: 800;
+      cursor: pointer; transition: transform 0.1s; color: white; text-transform: uppercase;
+    }
+    .btn:active { transform: scale(0.95); }
+    .btn-decline { background: var(--red); box-shadow: 0 4px 0 #b91c1c; }
+    .btn-fund { background: var(--green); box-shadow: 0 4px 0 #047857; }
 
     /* Game Over Screen */
     #game-over {
-      position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9);
-      display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 100;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.95); display: none; flex-direction: column;
+      align-items: center; justify-content: center; z-index: 50; padding: 20px; text-align: center;
     }
-    #game-over h1 { color: #ef4444; font-size: 60px; margin: 0; text-transform: uppercase; }
-    #game-over button { margin-top: 20px; padding: 10px 30px; font-size: 20px; font-weight: bold; cursor: pointer; }
+    #game-over h1 { font-size: 40px; color: var(--red); margin-bottom: 10px; }
+    #game-over p { font-size: 18px; line-height: 1.5; margin-bottom: 30px; }
+    #restart-btn { background: var(--blue); padding: 16px 32px; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 18px; cursor: pointer; }
 
-    canvas { display: block; }
   </style>
 </head>
 <body>
-  <div id="ui">
-    <div class="row"><div class="k">Bank</div><div class="v money" id="cash">$1,000</div></div>
-    <div class="row"><div class="k">Task</div><div class="v" id="mission" style="color:#38bdf8">Buy Leads</div></div>
-    <div class="row" style="margin-top: 15px;"><div class="k" style="color:#ef4444">Rent Due ($500)</div></div>
-    <div id="rent-bar-container"><div id="rent-bar"></div></div>
+
+  <div id="stats-container">
+    <div class="stat-box">
+      <div class="stat-label"><span>Liquidity</span> <span id="val-liquidity">50%</span></div>
+      <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-liquidity" style="background: var(--blue);"></div></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label"><span>Yield (Profit)</span> <span id="val-yield">50%</span></div>
+      <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-yield" style="background: var(--green);"></div></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label"><span>Broker Relations</span> <span id="val-brokers">50%</span></div>
+      <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-brokers" style="background: var(--yellow);"></div></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label"><span>Default Rate</span> <span id="val-defaults">20%</span></div>
+      <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-defaults" style="background: var(--red);"></div></div>
+    </div>
   </div>
 
-  <div id="shop">
-    <div class="shop-title">Hustle Upgrades</div>
-    <button class="shop-btn" id="btn-shoes">Energy Drink ($300)<br><small>Move 50% Faster</small></button>
-    <button class="shop-btn" id="btn-rolex">Fake Rolex ($800)<br><small>+20% Close Rate</small></button>
+  <div id="game-area">
+    </div>
+
+  <div id="controls">
+    <button class="btn btn-decline" onclick="handleChoice('decline')">Swipe Left<br><small>Decline</small></button>
+    <button class="btn btn-fund" onclick="handleChoice('fund')">Swipe Right<br><small>Fund Deal</small></button>
   </div>
-  
-  <div id="interact">CLICK TO ACTION</div>
-  <div id="floating-container"></div>
 
   <div id="game-over">
-    <h1>Bankrupt!</h1>
-    <p style="font-size: 20px;">You couldn't pay rent.</p>
-    <button onclick="location.reload()">Try Again</button>
+    <h1 id="go-title">BANKRUPT</h1>
+    <p id="go-desc">You funded too many bad deals and the credit facility pulled your lines.</p>
+    <button id="restart-btn" onclick="location.reload()">Start New Fund</button>
   </div>
 
-  <script type="module">
-    import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
+  <script>
+    // --- GAME STATE ---
+    // Stats range from 0 to 100. 
+    // If Liquidity, Yield, or Brokers hit 0, you lose.
+    // If Defaults hit 100, you lose.
+    let stats = { liquidity: 50, yield: 50, brokers: 70, defaults: 20 };
+    let currentCardEl = null;
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+    let daysSurvived = 0;
 
-    // ---------- GAME STATE & STATS ----------
-    let cash = 1000;
-    let missionState = 0; 
-    let currentMarker = null;
-    let gameOver = false;
-    
-    // Stats
-    let moveSpeed = 12.0;
-    let closeRate = 0.60; // 60% chance to succeed a pitch
-    
-    // Rent Timer
-    const RENT_AMOUNT = 500;
-    const RENT_TIME_MAX = 45; // seconds
-    let rentTimer = RENT_TIME_MAX;
-
-    // UI Elements
-    const uiCash = document.getElementById("cash");
-    const uiMission = document.getElementById("mission");
-    const uiInteract = document.getElementById("interact");
-    const rentBar = document.getElementById("rent-bar");
-    const floatContainer = document.getElementById("floating-container");
-
-    const states = [
-      { id: "leads", name: "Buy Lead ($100)", color: 0x38bdf8, action: "BUY LEAD" },
-      { id: "merchant", name: "Pitch Merchant", color: 0x22c55e, action: "PITCH DEAL" },
-      { id: "funder", name: "Secure Funding", color: 0xa78bfa, action: "NEGOTIATE" },
-      { id: "bank", name: "Wire Funds", color: 0xf59e0b, action: "CLOSE DEAL" }
+    // --- THE MERCHANTS (The Database) ---
+    // [liquidity, yield, brokers, defaults] changes
+    const deck = [
+      {
+        type: "Trucking / Logistics",
+        pitch: "Owner-operator needs $40k to fix a transmission. He has 1 truck. It is currently impounded.",
+        data: "Avg Daily Bal: $400 | NSFs: 8 | FICO: 520",
+        fund: [-15, +5, +10, +25], // Costs cash, slight profit if he pays, brokers love it, massive default risk
+        decline: [0, 0, -10, 0]    // Safe, but brokers get annoyed you declined paper
+      },
+      {
+        type: "Dental Clinic",
+        pitch: "Established practice doing $250k/mo. Needs $100k for 'marketing'. Clean statements.",
+        data: "Avg Daily Bal: $45,000 | NSFs: 0 | FICO: 720",
+        fund: [-30, +15, +5, -5], // Huge cash drain, great profit, lowers overall default rate
+        decline: [0, -5, -20, 0]  // Brokers furious you passed on an A-paper deal
+      },
+      {
+        type: "Bodega / Deli",
+        pitch: "Corner store wants $15k to buy a bitcoin ATM. Willing to sign a Confession of Judgment.",
+        data: "Avg Daily Bal: $1,200 | NSFs: 3 | FICO: 600",
+        fund: [-5, +10, +5, +10], 
+        decline: [0, 0, -5, 0]
+      },
+      {
+        type: "Construction",
+        pitch: "Contractor is stacking 3 other advances. 'I just need one more to finish this huge government job!'",
+        data: "Avg Daily Bal: $8,000 | NSFs: 12 | Positions: 3rd",
+        fund: [-20, +25, +10, +30], // Massive yield potential, absolute garbage risk
+        decline: [0, 0, -5, -5] 
+      },
+      {
+        type: "E-Commerce",
+        pitch: "Dropshipper whose Facebook ad account just got banned. Needs $20k to pivot to TikTok.",
+        data: "Avg Daily Bal: $15,000 -> $200 | NSFs: 1 | FICO: 680",
+        fund: [-10, +5, 0, +20], 
+        decline: [+5, 0, -5, 0] // Saved money
+      },
+      {
+        type: "Restaurant",
+        pitch: "Your top ISO calls you: 'Trust me bro, this guy is solid. Just overlook the 14 negative days.'",
+        data: "Avg Daily Bal: -$40 | NSFs: 14 | FICO: 480",
+        fund: [-10, +10, +20, +25], // Brokers love you, but it's pure poison
+        decline: [0, 0, -25, 0]     // Piss off your best broker
+      }
     ];
 
-    // --- Upgrades ---
-    document.getElementById("btn-shoes").onclick = function() {
-      if (cash >= 300) { cash -= 300; moveSpeed = 20.0; this.disabled = true; this.innerText = "SOLD OUT"; spawnFloatingText("- $300", innerWidth/2, 100, "#ef4444"); updateHUD(); }
-    };
-    document.getElementById("btn-rolex").onclick = function() {
-      if (cash >= 800) { cash -= 800; closeRate = 0.85; this.disabled = true; this.innerText = "SOLD OUT"; spawnFloatingText("- $800", innerWidth/2, 100, "#ef4444"); updateHUD(); }
-    };
+    let currentMerchant = null;
 
-    function spawnFloatingText(text, x, y, color) {
-      const el = document.createElement("div");
-      el.className = "float-text";
-      el.innerText = text;
-      el.style.left = (x - 20) + "px";
-      el.style.top = y + "px";
-      el.style.color = color;
-      floatContainer.appendChild(el);
-      setTimeout(() => el.remove(), 1200);
-    }
-
-    function updateHUD() {
-      uiCash.textContent = "$" + cash.toLocaleString();
-      uiMission.textContent = states[missionState].name;
-      uiMission.style.color = "#" + states[missionState].color.toString(16).padStart(6, '0');
-    }
-
-    // ---------- SCENE SETUP ----------
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x040714, 0.012);
-
-    const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 500);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(innerWidth, innerHeight);
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    document.body.appendChild(renderer.domElement);
-
-    const hemi = new THREE.HemisphereLight(0x4466ff, 0x040714, 0.8); scene.add(hemi);
-    const sun = new THREE.DirectionalLight(0xffaa55, 1.0);
-    sun.position.set(-20, 50, 20); scene.add(sun);
-
-    const ground = new THREE.Mesh(
-      new THREE.PlaneGeometry(800, 800),
-      new THREE.MeshStandardMaterial({ color: 0x0a0f24, roughness: 1.0 })
-    );
-    ground.rotation.x = -Math.PI/2; scene.add(ground);
-
-    const grid = new THREE.GridHelper(200, 40, 0x1c2b66, 0x0a102a);
-    grid.position.y = 0.05; scene.add(grid);
-
-    const clickMarker = new THREE.Mesh(
-      new THREE.RingGeometry(0.8, 1.2, 16),
-      new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 })
-    );
-    clickMarker.rotation.x = -Math.PI/2; clickMarker.visible = false; scene.add(clickMarker);
-
-    // ---------- PLAYER ----------
-    const human = new THREE.Group();
-    const matSuit = new THREE.MeshStandardMaterial({ color: 0x222222 }); 
-    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.6, 1.0, 4, 12), matSuit);
-    torso.position.y = 1.6; human.add(torso);
-    scene.add(human);
-
-    // ---------- LOCATIONS ----------
-    const markers = [];
-    function createMarker(stateObj, x, z) {
-      const g = new THREE.Group();
-      const pad = new THREE.Mesh(
-        new THREE.CylinderGeometry(2.5, 2.5, 0.2, 16),
-        new THREE.MeshBasicMaterial({ color: stateObj.color, transparent: true, opacity: 0.5 })
-      );
-      g.add(pad);
-      g.position.set(x, 0, z);
-      g.userData = { stateIndex: states.indexOf(stateObj) };
-      scene.add(g);
-      markers.push(g);
-    }
-
-    createMarker(states[0], -20, 20); // Leads
-    createMarker(states[1], 20, 20);  // Merchant
-    createMarker(states[2], 20, -20); // Funder
-    createMarker(states[3], -20, -20); // Bank
-
-    // ---------- MOVEMENT & INTERACTION ----------
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    let targetPosition = new THREE.Vector3();
-    let isMoving = false;
-
-    window.addEventListener('pointerdown', (e) => {
-      if (gameOver || e.target.closest('#ui') || e.target.closest('#shop') || e.target.id === 'interact') return;
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObject(ground);
-      if (intersects.length > 0) {
-        targetPosition.copy(intersects[0].point); targetPosition.y = 0;
-        isMoving = true;
-        clickMarker.position.copy(targetPosition); clickMarker.position.y = 0.1;
-        clickMarker.visible = true; clickMarker.scale.set(1,1,1);
+    // --- CORE LOGIC ---
+    function updateUI() {
+      // Clamp values
+      for (let key in stats) {
+        stats[key] = Math.max(0, Math.min(100, stats[key]));
       }
-    });
 
-    // The Core Game Loop Logic
-    uiInteract.addEventListener('click', (e) => {
-      if (!currentMarker) return;
-      const targetState = currentMarker.userData.stateIndex;
+      document.getElementById('bar-liquidity').style.width = stats.liquidity + '%';
+      document.getElementById('val-liquidity').innerText = stats.liquidity + '%';
       
-      // Screen coordinates for floating text
-      const rect = uiInteract.getBoundingClientRect();
-      const tx = rect.left + rect.width/2;
-      const ty = rect.top - 20;
-
-      if (targetState !== missionState) {
-        spawnFloatingText("WRONG LOCATION!", tx, ty, "#ef4444");
-        return;
-      }
-
-      // 1. Buy Leads
-      if (missionState === 0) {
-        if (cash < 100) { spawnFloatingText("NEED $100!", tx, ty, "#ef4444"); return; }
-        cash -= 100;
-        spawnFloatingText("- $100 (Lead Bought)", tx, ty, "#f59e0b");
-        missionState = 1;
-      }
-      // 2. Pitch Merchant & 3. Funder (The RNG)
-      else if (missionState === 1 || missionState === 2) {
-        if (Math.random() > closeRate) {
-          // FAILED!
-          spawnFloatingText("REJECTED! LOST LEAD!", tx, ty, "#ef4444");
-          missionState = 0; // Go back to start
-        } else {
-          // SUCCESS!
-          spawnFloatingText("SUCCESS!", tx, ty, "#22c55e");
-          missionState++;
-        }
-      }
-      // 4. Close Deal at Bank
-      else if (missionState === 3) {
-        cash += 1200;
-        spawnFloatingText("+ $1,200 COMMISSION!", tx, ty, "#22c55e");
-        missionState = 0; // Loop resets
-      }
-
-      updateHUD();
-      uiInteract.style.display = "none"; // Hide immediately to prevent double click
-    });
-
-    function update(dt) {
-      if (gameOver) return;
-
-      // Rent Timer Logic
-      rentTimer -= dt;
-      rentBar.style.width = (rentTimer / RENT_TIME_MAX) * 100 + "%";
+      document.getElementById('bar-yield').style.width = stats.yield + '%';
+      document.getElementById('val-yield').innerText = stats.yield + '%';
       
-      if (rentTimer <= 0) {
-        cash -= RENT_AMOUNT;
-        if (cash < 0) {
-          gameOver = true;
-          document.getElementById("game-over").style.display = "flex";
-          return;
-        } else {
-          spawnFloatingText("RENT PAID: -$500", innerWidth/2, innerHeight/2, "#ef4444");
-          rentTimer = RENT_TIME_MAX; // reset clock
-          updateHUD();
-        }
-      }
+      document.getElementById('bar-brokers').style.width = stats.brokers + '%';
+      document.getElementById('val-brokers').innerText = stats.brokers + '%';
+      
+      document.getElementById('bar-defaults').style.width = stats.defaults + '%';
+      document.getElementById('val-defaults').innerText = stats.defaults + '%';
 
-      if (clickMarker.visible) {
-        clickMarker.scale.x -= dt * 3; clickMarker.scale.y -= dt * 3;
-        if (clickMarker.scale.x <= 0) clickMarker.visible = false;
-      }
-
-      if (isMoving) {
-        const dist = human.position.distanceTo(targetPosition);
-        if (dist > 0.5) {
-          const dir = new THREE.Vector3().subVectors(targetPosition, human.position).normalize();
-          human.position.addScaledVector(dir, moveSpeed * dt);
-          human.rotation.y = Math.atan2(dir.x, dir.z);
-        } else {
-          isMoving = false;
-        }
-      }
-
-      // Marker Logic
-      let nearMarker = null;
-      markers.forEach(m => {
-        m.children[0].material.opacity = (m.userData.stateIndex === missionState) ? 0.8 : 0.2;
-        if (human.position.distanceTo(m.position) < 3.5) nearMarker = m;
-      });
-
-      if (nearMarker !== currentMarker) {
-        currentMarker = nearMarker;
-        if (currentMarker && currentMarker.userData.stateIndex === missionState) {
-          uiInteract.textContent = states[missionState].action;
-          uiInteract.style.background = "#" + states[missionState].color.toString(16).padStart(6,'0');
-          uiInteract.style.display = "block";
-        } else {
-          uiInteract.style.display = "none";
-        }
-      }
-
-      const camOffset = new THREE.Vector3(-15, 20, -15);
-      camera.position.lerp(human.position.clone().add(camOffset), 0.1);
-      camera.lookAt(human.position.clone());
+      checkGameOver();
     }
 
-    let last = performance.now();
-    function loop() {
-      const now = performance.now();
-      const dt = Math.min(0.05, (now - last) / 1000);
-      last = now;
-      update(dt);
-      renderer.render(scene, camera);
-      requestAnimationFrame(loop);
-    }
-    updateHUD(); loop();
+    function checkGameOver() {
+      const go = document.getElementById('game-over');
+      const title = document.getElementById('go-title');
+      const desc = document.getElementById('go-desc');
+      let lost = true;
 
-    addEventListener("resize", () => {
-      camera.aspect = innerWidth / innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth, innerHeight);
-    });
+      if (stats.liquidity <= 0) {
+        title.innerText = "OUT OF CAPITAL"; desc.innerText = `You ran out of money to fund deals. You survived ${daysSurvived} deals.`;
+      } else if (stats.yield <= 0) {
+        title.innerText = "UNPROFITABLE"; desc.innerText = `Your fund bled money. The investors pulled out. You survived ${daysSurvived} deals.`;
+      } else if (stats.brokers <= 0) {
+        title.innerText = "BLACKLISTED"; desc.innerText = `You declined too many deals. Brokers stopped sending you files. You starved to death. You survived ${daysSurvived} deals.`;
+      } else if (stats.defaults >= 100) {
+        title.innerText = "DEFAULT CRISIS"; desc.innerText = `You funded absolute garbage. Your portfolio defaulted. You survived ${daysSurvived} deals.`;
+      } else {
+        lost = false;
+      }
+
+      if (lost) {
+        go.style.display = 'flex';
+      }
+    }
+
+    function spawnCard() {
+      currentMerchant = deck[Math.floor(Math.random() * deck.length)];
+      
+      const gameArea = document.getElementById('game-area');
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="stamp" id="stamp-decline">DECLINED</div>
+        <div class="stamp" id="stamp-fund">FUNDED</div>
+        <div class="merchant-type">${currentMerchant.type}</div>
+        <div class="merchant-pitch">"${currentMerchant.pitch}"</div>
+        <div class="merchant-data">${currentMerchant.data}</div>
+      `;
+      
+      gameArea.appendChild(card);
+      currentCardEl = card;
+
+      // Setup Dragging (Touch & Mouse)
+      card.addEventListener('pointerdown', startDrag);
+      window.addEventListener('pointermove', drag);
+      window.addEventListener('pointerup', endDrag);
+    }
+
+    // --- SWIPE MECHANICS ---
+    function startDrag(e) {
+      isDragging = true;
+      startX = e.clientX;
+      currentCardEl.style.transition = 'none'; // remove smooth snap while dragging
+    }
+
+    function drag(e) {
+      if (!isDragging || !currentCardEl) return;
+      currentX = e.clientX - startX;
+      
+      // Rotate slightly as you drag
+      const rotate = currentX * 0.1;
+      currentCardEl.style.transform = `translateX(${currentX}px) rotate(${rotate}deg)`;
+
+      // Show Stamps based on drag direction
+      const declineStamp = currentCardEl.querySelector('#stamp-decline');
+      const fundStamp = currentCardEl.querySelector('#stamp-fund');
+      
+      if (currentX < -50) { declineStamp.style.opacity = Math.min(1, Math.abs(currentX)/150); fundStamp.style.opacity = 0; }
+      else if (currentX > 50) { fundStamp.style.opacity = Math.min(1, Math.abs(currentX)/150); declineStamp.style.opacity = 0; }
+      else { declineStamp.style.opacity = 0; fundStamp.style.opacity = 0; }
+    }
+
+    function endDrag() {
+      if (!isDragging || !currentCardEl) return;
+      isDragging = false;
+      currentCardEl.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+
+      if (currentX > 100) { handleChoice('fund', true); }
+      else if (currentX < -100) { handleChoice('decline', true); }
+      else { 
+        // Snap back to center
+        currentCardEl.style.transform = `translateX(0px) rotate(0deg)`; 
+        currentCardEl.querySelector('#stamp-decline').style.opacity = 0;
+        currentCardEl.querySelector('#stamp-fund').style.opacity = 0;
+      }
+      currentX = 0;
+    }
+
+    function handleChoice(action, fromDrag = false) {
+      if (!currentCardEl) return;
+      daysSurvived++;
+
+      // Apply Stat Changes
+      const effects = action === 'fund' ? currentMerchant.fund : currentMerchant.decline;
+      stats.liquidity += effects[0];
+      stats.yield += effects[1];
+      stats.brokers += effects[2];
+      stats.defaults += effects[3];
+
+      // Natural decay/recovery (keeps the game moving)
+      stats.liquidity += 2; // Slowly collect payments
+      stats.defaults = Math.max(0, stats.defaults - 1); // Old bad debt washes out
+
+      // Animate card away
+      const throwX = action === 'fund' ? 400 : -400;
+      const throwRot = action === 'fund' ? 45 : -45;
+      
+      if (!fromDrag) {
+         currentCardEl.querySelector(action === 'fund' ? '#stamp-fund' : '#stamp-decline').style.opacity = 1;
+      }
+
+      currentCardEl.style.transform = `translateX(${throwX}px) rotate(${throwRot}deg)`;
+      currentCardEl.style.opacity = 0;
+      
+      const oldCard = currentCardEl;
+      currentCardEl = null;
+
+      setTimeout(() => {
+        oldCard.remove();
+        updateUI();
+        if (document.getElementById('game-over').style.display !== 'flex') {
+          spawnCard();
+        }
+      }, 300);
+    }
+
+    // Init Game
+    updateUI();
+    spawnCard();
+
   </script>
 </body>
 </html>
