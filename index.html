@@ -2,403 +2,927 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PrivateCreditMCA — The Operating System for MCA Professionals</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Sora:wght@300;400;500;600;700;800&family=Geist+Mono&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrivateCreditMCA — The Live Marketplace for MCA Deals</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#060a10;--deep:#0a0f18;--sf:#0e1422;--el:#131b2e;--teal:#00d4c8;--t4:#00e8db;--cyan:#00c8ff;--grn:#00e676;--amb:#ffc446;--red:#ff5252;--pur:#b388ff;--org:#ff7b42;--gold:#ffd700;--t1:#f0f4fc;--t2:#c8d0e0;--t3:#8b97b0;--tx4:#586580;--tx5:#3a4560;--bd:rgba(255,255,255,.04);--bd2:rgba(255,255,255,.07);--bdt:rgba(0,212,200,.15);--r:16px;--r2:12px;--ex:cubic-bezier(.16,1,.3,1)}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#00b0a6 var(--bg)}
-body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-::selection{background:rgba(0,212,200,.3)}a{color:inherit;text-decoration:none}
-.grain{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:180px}
-.ambient{position:fixed;inset:0;pointer-events:none;z-index:0}
-.ao{position:absolute;border-radius:50%;filter:blur(120px)}
-.ao.a{width:900px;height:900px;background:radial-gradient(circle,rgba(0,212,200,.06),transparent 70%);top:-350px;left:-200px;animation:da 22s ease-in-out infinite}
-.ao.b{width:600px;height:600px;background:radial-gradient(circle,rgba(0,200,255,.04),transparent 70%);bottom:-200px;right:-150px;animation:db 28s ease-in-out infinite}
-.ao.c{width:500px;height:500px;background:radial-gradient(circle,rgba(179,136,255,.03),transparent 70%);top:60%;left:40%;animation:da 35s ease-in-out infinite reverse}
-@keyframes da{0%,100%{transform:translate(0)}50%{transform:translate(40px,30px)}}
-@keyframes db{0%,100%{transform:translate(0)}50%{transform:translate(-30px,-40px)}}
-.nav{position:fixed;top:0;width:100%;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,56px);background:rgba(6,10,16,.5);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--bd);transition:all .3s}
-.nav.scrolled{background:rgba(6,10,16,.92);border-color:var(--bd2)}
-.nav-l{display:flex;align-items:center;gap:12px}
-.logo{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
-.logo::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.2))}
-.logo svg{position:relative;z-index:1}
-.nav-brand{font-weight:700;font-size:15px;letter-spacing:-.4px}.nav-brand em{font-style:normal;color:var(--t4)}
-.nav-pills{display:flex;gap:4px;background:var(--sf);border:1px solid var(--bd2);border-radius:100px;padding:3px}
-.nl{padding:7px 14px;border-radius:100px;font-size:11.5px;font-weight:500;color:var(--t3);transition:all .25s}
-.nl:hover{color:var(--t1)}
-.nav-r{display:flex;gap:8px;align-items:center}
-.btn{padding:8px 16px;border-radius:10px;font-size:12px;font-weight:700;border:1px solid var(--bd2);background:var(--sf);color:var(--t2);cursor:pointer;font-family:'Sora',sans-serif;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
-.btn:hover{border-color:var(--bdt);color:var(--t4);transform:translateY(-1px)}
-.btn-p{background:var(--teal);color:var(--bg);border-color:transparent}.btn-p:hover{box-shadow:0 6px 20px rgba(0,212,200,.25);color:var(--bg)}
-.btn-g{background:rgba(0,230,118,.06);border-color:rgba(0,230,118,.2);color:var(--grn)}.btn-g:hover{border-color:rgba(0,230,118,.4)}
-.nav-avatar{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:11px;font-weight:800;color:#fff;cursor:pointer;transition:all .2s;border:2px solid transparent;flex-shrink:0}
-.nav-avatar:hover{border-color:var(--teal);transform:scale(1.05)}
-.nav-user-name{font-size:12px;font-weight:700;color:var(--t2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.wrap{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,56px)}
-.hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:140px 0 100px}
-.hero-in{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,56px);position:relative;z-index:2}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--t4);margin-bottom:24px;opacity:0;animation:hf .8s var(--ex) .2s forwards}
-.hero-eyebrow .live{width:7px;height:7px;border-radius:50%;background:var(--grn);box-shadow:0 0 8px rgba(0,230,118,.5);animation:pulse 2.5s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(48px,7.5vw,90px);font-weight:400;line-height:1.0;letter-spacing:-2.5px;margin-bottom:24px;max-width:880px;opacity:0;animation:hf .8s var(--ex) .35s forwards}
-.hero h1 em{font-style:italic;color:var(--t4)}
-.hero-sub{font-size:clamp(15px,1.6vw,18px);color:var(--t3);line-height:1.7;max-width:540px;margin-bottom:36px;opacity:0;animation:hf .8s var(--ex) .5s forwards}
-.hero-acts{display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:hf .8s var(--ex) .65s forwards}
-.hero-btn{display:inline-flex;align-items:center;gap:8px;padding:15px 30px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:'Sora',sans-serif;transition:all .3s}
-.hero-btn.primary{background:var(--teal);color:var(--bg);box-shadow:0 4px 24px rgba(0,212,200,.2)}
-.hero-btn.primary:hover{transform:translateY(-2px);box-shadow:0 12px 48px rgba(0,212,200,.3)}
-.hero-btn.secondary{background:rgba(255,255,255,.04);color:var(--t2);border:1px solid var(--bd2)}
-.hero-btn.secondary:hover{border-color:var(--bdt);color:var(--t4)}
-.hero-btn .arr{transition:transform .3s}.hero-btn:hover .arr{transform:translateX(3px)}
-@keyframes hf{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.welcome-banner{opacity:0;animation:hf .8s var(--ex) .55s forwards;margin-bottom:36px;padding:16px 20px;background:rgba(0,212,200,.03);border:1px solid var(--bdt);border-radius:var(--r2);display:flex;align-items:center;gap:14px;max-width:540px}
-.wb-avatar{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
-.wb-text{font-size:13px;font-weight:600;color:var(--t2)}.wb-text em{font-style:normal;color:var(--t4)}
-.wb-sub{font-size:10px;color:var(--tx4);margin-top:2px}
-.ticker-wrap{margin-top:56px;opacity:0;animation:hf .8s var(--ex) .8s forwards}
-.ticker{display:flex;gap:0;background:rgba(14,20,34,.7);backdrop-filter:blur(16px);border:1px solid var(--bd2);border-radius:var(--r2);max-width:max-content;overflow:hidden}
-.tick{display:flex;align-items:center;gap:8px;padding:14px 22px;border-right:1px solid var(--bd)}
-.tick:last-child{border:0}
-.tick .tv{font-family:'Geist Mono',monospace;font-size:22px;font-weight:800;letter-spacing:-.5px}
-.tick .tl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--tx4);line-height:1.3}
-.marquee-wrap{border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);overflow:hidden;padding:13px 0;background:rgba(14,20,34,.4);position:relative;z-index:1}
-.marquee{display:flex;gap:0;animation:marq 50s linear infinite;width:max-content}
-.marquee span{padding:0 36px;font-family:'Instrument Serif',serif;font-size:15px;font-style:italic;color:var(--tx4);white-space:nowrap;display:flex;align-items:center;gap:14px}
-.marquee span::after{content:'◆';font-size:5px;color:var(--teal);font-style:normal;opacity:.4}
-@keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.sec{position:relative;z-index:1;padding:clamp(80px,10vw,120px) clamp(16px,4vw,56px)}
-.sec-in{max-width:1200px;margin:0 auto}
-.sec-tag{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:10px}
-.sec-tag::before{content:'';width:20px;height:1px;background:var(--teal)}
-.sec-h2{font-family:'Instrument Serif',serif;font-size:clamp(32px,5vw,52px);font-weight:400;line-height:1.08;letter-spacing:-1.5px;max-width:640px;margin-bottom:14px}
-.sec-h2 em{font-style:italic;color:var(--t4)}
-.sec-desc{font-size:14px;color:var(--t3);line-height:1.65;max-width:480px;margin-bottom:40px}
-.sr{opacity:0;transform:translateY(28px);transition:all .7s var(--ex)}.sr.v{opacity:1;transform:translateY(0)}
-.platform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.pg-card{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);padding:28px 24px;position:relative;overflow:hidden;transition:all .4s var(--ex);cursor:pointer;display:flex;flex-direction:column}
-.pg-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .3s}
-.pg-card:hover{border-color:var(--bdt);transform:translateY(-6px);box-shadow:0 24px 64px rgba(0,0,0,.35)}
-.pg-card:hover::before{opacity:1}
-.pg-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;flex-shrink:0;transition:all .3s}
-.pg-card:hover .pg-icon{transform:scale(1.08)}
-.pg-name{font-size:16px;font-weight:800;letter-spacing:-.2px;margin-bottom:6px}
-.pg-desc{font-size:12px;color:var(--tx4);line-height:1.55;flex:1;margin-bottom:14px}
-.pg-link{font-size:11px;font-weight:700;color:var(--t4);display:flex;align-items:center;gap:6px;transition:gap .3s}
-.pg-card:hover .pg-link{gap:10px}
-.pg-badge{position:absolute;top:12px;right:12px;font-size:8px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:100px}
-.pg-card.featured{grid-column:span 3;display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:32px 28px;align-items:center;border-color:rgba(0,230,118,.12);background:linear-gradient(135deg,rgba(0,230,118,.02),rgba(0,212,200,.02))}
-.pg-card.featured:hover{border-color:rgba(0,230,118,.25)}
-.pg-card.featured::before{background:linear-gradient(90deg,var(--grn),var(--teal),var(--cyan))}
-.pg-card.featured .pg-inner{display:flex;flex-direction:column}
-.pg-card.featured .pg-visual{display:flex;flex-direction:column;gap:6px}
-.pv-row{display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(0,0,0,.1);border:1px solid var(--bd2);border-radius:8px;font-size:11px}
-.pv-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.pv-name{flex:1;font-weight:600;color:var(--t3)}
-.pv-val{font-family:'Geist Mono',monospace;font-weight:700;font-size:11px}
-.c-grn .pg-icon{background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.15)}
-.pg-card.c-grn::before{background:linear-gradient(90deg,var(--grn),var(--teal))}
-.c-teal .pg-icon{background:rgba(0,212,200,.08);border:1px solid var(--bdt)}
-.pg-card.c-teal::before{background:linear-gradient(90deg,var(--teal),var(--cyan))}
-.c-cyan .pg-icon{background:rgba(0,200,255,.06);border:1px solid rgba(0,200,255,.15)}
-.pg-card.c-cyan::before{background:linear-gradient(90deg,var(--cyan),var(--grn))}
-.c-red .pg-icon{background:rgba(255,82,82,.06);border:1px solid rgba(255,82,82,.15)}
-.pg-card.c-red::before{background:linear-gradient(90deg,var(--red),var(--amb))}
-.c-amb .pg-icon{background:rgba(255,196,70,.06);border:1px solid rgba(255,196,70,.15)}
-.pg-card.c-amb::before{background:linear-gradient(90deg,var(--amb),var(--org))}
-.c-pur .pg-icon{background:rgba(179,136,255,.06);border:1px solid rgba(179,136,255,.15)}
-.pg-card.c-pur::before{background:linear-gradient(90deg,var(--pur),var(--cyan))}
-.c-org .pg-icon{background:rgba(255,123,66,.06);border:1px solid rgba(255,123,66,.15)}
-.pg-card.c-org::before{background:linear-gradient(90deg,var(--org),var(--amb))}
-.c-gold .pg-icon{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.15)}
-.pg-card.c-gold::before{background:linear-gradient(90deg,var(--gold),var(--amb))}
-.wf-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
-.wf-grid::before{content:'';position:absolute;top:32px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,var(--grn),var(--teal),var(--cyan),var(--amb),var(--grn));opacity:.15;z-index:0}
-.wf-step{text-align:center;position:relative;z-index:1;padding:0 8px}
-.wf-num{width:48px;height:48px;border-radius:50%;background:var(--sf);border:2px solid var(--bd2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-family:'Geist Mono',monospace;font-size:18px;font-weight:800;color:var(--tx4);transition:all .3s}
-.wf-step:hover .wf-num{border-color:var(--teal);color:var(--t4);box-shadow:0 0 20px rgba(0,212,200,.12)}
-.wf-title{font-size:13px;font-weight:800;letter-spacing:-.1px;margin-bottom:4px}
-.wf-desc{font-size:11px;color:var(--tx4);line-height:1.45}
-.big-feature{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:60px 0;border-top:1px solid var(--bd2)}
-.bf-text .bf-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
-.bf-text h3{font-family:'Instrument Serif',serif;font-size:clamp(28px,4vw,40px);letter-spacing:-1px;line-height:1.08;margin-bottom:14px}
-.bf-text h3 em{font-style:italic;color:var(--t4)}
-.bf-text p{font-size:13px;color:var(--t3);line-height:1.65;margin-bottom:16px}
-.bf-visual{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);padding:24px;position:relative;overflow:hidden}
-.bf-visual::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--cyan))}
-.bf-mock{display:flex;flex-direction:column;gap:10px}
-.bf-mock-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(0,0,0,.1);border:1px solid var(--bd2);border-radius:10px}
-.bf-mock-row .mr-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.bf-mock-row .mr-name{font-size:11px;font-weight:700;flex:1}
-.bf-mock-row .mr-val{font-family:'Geist Mono',monospace;font-size:12px;font-weight:700}
-.stats-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--bd2);border-radius:var(--r);overflow:hidden;position:relative;z-index:1}
-.stat{background:var(--sf);padding:32px 20px;text-align:center}
-.stat-val{font-family:'Geist Mono',monospace;font-size:clamp(24px,3.5vw,38px);font-weight:800;letter-spacing:-1px}
-.stat-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--tx4);margin-top:4px}
-.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.test-card{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);padding:24px;transition:all .35s}
-.test-card:hover{border-color:var(--bdt);transform:translateY(-4px)}
-.test-stars{color:var(--gold);font-size:13px;margin-bottom:10px;letter-spacing:1px}
-.test-text{font-size:13px;color:var(--t3);line-height:1.6;margin-bottom:14px;font-style:italic}
-.test-author{font-size:11px;font-weight:700;color:var(--t2)}
-.test-role{font-size:10px;color:var(--tx4);margin-top:2px}
-.cta{position:relative;z-index:1;padding:clamp(100px,12vw,140px) clamp(16px,4vw,56px);text-align:center;overflow:hidden}
-.cta-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,200,.06),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
-.cta-in{position:relative;z-index:1;max-width:560px;margin:0 auto}
-.cta-in h2{font-family:'Instrument Serif',serif;font-size:clamp(34px,5vw,54px);line-height:1.05;letter-spacing:-1.5px;margin-bottom:16px}
-.cta-in h2 em{font-style:italic;color:var(--t4)}
-.cta-in p{font-size:15px;color:var(--t3);line-height:1.65;margin-bottom:32px}
-.foot{border-top:1px solid var(--bd);padding:36px clamp(16px,4vw,56px);position:relative;z-index:1}
-.foot-in{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
-.foot-l{display:flex;align-items:center;gap:16px}
-.foot-wm{font-weight:700;font-size:14px;letter-spacing:-.3px}.foot-wm em{font-style:normal;color:var(--t4)}
-.foot-cp{font-size:10px;color:var(--tx5)}
-.foot-lk{display:flex;gap:18px;list-style:none;flex-wrap:wrap}
-.foot-lk a{font-size:11px;color:var(--tx4);transition:color .2s}.foot-lk a:hover{color:var(--t4)}
-@media(max-width:1024px){.platform-grid{grid-template-columns:1fr 1fr}.pg-card.featured{grid-column:span 2}.wf-grid{grid-template-columns:repeat(3,1fr);gap:20px}.wf-grid::before{display:none}.test-grid{grid-template-columns:1fr 1fr}.big-feature{grid-template-columns:1fr}.stats-bar{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:768px){.nav-pills{display:none}.platform-grid{grid-template-columns:1fr}.pg-card.featured{grid-column:span 1;grid-template-columns:1fr}.stats-bar{grid-template-columns:1fr 1fr}.test-grid{grid-template-columns:1fr}.ticker{flex-wrap:wrap}.wf-grid{grid-template-columns:1fr 1fr}.welcome-banner{flex-direction:column;text-align:center}}
+:root {
+  --bg: #07080A;
+  --bg-card: #0D0F13;
+  --bg-card-hover: #12151B;
+  --border: rgba(255,255,255,0.06);
+  --border-bright: rgba(255,255,255,0.12);
+  --text: #EAEDF3;
+  --text-dim: #6B7280;
+  --text-mid: #9CA3AF;
+  --accent: #00E87B;
+  --accent-dim: rgba(0,232,123,0.12);
+  --accent-glow: rgba(0,232,123,0.25);
+  --red: #FF4D4D;
+  --amber: #FFAA2C;
+  --blue: #3B82F6;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ─── GLOBAL UTILITIES ──────────────────── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ─── ANIMATED GRAIN OVERLAY ──────────── */
+body::before {
+  content: '';
+  position: fixed;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─── GLOW BLOB ───────────────────────── */
+.glow-blob {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  filter: blur(120px);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ─── NAV ─────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 18px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(7,8,10,0.7);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-weight: 800; font-size: 18px;
+  letter-spacing: -0.5px;
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-logo .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.5; transform:scale(0.8); }
+}
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  color: var(--text-mid); text-decoration: none; font-size: 14px; font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-cta {
+  background: var(--accent); color: #07080A; border: none;
+  padding: 10px 22px; border-radius: 100px; font-weight: 700;
+  font-size: 14px; cursor: pointer; font-family: inherit;
+  transition: all 0.2s;
+}
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 24px var(--accent-glow); }
+
+/* ─── HERO ────────────────────────────── */
+.hero {
+  position: relative;
+  padding: 180px 0 120px;
+  text-align: center;
+  overflow: hidden;
+}
+.hero .glow-blob { top: -200px; left: 50%; transform: translateX(-50%); }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent-dim); border: 1px solid rgba(0,232,123,0.2);
+  padding: 8px 18px; border-radius: 100px;
+  font-size: 13px; font-weight: 600; color: var(--accent);
+  margin-bottom: 32px;
+  animation: fadeUp 0.8s ease both;
+}
+.hero-badge .live-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  animation: pulse-dot 1.5s infinite;
+}
+.hero h1 {
+  font-size: clamp(42px, 6vw, 80px);
+  font-weight: 900; letter-spacing: -2px;
+  line-height: 1.05;
+  max-width: 900px; margin: 0 auto 28px;
+  animation: fadeUp 0.8s ease 0.1s both;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--accent), #00C9FF);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-sub {
+  font-size: 20px; color: var(--text-mid); font-weight: 400;
+  max-width: 560px; margin: 0 auto 48px; line-height: 1.6;
+  animation: fadeUp 0.8s ease 0.2s both;
+}
+.hero-actions {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.8s ease 0.3s both;
+}
+.btn-primary {
+  background: var(--accent); color: #07080A;
+  padding: 16px 36px; border-radius: 100px;
+  font-weight: 700; font-size: 16px; border: none; cursor: pointer;
+  font-family: inherit; transition: all 0.25s;
+  box-shadow: 0 0 40px var(--accent-glow);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 48px var(--accent-glow); }
+.btn-secondary {
+  background: transparent; color: var(--text);
+  padding: 16px 36px; border-radius: 100px;
+  font-weight: 600; font-size: 16px;
+  border: 1px solid var(--border-bright); cursor: pointer;
+  font-family: inherit; transition: all 0.25s;
+}
+.btn-secondary:hover { border-color: var(--text-mid); background: rgba(255,255,255,0.03); }
+.hero-meta {
+  margin-top: 28px; font-size: 13px; color: var(--text-dim);
+  display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.8s ease 0.4s both;
+}
+.hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+/* ─── LIVE TICKER BAR ─────────────────── */
+.ticker-bar {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  overflow: hidden;
+  position: relative;
+}
+.ticker-track {
+  display: flex; gap: 48px;
+  animation: scroll-left 30s linear infinite;
+  width: max-content;
+}
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-item {
+  display: flex; align-items: center; gap: 10px;
+  white-space: nowrap; font-size: 13px; color: var(--text-dim);
+}
+.ticker-item .ticker-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+}
+.ticker-item .ticker-dot.green { background: var(--accent); }
+.ticker-item .ticker-dot.amber { background: var(--amber); }
+.ticker-item .ticker-dot.blue { background: var(--blue); }
+.ticker-item strong { color: var(--text-mid); font-weight: 600; }
+
+/* ─── SECTION HEADERS ─────────────────── */
+.section { padding: 120px 0; position: relative; }
+.section-label {
+  font-size: 12px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+}
+.section-title {
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800; letter-spacing: -1.5px; line-height: 1.1;
+  margin-bottom: 20px;
+}
+.section-desc {
+  font-size: 18px; color: var(--text-mid); max-width: 600px; line-height: 1.6;
+}
+
+/* ─── LIVE MARKETPLACE SECTION ────────── */
+.marketplace-section { overflow: hidden; }
+.marketplace-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  margin-top: 56px;
+}
+.deal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.deal-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.deal-card:hover { border-color: var(--border-bright); transform: translateY(-4px); }
+.deal-card:hover::before { opacity: 1; }
+.deal-card-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px; }
+.deal-live {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--red);
+}
+.deal-live .blink {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--red);
+  animation: pulse-dot 1s infinite;
+}
+.deal-time { font-size: 12px; color: var(--text-dim); }
+.deal-biz { font-weight: 700; font-size: 17px; margin-bottom: 4px; }
+.deal-meta { font-size: 13px; color: var(--text-dim); margin-bottom: 6px; }
+.deal-amount {
+  font-size: 24px; font-weight: 800; letter-spacing: -0.5px;
+  margin-bottom: 20px;
+}
+.deal-amount span { font-size: 14px; font-weight: 500; color: var(--text-dim); }
+.offer-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+}
+.offer-row .funder { color: var(--text-mid); font-weight: 500; }
+.offer-row .terms { font-weight: 600; }
+.offer-row .offer-badge {
+  font-size: 11px; padding: 3px 10px; border-radius: 100px;
+  font-weight: 600;
+}
+.offer-badge.active { background: var(--accent-dim); color: var(--accent); }
+.offer-badge.reviewing { background: rgba(255,170,44,0.12); color: var(--amber); }
+.deal-footer {
+  margin-top: 16px; text-align: center;
+  font-size: 13px; font-weight: 600; color: var(--accent);
+}
+
+/* ─── TRANSFORMATION ──────────────────── */
+.transform-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+  margin-top: 56px; align-items: start;
+}
+.transform-col { position: relative; }
+.transform-col.old .transform-box {
+  background: rgba(255,77,77,0.04);
+  border: 1px solid rgba(255,77,77,0.12);
+  border-radius: var(--radius); padding: 36px;
+}
+.transform-col.new .transform-box {
+  background: rgba(0,232,123,0.04);
+  border: 1px solid rgba(0,232,123,0.15);
+  border-radius: var(--radius); padding: 36px;
+}
+.transform-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; margin-bottom: 24px; display: flex;
+  align-items: center; gap: 8px;
+}
+.transform-col.old .transform-label { color: var(--red); }
+.transform-col.new .transform-label { color: var(--accent); }
+.transform-step {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 0; font-size: 15px; color: var(--text-mid);
+}
+.transform-col.old .transform-step .step-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,77,77,0.1); display: flex;
+  align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.transform-col.new .transform-step .step-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent-dim); display: flex;
+  align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.transform-col.new .transform-step { color: var(--text); }
+.transform-arrow {
+  position: absolute; right: -36px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 28px; color: var(--accent);
+}
+
+/* ─── PROTECTION ──────────────────────── */
+.protection-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  margin-top: 56px;
+}
+.protection-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.protection-card:hover { border-color: var(--border-bright); }
+.protection-icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--accent-dim);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin: 0 auto 20px;
+}
+.protection-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+.protection-card p { font-size: 14px; color: var(--text-dim); line-height: 1.5; }
+
+/* ─── STEPS ───────────────────────────── */
+.steps-track {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  margin-top: 56px; position: relative;
+}
+.steps-track::before {
+  content: '';
+  position: absolute; top: 36px; left: 12%; right: 12%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-dim));
+}
+.step-card { text-align: center; position: relative; padding: 0 16px; }
+.step-num {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--bg-card); border: 2px solid var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 800; margin: 0 auto 24px;
+  position: relative; z-index: 2;
+  color: var(--accent);
+}
+.step-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+.step-card p { font-size: 14px; color: var(--text-dim); line-height: 1.5; }
+
+/* ─── AI PREVIEW CARD ─────────────────── */
+.ai-preview {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  margin-top: 20px;
+  max-width: 280px;
+  margin-left: auto; margin-right: auto;
+}
+.ai-preview-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+}
+.ai-row {
+  display: flex; justify-content: space-between;
+  padding: 8px 0; font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+.ai-row:last-child { border: none; }
+.ai-row .label { color: var(--text-dim); }
+.ai-row .value { font-weight: 600; }
+.ai-row .value.good { color: var(--accent); }
+.ai-row .value.warn { color: var(--amber); }
+
+/* ─── TWO PATHS ───────────────────────── */
+.paths-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  margin-top: 56px;
+}
+.path-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 44px;
+  transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.path-card:hover { border-color: var(--border-bright); }
+.path-card.featured {
+  border-color: rgba(0,232,123,0.3);
+  background: linear-gradient(135deg, rgba(0,232,123,0.04), transparent);
+}
+.path-card.featured::before {
+  content: 'POPULAR'; position: absolute; top: 20px; right: 20px;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  background: var(--accent); color: var(--bg); padding: 4px 12px;
+  border-radius: 100px;
+}
+.path-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.path-card .path-desc { font-size: 15px; color: var(--text-mid); margin-bottom: 28px; line-height: 1.5; }
+.path-benefit {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0; font-size: 14px;
+}
+.path-benefit .check { color: var(--accent); font-weight: 700; }
+.path-cta {
+  margin-top: 28px; display: block; width: 100%; text-align: center;
+  padding: 14px; border-radius: 100px; font-weight: 700;
+  font-size: 15px; border: none; cursor: pointer; font-family: inherit;
+  transition: all 0.25s;
+}
+.path-card.featured .path-cta {
+  background: var(--accent); color: var(--bg);
+}
+.path-card:not(.featured) .path-cta {
+  background: transparent; color: var(--text);
+  border: 1px solid var(--border-bright);
+}
+
+/* ─── STATS BAR ───────────────────────── */
+.stats-bar {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  margin-top: 56px;
+}
+.stat-block { text-align: center; }
+.stat-val {
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 900; letter-spacing: -2px;
+  background: linear-gradient(135deg, var(--accent), #00C9FF);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.stat-label { font-size: 14px; color: var(--text-dim); margin-top: 4px; font-weight: 500; }
+
+/* ─── TOOLS GRID ──────────────────────── */
+.tools-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  margin-top: 56px;
+}
+.tool-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: all 0.3s;
+}
+.tool-card:hover { border-color: var(--border-bright); transform: translateY(-2px); }
+.tool-icon {
+  font-size: 28px; margin-bottom: 16px;
+}
+.tool-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.tool-card p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+
+/* ─── FINAL CTA ───────────────────────── */
+.final-cta {
+  text-align: center;
+  padding: 140px 0;
+  position: relative; overflow: hidden;
+}
+.final-cta .glow-blob { bottom: -200px; left: 50%; transform: translateX(-50%); }
+.final-cta h2 {
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 900; letter-spacing: -2px; line-height: 1.05;
+  max-width: 800px; margin: 0 auto 20px;
+}
+.final-cta p {
+  font-size: 18px; color: var(--text-mid); max-width: 500px;
+  margin: 0 auto 44px; line-height: 1.6;
+}
+.final-cta .hero-meta { margin-top: 24px; }
+
+/* ─── FOOTER ──────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 48px 28px;
+  text-align: center;
+  font-size: 13px; color: var(--text-dim);
+}
+footer a { color: var(--text-mid); text-decoration: none; }
+footer a:hover { color: var(--text); }
+.footer-links { display: flex; gap: 28px; justify-content: center; margin-bottom: 20px; }
+
+/* ─── RESPONSIVE ──────────────────────── */
+@media (max-width: 900px) {
+  .marketplace-grid, .protection-grid, .tools-grid { grid-template-columns: 1fr; }
+  .transform-grid, .paths-grid { grid-template-columns: 1fr; }
+  .steps-track { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .steps-track::before { display: none; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  .nav-links { display: none; }
+  .transform-arrow { display: none; }
+}
+@media (max-width: 600px) {
+  .stats-bar { grid-template-columns: 1fr; }
+  .steps-track { grid-template-columns: 1fr; }
+}
+
+/* ─── SCROLL ANIMATIONS ───────────────── */
+.reveal {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
-<div class="grain"></div>
-<div class="ambient"><div class="ao a"></div><div class="ao b"></div><div class="ao c"></div></div>
 
-<nav class="nav" id="nav">
-  <div class="nav-l"><a href="index.html" class="logo"><svg width="14" height="14" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div class="nav-brand">Private<em>Credit</em>MCA</div></div>
-  <div class="nav-pills"><a href="#platform" class="nl">Platform</a><a href="marketplace.html" class="nl">Marketplace</a><a href="deallab.html" class="nl">Deal Lab</a><a href="funders.html" class="nl">Funders</a><a href="pipeline.html" class="nl">Pipeline</a><a href="education.html" class="nl">Academy</a></div>
-  <div class="nav-r" id="navRight"></div>
+<!-- ═══════ NAV ═══════ -->
+<nav>
+  <div class="nav-logo">
+    <span class="dot"></span>
+    PrivateCreditMCA
+  </div>
+  <div class="nav-links">
+    <a href="#marketplace">Marketplace</a>
+    <a href="#how">How It Works</a>
+    <a href="#tools">Tools</a>
+    <a href="#paths">Get Started</a>
+  </div>
+  <button class="nav-cta">Submit a Deal</button>
 </nav>
 
+<!-- ═══════ HERO ═══════ -->
 <section class="hero">
-  <div class="hero-in">
-    <div class="hero-eyebrow"><span class="live"></span> Platform Live — 136 Active Deals</div>
-    <h1>The operating system for <em>MCA professionals</em></h1>
-    <div id="heroBanner"></div>
-    <div class="hero-sub">Everything brokers and funders need in one platform — deal scoring, AI underwriting, competitive offer arenas, pipeline management, universal submissions, and real-time market intelligence.</div>
-    <div class="hero-acts" id="heroActions"></div>
-    <div class="ticker-wrap"><div class="ticker">
-      <div class="tick"><div class="tv" style="color:var(--t4)">$9.9M</div><div class="tl">Pipeline Volume</div></div>
-      <div class="tick"><div class="tv" style="color:var(--grn)">136</div><div class="tl">Active Deals</div></div>
-      <div class="tick"><div class="tv" style="color:var(--amb)">12</div><div class="tl">Funders Bidding</div></div>
-      <div class="tick"><div class="tv" style="color:var(--pur)">4.2h</div><div class="tl">Avg Time to Offer</div></div>
-      <div class="tick"><div class="tv" style="color:var(--org)">94%</div><div class="tl">Packet Acceptance</div></div>
-    </div></div>
-  </div>
-</section>
-
-<div class="marquee-wrap"><div class="marquee" id="marquee"></div></div>
-
-<section class="sec" id="platform" style="background:var(--deep)">
-  <div class="sec-in">
-    <div class="sec-tag">The Platform</div>
-    <div class="sec-h2">Every tool a broker needs. <em>One profile.</em></div>
-    <div class="sec-desc">Create your profile once. 14 integrated tools unlock — deal scoring, AI underwriting, competitive bidding, pipeline management, and more. Everything connected through your identity.</div>
-    <div class="platform-grid" id="pgGrid"></div>
-  </div>
-</section>
-
-<section class="sec">
-  <div class="sec-in">
-    <div class="sec-tag">How It Works</div>
-    <div class="sec-h2">From signup to funded in <em>five steps</em></div>
-    <div class="sec-desc">Create your profile, upload once, and the platform handles the rest.</div>
-    <div class="wf-grid sr">
-      <div class="wf-step"><div class="wf-num" style="border-color:var(--grn);color:var(--grn)">1</div><div class="wf-title">Create Profile</div><div class="wf-desc">Sign up. Choose your role — broker, funder, or merchant. Set specialties.</div></div>
-      <div class="wf-step"><div class="wf-num" style="border-color:var(--teal);color:var(--t4)">2</div><div class="wf-title">Upload Docs</div><div class="wf-desc">Drop bank statements and docs into the Universal Deal Packet. AI extracts everything.</div></div>
-      <div class="wf-step"><div class="wf-num">3</div><div class="wf-title">AI Underwrites</div><div class="wf-desc">BankIQ analyzes statements. Deal Lab scores the deal. Risk flags generated instantly.</div></div>
-      <div class="wf-step"><div class="wf-num">4</div><div class="wf-title">Submit Everywhere</div><div class="wf-desc">One click sends the standardized packet to 10+ funders in their preferred format.</div></div>
-      <div class="wf-step"><div class="wf-num">5</div><div class="wf-title">Offers Compete</div><div class="wf-desc">Funders bid in the Offer Battle arena. Compare and accept. Track in Pipeline CRM.</div></div>
+  <div class="glow-blob"></div>
+  <div class="container">
+    <div class="hero-badge">
+      <span class="live-dot"></span>
+      Live Marketplace — 136 Deals Active Now
+    </div>
+    <h1>Stop Emailing Deals<br>Into the <span class="highlight">Void</span></h1>
+    <p class="hero-sub">Submit once. Let 50+ funders compete for your MCA deal in a live marketplace. Know it was seen. Know you got the best terms.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Submit a Deal →</button>
+      <button class="btn-secondary">Create Broker Account</button>
+    </div>
+    <div class="hero-meta">
+      <span>✓ Free to use</span>
+      <span>✓ No credit card</span>
+      <span>✓ Merchant info stays private</span>
     </div>
   </div>
 </section>
 
-<section class="sec" style="background:var(--deep)">
-  <div class="sec-in">
-    <div class="big-feature sr">
-      <div class="bf-text">
-        <div class="bf-tag">Core Infrastructure</div>
-        <h3>The Universal <em>Deal Packet</em></h3>
-        <p>Brokers waste 30–60 minutes repackaging every deal for different funders. The Universal Deal Packet solves this permanently — upload once, AI summarizes, one click sends to every funder in their preferred format.</p>
-        <p style="color:var(--tx4)">The more funders that accept it, the more brokers use the platform. The more brokers, the more funders join. This is the network effect.</p>
-        <a href="packet.html" class="btn btn-p" style="margin-top:8px">Build a Packet →</a>
-      </div>
-      <div class="bf-visual">
-        <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--tx4);margin-bottom:12px">UNIVERSAL DEAL PACKET — PREVIEW</div>
-        <div class="bf-mock">
-          <div class="bf-mock-row"><div class="mr-dot" style="background:var(--grn)"></div><div class="mr-name">Merchant Profile</div><div class="mr-val" style="color:var(--grn)">Complete</div></div>
-          <div class="bf-mock-row"><div class="mr-dot" style="background:var(--grn)"></div><div class="mr-name">Financial Summary</div><div class="mr-val" style="color:var(--grn)">AI Extracted</div></div>
-          <div class="bf-mock-row"><div class="mr-dot" style="background:var(--grn)"></div><div class="mr-name">Documents (4/4)</div><div class="mr-val" style="color:var(--grn)">All Received</div></div>
-          <div class="bf-mock-row"><div class="mr-dot" style="background:var(--t4)"></div><div class="mr-name">Risk Score</div><div class="mr-val" style="color:var(--t4)">78 / B</div></div>
-          <div class="bf-mock-row"><div class="mr-dot" style="background:var(--amb)"></div><div class="mr-name">Recommended Range</div><div class="mr-val" style="color:var(--amb)">$45K–$62K</div></div>
+<!-- ═══════ LIVE TICKER ═══════ -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker">
+    <!-- doubled for infinite scroll -->
+    <div class="ticker-item"><span class="ticker-dot green"></span><strong>QuickFix Auto</strong> TX · 3 offers · $80K</div>
+    <div class="ticker-item"><span class="ticker-dot amber"></span><strong>Nonna's Trattoria</strong> NY · 2 offers · $65K</div>
+    <div class="ticker-item"><span class="ticker-dot green"></span><strong>Peak Roofing Co</strong> FL · reviewing · $110K</div>
+    <div class="ticker-item"><span class="ticker-dot blue"></span><strong>Bright Smile Dental</strong> CA · new deal · $45K</div>
+    <div class="ticker-item"><span class="ticker-dot green"></span><strong>Metro Logistics</strong> NJ · 4 offers · $92K</div>
+    <div class="ticker-item"><span class="ticker-dot amber"></span><strong>Casa Verde Landscaping</strong> AZ · 1 offer · $38K</div>
+    <div class="ticker-item"><span class="ticker-dot green"></span><strong>TechServe IT</strong> IL · funded · $120K</div>
+    <div class="ticker-item"><span class="ticker-dot blue"></span><strong>Harbor Fish Market</strong> MA · new deal · $55K</div>
+    <!-- duplicate -->
+    <div class="ticker-item"><span class="ticker-dot green"></span><strong>QuickFix Auto</strong> TX · 3 offers · $80K</div>
+    <div class="ticker-item"><span class="ticker-dot amber"></span><strong>Nonna's Trattoria</strong> NY · 2 offers · $65K</div>
+    <div class="ticker-item"><span class="ticker-dot green"></span><strong>Peak Roofing Co</strong> FL · reviewing · $110K</div>
+    <div class="ticker-item"><span class="ticker-dot blue"></span><strong>Bright Smile Dental</strong> CA · new deal · $45K</div>
+    <div class="ticker-item"><span class="ticker-dot green"></span><strong>Metro Logistics</strong> NJ · 4 offers · $92K</div>
+    <div class="ticker-item"><span class="ticker-dot amber"></span><strong>Casa Verde Landscaping</strong> AZ · 1 offer · $38K</div>
+    <div class="ticker-item"><span class="ticker-dot green"></span><strong>TechServe IT</strong> IL · funded · $120K</div>
+    <div class="ticker-item"><span class="ticker-dot blue"></span><strong>Harbor Fish Market</strong> MA · new deal · $55K</div>
+  </div>
+</div>
+
+<!-- ═══════ LIVE MARKETPLACE ═══════ -->
+<section class="section marketplace-section" id="marketplace">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Live Marketplace</div>
+      <div class="section-title">Deals Are Competing<br>Right Now</div>
+      <div class="section-desc">Every deal submitted becomes visible to participating funders. They review. They bid. You choose the best offer.</div>
+    </div>
+    <div class="marketplace-grid reveal" style="transition-delay:0.15s">
+      <!-- Card 1 -->
+      <div class="deal-card">
+        <div class="deal-card-header">
+          <div class="deal-live"><span class="blink"></span> Live</div>
+          <div class="deal-time mono">2m ago</div>
         </div>
-        <div style="margin-top:14px;text-align:center;font-size:11px;color:var(--tx5)">Ready to submit to 10 funders in one click</div>
+        <div class="deal-biz">QuickFix Auto Repair</div>
+        <div class="deal-meta">Auto Repair · TX · $74K/mo revenue</div>
+        <div class="deal-amount">$80,000 <span>requested</span></div>
+        <div class="offer-row">
+          <span class="funder">Apex Funding</span>
+          <span class="terms mono">$60K @ 1.37</span>
+          <span class="offer-badge active">Offer</span>
+        </div>
+        <div class="offer-row">
+          <span class="funder">Capital Group</span>
+          <span class="terms mono">$58K @ 1.35</span>
+          <span class="offer-badge active">Offer</span>
+        </div>
+        <div class="offer-row">
+          <span class="funder">Atlas Capital</span>
+          <span class="terms mono">$62K @ 1.40</span>
+          <span class="offer-badge active">Offer</span>
+        </div>
+        <div class="deal-footer">3 funders competing</div>
+      </div>
+      <!-- Card 2 -->
+      <div class="deal-card">
+        <div class="deal-card-header">
+          <div class="deal-live"><span class="blink"></span> Live</div>
+          <div class="deal-time mono">8m ago</div>
+        </div>
+        <div class="deal-biz">Nonna's Trattoria</div>
+        <div class="deal-meta">Restaurant · NY · $70K/mo revenue</div>
+        <div class="deal-amount">$65,000 <span>requested</span></div>
+        <div class="offer-row">
+          <span class="funder">Forward Financing</span>
+          <span class="terms mono">$52K @ 1.36</span>
+          <span class="offer-badge active">Offer</span>
+        </div>
+        <div class="offer-row">
+          <span class="funder">BridgeCap</span>
+          <span class="terms mono">$55K @ 1.38</span>
+          <span class="offer-badge active">Offer</span>
+        </div>
+        <div class="deal-footer">2 funders competing</div>
+      </div>
+      <!-- Card 3 -->
+      <div class="deal-card">
+        <div class="deal-card-header">
+          <div class="deal-live"><span class="blink"></span> Live</div>
+          <div class="deal-time mono">14m ago</div>
+        </div>
+        <div class="deal-biz">Peak Roofing Co</div>
+        <div class="deal-meta">Construction · FL · $128K/mo revenue</div>
+        <div class="deal-amount">$110,000 <span>requested</span></div>
+        <div class="offer-row">
+          <span class="funder">Rapid Finance</span>
+          <span class="terms mono">$105K @ 1.32</span>
+          <span class="offer-badge active">Offer</span>
+        </div>
+        <div class="offer-row">
+          <span class="funder">Libertas Funding</span>
+          <span class="terms mono">$110K @ 1.36</span>
+          <span class="offer-badge reviewing">Reviewing</span>
+        </div>
+        <div class="deal-footer">2 funders competing</div>
       </div>
     </div>
-    <div class="big-feature sr" style="direction:rtl">
-      <div class="bf-text" style="direction:ltr">
-        <div class="bf-tag" style="color:var(--red)">Competitive Funding</div>
-        <h3 style="max-width:400px">Funders compete. <em style="color:var(--red)">Brokers win.</em></h3>
-        <p>Submit a deal to the arena and watch funders bid against each other. Compare offers side-by-side — amount, factor, term, daily payment. Accept the best with one click.</p>
-        <a href="offerbattle.html" class="btn" style="margin-top:8px;border-color:rgba(255,82,82,.2);color:var(--red)">Enter the Arena →</a>
+  </div>
+</section>
+
+<!-- ═══════ TRANSFORMATION ═══════ -->
+<section class="section">
+  <div class="container">
+    <div class="reveal" style="text-align:center; margin-bottom: 8px;">
+      <div class="section-label">The Shift</div>
+      <div class="section-title" style="max-width:700px;margin:0 auto 16px;">From Email Chaos to a<br>Real Deal Market</div>
+    </div>
+    <div class="transform-grid reveal" style="transition-delay:0.15s">
+      <div class="transform-col old">
+        <div class="transform-box">
+          <div class="transform-label">✕ How Brokers Work Today</div>
+          <div class="transform-step"><span class="step-icon">📧</span> Email the deal to 10+ funders</div>
+          <div class="transform-step"><span class="step-icon">⏳</span> Wait for someone to reply</div>
+          <div class="transform-step"><span class="step-icon">🔁</span> Follow up 3–4 times</div>
+          <div class="transform-step"><span class="step-icon">🤷</span> Hope you got the best offer</div>
+          <div class="transform-step"><span class="step-icon">😶</span> Never know if the deal was seen</div>
+        </div>
+        <div class="transform-arrow">→</div>
       </div>
-      <div class="bf-visual" style="direction:ltr">
-        <div style="font-family:'Geist Mono',monospace;font-size:10px;color:var(--tx4);margin-bottom:12px">OFFER BATTLE — LIVE ARENA</div>
-        <div class="bf-mock">
-          <div class="bf-mock-row" style="border-color:rgba(0,230,118,.15);background:rgba(0,230,118,.02)"><div class="mr-dot" style="background:var(--grn)"></div><div class="mr-name">Forward Financing</div><div class="mr-val" style="color:var(--grn)">$60K · 1.37x · 120d</div></div>
-          <div class="bf-mock-row"><div class="mr-dot" style="background:var(--t4)"></div><div class="mr-name">Fora Financial</div><div class="mr-val">$62K · 1.39x · 110d</div></div>
-          <div class="bf-mock-row"><div class="mr-dot" style="background:var(--t4)"></div><div class="mr-name">Credibly</div><div class="mr-val">$58K · 1.35x · 130d</div></div>
-          <div class="bf-mock-row"><div class="mr-dot" style="background:var(--amb)"></div><div class="mr-name">Everest Funding</div><div class="mr-val">$65K · 1.42x · 100d</div></div>
+      <div class="transform-col new">
+        <div class="transform-box">
+          <div class="transform-label">✓ With PrivateCreditMCA</div>
+          <div class="transform-step"><span class="step-icon">⚡</span> Upload docs. AI analyzes in seconds.</div>
+          <div class="transform-step"><span class="step-icon">🚀</span> One click sends to marketplace</div>
+          <div class="transform-step"><span class="step-icon">🏦</span> 50+ funders see it instantly</div>
+          <div class="transform-step"><span class="step-icon">📊</span> Offers appear side-by-side</div>
+          <div class="transform-step"><span class="step-icon">✅</span> You pick the best one</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="wrap sr"><div class="stats-bar">
-  <div class="stat"><div class="stat-val" style="color:var(--grn)">14</div><div class="stat-label">Platform Tools</div></div>
-  <div class="stat"><div class="stat-val" style="color:var(--t4)">50+</div><div class="stat-label">Funder Network</div></div>
-  <div class="stat"><div class="stat-val" style="color:var(--amb)">2 min</div><div class="stat-label">Avg Submission</div></div>
-  <div class="stat"><div class="stat-val" style="color:var(--pur)">24h</div><div class="stat-label">Max Response</div></div>
-  <div class="stat"><div class="stat-val" style="color:var(--org)">1-click</div><div class="stat-label">10 Funders</div></div>
-</div></div>
-
-<section class="sec">
-  <div class="sec-in">
-    <div class="sec-tag">From the Community</div>
-    <div class="sec-h2">Built by brokers, <em>for brokers</em></div>
-    <div class="sec-desc">Real feedback from MCA professionals who use the platform daily.</div>
-    <div class="test-grid">
-      <div class="test-card sr"><div class="test-stars">★★★★★</div><div class="test-text">"Created my profile, uploaded docs, had 3 offers in 6 hours. The Universal Deal Packet alone saves me an hour per deal."</div><div class="test-author">Marcus C.</div><div class="test-role">Broker · NY · 47 funded deals</div></div>
-      <div class="test-card sr"><div class="test-stars">★★★★★</div><div class="test-text">"BankIQ caught NSFs I missed on a quick scan. The AI underwriting summary is better than what most junior underwriters produce."</div><div class="test-author">Sarah O.</div><div class="test-role">Broker · TX · 35 funded deals</div></div>
-      <div class="test-card sr"><div class="test-stars">★★★★★</div><div class="test-text">"We get clean, standardized packages every time. Every broker has a verified profile so we know who we're working with. Underwriting went from 2 hours to 20 minutes."</div><div class="test-author">Forward Financing</div><div class="test-role">Funder · MA · 312 deals funded</div></div>
+<!-- ═══════ PROTECTION ═══════ -->
+<section class="section" style="background: linear-gradient(180deg, transparent, rgba(0,232,123,0.02), transparent);">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <div class="section-label">Broker Protection</div>
+      <div class="section-title">Your Merchant. Your Deal.<br>Always.</div>
+      <div class="section-desc" style="margin:0 auto;">The biggest fear in MCA is losing control of a deal. That doesn't happen here.</div>
+    </div>
+    <div class="protection-grid reveal" style="transition-delay:0.15s">
+      <div class="protection-card">
+        <div class="protection-icon">🔒</div>
+        <h3>Contact Info Hidden</h3>
+        <p>Funders never see merchant phone numbers or email addresses until you accept an offer.</p>
+      </div>
+      <div class="protection-card">
+        <div class="protection-icon">🛡️</div>
+        <h3>No Merchant Poaching</h3>
+        <p>Your deal stays yours. No one can reach around you to contact the merchant directly.</p>
+      </div>
+      <div class="protection-card">
+        <div class="protection-icon">🔐</div>
+        <h3>No Data Forwarding</h3>
+        <p>Deal packets don't get forwarded, screenshot, or shared outside the platform.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="cta">
-  <div class="cta-glow"></div>
-  <div class="cta-in sr" id="ctaSection"></div>
+<!-- ═══════ HOW IT WORKS ═══════ -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <div class="section-label">How It Works</div>
+      <div class="section-title">Upload to Funded.<br>Four Steps.</div>
+    </div>
+    <div class="steps-track reveal" style="transition-delay:0.15s">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Upload Documents</h3>
+        <p>Bank statements, application, merchant details. We auto-create a Universal Deal Packet.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>AI Analyzes</h3>
+        <p>Instant underwriting summary with revenue, risk score, and approval range.</p>
+        <div class="ai-preview">
+          <div class="ai-preview-label mono">AI BankIQ</div>
+          <div class="ai-row"><span class="label">Revenue</span><span class="value">$82K/mo</span></div>
+          <div class="ai-row"><span class="label">NSFs</span><span class="value good">2</span></div>
+          <div class="ai-row"><span class="label">Risk Score</span><span class="value good">78 / B</span></div>
+          <div class="ai-row"><span class="label">Approval Range</span><span class="value">$45K–$62K</span></div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Submit to Market</h3>
+        <p>One click sends your deal live. Funders see it immediately and start reviewing.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <h3>Compare & Close</h3>
+        <p>Offers appear side-by-side. Pick the best terms and close the deal.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<footer class="foot">
-  <div class="foot-in">
-    <div class="foot-l"><div class="foot-wm">Private<em>Credit</em>MCA</div><div class="foot-cp">© 2026 PrivateCreditMCA. All rights reserved.</div></div>
-    <ul class="foot-lk">
-      <li><a href="profile.html">Profile</a></li>
-      <li><a href="marketplace.html">Marketplace</a></li>
-      <li><a href="deallab.html">Deal Lab</a></li>
-      <li><a href="funders.html">Funders</a></li>
-      <li><a href="bankiq.html">BankIQ</a></li>
-      <li><a href="pipeline.html">Pipeline</a></li>
-      <li><a href="offerbattle.html">Offer Battle</a></li>
-      <li><a href="heatmap.html">Heat Map</a></li>
-      <li><a href="trust.html">Trust</a></li>
-      <li><a href="packet.html">Deal Packet</a></li>
-      <li><a href="superbroker.html">Superbroker</a></li>
-      <li><a href="education.html">Academy</a></li>
-      <li><a href="services.html">Services</a></li>
-      <li><a href="signal.html">The Signal</a></li>
-      <li><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Reddit</a></li>
-    </ul>
+<!-- ═══════ TWO PATHS ═══════ -->
+<section class="section" id="paths">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <div class="section-label">Get Started</div>
+      <div class="section-title">Two Ways to Place a Deal</div>
+      <div class="section-desc" style="margin:0 auto;">Choose the workflow that fits how you operate.</div>
+    </div>
+    <div class="paths-grid reveal" style="transition-delay:0.15s">
+      <div class="path-card featured">
+        <h3>Submit to Marketplace</h3>
+        <p class="path-desc">Best for experienced brokers. Your deal goes live and funders compete.</p>
+        <div class="path-benefit"><span class="check">✓</span> Access to 50+ funders</div>
+        <div class="path-benefit"><span class="check">✓</span> Competing offers in hours</div>
+        <div class="path-benefit"><span class="check">✓</span> Full control of your deal</div>
+        <div class="path-benefit"><span class="check">✓</span> Side-by-side term comparison</div>
+        <button class="path-cta">Browse Marketplace →</button>
+      </div>
+      <div class="path-card">
+        <h3>Use a Superbroker</h3>
+        <p class="path-desc">Best for new brokers or complex deals. A senior broker structures and places it for you.</p>
+        <div class="path-benefit"><span class="check">✓</span> Expert deal structuring</div>
+        <div class="path-benefit"><span class="check">✓</span> Higher approval odds</div>
+        <div class="path-benefit"><span class="check">✓</span> Support for tough files</div>
+        <div class="path-benefit"><span class="check">✓</span> Hands-on guidance</div>
+        <button class="path-cta">Submit to Superbroker →</button>
+      </div>
+    </div>
   </div>
+</section>
+
+<!-- ═══════ STATS ═══════ -->
+<section class="section">
+  <div class="container">
+    <div class="stats-bar reveal">
+      <div class="stat-block">
+        <div class="stat-val">$9.9M</div>
+        <div class="stat-label">Pipeline Volume</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-val">136</div>
+        <div class="stat-label">Active Deals</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-val">50+</div>
+        <div class="stat-label">Funders Connected</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-val">4.2h</div>
+        <div class="stat-label">Avg. Time to First Offer</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ TOOLS ═══════ -->
+<section class="section" id="tools">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <div class="section-label">Platform Tools</div>
+      <div class="section-title">Everything Exists to<br>Move Deals Faster</div>
+    </div>
+    <div class="tools-grid reveal" style="transition-delay:0.15s">
+      <div class="tool-card">
+        <div class="tool-icon">📦</div>
+        <h3>Universal Deal Packet</h3>
+        <p>Upload once, submit anywhere. One standardized file every funder accepts.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🧠</div>
+        <h3>AI BankIQ</h3>
+        <p>Instant bank statement analysis. Revenue, NSFs, risk score, approval range.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">⚔️</div>
+        <h3>Offer Battle</h3>
+        <p>Funders compete directly on your deal. Compare offers side-by-side.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">📈</div>
+        <h3>Pipeline CRM</h3>
+        <p>Track every deal from lead to funded. Never lose a deal in your pipeline again.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🧪</div>
+        <h3>Deal Lab</h3>
+        <p>Simulate deal structures and test different scenarios before submitting.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🔥</div>
+        <h3>Deal Heat Map</h3>
+        <p>See trending industries, hot deal types, and where funders are most active.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">📖</div>
+        <h3>Funder Directory</h3>
+        <p>50+ funders with policies, preferences, and AI-matched fit scores.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">⭐</div>
+        <h3>Trust & Reputation</h3>
+        <p>Verified broker profiles and performance data that builds your credibility.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🎓</div>
+        <h3>MCA Academy</h3>
+        <p>Training modules for underwriting, sales tactics, and deal structuring.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FINAL CTA ═══════ -->
+<section class="final-cta">
+  <div class="glow-blob"></div>
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Ready?</div>
+      <h2>Stop Chasing Funders.<br>Let Them Chase <span class="highlight">Your Deal.</span></h2>
+      <p>Submit your MCA deal once and let funders compete in a live marketplace. It's free. It's fast. And you'll never go back to email.</p>
+      <div class="hero-actions">
+        <button class="btn-primary">Submit a Deal →</button>
+        <button class="btn-secondary">Create Broker Account</button>
+      </div>
+      <div class="hero-meta">
+        <span>✓ Free to use</span>
+        <span>✓ No credit card required</span>
+        <span>✓ 50+ funders connected</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <div class="footer-links">
+    <a href="#">Marketplace</a>
+    <a href="#">For Funders</a>
+    <a href="#">Superbrokers</a>
+    <a href="#">Academy</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+  </div>
+  <p>© 2026 PrivateCreditMCA. All rights reserved.</p>
 </footer>
 
+<!-- ═══════ SCROLL REVEAL ═══════ -->
 <script>
-var LS="pcmca_user_v1";
-var COLORS=["#2563eb","#059669","#dc2626","#7c3aed","#0891b2","#ea580c","#d946ef","#0d9488","#e11d48","#4f46e5"];
-function getUser(){try{return JSON.parse(localStorage.getItem(LS))}catch(e){return null}}
-function avatarColor(n){var h=0;for(var i=0;i<n.length;i++)h=((h<<5)-h)+n.charCodeAt(i);return COLORS[Math.abs(h)%COLORS.length]}
-function initials(n){return n.split(" ").map(function(w){return w[0]}).join("").slice(0,2).toUpperCase()}
-function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
 
-var user=getUser();
-var isLoggedIn=user&&user.onboarded;
-
-// NAV — auth aware
-var navR=document.getElementById("navRight");
-if(isLoggedIn){
-  var col=avatarColor(user.name);
-  navR.innerHTML='<a href="packet.html" class="btn btn-g">Build Packet</a><a href="profile.html" class="btn" style="gap:8px;padding:5px 12px 5px 5px"><div class="nav-avatar" style="background:'+col+'">'+initials(user.name)+'</div><span class="nav-user-name">'+esc(user.name.split(" ")[0])+'</span></a>';
-}else{
-  navR.innerHTML='<a href="profile.html" class="btn">Log In</a><a href="profile.html" class="btn btn-p">Sign Up Free</a>';
-}
-
-// HERO — auth aware
-var heroBanner=document.getElementById("heroBanner");
-var heroActions=document.getElementById("heroActions");
-if(isLoggedIn){
-  var col=avatarColor(user.name);
-  var role={broker:"Broker",funder:"Funder",merchant:"Merchant",other:"Member"}[user.role]||"Member";
-  heroBanner.innerHTML='<div class="welcome-banner"><div class="wb-avatar" style="background:'+col+'">'+initials(user.name)+'</div><div><div class="wb-text">Welcome back, <em>'+esc(user.name.split(" ")[0])+'</em></div><div class="wb-sub">'+esc(role)+(user.company?" · "+esc(user.company):"")+(user.state?" · "+esc(user.state):"")+(user.deals?" · "+user.deals+" deals":"")+'</div></div></div>';
-  heroActions.innerHTML='<a href="packet.html" class="hero-btn primary">Build a Deal Packet <span class="arr">\u2192</span></a><a href="pipeline.html" class="hero-btn secondary">My Pipeline <span class="arr">\u2192</span></a><a href="profile.html" class="hero-btn secondary">My Profile <span class="arr">\u2192</span></a>';
-}else{
-  heroBanner.innerHTML="";
-  heroActions.innerHTML='<a href="profile.html" class="hero-btn primary">Create Your Profile <span class="arr">\u2192</span></a><a href="marketplace.html" class="hero-btn secondary">Browse Marketplace <span class="arr">\u2192</span></a>';
-}
-
-// CTA — auth aware
-var ctaSection=document.getElementById("ctaSection");
-if(isLoggedIn){
-  ctaSection.innerHTML='<h2>Ready to submit your <em>next deal?</em></h2><p>Your profile is live. Build a Universal Deal Packet and submit to 10+ funders in one click.</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a href="packet.html" class="hero-btn primary" style="padding:16px 36px;font-size:15px">Build Deal Packet <span class="arr">\u2192</span></a><a href="offerbattle.html" class="hero-btn secondary" style="padding:16px 36px;font-size:15px">Offer Battle Arena</a></div>';
-}else{
-  ctaSection.innerHTML='<h2>Ready to 10x your <em>deal flow?</em></h2><p>Create your free profile and join the platform that\'s replacing spreadsheets, email chains, and guesswork for MCA professionals.</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a href="profile.html" class="hero-btn primary" style="padding:16px 36px;font-size:15px">Create Free Profile <span class="arr">\u2192</span></a><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="hero-btn secondary" style="padding:16px 36px;font-size:15px">Join the Community</a></div><div style="margin-top:16px;font-size:12px;color:var(--tx4)">Free to use \u00b7 No credit card \u00b7 50+ funders connected</div>';
-}
-
-// Nav scroll
-window.addEventListener("scroll",function(){document.getElementById("nav").classList.toggle("scrolled",window.scrollY>40)});
-
-// Marquee
-var mItems=["Universal Deal Packet","AI Bank Statement Intelligence","Offer Battle Arena","Pipeline CRM","Deal Heat Map","Trust & Reputation","Deal Lab Scoring","Funder Directory","Superbroker","MCA Academy","Live Marketplace","Competitive Funding","Broker Profiles","One-Click Submission"];
-var mq=document.getElementById("marquee");
-var txt="";for(var i=0;i<3;i++){mItems.forEach(function(item){txt+="<span>"+item+"</span>"})}
-mq.innerHTML=txt;
-
-// Platform grid
-var TOOLS=[
-{name:"Your Profile",desc:"Your identity on the platform. Role, specialties, reputation score, deal history, and trust tier. Everything flows from here — this is step one.",icon:"\ud83d\udc64",color:"c-grn",href:"profile.html",badge:"Start Here",badgeBg:"rgba(0,230,118,.08)",badgeColor:"var(--grn)",featured:true,visual:[
-{dot:"var(--grn)",label:"Role & Identity",val:"Broker / Funder"},
-{dot:"var(--teal)",label:"Specialties",val:"Restaurant, Retail, +3"},
-{dot:"var(--amb)",label:"Reputation Score",val:"72 / 99"},
-{dot:"var(--pur)",label:"Trust Tier",val:"Verified"}
-]},
-{name:"Universal Deal Packet",desc:"Upload docs once. AI builds a standardized packet. One click submits to 10+ funders in their preferred format.",icon:"\ud83d\udce6",color:"c-teal",href:"packet.html",badge:"Core",badgeBg:"rgba(0,212,200,.08)",badgeColor:"var(--t4)"},
-{name:"AI BankIQ",desc:"Upload bank statements, get instant AI underwriting \u2014 revenue analysis, NSF detection, risk scoring, and recommended approval range.",icon:"\ud83e\udde0",color:"c-cyan",href:"bankiq.html",badge:"AI",badgeBg:"rgba(0,200,255,.08)",badgeColor:"var(--cyan)"},
-{name:"Offer Battle Arena",desc:"Submit a deal. Funders compete with live bids. Compare amount, factor, term, daily payment side-by-side.",icon:"\u2694\ufe0f",color:"c-red",href:"offerbattle.html",badge:"Live",badgeBg:"rgba(255,82,82,.08)",badgeColor:"var(--red)"},
-{name:"Pipeline CRM",desc:"Full Kanban board \u2014 Lead to Funded in 6 stages. Drag-and-drop deals, track docs, funder responses, and timeline.",icon:"\ud83d\udccb",color:"c-grn",href:"pipeline.html"},
-{name:"Deal Lab",desc:"Real-time deal scoring with live sliders. Adjust amount, factor, term \u2014 watch score and stress test update instantly.",icon:"\ud83e\uddea",color:"c-amb",href:"deallab.html"},
-{name:"Funder Directory",desc:"50+ funders with fit scores, stacking policies, min/max amounts, speed ratings, and specialties.",icon:"\ud83c\udfe6",color:"c-pur",href:"funders.html"},
-{name:"Deal Heat Map",desc:"Live marketplace intelligence \u2014 trending industries, geographic density, funder demand signals, real-time activity feed.",icon:"\ud83d\udd25",color:"c-org",href:"heatmap.html",badge:"Live",badgeBg:"rgba(255,123,66,.08)",badgeColor:"var(--org)"},
-{name:"Trust & Reputation",desc:"Verified reputation scores for brokers and funders. Deal quality, funded rate, doc completeness, peer reviews.",icon:"\ud83d\udee1\ufe0f",color:"c-gold",href:"trust.html"},
-{name:"Superbroker",desc:"Submit your deal and let the platform handle funder matching, structuring, and placement. Full game plan in 24 hours.",icon:"\u26a1",color:"c-teal",href:"superbroker.html"},
-{name:"Live Marketplace",desc:"Browse active deal listings. Filter by industry, amount, score, state. Live score rings and funder fit indicators.",icon:"\ud83c\udfea",color:"c-grn",href:"marketplace.html"},
-{name:"MCA Academy",desc:"Master the business \u2014 courses on underwriting, sales, compliance, funder relationships, and deal structuring.",icon:"\ud83c\udf93",color:"c-pur",href:"education.html"},
-{name:"The Signal",desc:"Industry intelligence \u2014 funder policy changes, rate environment, regulatory news, and data-driven market analysis.",icon:"\ud83d\udce1",color:"c-cyan",href:"signal.html"}
-];
-var pgGrid=document.getElementById("pgGrid");
-TOOLS.forEach(function(t,i){
-  var card=document.createElement("a");card.href=t.href;
-  if(t.featured){
-    card.className="pg-card featured "+t.color+" sr";
-    var vis="";
-    if(t.visual){t.visual.forEach(function(v){vis+='<div class="pv-row"><div class="pv-dot" style="background:'+v.dot+'"></div><div class="pv-name">'+v.label+'</div><div class="pv-val">'+v.val+'</div></div>'})}
-    card.innerHTML='<div class="pg-inner"><div class="pg-icon">'+t.icon+'</div>'+(t.badge?'<div class="pg-badge" style="background:'+t.badgeBg+';color:'+t.badgeColor+'">'+t.badge+'</div>':'')+'<div class="pg-name">'+t.name+'</div><div class="pg-desc">'+t.desc+'</div><div class="pg-link">'+(isLoggedIn?"View Profile":"Create Profile")+' <span>\u2192</span></div></div><div class="pg-visual">'+vis+'</div>';
-  }else{
-    card.className="pg-card "+(t.color||"")+" sr";
-    card.style.transitionDelay=((i-1)%3*0.06)+"s";
-    card.innerHTML='<div class="pg-icon">'+t.icon+'</div>'+(t.badge?'<div class="pg-badge" style="background:'+t.badgeBg+';color:'+t.badgeColor+'">'+t.badge+'</div>':'')+'<div class="pg-name">'+t.name+'</div><div class="pg-desc">'+t.desc+'</div><div class="pg-link">Explore <span>\u2192</span></div>';
-  }
-  pgGrid.appendChild(card);
-});
-
-// Scroll reveal
-var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("v");obs.unobserve(e.target)}})},{threshold:.15,rootMargin:"0px 0px -40px 0px"});
-document.querySelectorAll(".sr").forEach(function(el){obs.observe(el)});
-
-// Smooth anchors
-document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener("click",function(e){var t=document.querySelector(a.getAttribute("href"));if(t){e.preventDefault();t.scrollIntoView({behavior:"smooth",block:"start"})}})});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
+
 </body>
 </html>
