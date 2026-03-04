@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Broker Academy — PrivateCreditMCA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a10;--deep:#0a0f18;--surface:#0e1422;--elevated:#131b2e;--card:#151e33;--teal:#00d4c8;--teal4:#00e8db;--cyan:#00c8ff;--green:#00e676;--amber:#ffc446;--red:#ff5252;--purple:#b388ff;--pink:#ff6b9d;--t1:#f0f4fc;--t2:#c8d0e0;--t3:#8b97b0;--t4:#586580;--t5:#3a4560;--bd:rgba(255,255,255,.04);--bd2:rgba(255,255,255,.07);--bdt:rgba(0,212,200,.15);--r:16px;--r2:12px;--ex:cubic-bezier(.16,1,.3,1);--eq:cubic-bezier(.25,1,.5,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#00b0a6 var(--bg)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#00b0a6;border-radius:3px}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--t1);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(0,212,200,.3);color:#fff}
+a{color:inherit;text-decoration:none}
+.grain{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:180px}
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.ao{position:absolute;border-radius:50%;filter:blur(120px);animation:drift 30s ease-in-out infinite alternate}
+.ao.a{width:800px;height:800px;background:radial-gradient(circle,rgba(0,212,200,.06),transparent 70%);top:-300px;right:-200px}
+.ao.b{width:600px;height:600px;background:radial-gradient(circle,rgba(179,136,255,.04),transparent 70%);bottom:-200px;left:-100px}
+.ao.c{width:500px;height:500px;background:radial-gradient(circle,rgba(0,200,255,.04),transparent 70%);top:40%;left:50%;animation-delay:-15s}
+@keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(30px,20px)}}
+.nav{position:fixed;top:0;width:100%;z-index:1000;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,48px);background:rgba(6,10,16,.7);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--bd)}
+.nav-l{display:flex;align-items:center;gap:10px}
+.nav-m{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.nav-m::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.2))}
+.nav-m svg{position:relative;z-index:1}
+.nav-w{font-weight:700;font-size:15px;letter-spacing:-.4px}.nav-w em{font-style:normal;color:var(--teal4)}
+.nav-pills{display:flex;gap:4px;background:var(--surface);border:1px solid var(--bd2);border-radius:100px;padding:3px}
+.nav-p{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;color:var(--t3);transition:all .25s}
+.nav-p:hover{color:var(--t1);background:rgba(255,255,255,.04)}
+.nav-p.active{color:var(--t1);background:rgba(0,212,200,.1);border:1px solid var(--bdt)}
+.nav-r{display:flex;gap:8px}
+.nb{padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:'Sora',sans-serif;transition:all .25s}
+.nb-g{background:transparent;color:var(--t2);border:1px solid var(--bd2)}.nb-g:hover{border-color:var(--bdt);color:var(--teal4)}
+.nb-p{background:var(--teal);color:var(--bg)}.nb-p:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,212,200,.3)}
+.wrap{max-width:1100px;margin:0 auto;padding:80px 18px 60px;position:relative;z-index:1}
+.hero{text-align:center;margin-bottom:40px;padding-top:20px}
+.hero-ey{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:inline-flex;align-items:center;gap:10px}
+.hero-ey::before,.hero-ey::after{content:'';width:24px;height:1px;background:var(--teal)}
+.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(36px,5vw,56px);font-weight:400;letter-spacing:-1.5px;line-height:1.08}
+.hero h1 em{font-style:italic;color:var(--teal4)}
+.hero p{font-size:15px;color:var(--t3);line-height:1.6;margin-top:14px;max-width:600px;margin-left:auto;margin-right:auto}
+.profile{background:rgba(14,20,34,.8);border:1px solid var(--bd2);border-radius:var(--r);padding:28px;margin-bottom:32px;position:relative;overflow:hidden;backdrop-filter:blur(8px)}
+.profile::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--cyan),var(--green),var(--amber));opacity:.7}
+.profile-top{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.rank-badge{width:72px;height:72px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--surface);border:2px solid var(--bd2);position:relative;overflow:hidden;transition:all .5s}
+.rank-badge .ri{font-size:28px;line-height:1}.rank-badge .rl{font-size:8px;font-weight:700;letter-spacing:1px;color:var(--t4);margin-top:2px}
+.r0{border-color:rgba(139,151,176,.3)}.r1{border-color:rgba(0,212,200,.3)}.r2{border-color:rgba(0,212,200,.4)}.r3{border-color:rgba(0,200,255,.4)}.r4{border-color:rgba(255,196,70,.4);box-shadow:0 0 30px rgba(255,196,70,.1)}.r5{border-color:rgba(179,136,255,.4);box-shadow:0 0 30px rgba(179,136,255,.1)}.r6{border-color:rgba(255,107,157,.4);box-shadow:0 0 40px rgba(255,107,157,.15);animation:legendPulse 3s ease-in-out infinite}
+@keyframes legendPulse{0%,100%{box-shadow:0 0 40px rgba(255,107,157,.15)}50%{box-shadow:0 0 60px rgba(255,107,157,.25)}}
+.profile-info{flex:1;min-width:200px}
+.rank-name{font-family:'Instrument Serif',serif;font-size:26px;letter-spacing:-.5px}.rank-name em{font-style:italic;color:var(--teal4)}
+.rank-sub{font-size:12px;color:var(--t4);margin-top:4px}
+.xp-row{display:flex;align-items:center;gap:14px;margin-top:10px}
+.xp-bar-wrap{flex:1;height:10px;background:rgba(255,255,255,.05);border-radius:10px;overflow:hidden}
+.xp-bar{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--teal),var(--cyan));transition:width .8s var(--ex);position:relative}
+.xp-bar::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.15),transparent);border-radius:10px}
+.xp-text{font-size:12px;font-weight:600;color:var(--t3);white-space:nowrap;min-width:100px;text-align:right}
+.profile-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.ps{padding:6px 14px;border-radius:100px;border:1px solid var(--bd2);background:rgba(0,0,0,.15);font-size:11px;font-weight:600;color:var(--t3)}.ps b{color:var(--t1)}.ps.tl{border-color:var(--bdt);color:var(--teal4)}
+.sec{margin-bottom:36px}
+.sec-tag{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec-tag::before{content:'';width:16px;height:1px;background:var(--teal)}
+.sec h2{font-family:'Instrument Serif',serif;font-size:clamp(24px,3vw,34px);font-weight:400;letter-spacing:-.8px;line-height:1.1}.sec h2 em{font-style:italic;color:var(--teal4)}
+.sec .sdesc{font-size:13px;color:var(--t4);margin-top:8px;max-width:600px}
+.hub{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:20px}
+.gc{background:rgba(14,20,34,.75);border:1px solid var(--bd2);border-radius:var(--r);padding:24px;cursor:pointer;transition:all .35s var(--eq);position:relative;overflow:hidden}
+.gc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;transition:opacity .3s;opacity:0}
+.gc:hover{border-color:var(--bdt);transform:translateY(-4px);box-shadow:0 16px 50px rgba(0,0,0,.3)}.gc:hover::before{opacity:1}
+.gc-icon{font-size:32px;margin-bottom:12px;display:block}.gc-name{font-weight:700;font-size:16px;letter-spacing:-.2px;margin-bottom:6px}.gc-desc{font-size:12px;color:var(--t4);line-height:1.5;margin-bottom:14px}
+.gc-meta{display:flex;gap:6px;flex-wrap:wrap}
+.gc-pill{padding:4px 10px;border-radius:100px;border:1px solid var(--bd2);font-size:10px;font-weight:600;color:var(--t4)}.gc-pill.xp{border-color:var(--bdt);color:var(--teal4)}
+.gc.rpg::before{background:linear-gradient(90deg,var(--teal),var(--cyan))}.gc.obj::before{background:linear-gradient(90deg,var(--amber),var(--pink))}.gc.comm::before{background:linear-gradient(90deg,var(--green),var(--teal))}.gc.road::before{background:linear-gradient(90deg,var(--purple),var(--cyan))}.gc.lib::before{background:linear-gradient(90deg,var(--cyan),var(--purple))}
+.panel{background:rgba(14,20,34,.8);border:1px solid var(--bd2);border-radius:var(--r);overflow:hidden;backdrop-filter:blur(8px);margin-bottom:24px}
+.panel-hd{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.panel-t{font-size:16px;font-weight:700;letter-spacing:-.2px}.panel-s{font-size:11px;color:var(--t4);margin-top:2px}
+.panel-bd{padding:20px}
+.btn{padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;border:1px solid var(--bd2);background:var(--surface);color:var(--t2);cursor:pointer;font-family:'Sora',sans-serif;transition:all .25s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--bdt);color:var(--teal4);transform:translateY(-1px)}
+.btn-pri{background:var(--teal);color:var(--bg);border-color:transparent}.btn-pri:hover{box-shadow:0 8px 28px rgba(0,212,200,.25)}
+.btn-dan{background:rgba(255,82,82,.08);border-color:rgba(255,82,82,.2);color:var(--red)}.btn-sm{padding:7px 14px;font-size:12px}
+.trees{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.tree{background:var(--surface);border:1px solid var(--bd2);border-radius:var(--r2);padding:18px 14px;text-align:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.tree::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;transition:all .3s}
+.tree.active{border-color:var(--bdt);background:var(--elevated)}.tree:hover{border-color:rgba(255,255,255,.08)}
+.tree .st-icon{font-size:24px;margin-bottom:6px;display:block}.tree .st-name{font-size:11px;font-weight:700;letter-spacing:.3px}.tree .st-prog{font-size:10px;color:var(--t4);font-weight:600;margin-top:4px}
+.tree .st-bar{height:3px;background:rgba(255,255,255,.05);border-radius:3px;margin-top:8px;overflow:hidden}.tree .st-fill{height:100%;border-radius:3px;transition:width .6s var(--ex)}
+.tree[data-cat="deals"] .st-fill{background:var(--teal)}.tree[data-cat="deals"]::after{background:var(--teal)}
+.tree[data-cat="funders"] .st-fill{background:var(--amber)}.tree[data-cat="funders"]::after{background:var(--amber)}
+.tree[data-cat="sales"] .st-fill{background:var(--green)}.tree[data-cat="sales"]::after{background:var(--green)}
+.tree[data-cat="ops"] .st-fill{background:var(--purple)}.tree[data-cat="ops"]::after{background:var(--purple)}
+.tree.active::after{opacity:1;height:2px}
+.quiz{background:var(--surface);border:1px solid var(--bd2);border-radius:var(--r);padding:32px;position:relative;overflow:hidden;min-height:340px}
+.quiz::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--cyan))}
+.quiz-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:10px}
+.quiz-cat{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:100px}
+.quiz-cat.deals{background:rgba(0,212,200,.08);color:var(--teal4)}.quiz-cat.funders{background:rgba(255,196,70,.08);color:var(--amber)}.quiz-cat.sales{background:rgba(0,230,118,.08);color:var(--green)}.quiz-cat.ops{background:rgba(179,136,255,.08);color:var(--purple)}
+.quiz-diff{font-size:11px;color:var(--t4);font-weight:600}.quiz-diff .xv{color:var(--teal4);font-weight:700}
+.quiz-q{font-size:17px;font-weight:700;line-height:1.45;margin-bottom:20px;letter-spacing:-.2px}
+.quiz-opts{display:grid;gap:10px}
+.quiz-opt{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid var(--bd2);background:rgba(0,0,0,.12);border-radius:var(--r2);cursor:pointer;font-family:'Sora',sans-serif;font-size:13.5px;font-weight:500;color:var(--t2);transition:all .25s;text-align:left;width:100%}
+.quiz-opt:hover{border-color:var(--bdt);background:rgba(0,212,200,.03);transform:translateX(4px)}
+.quiz-opt .ok{width:28px;height:28px;border-radius:8px;background:var(--elevated);border:1px solid var(--bd2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--t4);flex:0 0 auto;transition:all .25s}
+.quiz-opt.correct{border-color:rgba(0,230,118,.4);background:rgba(0,230,118,.06)}.quiz-opt.correct .ok{background:var(--green);color:var(--bg);border-color:var(--green)}
+.quiz-opt.wrong{border-color:rgba(255,82,82,.4);background:rgba(255,82,82,.06)}.quiz-opt.wrong .ok{background:var(--red);color:#fff;border-color:var(--red)}
+.quiz-opt.disabled{opacity:.35;pointer-events:none}
+.quiz-fb{margin-top:20px;padding:16px;border-radius:var(--r2);display:none;animation:fbIn .3s var(--ex)}.quiz-fb.show{display:block}
+.quiz-fb.correct-fb{background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2)}.quiz-fb.wrong-fb{background:rgba(255,82,82,.06);border:1px solid rgba(255,82,82,.2)}
+.fb-title{font-weight:700;font-size:14px;margin-bottom:6px}.fb-text{font-size:12.5px;color:var(--t3);line-height:1.55}
+.quiz-next{margin-top:16px;display:none}.quiz-next.show{display:block}
+@keyframes fbIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.oh-scene{background:var(--surface);border:1px solid var(--bd2);border-radius:var(--r);padding:28px;position:relative;overflow:hidden;margin-top:14px}
+.oh-scene::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--amber),var(--pink))}
+.oh-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.oh-persona{display:flex;align-items:center;gap:12px}
+.oh-avatar{width:48px;height:48px;border-radius:12px;background:var(--elevated);border:1px solid var(--bd2);display:flex;align-items:center;justify-content:center;font-size:22px}
+.oh-name{font-weight:700;font-size:15px}.oh-biz{font-size:11px;color:var(--t4);margin-top:2px}
+.oh-pills{display:flex;gap:6px;flex-wrap:wrap}
+.oh-pill{padding:4px 10px;border-radius:100px;border:1px solid var(--bd2);font-size:10px;font-weight:600;color:var(--t4)}
+.oh-pill.diff-hard{border-color:rgba(255,82,82,.2);color:var(--red)}.oh-pill.diff-medium{border-color:rgba(255,196,70,.2);color:var(--amber)}.oh-pill.diff-easy{border-color:rgba(0,230,118,.2);color:var(--green)}
+.oh-dialogue{margin-bottom:20px}
+.oh-bubble{padding:16px;border-radius:14px;margin-bottom:12px;line-height:1.55;font-size:13.5px;max-width:85%;animation:bubbleIn .35s var(--ex)}
+.oh-bubble.merchant{background:var(--elevated);border:1px solid var(--bd2);border-bottom-left-radius:4px;margin-right:auto}
+.oh-bubble.broker{background:rgba(0,212,200,.06);border:1px solid var(--bdt);border-bottom-right-radius:4px;margin-left:auto;text-align:right}
+.oh-bubble .speaker{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-bottom:6px}
+.oh-choices{display:grid;gap:10px}
+.oh-choice{display:block;padding:14px 16px;border:1px solid var(--bd2);background:rgba(0,0,0,.12);border-radius:var(--r2);cursor:pointer;font-family:'Sora',sans-serif;font-size:13px;color:var(--t2);transition:all .25s;text-align:left;width:100%}
+.oh-choice:hover{border-color:var(--bdt);background:rgba(0,212,200,.03);transform:translateX(4px)}
+.oh-choice.best{border-color:rgba(0,230,118,.4);background:rgba(0,230,118,.06)}.oh-choice.ok{border-color:rgba(255,196,70,.3);background:rgba(255,196,70,.04)}.oh-choice.bad{border-color:rgba(255,82,82,.3);background:rgba(255,82,82,.04)}
+.oh-choice.disabled{pointer-events:none;opacity:.4}
+.oh-result{padding:16px;border-radius:var(--r2);margin-top:14px;animation:fbIn .3s var(--ex)}
+.oh-result.best-r{background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2)}.oh-result.ok-r{background:rgba(255,196,70,.06);border:1px solid rgba(255,196,70,.2)}.oh-result.bad-r{background:rgba(255,82,82,.06);border:1px solid rgba(255,82,82,.2)}
+.oh-result .or-t{font-weight:700;font-size:14px;margin-bottom:6px}.oh-result .or-b{font-size:12.5px;color:var(--t3);line-height:1.55}
+@keyframes bubbleIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.calc-in{display:flex;flex-direction:column;gap:10px}
+.calc-field label{display:flex;justify-content:space-between;font-size:11px;color:var(--t3);font-weight:600;margin-bottom:5px}.calc-field label .cv{color:var(--t1);font-weight:700}
+input,select{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--bd2);background:var(--elevated);color:var(--t1);font-size:13px;font-family:'Sora',sans-serif;outline:none;transition:border-color .25s}
+input:focus,select:focus{border-color:var(--teal)}
+input[type="range"]{padding:0;height:32px;accent-color:var(--teal);background:transparent;border:none}
+.calc-out{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.co{border:1px solid var(--bd2);background:rgba(0,0,0,.12);border-radius:var(--r2);padding:16px}
+.co .ck{font-size:11px;color:var(--t4);font-weight:600}.co .cv2{font-size:22px;font-weight:800;margin-top:6px;letter-spacing:-.5px}.co .ch{font-size:10px;color:var(--t5);margin-top:4px}
+.roadmap{display:flex;flex-direction:column;gap:0}
+.rm-step{display:grid;grid-template-columns:80px 1fr;gap:0;position:relative}
+.rm-line{display:flex;flex-direction:column;align-items:center;position:relative}
+.rm-dot{width:36px;height:36px;border-radius:10px;border:2px solid var(--bd2);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:16px;z-index:2;transition:all .3s}
+.rm-dot.active{border-color:var(--teal);box-shadow:0 0 20px rgba(0,212,200,.15)}.rm-dot.done{border-color:var(--green);background:rgba(0,230,118,.08)}
+.rm-connector{width:2px;flex:1;background:var(--bd2);margin:4px 0}.rm-connector.done{background:var(--green)}
+.rm-content{padding:6px 0 28px 16px}
+.rm-rank{font-weight:700;font-size:15px;letter-spacing:-.2px}.rm-xp{font-size:11px;color:var(--teal4);font-weight:600;margin-top:2px}.rm-desc{font-size:12px;color:var(--t4);line-height:1.5;margin-top:6px}
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.lib-card{background:var(--surface);border:1px solid var(--bd2);border-radius:var(--r2);padding:18px;cursor:pointer;transition:all .3s}
+.lib-card:hover{border-color:var(--bdt);transform:translateY(-2px)}
+.lib-card .lc-cat{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t4);margin-bottom:8px}
+.lib-card .lc-t{font-weight:700;font-size:14px;margin-bottom:4px}.lib-card .lc-d{font-size:11.5px;color:var(--t4);line-height:1.45}
+.game-view{display:none}.game-view.active{display:block;animation:gameIn .4s var(--ex)}
+@keyframes gameIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.back-row{margin-bottom:20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.rank-overlay{position:fixed;inset:0;z-index:8000;background:rgba(6,10,16,.92);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.rank-overlay.active{opacity:1;pointer-events:all}
+.rank-overlay-in{text-align:center;animation:ruIn .5s var(--ex)}
+.rank-overlay .ru-label{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--amber);margin-bottom:12px}
+.rank-overlay .ru-icon{font-size:64px;display:block;margin-bottom:16px}
+.rank-overlay .ru-title{font-family:'Instrument Serif',serif;font-size:36px;letter-spacing:-.5px}.rank-overlay .ru-title em{font-style:italic;color:var(--teal4)}
+.rank-overlay .ru-sub{font-size:13px;color:var(--t3);margin-top:10px}.rank-overlay .ru-btn{margin-top:24px}
+@keyframes ruIn{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.scenProg{display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap}
+.scenDot{width:12px;height:12px;border-radius:4px;border:1px solid var(--bd2);background:var(--surface);transition:all .3s}
+.scenDot.done{border-color:var(--green);background:rgba(0,230,118,.15)}.scenDot.cur{border-color:var(--amber);background:rgba(255,196,70,.15);animation:dotPulse 1.5s ease infinite}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.5}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(14,20,34,.95);border:1px solid var(--bd2);padding:10px 24px;border-radius:12px;font-weight:700;font-size:13px;display:none;z-index:9000;backdrop-filter:blur(16px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.toast.show{display:block;animation:ti .3s var(--ex)}
+@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+canvas#particles{position:fixed;inset:0;z-index:8001;pointer-events:none}
+@media(max-width:768px){.nav-pills{display:none}.trees{grid-template-columns:1fr 1fr}.calc-grid{grid-template-columns:1fr}.calc-out{grid-template-columns:1fr}.hub{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.nb-g{display:none}.trees{grid-template-columns:1fr 1fr}.hub{grid-template-columns:1fr}.profile-top{flex-direction:column;text-align:center}.rm-step{grid-template-columns:50px 1fr}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="ambient"><div class="ao a"></div><div class="ao b"></div><div class="ao c"></div></div>
+<canvas id="particles"></canvas>
+<nav class="nav">
+  <div class="nav-l"><a href="index.html" style="display:flex;align-items:center;gap:10px"><div class="nav-m"><svg width="14" height="14" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="nav-w">Private<em>Credit</em>MCA</div></a></div>
+  <div class="nav-pills"><a href="index.html" class="nav-p">Home</a><a href="deallab.html" class="nav-p">Deal Lab</a><a href="funders.html" class="nav-p">Funders</a><a href="education.html" class="nav-p active">Academy</a><a href="superbroker.html" class="nav-p">Superbroker</a></div>
+  <div class="nav-r"><a href="index.html" class="nb nb-g">← Home</a><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="nb nb-p">Join Community</a></div>
+</nav>
+<div class="wrap">
+  <div class="hero"><div class="hero-ey">Broker Academy</div><h1>Master MCA.<br><em>Outperform everyone.</em></h1><p>Interactive games, branching roleplay scenarios, and a career progression system that turns raw brokers into closers. Unified XP across everything.</p></div>
+  <div class="profile"><div class="profile-top"><div class="rank-badge r0" id="rankBadge"><span class="ri" id="rankIcon">📞</span><span class="rl" id="rankLvl">LVL 1</span></div><div class="profile-info"><div class="rank-name" id="rankName">Cold Caller</div><div class="rank-sub" id="rankSub">Next rank: <strong>Appointment Setter 📅</strong> at 100 XP</div><div class="xp-row"><div class="xp-bar-wrap"><div class="xp-bar" id="xpBar" style="width:0%"></div></div><div class="xp-text" id="xpText">0 / 100 XP</div></div></div></div><div class="profile-stats" id="profileStats"></div></div>
+  <div class="game-view active" id="viewHub"><div class="sec"><div class="sec-tag">Games & Training</div><h2>Choose your <em>training ground</em></h2><div class="sdesc">Each module earns XP toward your unified rank. Complete them all to hit MCA Legend.</div></div>
+    <div class="hub">
+      <div class="gc rpg" onclick="showGame('rpg')"><span class="gc-icon">📋</span><div class="gc-name">Broker RPG</div><div class="gc-desc">40 questions across 4 skill trees. Deal structure, funder knowledge, sales, and operations.</div><div class="gc-meta"><span class="gc-pill xp">+20-35 XP/Q</span><span class="gc-pill">4 Trees</span><span class="gc-pill">40 Questions</span></div></div>
+      <div class="gc obj" onclick="showGame('objection')"><span class="gc-icon">🎯</span><div class="gc-name">Objection Handler</div><div class="gc-desc">10 branching roleplay scenarios with real merchant personas. Choose your words. Every choice matters.</div><div class="gc-meta"><span class="gc-pill xp">+15-40 XP</span><span class="gc-pill">10 Scenarios</span><span class="gc-pill">Branching</span></div></div>
+      <div class="gc comm" onclick="showGame('calc')"><span class="gc-icon">💰</span><div class="gc-name">Commission Calculator</div><div class="gc-desc">Model your earnings at any deal volume. See what Closers vs Legends actually make.</div><div class="gc-meta"><span class="gc-pill xp">Interactive</span><span class="gc-pill">Real Math</span></div></div>
+      <div class="gc road" onclick="showGame('roadmap')"><span class="gc-icon">🗺️</span><div class="gc-name">Career Roadmap</div><div class="gc-desc">See where you are on the path from Cold Caller to MCA Legend. Track every milestone.</div><div class="gc-meta"><span class="gc-pill xp">7 Ranks</span><span class="gc-pill">Visual</span></div></div>
+      <div class="gc lib" onclick="showGame('library')"><span class="gc-icon">📚</span><div class="gc-name">Learning Library</div><div class="gc-desc">Essential concepts, glossary, and frameworks every MCA broker needs to internalize.</div><div class="gc-meta"><span class="gc-pill">Reference</span><span class="gc-pill">20+ Topics</span></div></div>
+    </div>
+  </div>
+  <div class="game-view" id="viewRpg"><div class="back-row"><button class="btn" onclick="showGame('hub')">← Back to Academy</button><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="resetRPG()">Reset RPG</button></div></div><div class="sec"><div class="sec-tag">Broker RPG</div><h2>Answer questions. <em>Earn XP.</em> Rank up.</h2><div class="sdesc">4 skill trees, 40 questions. Select a tree and start learning.</div></div>
+    <div class="trees"><div class="tree active" data-cat="deals" onclick="selectTree('deals')"><span class="st-icon">📊</span><div class="st-name">Deal Structure</div><div class="st-prog" id="stProgDeals">0 / 10</div><div class="st-bar"><div class="st-fill" id="stFillDeals" style="width:0"></div></div></div><div class="tree" data-cat="funders" onclick="selectTree('funders')"><span class="st-icon">🏦</span><div class="st-name">Funder Knowledge</div><div class="st-prog" id="stProgFunders">0 / 10</div><div class="st-bar"><div class="st-fill" id="stFillFunders" style="width:0"></div></div></div><div class="tree" data-cat="sales" onclick="selectTree('sales')"><span class="st-icon">🎯</span><div class="st-name">Sales & Negotiation</div><div class="st-prog" id="stProgSales">0 / 10</div><div class="st-bar"><div class="st-fill" id="stFillSales" style="width:0"></div></div></div><div class="tree" data-cat="ops" onclick="selectTree('ops')"><span class="st-icon">⚙️</span><div class="st-name">Operations</div><div class="st-prog" id="stProgOps">0 / 10</div><div class="st-bar"><div class="st-fill" id="stFillOps" style="width:0"></div></div></div></div>
+    <div class="quiz"><div class="quiz-hdr"><span class="quiz-cat deals" id="quizCat">DEAL STRUCTURE</span><span class="quiz-diff" id="quizDiff">Medium · +25 XP</span></div><div class="quiz-q" id="quizQ">Loading...</div><div class="quiz-opts" id="quizOpts"></div><div class="quiz-fb" id="quizFb"><div class="fb-title" id="fbTitle"></div><div class="fb-text" id="fbText"></div></div><div class="quiz-next" id="quizNext"><button class="btn btn-pri" onclick="nextQuestion()">Next Question →</button></div></div>
+  </div>
+  <div class="game-view" id="viewObjection"><div class="back-row"><button class="btn" onclick="showGame('hub')">← Back to Academy</button><div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="resetOH()">Reset Progress</button><button class="btn btn-sm" onclick="nextScenario()">Skip →</button></div></div><div class="sec"><div class="sec-tag">Objection Handler</div><h2>Handle the objection. <em>Close the deal.</em></h2><div class="sdesc">Real merchant personas with branching dialogue. Your choice determines the outcome.</div></div><div class="scenProg" id="scenProg"></div><div id="ohScene"></div></div>
+  <div class="game-view" id="viewCalc"><div class="back-row"><button class="btn" onclick="showGame('hub')">← Back to Academy</button></div><div class="sec"><div class="sec-tag">Commission Calculator</div><h2>Model your <em>real earnings</em></h2><div class="sdesc">Adjust deal size, volume, and commission to see what brokers actually make at each level.</div></div><div class="panel"><div class="panel-bd"><div class="calc-grid"><div class="calc-in"><div class="calc-field"><label>Avg Deal Size <span class="cv" id="ccAmt">$45,000</span></label><input type="range" id="ccAmtR" min="10000" max="200000" step="5000" value="45000"></div><div class="calc-field"><label>Deals Per Month <span class="cv" id="ccDPM">4</span></label><input type="range" id="ccDPMR" min="1" max="30" step="1" value="4"></div><div class="calc-field"><label>Commission (points) <span class="cv" id="ccPts">8 pts</span></label><input type="range" id="ccPtsR" min="3" max="15" step="0.5" value="8"></div><div class="calc-field"><label>ISO Split (your %) <span class="cv" id="ccSpl">70%</span></label><input type="range" id="ccSplR" min="40" max="100" step="5" value="70"></div></div><div class="calc-out" id="calcOut"></div></div></div></div></div>
+  <div class="game-view" id="viewRoadmap"><div class="back-row"><button class="btn" onclick="showGame('hub')">← Back to Academy</button></div><div class="sec"><div class="sec-tag">Career Roadmap</div><h2>Your path to <em>MCA Legend</em></h2><div class="sdesc">See exactly where you are, what you've unlocked, and what's next.</div></div><div class="roadmap" id="roadmap"></div></div>
+  <div class="game-view" id="viewLibrary"><div class="back-row"><button class="btn" onclick="showGame('hub')">← Back to Academy</button></div><div class="sec"><div class="sec-tag">Learning Library</div><h2>Essential <em>MCA knowledge</em></h2><div class="sdesc">Core concepts, terminology, and frameworks every broker needs to know.</div></div><div class="lib-grid" id="libGrid"></div><div class="panel" id="libDetail" style="display:none;margin-top:20px"><div class="panel-hd"><div><div class="panel-t" id="libTitle"></div></div><button class="btn btn-sm" onclick="closeLib()">Close</button></div><div class="panel-bd" id="libBody" style="font-size:13.5px;line-height:1.7;color:var(--t2)"></div></div></div>
+</div>
+<div class="rank-overlay" id="rankOverlay"><div class="rank-overlay-in"><div class="ru-label">Rank Up!</div><span class="ru-icon" id="ruIcon">🔥</span><div class="ru-title" id="ruTitle">You're now <em>Closer</em></div><div class="ru-sub" id="ruSub">Keep training to unlock the next rank</div><div class="ru-btn"><button class="btn btn-pri" onclick="dismissRankUp()">Let's Go →</button></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const SAVE_KEY="pcmca_academy_v2";
+const RANKS=[
+  {name:'Cold Caller',icon:'📞',xp:0,next:100,cls:'r0',lvl:1,desc:'Starting out. Learning the ropes, making first calls, understanding the basics.'},
+  {name:'Appointment Setter',icon:'📅',xp:100,next:250,cls:'r1',lvl:2,desc:'You can get a merchant on the phone and book a conversation. Consistency is building.'},
+  {name:'Junior Broker',icon:'📄',xp:250,next:500,cls:'r2',lvl:3,desc:'Submitting deals, learning funder preferences, starting to see what closes.'},
+  {name:'Senior Broker',icon:'💼',xp:500,next:800,cls:'r3',lvl:4,desc:'Consistent closer. You know which funders match which deals. Building a book.'},
+  {name:'Closer',icon:'🔥',xp:800,next:1200,cls:'r4',lvl:5,desc:'You handle objections cold. Merchants trust you. Funders want your deals.'},
+  {name:'ISO Owner',icon:'👑',xp:1200,next:2000,cls:'r5',lvl:6,desc:'Running the operation. Hiring reps, managing funder relationships, scaling revenue.'},
+  {name:'MCA Legend',icon:'🏆',xp:2000,next:9999,cls:'r6',lvl:7,desc:'Top of the industry. Your reputation precedes you. Others study your playbook.'}
+];
+let state={xp:0,rankIdx:0,currentCat:'deals',answered:{deals:[],funders:[],sales:[],ops:[]},treeScores:{deals:0,funders:0,sales:0,ops:0},currentQ:null,locked:false,ohCompleted:[],ohScenIdx:0,ohStep:0,ohLocked:false};
+function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state))}
+function load(){try{const r=localStorage.getItem(SAVE_KEY);if(r){const s=JSON.parse(r);Object.assign(state,s)}}catch{}}
+const $=id=>document.getElementById(id);
+const toastEl=$("toast");const toast=msg=>{toastEl.textContent=msg;toastEl.classList.add("show");setTimeout(()=>toastEl.classList.remove("show"),1400)};
+const money=n=>"$"+Math.round(n).toLocaleString();const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+const QUESTIONS={
+  deals:[
+    {q:"A merchant does $50K/month in revenue. What's typically the max advance they could qualify for?",opts:["$25K","$50K","$75K","$100K"],ans:2,xp:25,diff:"Medium",explain:"Most funders cap at 100-150% of monthly revenue for a single position. $75K (150%) is realistic for strong merchants."},
+    {q:"What does 'stacking' mean in MCA?",opts:["Adding multiple positions from different funders","Stacking merchant bank statements","Piling up commission checks","Double-funding the same deal"],ans:0,xp:20,diff:"Easy",explain:"Stacking is when a merchant takes advances from multiple funders simultaneously — risky but common."},
+    {q:"A 1.35 factor rate on a $40K advance means the merchant pays back:",opts:["$48,000","$54,000","$13,500","$40,000"],ans:1,xp:25,diff:"Medium",explain:"$40,000 × 1.35 = $54,000 total payback. Factor rate is a multiplier, not an interest rate."},
+    {q:"What's a typical daily holdback percentage for an MCA?",opts:["1-3%","5-15%","20-30%","50%+"],ans:1,xp:25,diff:"Medium",explain:"Most MCAs hold back 5-15% of daily credit card or bank receipts as repayment."},
+    {q:"Which deal structure gives the merchant the longest effective term?",opts:["High factor, low holdback","Low factor, high holdback","High factor, high holdback","Low factor, low holdback"],ans:3,xp:35,diff:"Hard",explain:"Low factor = less total payback. Low holdback = smaller daily payments. Both extend the effective term."},
+    {q:"What's an RTR in MCA terms?",opts:["Revenue To Ratio","Right To Receivables","Real-Time Rate","Return To Revenue"],ans:1,xp:20,diff:"Easy",explain:"RTR = Right To Receivables. MCA purchases future receivables — it's not technically a loan."},
+    {q:"If a merchant has $80K/mo revenue and 2 existing positions totaling $60K RTR, how much room is left?",opts:["$20K","$60K","$80K","$100K"],ans:0,xp:30,diff:"Hard",explain:"With $80K revenue and $60K existing RTR, there's roughly $20K of remaining capacity before becoming over-leveraged."},
+    {q:"What does 'payment pressure' measure?",opts:["How fast the funder responds","Daily payment as % of daily revenue","The merchant's stress level","Total payback amount"],ans:1,xp:25,diff:"Medium",explain:"Payment pressure = daily payment ÷ daily revenue. Under 15% is healthy; over 25% is dangerous."},
+    {q:"A 'renewal' in MCA typically happens when:",opts:["The original advance is fully paid off","40-60% of the advance is repaid","The merchant requests more money","The factor rate expires"],ans:1,xp:25,diff:"Medium",explain:"Most funders allow renewals at 40-60% paydown — a major revenue driver for brokers."},
+    {q:"What's the main legal difference between an MCA and a loan?",opts:["MCA has no interest","MCA purchases future receivables rather than lending money","MCA doesn't require a contract","There is no legal difference"],ans:1,xp:30,diff:"Hard",explain:"MCAs purchase future receivables at a discount — not technically loans and avoid certain lending regulations."}
+  ],
+  funders:[
+    {q:"What's the first thing a funder looks at on a bank statement?",opts:["Average daily balance","Number of deposits","Monthly ending balance","NSF/overdraft fees"],ans:0,xp:25,diff:"Medium",explain:"Average daily balance shows cash flow health. Consistent ADB signals a stable business."},
+    {q:"A funder offers net 10 commission. What does that mean?",opts:["10% of funded amount","10% of factor rate profit","Commission paid in 10 days","10 basis points"],ans:2,xp:20,diff:"Easy",explain:"Net 10 means you receive your commission within 10 business days of the deal funding."},
+    {q:"What's a 'clawback' in MCA brokering?",opts:["When a funder takes back commission after merchant defaults","When a merchant reverses an ACH","A type of penalty fee","When an ISO steals a broker's client"],ans:0,xp:25,diff:"Medium",explain:"Clawbacks happen when a funded merchant defaults early and the funder recoups the broker's commission."},
+    {q:"Which metric do funders use most to assess deal risk?",opts:["Credit score","Time in business","Bank statement revenue consistency","Industry type"],ans:2,xp:30,diff:"Hard",explain:"Revenue consistency in bank statements is king. Steady $50K/mo beats $100K one month and $20K the next."},
+    {q:"RTR stands for:",opts:["Revenue To Ratio","Real-Time Repayment","Right To Receivables","Remaining To Remit"],ans:2,xp:20,diff:"Easy",explain:"RTR = Right To Receivables. It's the legal basis for MCA."},
+    {q:"What makes a funder 'stack-friendly'?",opts:["They allow merchants with existing positions","They fund faster","They have higher factor rates","They work with bad credit"],ans:0,xp:20,diff:"Easy",explain:"Stack-friendly funders will fund merchants who already have existing MCA positions."},
+    {q:"What's a 'stip' in the funding process?",opts:["A stipulation — additional document required","A discount on the deal","A type of contract clause","A bonus payment"],ans:0,xp:20,diff:"Easy",explain:"Stips are additional documents funders request before final approval."},
+    {q:"A funder with 'strict stacking' policy means:",opts:["They won't fund if merchant has existing positions","They require higher credit scores","They take longer to fund","They have higher factor rates"],ans:0,xp:25,diff:"Medium",explain:"Strict stacking = no or limited tolerance for merchants with existing MCA positions."},
+    {q:"Which funder characteristic matters most for a merchant who needs money today?",opts:["Lowest factor rate","Stack-friendly policy","Funding speed","Highest approval amount"],ans:2,xp:25,diff:"Medium",explain:"When a merchant needs money urgently, funding speed beats everything."},
+    {q:"What's a 'UCC filing' in MCA?",opts:["A court order","A lien on business assets filed with the state","A type of insurance","A credit report"],ans:1,xp:30,diff:"Hard",explain:"A UCC filing gives the funder a security interest in the merchant's business assets."}
+  ],
+  sales:[
+    {q:"A merchant says 'I already have funding.' Best response?",opts:["Call back later","Ask about their current terms to see if you can stack or refinance","Offer a lower rate immediately","Move on to the next lead"],ans:1,xp:25,diff:"Medium",explain:"Understanding their current deal opens doors — you might stack, refinance, or build a future relationship."},
+    {q:"What's the best time to follow up on a warm MCA lead?",opts:["Same day","Next business day","3-5 business days later","Wait for them to call back"],ans:0,xp:20,diff:"Easy",explain:"Speed wins in MCA. Same-day follow-up dramatically increases close rates."},
+    {q:"A merchant needs $30K but only qualifies for $20K. You should:",opts:["Walk away","Fund the $20K and discuss future increases after performance","Lie about their revenue","Send them to a different broker"],ans:1,xp:30,diff:"Hard",explain:"Fund what you can, set expectations, build trust. Successful repayment opens doors for renewals."},
+    {q:"What is 'double-dipping' a lead?",opts:["Calling a lead twice in one day","Submitting the same deal to multiple funders simultaneously","Charging the merchant and the funder","Eating lunch during a sales call"],ans:1,xp:25,diff:"Medium",explain:"Submitting to multiple funders at once gets you competing offers and leverage."},
+    {q:"The #1 reason merchants choose a specific MCA offer is usually:",opts:["Lowest factor rate","Fastest funding speed","Best customer service","Longest term"],ans:1,xp:25,diff:"Medium",explain:"Speed is king. Merchants prioritize getting funded tomorrow over saving a few points."},
+    {q:"When a merchant says 'I need to think about it', you should:",opts:["Give them a week","Create urgency by explaining offer expiration","Pressure aggressively","Lower the price immediately"],ans:1,xp:25,diff:"Medium",explain:"Creating legitimate urgency works. Offers do expire and rates change."},
+    {q:"What's the biggest mistake new brokers make on sales calls?",opts:["Talking too much about themselves","Not asking enough qualifying questions","Being too aggressive","Calling at the wrong time"],ans:1,xp:25,diff:"Medium",explain:"Qualifying questions save everyone's time. Revenue, TIB, positions, and use of funds before pitching."},
+    {q:"A merchant asks 'What's the interest rate?' on an MCA. You should:",opts:["Give them an APR equivalent","Explain it's a factor rate and show total cost","Refuse to answer","Say it's proprietary"],ans:1,xp:30,diff:"Hard",explain:"MCA uses factor rates, not interest. Transparency about total payback builds trust."},
+    {q:"What's the ideal number of bank statements to collect upfront?",opts:["1 month","3 months","6 months","12 months"],ans:1,xp:20,diff:"Easy",explain:"3 months is the sweet spot — enough for funders without overwhelming the merchant."},
+    {q:"When should you bring up commission with a merchant?",opts:["On the first call","When they ask about costs","Never — it's between you and the funder","After they sign"],ans:2,xp:25,diff:"Medium",explain:"Commission is between broker and funder. The merchant doesn't pay it directly."}
+  ],
+  ops:[
+    {q:"What CRM feature matters most for an MCA brokerage?",opts:["Email templates","Lead pipeline tracking with automated follow-ups","Social media integration","Invoice generation"],ans:1,xp:25,diff:"Medium",explain:"Pipeline tracking with automated follow-ups ensures no deal falls through the cracks."},
+    {q:"What commission structure retains top MCA brokers best?",opts:["Flat salary","100% commission with high splits","Base salary + graduated commission tiers","Hourly + bonus"],ans:2,xp:30,diff:"Hard",explain:"Base + graduated tiers offer security while rewarding performance."},
+    {q:"When scaling an ISO, what should you hire first?",opts:["Marketing manager","More sales reps","Operations/admin support","A lawyer"],ans:2,xp:25,diff:"Medium",explain:"Ops support frees you to focus on deals and coaching."},
+    {q:"What's the biggest compliance risk in MCA?",opts:["Not filing taxes","Misrepresenting terms to merchants","Using personal email","Working from home"],ans:1,xp:30,diff:"Hard",explain:"Misrepresenting terms can lead to lawsuits and regulatory action."},
+    {q:"How many touches does it typically take to close an MCA lead?",opts:["1-2","3-5","6-10","12+"],ans:2,xp:20,diff:"Easy",explain:"Most MCA deals require 6-10 touchpoints before closing."},
+    {q:"What's the most important metric for an ISO owner to track daily?",opts:["Website traffic","Submissions sent to funders","Social media followers","Employee satisfaction"],ans:1,xp:25,diff:"Medium",explain:"Submissions are the lifeblood. More submissions = more funded deals."},
+    {q:"What's the recommended ratio of sales reps to ops support?",opts:["1:1","3:1","5:1","10:1"],ans:2,xp:25,diff:"Medium",explain:"5:1 is a good benchmark. One ops person can support roughly 5 active sales reps."},
+    {q:"Which tech tool has the highest ROI for a new ISO?",opts:["Custom website","CRM with automation","Social media scheduler","AI chatbot"],ans:1,xp:25,diff:"Medium",explain:"A CRM with automation multiplies your follow-up capacity."},
+    {q:"What's the biggest reason new ISOs fail in the first year?",opts:["Bad marketing","Undercapitalization and inconsistent deal flow","Wrong location","Poor technology"],ans:1,xp:30,diff:"Hard",explain:"Most new ISOs fail because they run out of money before building consistent deal flow."},
+    {q:"When should an ISO owner consider building their own brand vs white-labeling?",opts:["Immediately","After 50 funded deals","After 200 funded deals and steady monthly volume","Never"],ans:2,xp:30,diff:"Hard",explain:"Build your brand after you have volume and proof of concept. Branding before 200+ deals is premature."}
+  ]
+};
+const SCENARIOS=[
+  {id:"rate_shock",persona:"Maria",biz:"Maria's Mexican Kitchen",avatar:"👩‍🍳",industry:"Restaurant",diff:"easy",
+    opening:"I got your number from my friend Carlos. He said you helped him get funding. But honestly, I looked at these rates online and they seem really high. Why would I pay a 1.40 factor?",
+    branches:[{choices:[
+      {text:"I totally understand the concern about cost. Let me ask — what would you use the funding for, and how quickly would it generate revenue?",quality:"best",xp:30,response:"Well... I need $30K to expand my outdoor patio. It's been packed every weekend and I'm turning away customers.",next:1},
+      {text:"A 1.40 factor is actually very competitive. Most merchants pay between 1.30 and 1.55.",quality:"ok",xp:15,response:"I guess... but it still sounds like a lot of money on top.",next:2},
+      {text:"If you don't like the rate, I can try to get you a lower one. What rate would work?",quality:"bad",xp:5,response:"I don't know, something reasonable? Like a normal bank loan rate?",next:2}
+    ]},{choices:[
+      {text:"So a $30K advance with a 1.40 factor means $42K total payback. But if the patio adds even $15K/month, you'd recoup the entire cost in under 3 months — and keep earning after. The ROI is what matters.",quality:"best",xp:35,response:"When you put it that way... that actually makes sense. The patio could pay for itself fast. What do I need to get started?",next:null},
+      {text:"That's great revenue potential. Let me run some numbers and see what offers we can get you.",quality:"ok",xp:15,response:"Okay, sure. But I still want to make sure I'm not overpaying.",next:null}
+    ]},{choices:[
+      {text:"I hear you. Let me reframe — MCA isn't a loan, it's a business tool. The real question is: will the funding help you make more than it costs? Tell me about your business.",quality:"best",xp:25,response:"Hmm, that's a good way to look at it. I want to expand my patio — I'm turning away customers every weekend.",next:1},
+      {text:"Bank rates are different because they take months and require perfect credit. MCA is speed and access. You could have money in 24 hours.",quality:"ok",xp:15,response:"24 hours? That is fast... Carlos did mention that. Okay, what do you need from me?",next:null}
+    ]}]},
+  {id:"already_funded",persona:"James",biz:"James's Trucking LLC",avatar:"🚛",industry:"Trucking",diff:"medium",
+    opening:"Look man, I already got funding from two different companies. I'm paying like $800 a day between them. I don't need more debt right now.",
+    branches:[{choices:[
+      {text:"I appreciate you being upfront. $800/day across two positions — that's significant. How's your cash flow handling it? Any months where it gets tight?",quality:"best",xp:30,response:"Yeah honestly December and January were rough. Freight slows down and I was struggling to make both payments.",next:1},
+      {text:"With two positions, you might be eligible for a consolidation — rolling both into one lower daily payment.",quality:"ok",xp:20,response:"Consolidation? I didn't know that was possible. What would that look like?",next:2},
+      {text:"I totally understand. When your current positions are paid off, give me a call.",quality:"bad",xp:5,response:"Yeah sure, I'll keep your number.",next:null}
+    ]},{choices:[
+      {text:"That's exactly why I called. We might be able to consolidate into one position with a lower daily. Would it help if your $800/day became $500/day?",quality:"best",xp:35,response:"$500 a day instead of $800? That would be huge. How does that work exactly?",next:null},
+      {text:"Seasonal dips are tough with MCA payments. Have you talked to your current funders about adjusting holdback?",quality:"ok",xp:15,response:"No, I didn't think they'd do that. Should I?",next:null}
+    ]},{choices:[
+      {text:"If you're 50-60% paid down, some funders will buy out both balances and give you one fresh position. Lower daily, some cash in hand, one payment instead of two.",quality:"best",xp:30,response:"That sounds like exactly what I need. One payment and some breathing room. What info do you need?",next:null},
+      {text:"I'd need to see your bank statements to give you exact numbers. Can you send me the last 3 months?",quality:"ok",xp:15,response:"Maybe. Let me think about it. What's your email?",next:null}
+    ]}]},
+  {id:"trust_issue",persona:"Priya",biz:"Priya's Boutique",avatar:"👗",industry:"Retail",diff:"medium",
+    opening:"I've heard bad things about MCA companies. My friend got into one and they took money even when business was slow. How do I know you won't screw me over?",
+    branches:[{choices:[
+      {text:"That's a completely valid concern. Not all funders are equal — that's exactly why I exist as a broker. I match you with funders that have fair practices. What happened with your friend?",quality:"best",xp:35,response:"She got some advance and they were taking 20% of her sales every day. When Christmas was slow, she could barely pay rent.",next:1},
+      {text:"We only work with reputable funders. I can show you reviews and references.",quality:"ok",xp:15,response:"Everyone says they're reputable. How do I actually verify that?",next:2},
+      {text:"MCA is completely different now. The industry has cleaned up. You don't need to worry.",quality:"bad",xp:5,response:"That doesn't really make me feel better.",next:2}
+    ]},{choices:[
+      {text:"20% holdback is high — that's where the pain comes from. I push for 10-12% max. That means on slow days, they take less. And I walk through every line of the agreement before you sign. Transparency is how I keep clients.",quality:"best",xp:40,response:"That's actually really helpful. I didn't know holdback percentage made such a difference. You'd go through the contract with me?",next:null},
+      {text:"With an MCA, payments adjust with revenue since it's based on a percentage. So slow months = lower payments.",quality:"ok",xp:20,response:"But my friend's didn't adjust... are you sure?",next:null}
+    ]},{choices:[
+      {text:"Fair point. Let me send you a sample agreement to read on your own time. I'll also give you contact info of two merchants I've placed recently — ask them directly about their experience.",quality:"best",xp:30,response:"Now THAT I would appreciate. If I can talk to actual people you've helped, that would go a long way. Send me the info.",next:null},
+      {text:"How about we start with a conversation about your business needs and I can explain the process?",quality:"ok",xp:15,response:"Okay fine, but I'm not committing to anything today.",next:null}
+    ]}]},
+  {id:"bank_loan",persona:"David",biz:"D&D Construction",avatar:"🏗️",industry:"Construction",diff:"hard",
+    opening:"My accountant told me to just go to the bank. He says these merchant cash advances are a rip-off. Why shouldn't I just get a regular SBA loan?",
+    branches:[{choices:[
+      {text:"Your accountant isn't wrong about bank rates being lower. But there's a reason most small businesses can't use them. How quickly do you need the capital, and what's your credit situation?",quality:"best",xp:35,response:"I got a big contract starting in 3 weeks and need about $75K for materials. My credit is like 620... and I had a tax lien two years ago.",next:1},
+      {text:"Bank loans are great if you qualify. But most small businesses don't — takes 60-90 days, requires 680+ credit. MCA can fund in 24-48 hours.",quality:"ok",xp:20,response:"My accountant mentioned it could take a while. But he still thinks the rates are too high.",next:2},
+      {text:"Your accountant probably doesn't understand MCA. It's a different product entirely.",quality:"bad",xp:5,response:"Don't talk about my accountant like that. He's been handling my books for 15 years.",next:2}
+    ]},{choices:[
+      {text:"With a 620 credit and tax lien history, an SBA loan is very difficult — and 60-90 days minimum. Your contract starts in 3 weeks. An MCA gets you $75K in 24-48 hours. The cost of the MCA is real, but the cost of missing a $75K contract is higher.",quality:"best",xp:40,response:"You're right. If I miss this contract, I lose a lot more than the advance costs. I can't wait 3 months. What do I need to do?",next:null},
+      {text:"3 weeks is tight for a bank loan. Let me see what MCA offers I can get you and compare the total cost.",quality:"ok",xp:20,response:"Okay, that's fair. But I want to see the real numbers before I decide.",next:null}
+    ]},{choices:[
+      {text:"I respect that. Ask your accountant to compare the TOTAL cost of an MCA vs the OPPORTUNITY cost of waiting 90 days for a bank loan. I'm happy to get on a call with both of you and walk through numbers.",quality:"best",xp:35,response:"He'd actually respect that approach. Let me set up a call — can you do Thursday at 2?",next:null},
+      {text:"The rates reflect speed and accessibility. No collateral, no perfect credit needed. That's the tradeoff.",quality:"ok",xp:15,response:"I get that. Let me talk to my accountant.",next:null}
+    ]}]},
+  {id:"too_expensive",persona:"Tony",biz:"Tony's Auto Body",avatar:"🔧",industry:"Auto Repair",diff:"easy",
+    opening:"$54,000 payback on a $40,000 advance? That's $14,000 extra! That's insane.",
+    branches:[{choices:[
+      {text:"I hear you — $14K sounds like a lot. But let me flip the question: what would you do with the $40K, and how much additional revenue would it generate?",quality:"best",xp:25,response:"I need new paint booths. Each one lets me take on 3 more cars a week at $2,000 each. So... $6,000 more per week?",next:1},
+      {text:"That's a 1.35 factor rate, actually on the lower end. Many merchants pay 1.45-1.55.",quality:"ok",xp:10,response:"I don't care what other people pay. $14,000 is $14,000.",next:2},
+      {text:"I can try to negotiate a lower factor rate with the funder.",quality:"bad",xp:5,response:"How much lower? Like bank loan rates?",next:2}
+    ]},{choices:[
+      {text:"$6K per week in new revenue — $24K per month. The advance costs $14K over 6 months. You'd earn back EVERYTHING in the first month. After that, it's pure profit on those booths for years. The $14K isn't a cost — it's an investment with a massive return.",quality:"best",xp:35,response:"When you do the math like that... I'd make the $14K back in two weeks. And the booths keep making money. Okay, what's the next step?",next:null},
+      {text:"Solid revenue potential. Let me get you offers and we can look at the daily payment to make sure it fits your cash flow.",quality:"ok",xp:15,response:"Alright, let's see the numbers. But I want the lowest cost option.",next:null}
+    ]},{choices:[
+      {text:"Instead of focusing on the rate, think about it differently. The question isn't how much it costs — it's what it earns. If the $40K generates more revenue than $54K over the payback period, it's profitable. Tell me what you'd use it for.",quality:"best",xp:25,response:"Fair point. I need paint booths — they'd add $6K a week in revenue.",next:1},
+      {text:"Unfortunately, MCA rates are higher than bank rates because of speed and flexibility. Different product.",quality:"ok",xp:10,response:"Speed doesn't matter as much as cost. This is too much.",next:null}
+    ]}]},
+  {id:"spouse",persona:"Linda",biz:"Linda's Daycare",avatar:"👶",industry:"Childcare",diff:"medium",
+    opening:"I want to do this, but my husband says absolutely not. He thinks taking any advance is irresponsible. How am I supposed to convince him?",
+    branches:[{choices:[
+      {text:"I respect that — this is a family decision. What's his main concern? Is it the cost, the daily payments, or just the idea of borrowing?",quality:"best",xp:30,response:"He thinks any debt is bad. But we need $25K to hire two more teachers. I'm at capacity and turning away families.",next:1},
+      {text:"I can get on a call with both of you and address his concerns directly.",quality:"ok",xp:15,response:"Maybe... but he's pretty stubborn.",next:2},
+      {text:"It's your business decision. You don't need his permission.",quality:"bad",xp:5,response:"It's our money though. That's not how our marriage works.",next:2}
+    ]},{choices:[
+      {text:"Let's build a simple business case together. Each new teacher brings in how much additional monthly revenue? If we show him the numbers — investment vs return — it becomes a business decision, not a debt decision.",quality:"best",xp:35,response:"Each teacher handles about 6 kids at $1,200/month each. That's $14,400 for two teachers. If I showed him we'd make the money back in 2 months, he'd be way more open.",next:null},
+      {text:"Sounds like the advance would pay for itself quickly. Want me to put together an ROI breakdown for him?",quality:"ok",xp:20,response:"That would help. If it's on paper with real numbers, he might come around.",next:null}
+    ]},{choices:[
+      {text:"What if I put together a one-page summary — total cost, daily payment, what you'd use it for, and expected return? Something you can review together over dinner. No pressure, just the facts.",quality:"best",xp:30,response:"That would be perfect. He's a numbers guy — if the math works, he'll come around. Can you email that?",next:null},
+      {text:"Take your time and talk it over. I'm here whenever you're ready.",quality:"ok",xp:10,response:"Okay, thanks. I'll call you back if we decide to go ahead.",next:null}
+    ]}]},
+  {id:"bad_exp",persona:"Ray",biz:"Ray's Pizzeria",avatar:"🍕",industry:"Restaurant",diff:"hard",
+    opening:"Last time I did this, the funder started taking double payments. I had to close my bank account. I lost $8K and nobody helped me. Give me one reason I should trust any of you.",
+    branches:[{choices:[
+      {text:"Ray, that's terrible and I'm sorry. That sounds like a predatory funder. Can you tell me what happened with the original agreement?",quality:"best",xp:35,response:"I don't remember the company name... I didn't really read the contract closely. I know that's my fault.",next:1},
+      {text:"That's awful. I only work with vetted, reputable funders. What happened to you won't happen with my partners.",quality:"ok",xp:15,response:"That's what the last guy said too. Everyone says they're reputable.",next:2},
+      {text:"That's why you need a broker like me — I protect my clients.",quality:"bad",xp:5,response:"You protect me? Where were you when I was getting ripped off?",next:2}
+    ]},{choices:[
+      {text:"Not your fault. These companies use confusing contracts on purpose. Here's what I do differently: I walk through every line with you, show you exact daily payment and total payback, and give you my direct cell. If anything goes sideways, I'm your first call.",quality:"best",xp:40,response:"You'd go through the contract with me? And I could call you if something went wrong? Nobody offered that before. Okay... I'm willing to listen.",next:null},
+      {text:"Going forward, always read the agreement carefully. I can help you understand terms before you sign.",quality:"ok",xp:15,response:"I do need money... the ovens need replacing. But I'm scared.",next:null}
+    ]},{choices:[
+      {text:"Don't trust my words — trust the process. Let me send you a sample contract. Read it with your lawyer. I'll give you references from 3 merchants I've funded recently — call them directly. If anything feels wrong, walk away. I'd rather earn your trust slowly.",quality:"best",xp:35,response:"That's the first honest thing any of you guys have said. Send me the sample and those references.",next:null},
+      {text:"I understand your hesitation. I'm available whenever you're ready to talk more.",quality:"ok",xp:10,response:"Alright. Maybe I'll reach out. Maybe not.",next:null}
+    ]}]},
+  {id:"competitor",persona:"Steve",biz:"Steve's HVAC Services",avatar:"❄️",industry:"Services",diff:"medium",
+    opening:"I just got off the phone with another broker who said he can get me $50K at a 1.25 factor. Can you beat that?",
+    branches:[{choices:[
+      {text:"1.25 on $50K sounds aggressive. Before I try to beat it — what's your monthly revenue, time in business, and any existing positions? I want to make sure that offer is real.",quality:"best",xp:30,response:"Revenue is about $65K, been in business 4 years, one position almost paid off. Why, you think it's not real?",next:1},
+      {text:"I can definitely try to match or beat that. Let me get your information and submit.",quality:"ok",xp:15,response:"Cool, how long will it take? The other guy said funded by Friday.",next:2},
+      {text:"1.25? That's really low — usually means hidden fees.",quality:"bad",xp:5,response:"He seemed legit. Are you saying he's lying?",next:2}
+    ]},{choices:[
+      {text:"You're a strong file — 1.25 is possible. But check: ask for the TOTAL payback, daily payment, and whether there are origination fees. Sometimes a 1.25 factor comes with 3% origination that makes it cost more. I'll get you competing offers by tomorrow for a true apples-to-apples comparison.",quality:"best",xp:40,response:"Origination fees... he didn't mention those. Okay, get me your offers. I'd rather compare everything side by side.",next:null},
+      {text:"With your profile, 1.25 is possible but tight. Let me submit and see what comes back.",quality:"ok",xp:15,response:"Cool. But if you can't beat 1.25, I'm going with the other guy.",next:null}
+    ]},{choices:[
+      {text:"Did the other broker explain total cost? A 1.25 factor sounds great, but total payback + fees is what matters. Some quote low factors but add origination charges. Send me what they offered in writing — I'll show you a true side-by-side comparison.",quality:"best",xp:30,response:"He hasn't sent anything in writing yet... it was just verbal on the phone. That's a red flag, huh?",next:null},
+      {text:"Speed and factor aren't everything. I also provide ongoing support and help with renewals.",quality:"ok",xp:10,response:"Right now I just need the best deal. What can you do?",next:null}
+    ]}]},
+  {id:"need_more",persona:"Kim",biz:"Kim's Nail Salon",avatar:"💅",industry:"Beauty",diff:"easy",
+    opening:"I need $80,000 but the best offer is only $35,000. That's not close to what I need. Can you get me more?",
+    branches:[{choices:[
+      {text:"I understand. What's your monthly revenue, and any existing positions? Sometimes the gap tells us what funders are seeing.",quality:"best",xp:25,response:"About $28K a month. No positions. I need $80K to open a second location.",next:1},
+      {text:"$80K is doable with the right funder. Let me submit to my network.",quality:"ok",xp:10,response:"Please! I really need the full amount.",next:2},
+      {text:"If the best offer is $35K, that's probably what you qualify for.",quality:"bad",xp:5,response:"I can't start smaller — the build-out alone is $60K.",next:2}
+    ]},{choices:[
+      {text:"Real talk: at $28K/month, most funders cap at $35-42K. An $80K advance would create payment pressure that could sink both locations. Here's the play: take $35K now for the most critical build-out costs, then get a renewal in 3-4 months once the new location generates revenue. You'll qualify for much more with two locations producing income.",quality:"best",xp:35,response:"That makes sense. I don't want to put the existing salon at risk. If I take $35K now and get a renewal later, could I eventually get the rest?",next:null},
+      {text:"At $28K revenue, $80K is a stretch. Let me see if anyone can get you to $45-50K.",quality:"ok",xp:15,response:"That's still not enough... but it's better than $35K.",next:null}
+    ]},{choices:[
+      {text:"Here's a strategy: take the $35K now for the most critical items. Once the new location opens and generates revenue, your monthly number jumps and you qualify for a much larger renewal. It's a two-step play.",quality:"best",xp:25,response:"Two-step play... I like that. So it's not 'no' to $80K, it's 'not yet'?",next:null},
+      {text:"Let me see what I can find. Sometimes smaller funders can bridge the gap.",quality:"ok",xp:10,response:"Try your best. I need this to work.",next:null}
+    ]}]},
+  {id:"urgent",persona:"Alex",biz:"Alex's Event Planning",avatar:"🎪",industry:"Events",diff:"hard",
+    opening:"I have a huge corporate event in 9 days and my vendor demands $45,000 upfront or they drop me. I need funding YESTERDAY. Can you make this happen or not?",
+    branches:[{choices:[
+      {text:"I'm on it. 9 days is tight but doable — most funders fund in 24-48 hours. I need three things right now: last 3 months bank statements, government ID, and voided check. Can you send those in the next hour?",quality:"best",xp:35,response:"YES. Sending right now from my phone. Are you sure — 24 to 48 hours? I literally cannot lose this contract.",next:1},
+      {text:"I can help. Let me collect some information and start the application process.",quality:"ok",xp:15,response:"Application process? I don't have time for a process.",next:2},
+      {text:"That's a very tight timeline. I'll do my best but can't make promises.",quality:"bad",xp:5,response:"Can't make promises? Then why am I talking to you?",next:2}
+    ]},{choices:[
+      {text:"Send them now. I submit to 3-4 fast funders simultaneously. Offers within 4-6 hours. You pick the best one, sign tonight, funds hit tomorrow or day after. I'll be on my phone all day tracking this. You'll have my direct cell. We're making this happen.",quality:"best",xp:40,response:"Thank you. Sending everything right now. This event is worth $180K to my business. Don't let me down.",next:null},
+      {text:"Great, send them over and I'll try to have options by end of day.",quality:"ok",xp:15,response:"Try? End of day? Can you try harder?",next:null}
+    ]},{choices:[
+      {text:"Alex, I CAN get this done, but I need you to move fast too. Bank statements, ID, and voided check in 30 minutes and I'll have multiple offers by end of today. Pick the best one, sign tonight, fund tomorrow. I've done deals faster. Let's go.",quality:"best",xp:30,response:"THAT'S what I needed to hear. Sending everything now. Let's do this.",next:null},
+      {text:"The timeline is tight but not impossible. Let me see your bank statements first.",quality:"ok",xp:10,response:"Fine. But if you can't do it, tell me now.",next:null}
+    ]}]}
+];
+const LIBRARY=[
+  {cat:"Fundamentals",title:"What is an MCA?",body:"A Merchant Cash Advance is not a loan — it's a purchase of future receivables. A funder provides capital upfront in exchange for a percentage of future sales. This structure is legally distinct from lending and isn't subject to the same regulations."},
+  {cat:"Fundamentals",title:"Factor Rate vs Interest Rate",body:"A factor rate is a multiplier (like 1.35) applied to the advance amount to determine total payback. Unlike interest rates, factor rates don't compound. A $40K advance at 1.35 always costs $54K total, regardless of repayment speed."},
+  {cat:"Fundamentals",title:"How Holdback Works",body:"Holdback is the percentage of daily revenue debited as repayment. A 12% holdback means if the merchant deposits $5,000 today, $600 goes to the funder. Lower holdback = smaller daily payments = longer effective term. Sweet spot is 8-15%."},
+  {cat:"Fundamentals",title:"Stacking Explained",body:"Stacking is when a merchant has multiple MCA positions simultaneously. Some funders are stack-friendly (willing to be in 2nd or 3rd position), others are strict (first position only). Heavy stacking (3+) dramatically increases default risk."},
+  {cat:"Deal Structure",title:"Payment Pressure",body:"Payment Pressure = Daily Payment ÷ Daily Revenue. Under 15% is healthy, 15-25% is manageable, over 25% is dangerous. It's the single best predictor of repayment success."},
+  {cat:"Deal Structure",title:"Renewals & Refinancing",body:"Renewals happen at 40-60% paydown. Funder pays off remaining balance and issues a new, larger advance. For brokers, renewals are massive — easier to close, often larger, fresh commission. Building a renewal book creates recurring revenue."},
+  {cat:"Deal Structure",title:"RTR (Right To Receivables)",body:"RTR = remaining balance owed across all positions. If a merchant took $50K at 1.40 ($70K payback) and repaid $30K, RTR is $40K. High RTR relative to revenue = high risk."},
+  {cat:"Sales",title:"The Qualifying Call",body:"Before pitching: Monthly revenue? Time in business? Credit score range? Existing positions? Use of funds? These five questions determine which funders to approach."},
+  {cat:"Sales",title:"Speed as a Closing Tool",body:"In MCA, speed is the ultimate competitive advantage. A broker who gets offers in hours and funds in 24-48 hours wins over slightly better terms with a week-long process."},
+  {cat:"Sales",title:"Handling Rate Objections",body:"Never defend the rate directly. Reframe: the rate is the cost — the question is what does the capital earn you? Help merchants calculate ROI. Sell the return, not the rate."},
+  {cat:"Operations",title:"CRM Setup for Brokers",body:"At minimum: lead pipeline (new → contacted → docs → submitted → approved → funded), automated follow-ups, renewal tracking (alert at 50% paydown), and commission tracking."},
+  {cat:"Operations",title:"Building a Renewal Book",body:"Top brokers generate 40-60% of revenue from renewals. Track every funded deal, set alerts for 50% paydown, reach out proactively. Renewals close faster and have lower default rates."},
+  {cat:"Operations",title:"Scaling to ISO",body:"The path: 1) Master closing yourself, 2) Hire ops support, 3) Bring on 1-2 reps, 4) Build CRM automations, 5) Scale to 5+ reps, 6) Add marketing, 7) Build your brand. Most fail at step 2."},
+  {cat:"Compliance",title:"Disclosure Requirements",body:"Always disclose: factor rate, total payback, estimated term, daily payment, and any origination fees. Never misrepresent an MCA as a loan. Transparency protects everyone."},
+  {cat:"Compliance",title:"UCC Filings",body:"A UCC filing gives a funder security interest in merchant business assets. Multiple filings signal stacking. Always know your merchant's UCC situation before submitting."},
+  {cat:"Industry",title:"The Funder Ecosystem",body:"Funders range from large institutional to smaller ISOs. Each has different risk appetites, speed, pricing, and stacking policies. Maintain relationships with 10-20 funders across the spectrum."},
+  {cat:"Industry",title:"ISO vs Broker vs Rep",body:"A Rep works for an ISO. A Broker is independent with multiple funder relationships. An ISO is the business entity. Career path: Rep → Independent Broker → ISO Owner."},
+  {cat:"Industry",title:"2026 Industry Trends",body:"Key trends: increased state regulation, AI in underwriting, funder consolidation, embedded finance, and increased transparency driven by communities like PrivateCreditMCA."}
+];
+load();
+function getRank(xp){for(let i=RANKS.length-1;i>=0;i--){if(xp>=RANKS[i].xp)return i}return 0}
+function addXP(amount){state.xp+=amount;const newIdx=getRank(state.xp);if(newIdx>state.rankIdx){state.rankIdx=newIdx;setTimeout(()=>showRankUp(RANKS[newIdx]),600)}updateProfile();save()}
+function updateProfile(){const r=RANKS[state.rankIdx],nr=RANKS[Math.min(state.rankIdx+1,RANKS.length-1)];const badge=$('rankBadge');RANKS.forEach(rk=>badge.classList.remove(rk.cls));badge.classList.add(r.cls);$('rankIcon').textContent=r.icon;$('rankLvl').textContent='LVL '+r.lvl;$('rankName').innerHTML=state.rankIdx>=6?'<em>MCA Legend</em>':r.name;const xpIn=state.xp-r.xp,xpNeed=r.next-r.xp,pct=Math.min((xpIn/xpNeed)*100,100);$('xpBar').style.width=pct+'%';$('xpText').textContent=state.xp+' / '+r.next+' XP';if(state.rankIdx<RANKS.length-1)$('rankSub').innerHTML='Next rank: <strong>'+nr.name+' '+nr.icon+'</strong> at '+nr.xp+' XP';else $('rankSub').innerHTML='<strong>Maximum rank achieved!</strong> You are an MCA Legend.';const totalQ=Object.values(state.treeScores).reduce((a,b)=>a+b,0);const totalOH=state.ohCompleted?state.ohCompleted.length:0;$('profileStats').innerHTML=`<span class="ps"><b>${state.xp}</b> Total XP</span><span class="ps"><b>${totalQ}</b>/40 Questions</span><span class="ps"><b>${totalOH}</b>/10 Scenarios</span><span class="ps tl">${r.icon} ${r.name}</span>`}
+function updateSkillTrees(){['deals','funders','sales','ops'].forEach(cat=>{const total=QUESTIONS[cat].length,done=state.treeScores[cat];const cap=cat.charAt(0).toUpperCase()+cat.slice(1);$('stProg'+cap).textContent=done+' / '+total;$('stFill'+cap).style.width=((done/total)*100)+'%'})}
+function showGame(id){document.querySelectorAll('.game-view').forEach(v=>v.classList.remove('active'));const viewId=id==='hub'?'viewHub':id==='rpg'?'viewRpg':id==='objection'?'viewObjection':id==='calc'?'viewCalc':id==='roadmap'?'viewRoadmap':id==='library'?'viewLibrary':'viewHub';$(viewId).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(id==='rpg'){updateSkillTrees();loadQuestion()}if(id==='objection')renderScenario();if(id==='calc')renderCalc();if(id==='roadmap')renderRoadmap();if(id==='library')renderLibrary()}
+// RPG
+function getNextQuestion(cat){const pool=QUESTIONS[cat];const unanswered=pool.map((_,i)=>i).filter(i=>!state.answered[cat].includes(i));return unanswered.length?unanswered[Math.floor(Math.random()*unanswered.length)]:null}
+function loadQuestion(){state.locked=false;const cat=state.currentCat,qIdx=getNextQuestion(cat);if(qIdx===null){$('quizQ').textContent="You've mastered all "+cat+" questions! Select another skill tree.";$('quizOpts').innerHTML='';$('quizFb').classList.remove('show');$('quizNext').classList.remove('show');return}const q=QUESTIONS[cat][qIdx];state.currentQ={...q,idx:qIdx,cat};const catLabel={deals:'Deal Structure',funders:'Funder Knowledge',sales:'Sales & Negotiation',ops:'Operations'};$('quizCat').textContent=catLabel[cat];$('quizCat').className='quiz-cat '+cat;$('quizDiff').innerHTML=q.diff+' · +<span class="xv">'+q.xp+'</span> XP';$('quizQ').textContent=q.q;const keys=['A','B','C','D'];$('quizOpts').innerHTML=q.opts.map((opt,i)=>`<button class="quiz-opt" onclick="answerQ(${i})"><span class="ok">${keys[i]}</span>${opt}</button>`).join('');$('quizFb').classList.remove('show','correct-fb','wrong-fb');$('quizNext').classList.remove('show')}
+function answerQ(idx){if(state.locked)return;state.locked=true;const q=state.currentQ,opts=document.querySelectorAll('.quiz-opt'),correct=idx===q.ans;opts.forEach((o,i)=>{if(i===q.ans)o.classList.add('correct');if(i===idx&&!correct)o.classList.add('wrong');if(i!==q.ans&&i!==idx)o.classList.add('disabled')});state.answered[q.cat].push(q.idx);const fb=$('quizFb');if(correct){addXP(q.xp);state.treeScores[q.cat]++;fb.className='quiz-fb correct-fb show';$('fbTitle').textContent='✓ Correct! +'+q.xp+' XP';$('fbText').textContent=q.explain}else{fb.className='quiz-fb wrong-fb show';$('fbTitle').textContent='✗ Not quite.';$('fbText').textContent=q.explain}updateProfile();updateSkillTrees();$('quizNext').classList.add('show');save()}
+function nextQuestion(){loadQuestion()}
+function selectTree(cat){state.currentCat=cat;document.querySelectorAll('.tree').forEach(t=>t.classList.remove('active'));document.querySelector(`.tree[data-cat="${cat}"]`).classList.add('active');loadQuestion()}
+function resetRPG(){state.answered={deals:[],funders:[],sales:[],ops:[]};state.treeScores={deals:0,funders:0,sales:0,ops:0};save();updateSkillTrees();loadQuestion();toast("RPG reset")}
+// Objection Handler
+function renderScenarioProg(){$('scenProg').innerHTML=SCENARIOS.map((_,i)=>{const done=(state.ohCompleted||[]).includes(i);const cur=state.ohScenIdx===i;return`<div class="scenDot ${done?'done':''} ${cur&&!done?'cur':''}"></div>`}).join('')}
+function renderScenario(){renderScenarioProg();const idx=state.ohScenIdx||0;if(idx>=SCENARIOS.length){$('ohScene').innerHTML=`<div class="oh-scene"><div style="text-align:center;padding:40px 20px"><div style="font-size:48px;margin-bottom:16px">🏆</div><div style="font-family:'Instrument Serif',serif;font-size:28px;margin-bottom:8px">All Scenarios <em>Complete!</em></div><div style="font-size:13px;color:var(--t3)">You've handled every merchant objection. Reset to practice again.</div><div style="margin-top:20px"><button class="btn" onclick="resetOH()">Reset & Replay</button></div></div></div>`;return}const s=SCENARIOS[idx];state.ohStep=0;state.ohLocked=false;renderOHStep(s)}
+function renderOHStep(s){const step=state.ohStep||0;const branch=s.branches[step];if(!branch){finishScenario();return}let dialogueHTML=`<div class="oh-bubble merchant"><div class="speaker">${s.persona} — ${s.biz}</div>${step===0?s.opening:branch._merchantLine||s.opening}</div>`;if(step>0&&branch._brokerLine){dialogueHTML=`<div class="oh-bubble broker"><div class="speaker">You (Broker)</div>${branch._brokerLine}</div><div class="oh-bubble merchant"><div class="speaker">${s.persona}</div>${branch._merchantResponse||''}</div>`}$('ohScene').innerHTML=`<div class="oh-scene"><div class="oh-header"><div class="oh-persona"><div class="oh-avatar">${s.avatar}</div><div><div class="oh-name">${s.persona}</div><div class="oh-biz">${s.biz} · ${s.industry}</div></div></div><div class="oh-pills"><span class="oh-pill diff-${s.diff}">${s.diff.toUpperCase()}</span><span class="oh-pill">Round ${step+1}/${s.branches.length}</span></div></div><div class="oh-dialogue">${dialogueHTML}</div><div class="oh-choices" id="ohChoices">${branch.choices.map((c,i)=>`<button class="oh-choice" onclick="pickOH(${i})">${c.text}</button>`).join('')}</div><div id="ohResult"></div><div id="ohNextBtn" style="margin-top:14px;display:none"><button class="btn btn-pri" id="ohContinue">Continue →</button></div></div>`}
+function pickOH(idx){if(state.ohLocked)return;state.ohLocked=true;const s=SCENARIOS[state.ohScenIdx];const step=state.ohStep||0;const branch=s.branches[step];const choice=branch.choices[idx];const btns=document.querySelectorAll('.oh-choice');btns.forEach((b,i)=>{b.classList.add(branch.choices[i].quality);if(i!==idx)b.classList.add('disabled')});const dialogue=document.querySelector('.oh-dialogue');dialogue.innerHTML+=`<div class="oh-bubble broker"><div class="speaker">You (Broker)</div>${choice.text}</div>`;if(choice.response){dialogue.innerHTML+=`<div class="oh-bubble merchant"><div class="speaker">${s.persona}</div>${choice.response}</div>`}const labels={best:{t:'✓ Best Response! +'+choice.xp+' XP',c:'best-r'},ok:{t:'Decent. +'+choice.xp+' XP',c:'ok-r'},bad:{t:'Weak response. +'+choice.xp+' XP',c:'bad-r'}};const lb=labels[choice.quality];const bestC=branch.choices.find(c=>c.quality==='best');$('ohResult').innerHTML=`<div class="oh-result ${lb.c}"><div class="or-t">${lb.t}</div><div class="or-b">${choice.quality!=='best'?'Better approach: "'+bestC.text.substring(0,120)+'..."':'Exactly right. This builds trust and moves the deal forward.'}</div></div>`;addXP(choice.xp);const nextBtn=$('ohNextBtn');nextBtn.style.display='block';$('ohContinue').onclick=()=>{if(choice.next!==null&&choice.next!==undefined){state.ohStep=choice.next;const nb=s.branches[choice.next];if(nb){nb._brokerLine=choice.text;nb._merchantResponse=choice.response;nb._merchantLine=choice.response}state.ohLocked=false;renderOHStep(s)}else{finishScenario()}}}
+function finishScenario(){if(!state.ohCompleted)state.ohCompleted=[];if(!state.ohCompleted.includes(state.ohScenIdx))state.ohCompleted.push(state.ohScenIdx);state.ohScenIdx=Math.min((state.ohScenIdx||0)+1,SCENARIOS.length);save();toast("Scenario complete!");renderScenarioProg();setTimeout(()=>renderScenario(),800)}
+function nextScenario(){state.ohScenIdx=Math.min((state.ohScenIdx||0)+1,SCENARIOS.length);state.ohStep=0;state.ohLocked=false;save();renderScenario()}
+function resetOH(){state.ohCompleted=[];state.ohScenIdx=0;state.ohStep=0;save();renderScenario();toast("Progress reset")}
+// Commission Calculator
+function renderCalc(){const amt=Number($('ccAmtR').value),dpm=Number($('ccDPMR').value),pts=Number($('ccPtsR').value),spl=Number($('ccSplR').value);$('ccAmt').textContent=money(amt);$('ccDPM').textContent=dpm;$('ccPts').textContent=pts+' pts';$('ccSpl').textContent=spl+'%';const commPerDeal=amt*(pts/100);const yourCut=commPerDeal*(spl/100);const monthly=yourCut*dpm;const annual=monthly*12;$('calcOut').innerHTML=`<div class="co"><div class="ck">Commission Per Deal</div><div class="cv2">${money(commPerDeal)}</div><div class="ch">${pts} pts on ${money(amt)}</div></div><div class="co"><div class="ck">Your Cut Per Deal</div><div class="cv2" style="color:var(--teal4)">${money(yourCut)}</div><div class="ch">${spl}% of ${money(commPerDeal)}</div></div><div class="co"><div class="ck">Monthly Income</div><div class="cv2" style="color:var(--green)">${money(monthly)}</div><div class="ch">${dpm} deals × ${money(yourCut)}</div></div><div class="co"><div class="ck">Annual Income</div><div class="cv2" style="color:var(--amber)">${money(annual)}</div><div class="ch">${money(monthly)} × 12 months</div></div>`}
+['ccAmtR','ccDPMR','ccPtsR','ccSplR'].forEach(id=>{$(id).addEventListener('input',renderCalc)});
+// Career Roadmap
+function renderRoadmap(){$('roadmap').innerHTML=RANKS.map((r,i)=>{const isLast=i===RANKS.length-1;const done=state.xp>=r.next;const active=state.rankIdx===i;return`<div class="rm-step"><div class="rm-line"><div class="rm-dot ${done?'done':''} ${active?'active':''}">${r.icon}</div>${!isLast?`<div class="rm-connector ${done?'done':''}"></div>`:''}</div><div class="rm-content"><div class="rm-rank">${r.name}</div><div class="rm-xp">${r.xp} XP${active?' — You are here':''}${done?' ✓':''}</div><div class="rm-desc">${r.desc}</div></div></div>`}).join('')}
+// Learning Library
+function renderLibrary(){$('libGrid').innerHTML=LIBRARY.map((item,i)=>`<div class="lib-card" onclick="openLib(${i})"><div class="lc-cat">${item.cat}</div><div class="lc-t">${item.title}</div><div class="lc-d">${item.body.substring(0,80)}...</div></div>`).join('');$('libDetail').style.display='none'}
+function openLib(i){const item=LIBRARY[i];$('libTitle').textContent=item.title;$('libBody').innerHTML=`<div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t4);margin-bottom:12px">${item.cat}</div><p>${item.body}</p>`;$('libDetail').style.display='block';$('libDetail').scrollIntoView({behavior:'smooth',block:'start'})}
+function closeLib(){$('libDetail').style.display='none'}
+// Rank Up Overlay + Particles
+function showRankUp(rank){$('ruIcon').textContent=rank.icon;$('ruTitle').innerHTML="You're now <em>"+rank.name+"</em>";$('ruSub').textContent=rank.lvl<7?'Keep training to unlock the next rank':'Maximum rank achieved. Legendary.';$('rankOverlay').classList.add('active');spawnParticles()}
+function dismissRankUp(){$('rankOverlay').classList.remove('active')}
+function spawnParticles(){const canvas=$('particles'),ctx=canvas.getContext('2d');canvas.width=window.innerWidth;canvas.height=window.innerHeight;const particles=[],colors=['#00d4c8','#00e8db','#00c8ff','#00e676','#ffc446','#b388ff'];for(let i=0;i<80;i++){particles.push({x:canvas.width/2+(Math.random()-.5)*200,y:canvas.height/2+(Math.random()-.5)*100,vx:(Math.random()-.5)*12,vy:(Math.random()-.5)*12-4,size:Math.random()*5+2,color:colors[Math.floor(Math.random()*colors.length)],life:1,decay:Math.random()*.015+.008,gravity:.12})}function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);let alive=false;particles.forEach(p=>{if(p.life<=0)return;alive=true;p.x+=p.vx;p.y+=p.vy;p.vy+=p.gravity;p.vx*=.98;p.life-=p.decay;ctx.globalAlpha=p.life;ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill()});if(alive)requestAnimationFrame(animate);else ctx.clearRect(0,0,canvas.width,canvas.height)}requestAnimationFrame(animate)}
+// INIT
+updateProfile();updateSkillTrees();
+</script>
+</body>
+</html>
