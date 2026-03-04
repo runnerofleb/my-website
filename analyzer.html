@@ -1,476 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BrokerOS • Deal Lab</title>
-  <style>
-    :root{
-      --bg:#0b1026;
-      --panel:#0a1433;
-      --panel2:#0b1b44;
-      --border:#1c2b66;
-      --text:#eaf1ff;
-      --muted:#a7b4cc;
-      --muted2:#7d8aa3;
-      --good:#22c55e;
-      --warn:#f59e0b;
-      --bad:#ef4444;
-      --blue:#38bdf8;
-      --vio:#a78bfa;
-      --pink:#fb7185;
-      --shadow:0 18px 45px rgba(0,0,0,.40);
-      --r:18px;
-      --r2:14px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-    }
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family: var(--sans);
-      color:var(--text);
-      background:
-        radial-gradient(1000px 540px at 12% 8%, rgba(56,189,248,.18), transparent 55%),
-        radial-gradient(900px 520px at 70% 12%, rgba(34,197,94,.12), transparent 55%),
-        radial-gradient(900px 520px at 86% 70%, rgba(251,113,133,.10), transparent 55%),
-        var(--bg);
-    }
-    a{ color:var(--blue); text-decoration:none; font-weight:800; }
-    a:hover{ text-decoration:underline; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deal Lab — PrivateCreditMCA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a10;--deep:#0a0f18;--surface:#0e1422;--elevated:#131b2e;--card:#151e33;--teal:#00d4c8;--teal4:#00e8db;--cyan:#00c8ff;--green:#00e676;--amber:#ffc446;--red:#ff5252;--purple:#b388ff;--t1:#f0f4fc;--t2:#c8d0e0;--t3:#8b97b0;--t4:#586580;--t5:#3a4560;--bd:rgba(255,255,255,.04);--bd2:rgba(255,255,255,.07);--bdt:rgba(0,212,200,.15);--r:16px;--r2:12px;--ex:cubic-bezier(.16,1,.3,1);--eq:cubic-bezier(.25,1,.5,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#00b0a6 var(--bg)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#00b0a6;border-radius:3px}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--t1);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(0,212,200,.3);color:#fff}
+a{color:inherit;text-decoration:none}
+.grain{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:180px}
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.ao{position:absolute;border-radius:50%;filter:blur(100px)}
+.ao.a{width:700px;height:700px;background:radial-gradient(circle,rgba(0,212,200,.05),transparent 70%);top:-250px;right:-100px}
+.ao.b{width:500px;height:500px;background:radial-gradient(circle,rgba(0,200,255,.04),transparent 70%);bottom:-150px;left:-100px}
 
-    header{
-      position: sticky; top:0; z-index:50;
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding:16px 22px;
-      background: rgba(9,12,25,.75);
-      backdrop-filter: blur(10px);
-      border-bottom:1px solid rgba(28,43,102,.65);
-    }
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      font-weight:950;
-      letter-spacing:-.2px;
-    }
-    .logo{
-      width:34px; height:34px; border-radius:14px;
-      background: linear-gradient(90deg, var(--good), var(--blue), var(--vio));
-      box-shadow: 0 14px 40px rgba(56,189,248,.14);
-      flex: 0 0 auto;
-    }
-    .brand small{
-      display:block;
-      color:var(--muted);
-      font-weight:800;
-      font-size:12px;
-      margin-top:2px;
-      letter-spacing:0;
-    }
-    nav{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
-    nav a{
-      padding:8px 10px;
-      border:1px solid rgba(28,43,102,.75);
-      background: rgba(10,20,51,.55);
-      border-radius:999px;
-      color:var(--muted);
-    }
-    nav a.active{
-      color:var(--text);
-      border-color: rgba(56,189,248,.40);
-      background: rgba(56,189,248,.12);
-    }
+/* NAV */
+.nav{position:fixed;top:0;width:100%;z-index:1000;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,48px);background:rgba(6,10,16,.7);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--bd)}
+.nav-l{display:flex;align-items:center;gap:10px}
+.nav-m{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.nav-m::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.2))}
+.nav-m svg{position:relative;z-index:1}
+.nav-w{font-weight:700;font-size:15px;letter-spacing:-.4px}.nav-w em{font-style:normal;color:var(--teal4)}
+.nav-pills{display:flex;gap:4px;background:var(--surface);border:1px solid var(--bd2);border-radius:100px;padding:3px}
+.nav-p{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;color:var(--t3);transition:all .25s}
+.nav-p:hover{color:var(--t1);background:rgba(255,255,255,.04)}
+.nav-p.active{color:var(--t1);background:rgba(0,212,200,.1);border:1px solid var(--bdt)}
+.nav-r{display:flex;gap:8px}
+.nb{padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:'Sora',sans-serif;transition:all .25s}
+.nb-g{background:transparent;color:var(--t2);border:1px solid var(--bd2)}.nb-g:hover{border-color:var(--bdt);color:var(--teal4)}
+.nb-p{background:var(--teal);color:var(--bg)}.nb-p:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,212,200,.3)}
 
-    .wrap{ max-width:1200px; margin:0 auto; padding:18px; }
+/* LAYOUT */
+.wrap{max-width:1200px;margin:0 auto;padding:80px 18px 40px;position:relative;z-index:1}
+.hero{margin-bottom:24px}
+.hero-ey{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.hero-ey::before{content:'';width:20px;height:1px;background:var(--teal)}
+.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(28px,4vw,42px);font-weight:400;letter-spacing:-1px;line-height:1.1}
+.hero h1 em{font-style:italic;color:var(--teal4)}
+.hero p{font-size:14px;color:var(--t3);line-height:1.6;margin-top:10px;max-width:700px}
+.hero-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.btn{padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;border:1px solid var(--bd2);background:var(--surface);color:var(--t2);cursor:pointer;font-family:'Sora',sans-serif;transition:all .25s;white-space:nowrap}
+.btn:hover{border-color:var(--bdt);color:var(--teal4);transform:translateY(-1px)}
+.btn-pri{background:var(--teal);color:var(--bg);border-color:transparent}
+.btn-pri:hover{box-shadow:0 8px 28px rgba(0,212,200,.25)}
+.btn-dan{background:rgba(255,82,82,.08);border-color:rgba(255,82,82,.2);color:var(--red)}
+.btn-dan:hover{border-color:rgba(255,82,82,.4)}
 
-    .hero{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap;
-      margin-top:10px;
-    }
-    .hero h1{
-      margin:0;
-      font-size:28px;
-      letter-spacing:-.4px;
-    }
-    .hero p{ margin:8px 0 0; color:var(--muted); max-width: 820px; line-height:1.35; }
-    .hero .ctaRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:16px;align-items:start}
+@media(max-width:980px){.grid{grid-template-columns:1fr}}
 
-    .btn{
-      border:1px solid rgba(28,43,102,.85);
-      background: rgba(10,20,51,.70);
-      color: var(--text);
-      padding:10px 12px;
-      border-radius: 14px;
-      font-weight:900;
-      cursor:pointer;
-      transition: transform .08s ease, border-color .15s ease, background .15s ease;
-      white-space: nowrap;
-    }
-    .btn:hover{ transform: translateY(-1px); border-color: rgba(56,189,248,.40); }
-    .btn.primary{
-      background: linear-gradient(90deg, rgba(34,197,94,.22), rgba(56,189,248,.18));
-      border-color: rgba(34,197,94,.35);
-    }
-    .btn.primary:hover{ border-color: rgba(34,197,94,.55); }
-    .btn.danger{
-      background: rgba(239,68,68,.12);
-      border-color: rgba(239,68,68,.35);
-    }
-    .btn.small{ padding:8px 10px; border-radius: 12px; font-size: 13px; }
+/* PANELS */
+.panel{background:rgba(14,20,34,.75);border:1px solid var(--bd2);border-radius:var(--r);overflow:hidden;backdrop-filter:blur(8px)}
+.panel-hd{padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.panel-t{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.panel-s{font-size:11px;color:var(--t4);margin-top:3px;font-weight:500}
+.panel-bd{padding:16px}
 
-    .grid{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 14px;
-      align-items:start;
-    }
-    @media (max-width: 980px){
-      .grid{ grid-template-columns: 1fr; }
-    }
+/* PILLS */
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:100px;border:1px solid var(--bd2);background:rgba(0,0,0,.2);font-size:11px;font-weight:600;color:var(--t3);white-space:nowrap}
+.pill b{color:var(--t1)}.pill.tl{border-color:var(--bdt);background:rgba(0,212,200,.06);color:var(--teal4)}.pill.gn{border-color:rgba(0,230,118,.2);background:rgba(0,230,118,.06);color:var(--green)}.pill.wn{border-color:rgba(255,196,70,.2);background:rgba(255,196,70,.06);color:var(--amber)}.pill.rd{border-color:rgba(255,82,82,.2);background:rgba(255,82,82,.06);color:var(--red)}
 
-    .panel{
-      background: rgba(10,20,51,.72);
-      border:1px solid rgba(28,43,102,.80);
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .panelHeader{
-      padding: 14px 14px 12px;
-      border-bottom:1px solid rgba(28,43,102,.65);
-      background: rgba(10,20,51,.50);
-      display:flex; align-items:flex-start; justify-content:space-between; gap:10px; flex-wrap:wrap;
-    }
-    .panelHeader .t{ font-weight: 950; }
-    .panelHeader .s{ color:var(--muted); font-size:12px; margin-top:4px; font-weight:800; }
+/* FORM */
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+.field{margin-bottom:4px}
+.field label{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:var(--t3);font-weight:600;margin-bottom:5px;letter-spacing:.2px}
+.field label .val{color:var(--t1);font-weight:700}
+input,select,textarea{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--bd2);background:var(--elevated);color:var(--t1);font-size:13px;font-family:'Sora',sans-serif;outline:none;transition:border-color .25s}
+input:focus,select:focus,textarea:focus{border-color:var(--teal)}
+input::placeholder,textarea::placeholder{color:var(--t5)}
+input[type="range"]{padding:0;height:32px;accent-color:var(--teal);background:transparent;border:none}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23586580' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;cursor:pointer}
+select option{background:var(--elevated);color:var(--t1)}
+textarea{resize:vertical;min-height:80px}
 
-    .panelBody{ padding: 14px; }
+/* KPIS */
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.kpi{border:1px solid var(--bd2);background:rgba(0,0,0,.15);border-radius:var(--r2);padding:14px}
+.kpi .k{font-size:11px;color:var(--t4);font-weight:600;letter-spacing:.3px}
+.kpi .v{margin-top:6px;font-size:20px;font-weight:800;letter-spacing:-.5px}
+.kpi .h{margin-top:4px;font-size:10.5px;color:var(--t5)}
 
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    @media (max-width: 980px){ .row{ grid-template-columns:1fr; } }
+/* STRESS */
+.meter{margin-top:14px;border:1px solid var(--bd2);background:rgba(0,0,0,.15);border-radius:var(--r2);padding:14px}
+.meter .mt{font-weight:700;font-size:14px;margin-bottom:10px}
+.bar{height:10px;border-radius:99px;background:rgba(255,255,255,.04);overflow:hidden}
+.bar>div{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--cyan));transition:width .3s var(--ex)}
+.bar-meta{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--t4);font-weight:600}
+.bar-meta .gn{color:var(--green)}.bar-meta .wn{color:var(--amber)}.bar-meta .rd{color:var(--red)}
 
-    .field label{
-      display:flex; justify-content:space-between; gap:10px; align-items:baseline;
-      font-size:12px;
-      color:var(--muted);
-      font-weight:900;
-      margin-bottom:6px;
-    }
-    .field label span.value{
-      color:var(--text);
-      font-family: var(--mono);
-      font-weight:900;
-      font-size:12px;
-    }
-    input, select{
-      width:100%;
-      padding:10px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(44,70,160,.75);
-      background: rgba(7,12,28,.65);
-      color: var(--text);
-      outline:none;
-    }
-    input::placeholder{ color: rgba(167,180,204,.6); }
-    input[type="range"]{
-      padding:0;
-      height: 34px;
-      accent-color: #38bdf8;
-    }
+/* RISK */
+.risk-card{margin-top:14px;border:1px solid var(--bd2);background:rgba(0,0,0,.15);border-radius:var(--r2);padding:14px}
+.risk-card .rc-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.risk-card .rc-top span{font-weight:700;font-size:14px}
+.risk-card .rc-body{margin-top:8px;font-size:12.5px;color:var(--t3);line-height:1.6}
 
-    .pillRow{ display:flex; gap:8px; flex-wrap:wrap; }
-    .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(44,70,160,.70);
-      background: rgba(7,12,28,.45);
-      color:var(--muted);
-      font-size:12px;
-      font-weight:900;
-      white-space:nowrap;
-    }
-    .pill strong{ color: var(--text); }
-    .pill.good{ border-color: rgba(34,197,94,.45); background: rgba(34,197,94,.10); color: rgba(34,197,94,.95); }
-    .pill.warn{ border-color: rgba(245,158,11,.50); background: rgba(245,158,11,.10); color: rgba(245,158,11,.95); }
-    .pill.bad{ border-color: rgba(239,68,68,.55); background: rgba(239,68,68,.10); color: rgba(239,68,68,.98); }
-    .pill.score{ border-color: rgba(56,189,248,.45); background: rgba(56,189,248,.12); color: var(--text); }
+/* SCENARIOS */
+.sc-card{border:1px solid var(--bd2);background:rgba(0,0,0,.15);border-radius:var(--r2);padding:14px;margin-bottom:10px}
+.sc-card .sc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.sc-card .sc-name{font-weight:700;font-size:14px}
+.sc-card .sc-meta{font-size:11.5px;color:var(--t4);margin-top:4px;line-height:1.4}
+.sc-card .sc-acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
 
-    .kpis{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-      margin-top:12px;
-    }
-    .kpi{
-      border:1px solid rgba(28,43,102,.75);
-      background: rgba(7,12,28,.45);
-      border-radius: var(--r2);
-      padding: 12px;
-    }
-    .kpi .k{ color:var(--muted); font-size:12px; font-weight:900; }
-    .kpi .v{ margin-top:6px; font-weight:950; font-size:18px; }
-    .kpi .hint{ margin-top:6px; color:var(--muted2); font-size:12px; line-height:1.35; }
+.tip-card{border:1px solid var(--bd2);background:rgba(0,0,0,.15);border-radius:var(--r2);padding:14px;margin-top:10px}
+.tip-card .tc-t{font-weight:700;font-size:14px;margin-bottom:6px}
+.tip-card .tc-b{font-size:12px;color:var(--t3);line-height:1.65}
+.tip-card .tc-acts{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
 
-    .meter{
-      margin-top:12px;
-      border:1px solid rgba(28,43,102,.75);
-      background: rgba(7,12,28,.45);
-      border-radius: var(--r2);
-      padding: 12px;
-    }
-    .bar{
-      height: 12px;
-      border-radius: 999px;
-      background: rgba(167,180,204,.18);
-      overflow:hidden;
-      border:1px solid rgba(44,70,160,.55);
-      margin-top:10px;
-    }
-    .bar > div{
-      height:100%;
-      width: 50%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--good), var(--blue), var(--vio));
-      transition: width .15s ease;
-    }
-    .meter .meta{
-      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
-      color:var(--muted);
-      font-weight:900;
-      font-size:12px;
-      margin-top:10px;
-    }
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(14,20,34,.95);border:1px solid var(--bd2);padding:10px 20px;border-radius:12px;font-weight:700;font-size:13px;display:none;z-index:9000;backdrop-filter:blur(16px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.toast.show{display:block;animation:toastIn .3s var(--ex)}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
-    .list{ display:grid; gap:10px; }
-    .card{
-      border:1px solid rgba(28,43,102,.75);
-      background: rgba(7,12,28,.45);
-      border-radius: var(--r2);
-      padding: 12px;
-    }
-    .card .title{
-      font-weight: 950;
-      display:flex; justify-content:space-between; gap:10px; align-items:center;
-    }
-    .card .sub{ margin-top:6px; color:var(--muted); font-size:12px; line-height:1.35; }
-    .card .actions{ margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
-
-    .scenarioRow{
-      display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
-    }
-    .scenarioRow .meta{
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 6px;
-      line-height: 1.35;
-    }
-
-    .toast{
-      position: fixed;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(10,20,51,.95);
-      border: 1px solid rgba(28,43,102,.85);
-      padding: 10px 12px;
-      border-radius: 14px;
-      box-shadow: var(--shadow);
-      font-weight: 950;
-      display:none;
-      z-index: 200;
-    }
-    .toast.show{ display:block; }
-  </style>
+@media(max-width:768px){.nav-pills{display:none}.row{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}}
+@media(max-width:480px){.nb-g{display:none}}
+</style>
 </head>
-
 <body>
-<header>
-  <div class="brand">
-    <div class="logo"></div>
-    <div>
-      BrokerOS <small>Deal Lab • simulate structures • ship to Marketplace</small>
-    </div>
-  </div>
+<div class="grain"></div>
+<div class="ambient"><div class="ao a"></div><div class="ao b"></div></div>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="marketplace.html">Marketplace</a>
-    <a class="active" href="analyzer.html">Deal Lab</a>
-    <a href="funders.html">Funders</a>
-    <a href="leaderboard.html">Leaderboard</a>
-  </nav>
-</header>
+<nav class="nav">
+  <div class="nav-l">
+    <a href="index.html" style="display:flex;align-items:center;gap:10px">
+      <div class="nav-m"><svg width="14" height="14" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="nav-w">Private<em>Credit</em>MCA</div>
+    </a>
+  </div>
+  <div class="nav-pills">
+    <a href="index.html" class="nav-p">Home</a>
+    <a href="deallab.html" class="nav-p active">Deal Lab</a>
+    <a href="funders.html" class="nav-p">Funders</a>
+    <a href="superbroker.html" class="nav-p">Superbroker</a>
+  </div>
+  <div class="nav-r">
+    <a href="index.html" class="nb nb-g">← Home</a>
+    <a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="nb nb-p">Join Community</a>
+  </div>
+</nav>
 
 <div class="wrap">
   <div class="hero">
-    <div>
-      <h1>Deal Lab Simulator</h1>
-      <p>
-        Enter the deal basics, then tune <b>amount</b>, <b>factor</b>, <b>term</b>, and <b>holdback</b>.
-        BrokerOS estimates payment pressure and flags risk. When it looks right, hit <b>Send to Marketplace</b>.
-      </p>
-    </div>
-    <div class="ctaRow">
+    <div class="hero-ey">Deal Lab</div>
+    <h1>Deal Lab <em>Simulator</em></h1>
+    <p>Enter the deal basics, then tune <strong>amount</strong>, <strong>factor</strong>, <strong>term</strong>, and <strong>holdback</strong>. Live scoring, payment pressure, and risk flags — then ship it to the Funder Directory.</p>
+    <div class="hero-acts">
       <button class="btn" id="btnExample">Load Example</button>
-      <button class="btn primary" id="btnSend">Send to Marketplace</button>
-      <button class="btn danger" id="btnReset">Reset Lab</button>
+      <button class="btn btn-pri" id="btnSend">Send to Funders →</button>
+      <button class="btn btn-dan" id="btnReset">Reset Lab</button>
     </div>
   </div>
 
   <div class="grid">
-    <!-- Left -->
+    <!-- LEFT: Deal inputs -->
     <div class="panel">
-      <div class="panelHeader">
-        <div>
-          <div class="t">Deal Inputs</div>
-          <div class="s">No PII. Keep it clean and fast.</div>
-        </div>
-        <div class="pillRow" id="topPills"></div>
+      <div class="panel-hd">
+        <div><div class="panel-t">Deal Inputs</div><div class="panel-s">No PII. Keep it clean and fast.</div></div>
+        <div class="pills" id="topPills"></div>
       </div>
-
-      <div class="panelBody">
+      <div class="panel-bd">
         <div class="row">
-          <div class="field">
-            <label>Industry <span class="value" id="vIndustry"></span></label>
-            <select id="industry">
-              <option value="Restaurant">Restaurant</option>
-              <option value="Retail">Retail</option>
-              <option value="Construction">Construction</option>
-              <option value="Trucking">Trucking</option>
-              <option value="Services">Services</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>State (optional) <span class="value" id="vState"></span></label>
-            <input id="state" placeholder="e.g. NY" maxlength="2" />
-          </div>
-
-          <div class="field">
-            <label>Monthly Revenue ($) <span class="value" id="vRev"></span></label>
-            <input id="revenue" type="number" placeholder="e.g. 85000" />
-          </div>
-
-          <div class="field">
-            <label>Credit Score <span class="value" id="vCredit"></span></label>
-            <input id="credit" type="number" placeholder="e.g. 620" />
-          </div>
-
-          <div class="field">
-            <label>Time in Business (months) <span class="value" id="vTib"></span></label>
-            <input id="tib" type="number" placeholder="e.g. 18" />
-          </div>
-
-          <div class="field">
-            <label>Positions (0–4) <span class="value" id="vPos"></span></label>
-            <input id="positions" type="number" min="0" max="4" placeholder="e.g. 1" />
-          </div>
+          <div class="field"><label>Industry <span class="val" id="vInd"></span></label><select id="industry"><option value="Restaurant">Restaurant</option><option value="Retail">Retail</option><option value="Construction">Construction</option><option value="Trucking">Trucking</option><option value="Services">Services</option></select></div>
+          <div class="field"><label>State (optional) <span class="val" id="vSt"></span></label><input id="state" placeholder="e.g. NY" maxlength="2"></div>
+          <div class="field"><label>Monthly Revenue ($) <span class="val" id="vRev"></span></label><input id="revenue" type="number" placeholder="e.g. 85000"></div>
+          <div class="field"><label>Credit Score <span class="val" id="vCr"></span></label><input id="credit" type="number" placeholder="e.g. 620"></div>
+          <div class="field"><label>Time in Business (months) <span class="val" id="vTib"></span></label><input id="tib" type="number" placeholder="e.g. 18"></div>
+          <div class="field"><label>Positions (0–4) <span class="val" id="vPos"></span></label><input id="positions" type="number" min="0" max="4" placeholder="e.g. 1"></div>
         </div>
-
-        <div style="height:12px"></div>
-
+        <div style="height:14px"></div>
         <div class="row">
-          <div class="field">
-            <label>Funding Amount <span class="value" id="vAmt"></span></label>
-            <input id="amount" type="range" min="5000" max="200000" step="1000" />
-          </div>
-
-          <div class="field">
-            <label>Factor <span class="value" id="vFactor"></span></label>
-            <input id="factor" type="range" min="1.10" max="1.60" step="0.01" />
-          </div>
-
-          <div class="field">
-            <label>Term (business days) <span class="value" id="vTerm"></span></label>
-            <input id="term" type="range" min="60" max="200" step="5" />
-          </div>
-
-          <div class="field">
-            <label>Holdback (%) <span class="value" id="vHold"></span></label>
-            <input id="holdback" type="range" min="5" max="25" step="1" />
-          </div>
+          <div class="field"><label>Funding Amount <span class="val" id="vAmt"></span></label><input id="amount" type="range" min="5000" max="200000" step="1000"></div>
+          <div class="field"><label>Factor <span class="val" id="vFac"></span></label><input id="factor" type="range" min="1.10" max="1.60" step="0.01"></div>
+          <div class="field"><label>Term (business days) <span class="val" id="vTrm"></span></label><input id="term" type="range" min="60" max="200" step="5"></div>
+          <div class="field"><label>Holdback (%) <span class="val" id="vHld"></span></label><input id="holdback" type="range" min="5" max="25" step="1"></div>
         </div>
-
         <div class="kpis">
-          <div class="kpi">
-            <div class="k">Total Payback</div>
-            <div class="v" id="kPayback">—</div>
-            <div class="hint">Amount × factor (simple V1)</div>
-          </div>
-          <div class="kpi">
-            <div class="k">Daily Payment</div>
-            <div class="v" id="kDaily">—</div>
-            <div class="hint">Payback ÷ term</div>
-          </div>
-          <div class="kpi">
-            <div class="k">Estimated Daily Revenue</div>
-            <div class="v" id="kDailyRev">—</div>
-            <div class="hint">Monthly revenue ÷ 22 business days</div>
-          </div>
-          <div class="kpi">
-            <div class="k">Payment Pressure</div>
-            <div class="v" id="kPressure">—</div>
-            <div class="hint">Daily payment ÷ daily revenue</div>
-          </div>
+          <div class="kpi"><div class="k">Total Payback</div><div class="v" id="kPay">—</div><div class="h">Amount × factor</div></div>
+          <div class="kpi"><div class="k">Daily Payment</div><div class="v" id="kDai">—</div><div class="h">Payback ÷ term</div></div>
+          <div class="kpi"><div class="k">Est. Daily Revenue</div><div class="v" id="kDRv">—</div><div class="h">Monthly ÷ 22 biz days</div></div>
+          <div class="kpi"><div class="k">Payment Pressure</div><div class="v" id="kPrs">—</div><div class="h">Daily payment ÷ daily revenue</div></div>
         </div>
-
         <div class="meter">
-          <div style="font-weight:950;">Cashflow Stress Test</div>
+          <div class="mt">Cashflow Stress Test</div>
           <div class="bar"><div id="stressFill"></div></div>
-          <div class="meta">
-            <span id="stressLabel">—</span>
-            <span class="mono" id="stressValue">—</span>
-          </div>
-          <div style="color:var(--muted); font-size:12px; margin-top:8px; line-height:1.35;">
-            Simple indicator (V1). V2 can use statement metrics.
-          </div>
+          <div class="bar-meta"><span id="stressLabel">—</span><span id="stressValue">—</span></div>
         </div>
-
-        <div style="height:12px"></div>
-
-        <div class="card">
-          <div class="title">
-            Risk Flags
-            <span class="pill score" id="riskCount">0</span>
-          </div>
-          <div class="sub" id="flags">No flags yet.</div>
+        <div class="risk-card">
+          <div class="rc-top"><span>Risk Flags</span><span class="pill tl" id="riskCount">0</span></div>
+          <div class="rc-body" id="flags">No flags yet.</div>
         </div>
       </div>
     </div>
 
-    <!-- Right -->
+    <!-- RIGHT: Scenarios -->
     <div class="panel">
-      <div class="panelHeader">
-        <div>
-          <div class="t">Scenarios</div>
-          <div class="s">Save variants like “Fast Close” vs “Conservative”.</div>
-        </div>
-        <div class="pillRow">
-          <button class="btn small" id="btnSave">Save Scenario</button>
-          <button class="btn small danger" id="btnClear">Clear</button>
+      <div class="panel-hd">
+        <div><div class="panel-t">Scenarios</div><div class="panel-s">Save variants like "Fast Close" vs "Conservative".</div></div>
+        <div style="display:flex;gap:6px">
+          <button class="btn" id="btnSave" style="font-size:12px;padding:7px 12px">Save Scenario</button>
+          <button class="btn btn-dan" id="btnClear" style="font-size:12px;padding:7px 12px">Clear</button>
         </div>
       </div>
-
-      <div class="panelBody">
-        <div class="list" id="scenarios"></div>
-
-        <div style="height:12px"></div>
-
-        <div class="card">
-          <div class="title">Pro Tips</div>
-          <div class="sub">
-            • Lower <b>payment pressure</b> = higher approval odds.<br>
-            • With <b>2+ positions</b>, keep amount conservative.<br>
+      <div class="panel-bd">
+        <div id="scenarios"></div>
+        <div class="tip-card">
+          <div class="tc-t">Pro Tips</div>
+          <div class="tc-b">
+            • Lower <strong>payment pressure</strong> = higher approval odds.<br>
+            • With <strong>2+ positions</strong>, keep amount conservative.<br>
             • Use scenarios to compare a fast offer vs a clean offer.
           </div>
-          <div class="actions">
-            <a class="btn small" href="marketplace.html">Go to Marketplace</a>
-            <a class="btn small" href="funders.html">Browse Funders</a>
+          <div class="tc-acts">
+            <a class="btn" href="funders.html" style="font-size:12px;padding:7px 14px">Browse Funders</a>
+            <a class="btn" href="superbroker.html" style="font-size:12px;padding:7px 14px">⚡ Superbroker</a>
           </div>
         </div>
       </div>
@@ -481,336 +230,41 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // must match marketplace.html
-  const MARKET_KEY = "brokerDeals";
-  const LAB_KEY = "brokeros_deal_lab_v1";
-  const SCEN_KEY = "brokeros_deal_scenarios_v1";
+const MARKET_KEY="brokerDeals",LAB_KEY="brokeros_deal_lab_v1",SCEN_KEY="brokeros_deal_scenarios_v1";
+const $=id=>document.getElementById(id);
+const toastEl=$("toast");
+const toast=msg=>{toastEl.textContent=msg;toastEl.classList.add("show");setTimeout(()=>toastEl.classList.remove("show"),1400)};
+const money=n=>isFinite(n)?"$"+Math.round(n).toLocaleString():"—";
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 
-  const $ = (id) => document.getElementById(id);
-  const toastEl = $("toast");
-  const toast = (msg) => {
-    toastEl.textContent = msg;
-    toastEl.classList.add("show");
-    setTimeout(()=>toastEl.classList.remove("show"), 1400);
-  };
+function readForm(){return{industry:$("industry").value,state:($("state").value||"").toUpperCase().slice(0,2),revenue:Number($("revenue").value||0),credit:Number($("credit").value||0),tib:Number($("tib").value||0),positions:Number($("positions").value||0),amount:Number($("amount").value||0),factor:Number($("factor").value||1.35),term:Number($("term").value||120),holdback:Number($("holdback").value||12)}}
+function writeForm(s){$("industry").value=s.industry??"Restaurant";$("state").value=s.state??"";$("revenue").value=s.revenue??"";$("credit").value=s.credit??"";$("tib").value=s.tib??"";$("positions").value=s.positions??"";$("amount").value=s.amount??45000;$("factor").value=s.factor??1.39;$("term").value=s.term??120;$("holdback").value=s.holdback??12}
 
-  const money = (n) => isFinite(n) ? "$" + Math.round(n).toLocaleString() : "—";
-  const clamp = (n,a,b) => Math.max(a, Math.min(b,n));
+function scoreDeal(d){let score=50;const flags=[];const cr=Number(d.credit||0),rev=Number(d.revenue||0),tib=Number(d.tib||0),pos=Number(d.positions||0),amt=Number(d.amount||0),fac=Number(d.factor||1.35),trm=Number(d.term||120),hld=Number(d.holdback||12);if(cr>=700)score+=22;else if(cr>=660)score+=16;else if(cr>=620)score+=10;else if(cr>=580)score+=4;else{score-=14;flags.push("Low credit band")}if(rev>=150000)score+=18;else if(rev>=100000)score+=13;else if(rev>=60000)score+=8;else if(rev>=30000)score+=3;else{score-=12;flags.push("Low monthly revenue")}if(tib>=36)score+=12;else if(tib>=24)score+=9;else if(tib>=12)score+=5;else{score-=10;flags.push("Short time in business")}if(pos===0)score+=10;else if(pos===1)score+=3;else if(pos===2)score-=7;else{score-=16;flags.push("Heavy stacking risk")}if(rev>0&&amt>0){const r=amt/rev;if(r<=.35)score+=10;else if(r<=.55)score+=4;else if(r<=.75){score-=6;flags.push("Request high vs revenue")}else{score-=14;flags.push("Request very high vs revenue")}}if(fac>=1.48){score-=6;flags.push("High factor increases friction")}if(trm<=80){score-=6;flags.push("Short term = higher daily payment")}if(hld>=20){score-=6;flags.push("High holdback may strain cashflow")}score=clamp(score,1,99);let grade="D";if(score>=85)grade="A";else if(score>=72)grade="B";else if(score>=58)grade="C";return{score,grade,flags}}
 
-  function readForm(){
-    return {
-      industry: $("industry").value,
-      state: ($("state").value || "").toUpperCase().slice(0,2),
-      revenue: Number($("revenue").value || 0),
-      credit: Number($("credit").value || 0),
-      tib: Number($("tib").value || 0),
-      positions: Number($("positions").value || 0),
-      amount: Number($("amount").value || 0),
-      factor: Number($("factor").value || 1.35),
-      term: Number($("term").value || 120),
-      holdback: Number($("holdback").value || 12),
-    };
-  }
+function calc(d){const rev=Number(d.revenue||0),amt=Number(d.amount||0),fac=Number(d.factor||1.35),trm=Number(d.term||120);const payback=amt*fac,daily=trm?(payback/trm):0,dailyRev=rev?(rev/22):0,pressure=dailyRev?(daily/dailyRev):0;return{payback,daily,dailyRev,pressure}}
+function stressScore(p,pos){let s=100;s-=clamp((p-.18)*160,0,70);s-=clamp((pos||0)*10,0,35);return clamp(Math.round(s),1,99)}
+function stressLabel(n){if(n>=80)return{t:"Smooth ✅",c:"gn"};if(n>=60)return{t:"Manageable ⚡",c:"wn"};return{t:"Stressed ⚠️",c:"rd"}}
 
-  function writeForm(s){
-    $("industry").value = s.industry ?? "Restaurant";
-    $("state").value = s.state ?? "";
-    $("revenue").value = s.revenue ?? "";
-    $("credit").value = s.credit ?? "";
-    $("tib").value = s.tib ?? "";
-    $("positions").value = s.positions ?? "";
-    $("amount").value = s.amount ?? 45000;
-    $("factor").value = s.factor ?? 1.39;
-    $("term").value = s.term ?? 120;
-    $("holdback").value = s.holdback ?? 12;
-  }
+function saveLab(){localStorage.setItem(LAB_KEY,JSON.stringify(readForm()))}
+function loadLab(){try{const r=localStorage.getItem(LAB_KEY);return r?JSON.parse(r):null}catch{return null}}
+function getScenarios(){try{return JSON.parse(localStorage.getItem(SCEN_KEY)||"[]")}catch{return[]}}
+function setScenarios(a){localStorage.setItem(SCEN_KEY,JSON.stringify(a))}
+function pushToMarketplace(p){let d=[];try{d=JSON.parse(localStorage.getItem(MARKET_KEY)||"[]")}catch{}d.unshift(p);localStorage.setItem(MARKET_KEY,JSON.stringify(d))}
 
-  function scoreDeal(d){
-    let score = 50;
-    const flags = [];
+function renderScenarios(){const box=$("scenarios"),arr=getScenarios();if(!arr.length){box.innerHTML='<div class="sc-card"><div class="sc-name">No saved scenarios yet</div><div class="sc-meta">Click <strong>Save Scenario</strong> to store variants.</div></div>';return}box.innerHTML="";arr.slice().reverse().forEach((s,i)=>{const idx=arr.length-1-i,d=s.data,sc=scoreDeal(d),{pressure}=calc(d);const el=document.createElement("div");el.className="sc-card";el.innerHTML=`<div class="sc-top"><div><div class="sc-name">${s.name} <span class="pill tl">Score <b>${sc.score}</b> • ${sc.grade}</span></div><div class="sc-meta">${d.industry} • ${money(d.amount)} • factor ${Number(d.factor).toFixed(2)} • ${d.term}d • pressure ${(pressure*100).toFixed(0)}%</div></div></div><div class="sc-acts"><button class="btn" data-load="${idx}" style="font-size:11px;padding:6px 12px">Load</button><button class="btn btn-dan" data-del="${idx}" style="font-size:11px;padding:6px 12px">Delete</button></div>`;box.appendChild(el)});box.querySelectorAll("[data-load]").forEach(b=>{b.onclick=()=>{const a=getScenarios(),i=Number(b.dataset.load);if(!a[i])return;writeForm(a[i].data);render();toast("Scenario loaded")}});box.querySelectorAll("[data-del]").forEach(b=>{b.onclick=()=>{const a=getScenarios(),i=Number(b.dataset.del);a.splice(i,1);setScenarios(a);renderScenarios();toast("Deleted")}})}
 
-    const credit = Number(d.credit||0);
-    const rev = Number(d.revenue||0);
-    const tib = Number(d.tib||0);
-    const pos = Number(d.positions||0);
-    const amt = Number(d.amount||0);
-    const factor = Number(d.factor||1.35);
-    const term = Number(d.term||120);
-    const hold = Number(d.holdback||12);
+function render(){const d=readForm(),{payback,daily,dailyRev,pressure}=calc(d),sc=scoreDeal(d);$("vInd").textContent=d.industry;$("vSt").textContent=d.state||"—";$("vRev").textContent=d.revenue?money(d.revenue):"—";$("vCr").textContent=d.credit||"—";$("vTib").textContent=d.tib?d.tib+" mo":"—";$("vPos").textContent=isFinite(d.positions)?d.positions:"—";$("vAmt").textContent=money(d.amount);$("vFac").textContent=Number(d.factor).toFixed(2);$("vTrm").textContent=d.term+" days";$("vHld").textContent=d.holdback+"%";$("topPills").innerHTML=`<span class="pill tl">Deal Score <b>${sc.score}</b> • Grade <b>${sc.grade}</b></span><span class="pill"><b>Pressure</b> ${(pressure*100).toFixed(0)}%</span><span class="pill"><b>Stack</b> ${d.positions}</span>`;$("kPay").textContent=payback?money(payback):"—";$("kDai").textContent=daily?money(daily):"—";$("kDRv").textContent=dailyRev?money(dailyRev):"—";$("kPrs").textContent=isFinite(pressure)&&pressure>0?(pressure*100).toFixed(0)+"%":"—";const ss=stressScore(pressure,d.positions),sl=stressLabel(ss);$("stressFill").style.width=ss+"%";$("stressLabel").textContent=sl.t;$("stressLabel").className=sl.c;$("stressValue").textContent="Stability "+ss+"/99";const fl=sc.flags;$("riskCount").innerHTML="Flags <b>"+fl.length+"</b>";$("flags").innerHTML=fl.length?fl.map(f=>"• "+f).join("<br>"):"No flags yet. Looks clean on the basics.";saveLab()}
 
-    if (credit >= 700) score += 22;
-    else if (credit >= 660) score += 16;
-    else if (credit >= 620) score += 10;
-    else if (credit >= 580) score += 4;
-    else { score -= 14; flags.push("Low credit band"); }
+["industry","state","revenue","credit","tib","positions","amount","factor","term","holdback"].forEach(id=>{const el=$(id);el.addEventListener("input",render);el.addEventListener("change",render)});
+$("btnExample").onclick=()=>{writeForm({industry:"Restaurant",state:"NY",revenue:95000,credit:620,tib:18,positions:1,amount:45000,factor:1.39,term:120,holdback:12});render();toast("Example loaded")};
+$("btnReset").onclick=()=>{localStorage.removeItem(LAB_KEY);writeForm({industry:"Restaurant",state:"",revenue:"",credit:"",tib:"",positions:"",amount:45000,factor:1.39,term:120,holdback:12});render();toast("Reset")};
+$("btnSave").onclick=()=>{const name=prompt("Scenario name:","Fast Close");if(!name)return;const arr=getScenarios();arr.push({name,at:new Date().toISOString(),data:readForm()});setScenarios(arr);renderScenarios();toast("Saved")};
+$("btnClear").onclick=()=>{setScenarios([]);renderScenarios();toast("Cleared")};
+$("btnSend").onclick=()=>{const d=readForm(),sc=scoreDeal(d);if(!d.revenue||!d.credit||!d.amount){toast("Add revenue, credit, and amount first");return}pushToMarketplace({industry:d.industry,revenue:Number(d.revenue),credit:Number(d.credit),amount:Number(d.amount),score:sc.score,status:"available"});toast("Sent to Funders ✅")};
 
-    if (rev >= 150000) score += 18;
-    else if (rev >= 100000) score += 13;
-    else if (rev >= 60000) score += 8;
-    else if (rev >= 30000) score += 3;
-    else { score -= 12; flags.push("Low monthly revenue"); }
-
-    if (tib >= 36) score += 12;
-    else if (tib >= 24) score += 9;
-    else if (tib >= 12) score += 5;
-    else { score -= 10; flags.push("Short time in business"); }
-
-    if (pos === 0) score += 10;
-    else if (pos === 1) score += 3;
-    else if (pos === 2) score -= 7;
-    else { score -= 16; flags.push("Heavy stacking risk"); }
-
-    if (rev > 0 && amt > 0){
-      const ratio = amt / rev;
-      if (ratio <= 0.35) score += 10;
-      else if (ratio <= 0.55) score += 4;
-      else if (ratio <= 0.75) { score -= 6; flags.push("Request high vs revenue"); }
-      else { score -= 14; flags.push("Request very high vs revenue"); }
-    }
-
-    if (factor >= 1.48) { score -= 6; flags.push("High factor increases friction"); }
-    if (term <= 80) { score -= 6; flags.push("Short term = higher daily payment"); }
-    if (hold >= 20) { score -= 6; flags.push("High holdback may strain cashflow"); }
-
-    score = clamp(score, 1, 99);
-    let grade = "D";
-    if (score >= 85) grade = "A";
-    else if (score >= 72) grade = "B";
-    else if (score >= 58) grade = "C";
-
-    return { score, grade, flags };
-  }
-
-  function calc(d){
-    const rev = Number(d.revenue||0);
-    const amt = Number(d.amount||0);
-    const factor = Number(d.factor||1.35);
-    const term = Number(d.term||120);
-
-    const payback = amt * factor;
-    const daily = term ? (payback / term) : 0;
-    const dailyRev = rev ? (rev / 22) : 0;
-    const pressure = dailyRev ? (daily / dailyRev) : 0;
-
-    return { payback, daily, dailyRev, pressure };
-  }
-
-  function stressScore(pressure, positions){
-    let s = 100;
-    s -= clamp((pressure - 0.18) * 160, 0, 70);
-    s -= clamp((positions || 0) * 10, 0, 35);
-    return clamp(Math.round(s), 1, 99);
-  }
-
-  function stressLabel(n){
-    if (n >= 80) return { t:"Smooth ✅", cls:"good" };
-    if (n >= 60) return { t:"Manageable ⚡", cls:"warn" };
-    return { t:"Stressed ⚠️", cls:"bad" };
-  }
-
-  function saveLab(){
-    localStorage.setItem(LAB_KEY, JSON.stringify(readForm()));
-  }
-  function loadLab(){
-    try{
-      const raw = localStorage.getItem(LAB_KEY);
-      if (!raw) return null;
-      return JSON.parse(raw);
-    } catch { return null; }
-  }
-
-  function getScenarios(){
-    try{ return JSON.parse(localStorage.getItem(SCEN_KEY) || "[]"); }
-    catch { return []; }
-  }
-  function setScenarios(arr){
-    localStorage.setItem(SCEN_KEY, JSON.stringify(arr));
-  }
-
-  function pushToMarketplace(payload){
-    let deals = [];
-    try{ deals = JSON.parse(localStorage.getItem(MARKET_KEY) || "[]"); } catch { deals = []; }
-    deals.unshift(payload);
-    localStorage.setItem(MARKET_KEY, JSON.stringify(deals));
-  }
-
-  function renderScenarios(){
-    const box = $("scenarios");
-    const arr = getScenarios();
-
-    if (!arr.length){
-      box.innerHTML = `<div class="card"><div class="title">No saved scenarios yet</div><div class="sub">Click <b>Save Scenario</b> to store variants.</div></div>`;
-      return;
-    }
-
-    box.innerHTML = "";
-    arr.slice().reverse().forEach((s, idxFromEnd)=>{
-      const idx = arr.length - 1 - idxFromEnd;
-
-      const d = s.data;
-      const scored = scoreDeal(d);
-      const { pressure } = calc(d);
-
-      const el = document.createElement("div");
-      el.className = "card";
-      el.innerHTML = `
-        <div class="scenarioRow">
-          <div>
-            <div class="title">${s.name} <span class="pill score">Score <strong>${scored.score}</strong> • ${scored.grade}</span></div>
-            <div class="meta">
-              ${d.industry} • ${money(d.amount)} • factor ${Number(d.factor).toFixed(2)} • ${d.term}d • pressure ${(pressure*100).toFixed(0)}%
-            </div>
-          </div>
-          <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
-            <button class="btn small" data-load="${idx}">Load</button>
-            <button class="btn small danger" data-del="${idx}">Delete</button>
-          </div>
-        </div>
-      `;
-      box.appendChild(el);
-    });
-
-    box.querySelectorAll("[data-load]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const i = Number(btn.getAttribute("data-load"));
-        const arr = getScenarios();
-        if (!arr[i]) return;
-        writeForm(arr[i].data);
-        render();
-        toast("Scenario loaded");
-      });
-    });
-
-    box.querySelectorAll("[data-del]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const i = Number(btn.getAttribute("data-del"));
-        const arr = getScenarios();
-        arr.splice(i,1);
-        setScenarios(arr);
-        renderScenarios();
-        toast("Deleted");
-      });
-    });
-  }
-
-  function render(){
-    const d = readForm();
-    const { payback, daily, dailyRev, pressure } = calc(d);
-    const scored = scoreDeal(d);
-
-    $("vIndustry").textContent = d.industry;
-    $("vState").textContent = d.state || "—";
-    $("vRev").textContent = d.revenue ? money(d.revenue) : "—";
-    $("vCredit").textContent = d.credit ? d.credit : "—";
-    $("vTib").textContent = d.tib ? d.tib + " mo" : "—";
-    $("vPos").textContent = isFinite(d.positions) ? d.positions : "—";
-
-    $("vAmt").textContent = money(d.amount);
-    $("vFactor").textContent = Number(d.factor).toFixed(2);
-    $("vTerm").textContent = d.term + " days";
-    $("vHold").textContent = d.holdback + "%";
-
-    $("topPills").innerHTML = `
-      <span class="pill score">Deal Score <strong>${scored.score}</strong> • Grade <strong>${scored.grade}</strong></span>
-      <span class="pill"><strong>Pressure</strong> ${(pressure*100).toFixed(0)}%</span>
-      <span class="pill"><strong>Stack</strong> ${d.positions}</span>
-    `;
-
-    $("kPayback").textContent = payback ? money(payback) : "—";
-    $("kDaily").textContent = daily ? money(daily) : "—";
-    $("kDailyRev").textContent = dailyRev ? money(dailyRev) : "—";
-    $("kPressure").textContent = isFinite(pressure) && pressure>0 ? (pressure*100).toFixed(0) + "%" : "—";
-
-    const ss = stressScore(pressure, d.positions);
-    const sl = stressLabel(ss);
-    $("stressFill").style.width = ss + "%";
-    $("stressLabel").textContent = sl.t;
-    $("stressValue").textContent = `Stability ${ss}/99`;
-    $("stressLabel").className = "";
-    $("stressLabel").classList.add(sl.cls);
-
-    const flags = scored.flags;
-    $("riskCount").innerHTML = `Flags <strong>${flags.length}</strong>`;
-    $("flags").innerHTML = flags.length
-      ? flags.map(f=>`• ${f}`).join("<br>")
-      : "No flags yet. Looks clean on the basics.";
-
-    saveLab();
-  }
-
-  // Wire inputs
-  const inputs = ["industry","state","revenue","credit","tib","positions","amount","factor","term","holdback"];
-  inputs.forEach(id=>{
-    const el = $(id);
-    el.addEventListener("input", render);
-    el.addEventListener("change", render);
-  });
-
-  $("btnExample").addEventListener("click", ()=>{
-    writeForm({
-      industry:"Restaurant", state:"NY",
-      revenue: 95000, credit: 620, tib: 18, positions: 1,
-      amount: 45000, factor: 1.39, term: 120, holdback: 12
-    });
-    render();
-    toast("Example loaded");
-  });
-
-  $("btnReset").addEventListener("click", ()=>{
-    localStorage.removeItem(LAB_KEY);
-    writeForm({
-      industry:"Restaurant", state:"",
-      revenue:"", credit:"", tib:"", positions:"",
-      amount: 45000, factor: 1.39, term: 120, holdback: 12
-    });
-    render();
-    toast("Reset");
-  });
-
-  $("btnSave").addEventListener("click", ()=>{
-    const name = prompt("Scenario name:", "Fast Close");
-    if (!name) return;
-    const arr = getScenarios();
-    arr.push({ name, at: new Date().toISOString(), data: readForm() });
-    setScenarios(arr);
-    renderScenarios();
-    toast("Saved");
-  });
-
-  $("btnClear").addEventListener("click", ()=>{
-    setScenarios([]);
-    renderScenarios();
-    toast("Cleared");
-  });
-
-  $("btnSend").addEventListener("click", ()=>{
-    const d = readForm();
-    const scored = scoreDeal(d);
-
-    if (!d.revenue || !d.credit || !d.amount){
-      toast("Add revenue, credit, and amount first");
-      return;
-    }
-
-    pushToMarketplace({
-      industry: d.industry,
-      revenue: Number(d.revenue),
-      credit: Number(d.credit),
-      amount: Number(d.amount),
-      score: scored.score,
-      status: "available"
-    });
-
-    toast("Sent to Marketplace ✅");
-  });
-
-  // Init defaults + restore last session
-  const saved = loadLab();
-  if (saved) writeForm(saved);
-  else writeForm({ amount:45000, factor:1.39, term:120, holdback:12, industry:"Restaurant" });
-
-  renderScenarios();
-  render();
+const saved=loadLab();if(saved)writeForm(saved);else writeForm({amount:45000,factor:1.39,term:120,holdback:12,industry:"Restaurant"});
+renderScenarios();render();
 </script>
 </body>
 </html>
