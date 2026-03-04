@@ -1,2157 +1,443 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BrokerOS • MCA GTA</title>
-<style>
-  :root{
-    --bg:#070a18; --txt:#eaf1ff; --muted:rgba(234,241,255,.72);
-    --panel:rgba(10,20,51,.78); --line:rgba(120,160,255,.18);
-    --good:#22c55e; --warn:#f59e0b; --bad:#ef4444; --blue:#38bdf8; --vio:#a78bfa; --pink:#fb7185;
-    --shadow:0 18px 55px rgba(0,0,0,.55);
-    --r:16px;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0; overflow:hidden; color:var(--txt);
-    font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
-    background:
-      radial-gradient(1000px 560px at 15% 15%, rgba(56,189,248,.18), transparent 55%),
-      radial-gradient(1000px 560px at 80% 20%, rgba(34,197,94,.12), transparent 55%),
-      radial-gradient(1000px 560px at 80% 80%, rgba(251,113,133,.10), transparent 55%),
-      var(--bg);
-  }
-  header{
-    position:fixed; top:0; left:0; right:0; z-index:20;
-    display:flex; justify-content:space-between; align-items:center; gap:10px;
-    padding:12px 16px; background:rgba(9,12,25,.75); backdrop-filter:blur(10px);
-    border-bottom:1px solid rgba(28,43,102,.65);
-  }
-  .brand{display:flex; gap:10px; align-items:center; font-weight:950;}
-  .logo{
-    width:30px;height:30px;border-radius:12px;
-    background:linear-gradient(90deg,var(--good),var(--blue),var(--vio));
-    box-shadow:0 14px 40px rgba(56,189,248,.14);
-  }
-  .tip{color:var(--muted); font-size:12px; font-weight:800; line-height:1.25;}
-  canvas{position:fixed; top:56px; left:0; right:0; bottom:0; display:block;}
-  .hud{
-    position:fixed; top:56px; left:12px; z-index:25; width:360px; max-width:calc(100vw - 24px);
-    background:var(--panel); border:1px solid rgba(28,43,102,.8); border-radius:var(--r);
-    box-shadow:var(--shadow); padding:12px;
-  }
-  .row{display:flex; justify-content:space-between; align-items:center; gap:10px;}
-  .k{color:var(--muted); font-size:12px; font-weight:900;}
-  .v{font-weight:950;}
-  .bar{margin-top:8px;height:10px;border-radius:999px;background:rgba(7,12,28,.65);
-    border:1px solid rgba(44,70,160,.55); overflow:hidden;
-  }
-  .fill{height:100%; width:0%; background:var(--blue);}
-  .fill.good{background:var(--good);}
-  .fill.warn{background:var(--warn);}
-  .fill.bad{background:var(--bad);}
-  .stars{margin-top:10px; display:flex; gap:6px; align-items:center;}
-  .star{
-    width:18px;height:18px;border-radius:6px;
-    border:1px solid rgba(120,160,255,.25);
-    background:rgba(7,12,28,.45);
-    display:inline-flex; align-items:center; justify-content:center;
-    font-size:12px; opacity:.28;
-  }
-  .star.on{opacity:1; border-color:rgba(245,158,11,.55); background:rgba(245,158,11,.12);}
-  .legend{margin-top:10px;color:var(--muted);font-size:12px;font-weight:800;line-height:1.35;}
-  .pillRow{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;}
-  .pill{
-    display:inline-flex; gap:8px; align-items:center;
-    border:1px solid rgba(44,70,160,.60);
-    background:rgba(7,12,28,.45);
-    padding:6px 10px; border-radius:999px;
-    font-size:12px; font-weight:950; color:var(--muted);
-    user-select:none;
-  }
-  .pill b{color:var(--txt)}
-  .pill.good{border-color:rgba(34,197,94,.45); background:rgba(34,197,94,.10); color:rgba(34,197,94,.95);}
-  .pill.warn{border-color:rgba(245,158,11,.55); background:rgba(245,158,11,.10); color:rgba(245,158,11,.95);}
-  .pill.bad{border-color:rgba(239,68,68,.55); background:rgba(239,68,68,.10); color:rgba(239,68,68,.98);}
-  .pill.blue{border-color:rgba(56,189,248,.45); background:rgba(56,189,248,.12); color:var(--txt);}
-  .rightPanel{
-    position:fixed; top:56px; right:12px; z-index:30;
-    width:400px; max-width:calc(100vw - 24px);
-    background:rgba(10,20,51,.85);
-    border:1px solid rgba(28,43,102,.8);
-    border-radius:var(--r);
-    box-shadow:var(--shadow);
-    display:none;
-    overflow:hidden;
-  }
-  .rightPanel.show{display:block;}
-  .rpHead{
-    padding:12px;
-    border-bottom:1px solid rgba(28,43,102,.65);
-    background:rgba(10,20,51,.60);
-    display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
-  }
-  .rpHead .title{font-weight:950;}
-  .rpHead .sub{color:var(--muted); font-size:12px; font-weight:800; margin-top:4px; line-height:1.25;}
-  .rpBody{padding:12px;}
-  .choices{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
-  .btn{
-    border:1px solid rgba(28,43,102,.85);
-    background:rgba(10,20,51,.70);
-    color:var(--txt);
-    padding:10px 12px;
-    border-radius:14px;
-    font-weight:950;
-    cursor:pointer;
-    transition:transform .08s ease, border-color .15s ease;
-    font-size:13px;
-  }
-  .btn:hover{transform:translateY(-1px); border-color:rgba(56,189,248,.45);}
-  .btn.primary{border-color:rgba(34,197,94,.45); background:linear-gradient(90deg, rgba(34,197,94,.20), rgba(56,189,248,.16));}
-  .btn.danger{border-color:rgba(239,68,68,.55); background:rgba(239,68,68,.12);}
-  .btn.small{padding:8px 10px; border-radius:12px; font-size:12px;}
-  .toast{
-    position:fixed; left:50%; transform:translateX(-50%);
-    bottom:16px; z-index:60;
-    background:rgba(10,20,51,.95); border:1px solid rgba(28,43,102,.85);
-    padding:10px 12px; border-radius:14px; box-shadow:var(--shadow);
-    font-weight:950; display:none;
-    max-width: min(720px, calc(100vw - 24px));
-  }
-  .toast.show{display:block;}
-  .minimapWrap{
-    position:fixed; left:12px; bottom:12px; z-index:35;
-    width:220px; height:160px;
-    border-radius:16px;
-    border:1px solid rgba(28,43,102,.8);
-    background:rgba(10,20,51,.65);
-    box-shadow:var(--shadow);
-    overflow:hidden;
-  }
-  .minimapWrap .label{
-    position:absolute; top:8px; left:10px;
-    font-size:12px; font-weight:950; color:rgba(234,241,255,.9);
-    text-shadow:0 2px 12px rgba(0,0,0,.6);
-  }
-  .minimap{position:absolute; inset:0; opacity:.95;}
-  .help{
-    position:fixed; right:12px; bottom:12px; z-index:35;
-    width:400px; max-width:calc(100vw - 24px);
-    border-radius:16px;
-    border:1px solid rgba(28,43,102,.8);
-    background:rgba(10,20,51,.65);
-    box-shadow:var(--shadow);
-    padding:12px;
-  }
-  .help .h{font-weight:950;}
-  .help .t{margin-top:6px; color:var(--muted); font-weight:800; font-size:12px; line-height:1.35;}
-  .help .t code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; color:rgba(234,241,255,.9);}
-  @media (max-width: 980px){
-    .help{display:none;}
-  }
-</style>
-</head>
-
-<body>
-<header>
-  <div class="brand">
-    <div class="logo"></div>
-    MCA GTA <span class="tip">Vice Funding City • cars • cops • missions • interiors • tools</span>
-  </div>
-  <div class="tip">
-    Controls: <b>WASD/Arrows</b> move/drive • <b>E</b> enter/exit car & buildings • <b>Space</b> handbrake •
-    <b>Q</b> spam offers (crime) • <b>1-3</b> tools • <b>M</b> toggle map • <b>Esc</b> close dialog
-  </div>
-</header>
-
-<div class="hud">
-  <div class="row"><div class="k">Mode</div><div class="v" id="mode">In car</div></div>
-
-  <div class="row" style="margin-top:6px;"><div class="k">Cash</div><div class="v" id="cash">$0</div></div>
-  <div class="row" style="margin-top:6px;"><div class="k">Reputation</div><div class="v" id="rep">0</div></div>
-  <div class="row" style="margin-top:6px;"><div class="k">Skill</div><div class="v" id="skill">0</div></div>
-
-  <div style="margin-top:10px;">
-    <div class="row"><div class="k">Heat</div><div class="v" id="heatText">0%</div></div>
-    <div class="bar"><div class="fill" id="heatBar"></div></div>
-  </div>
-
-  <div class="stars" id="stars"></div>
-
-  <div class="pillRow" id="toolPills"></div>
-
-  <div style="margin-top:10px;">
-    <div class="row"><div class="k">Mission</div><div class="v" id="mission">—</div></div>
-    <div class="legend" id="objective">—</div>
-  </div>
-
-  <div class="legend" id="zoneLegend"></div>
-
-  <div class="pillRow" style="margin-top:10px;">
-    <button class="btn small primary" id="saveBtn">Save</button>
-    <button class="btn small" id="loadBtn">Load</button>
-    <button class="btn small danger" id="resetBtn">Reset</button>
-  </div>
-</div>
-
-<canvas id="c"></canvas>
-
-<div class="minimapWrap" id="mmWrap">
-  <div class="label">Mini-Map</div>
-  <canvas class="minimap" id="mm"></canvas>
-</div>
-
-<div class="rightPanel" id="dialog">
-  <div class="rpHead">
-    <div>
-      <div class="title" id="dTitle">Title</div>
-      <div class="sub" id="dSub">Sub</div>
-    </div>
-    <button class="btn small" id="dClose">Esc</button>
-  </div>
-  <div class="rpBody">
-    <div id="dBody" style="color:rgba(234,241,255,.82); font-weight:800; line-height:1.35;"></div>
-    <div class="choices" id="dChoices"></div>
-  </div>
-</div>
-
-<div class="help">
-  <div class="h">BrokerOS GTA Tips</div>
-  <div class="t">
-    <b>Heat</b> → wanted stars. Cops chase harder at 3–5 stars.<br/>
-    Use <code>Bank</code> to cool down. <code>Funder HQ</code> cashes missions. <code>ISO Lounge</code> gives risky bonuses.<br/>
-    Tools: <code>1 Script Blaster</code> (rep/cash, heat) • <code>2 Statement Scanner</code> (improves deal quality) • <code>3 Rate Cutter</code> (better payout, more time).<br/>
-    You can enter interiors with <code>E</code> at door markers.
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-/* ============================
-   MCA GTA (Browser Edition)
-   ============================
-   Goals:
-   - GTA 2 vibe: cars + cops + wanted + missions
-   - MCA theming: leads, merchants, funders, bank, ISO
-   - Single file: GitHub Pages friendly
-*/
-
-(() => {
-  // ---------- DOM ----------
-  const canvas = document.getElementById("c");
-  const ctx = canvas.getContext("2d");
-  const mm = document.getElementById("mm");
-  const mmCtx = mm.getContext("2d");
-  const mmWrap = document.getElementById("mmWrap");
-
-  const $ = (id)=>document.getElementById(id);
-  const elMode = $("mode");
-  const elCash = $("cash");
-  const elRep  = $("rep");
-  const elSkill= $("skill");
-  const elHeatText = $("heatText");
-  const elHeatBar  = $("heatBar");
-  const elStars = $("stars");
-  const elMission = $("mission");
-  const elObjective = $("objective");
-  const elToolPills = $("toolPills");
-  const elZoneLegend = $("zoneLegend");
-
-  const dialog = $("dialog");
-  const dTitle = $("dTitle");
-  const dSub = $("dSub");
-  const dBody = $("dBody");
-  const dChoices = $("dChoices");
-  const dClose = $("dClose");
-
-  const saveBtn = $("saveBtn");
-  const loadBtn = $("loadBtn");
-  const resetBtn = $("resetBtn");
-
-  const toastEl = $("toast");
-  const toast = (msg) => {
-    toastEl.textContent = msg;
-    toastEl.classList.add("show");
-    setTimeout(()=>toastEl.classList.remove("show"), 1300);
-  };
-
-  // ---------- Utils ----------
-  const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
-  const lerp=(a,b,t)=>a+(b-a)*t;
-  const dist=(ax,ay,bx,by)=>Math.hypot(ax-bx, ay-by);
-  const rand=(a,b)=>a+Math.random()*(b-a);
-  const randi=(a,b)=>Math.floor(rand(a,b+1));
-  const pick=(arr)=>arr[Math.floor(Math.random()*arr.length)];
-  const now=()=>performance.now();
-
-  // ---------- Resize ----------
-  function resize(){
-    canvas.width = innerWidth;
-    canvas.height = innerHeight - 56;
-    mm.width = mmWrap.clientWidth;
-    mm.height = mmWrap.clientHeight;
-  }
-  addEventListener("resize", resize);
-  resize();
-
-  // ---------- Input ----------
-  const keys = {};
-  addEventListener("keydown", (e)=>{
-    keys[e.key.toLowerCase()] = true;
-    const k = e.key.toLowerCase();
-    if(["arrowup","arrowdown","arrowleft","arrowright"," "].includes(k)) e.preventDefault();
-    if(k==="escape") hideDialog();
-    if(k==="m") state.showMap = !state.showMap;
-  });
-  addEventListener("keyup", (e)=> keys[e.key.toLowerCase()] = false);
-
-  // ---------- Save ----------
-  const SAVE_KEY = "brokeros_mca_gta_save_v1";
-  function serialize(){
-    return {
-      state: {
-        inCar: state.inCar,
-        cash: state.cash,
-        rep: state.rep,
-        skill: state.skill,
-        heat: state.heat,
-        stars: state.stars,
-        showMap: state.showMap,
-        mission: state.mission,
-        missionStep: state.missionStep,
-        missionTimer: state.missionTimer,
-        inventory: state.inventory,
-        toolIndex: state.toolIndex,
-        storyFlags: state.storyFlags
-      },
-      player: {x:player.x,y:player.y},
-      car: {x:car.x,y:car.y,vx:car.vx,vy:car.vy,ang:car.ang, model: car.model},
-      cops: cops.map(c=>({x:c.x,y:c.y,vx:c.vx,vy:c.vy,mode:c.mode})),
-      npcs: npcs.map(n=>({x:n.x,y:n.y,type:n.type,seed:n.seed,anger:n.anger}))
-    };
-  }
-  function applySave(data){
-    if(!data) return false;
-    Object.assign(state, data.state || {});
-    if(data.player){ player.x = data.player.x; player.y = data.player.y; }
-    if(data.car){ Object.assign(car, data.car); }
-    if(Array.isArray(data.cops)){
-      data.cops.forEach((c,i)=>{ if(cops[i]) Object.assign(cops[i], c); });
-    }
-    if(Array.isArray(data.npcs)){
-      npcs.length = 0;
-      data.npcs.forEach(n=> npcs.push({...n, r: 12, vx:0, vy:0, talkCd:0}));
-    }
-    toast("Loaded");
-    return true;
-  }
-  function saveGame(){
-    localStorage.setItem(SAVE_KEY, JSON.stringify(serialize()));
-    toast("Saved");
-  }
-  function loadGame(){
-    try{
-      const raw = localStorage.getItem(SAVE_KEY);
-      if(!raw){ toast("No save found"); return; }
-      const data = JSON.parse(raw);
-      applySave(data);
-    }catch{
-      toast("Load failed");
-    }
-  }
-  function resetGame(){
-    localStorage.removeItem(SAVE_KEY);
-    location.reload();
-  }
-  saveBtn.onclick = saveGame;
-  loadBtn.onclick = loadGame;
-  resetBtn.onclick = resetGame;
-
-  // ---------- Audio (tiny, optional) ----------
-  let audioOn = true;
-  let audioCtx = null;
-  function beep(freq=440, dur=0.06, vol=0.03){
-    if(!audioOn) return;
-    try{
-      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type = "sine";
-      o.frequency.value = freq;
-      g.gain.value = vol;
-      o.connect(g); g.connect(audioCtx.destination);
-      o.start();
-      o.stop(audioCtx.currentTime + dur);
-    }catch{}
-  }
-
-  // ---------- World ----------
-  const world = { w: 3200, h: 2200 };
-
-  // Roads: for vibe + mild friction changes
-  const roads = [
-    // horizontal
-    {x:0, y:420, w:3200, h:120},
-    {x:0, y:1080, w:3200, h:140},
-    {x:0, y:1760, w:3200, h:120},
-    // vertical
-    {x:520, y:0, w:120, h:2200},
-    {x:1520, y:0, w:140, h:2200},
-    {x:2480, y:0, w:120, h:2200},
-  ];
-
-  const zones = [
-    { id:"leads",    label:"Lead Alley",     color:"#38bdf8", x:140,  y:1360, w:420, h:300, icon:"🟦", interior:false },
-    { id:"merchant", label:"Merchant Row",   color:"#22c55e", x:740,  y:220,  w:520, h:360, icon:"🟩", interior:false },
-    { id:"funder",   label:"Funder HQ",      color:"#a78bfa", x:2140, y:1320, w:700, h:420, icon:"🟪", interior:true },
-    { id:"bank",     label:"Bank District",  color:"#f59e0b", x:2140, y:220,  w:700, h:420, icon:"🟧", interior:true },
-    { id:"iso",      label:"ISO Lounge",     color:"#ef4444", x:740,  y:1320, w:520, h:300, icon:"🟥", interior:true },
-  ];
-
-  // Door markers (enter interiors)
-  const doors = [
-    { id:"bankDoor",   zone:"bank",   x:2140+40,  y:220+360,  w:44, h:44 },
-    { id:"funderDoor", zone:"funder", x:2140+40,  y:1320+360, w:44, h:44 },
-    { id:"isoDoor",    zone:"iso",    x:740+40,   y:1320+240, w:44, h:44 },
-  ];
-
-  // Interiors (simple separate "rooms" with their own interactions)
-  const interiors = {
-    bank:   { name:"Bank Interior",    w: 900, h: 520, tint:"#f59e0b" },
-    funder: { name:"Funder Interior",  w: 900, h: 520, tint:"#a78bfa" },
-    iso:    { name:"ISO Interior",     w: 900, h: 520, tint:"#ef4444" },
-  };
-
-  // ---------- Entities ----------
-  // Player on-foot
-  const player = { x: 420, y: 520, r: 12, speed: 3.2 };
-
-  // Vehicles
-  const VEHICLES = {
-    sedan:  { name:"Starter Sedan", max: 7.0, accel:0.20, turn:0.060, friction:0.986 },
-    coupe:  { name:"Closer Coupe",  max: 8.3, accel:0.22, turn:0.062, friction:0.988 },
-    lambo:  { name:"SuperBroker GT",max:10.5, accel:0.26, turn:0.070, friction:0.990 },
-    van:    { name:"Compliance Van",max: 6.2, accel:0.18, turn:0.052, friction:0.984 },
-  };
-
-  // Car
-  const car = {
-    x: 480, y: 560, vx: 0, vy: 0, ang: 0,
-    w: 36, h: 20,
-    model: "sedan",
-    handbrakeFriction: 0.968
-  };
-  function carStats(){ return VEHICLES[car.model] || VEHICLES.sedan; }
-
-  // NPCs
-  const npcs = [];
-  const NPC_TYPES = ["merchant","rep","runner"];
-  function spawnNPCs(n=10){
-    for(let i=0;i<n;i++){
-      npcs.push({
-        x: rand(260, world.w-260),
-        y: rand(260, world.h-260),
-        r: 12,
-        vx: rand(-0.4,0.4), vy: rand(-0.4,0.4),
-        type: pick(NPC_TYPES),
-        seed: randi(1,999999),
-        anger: 0, // rises if you “spam”
-        talkCd: 0
-      });
-    }
-  }
-  spawnNPCs(14);
-
-  // Cops
-  const cops = [
-    { x: 2800, y: 300,  vx:0, vy:0, mode:"patrol" },
-    { x: 2800, y: 1900, vx:0, vy:0, mode:"patrol" },
-    { x: 300,  y: 300,  vx:0, vy:0, mode:"patrol" },
-  ];
-
-  // Roadblocks (spawned at higher stars)
-  const roadblocks = [];
-
-  // ---------- Game State ----------
-  const state = {
-    inCar: true,
-    inInterior: null,     // "bank" | "funder" | "iso" | null
-    cash: 0,
-    rep: 0,
-    skill: 0,
-    heat: 0,              // 0..100
-    stars: 0,             // 0..5
-    showMap: true,
-
-    // Tools
-    inventory: {
-      script: { unlocked:true,  level:1 },
-      scanner:{ unlocked:false, level:0 },
-      cutter: { unlocked:false, level:0 },
-    },
-    toolIndex: 1, // 1..3
-
-    // Mission system
-    mission: "Story: Street Broker",
-    missionStep: 0,
-    missionTimer: 0,
-
-    // Deal quality (affects payouts)
-    dealQuality: 60, // 0..100
-
-    // story flags
-    storyFlags: {
-      introDone:false,
-      scannerUnlocked:false,
-      cutterUnlocked:false,
-      superCarUnlocked:false,
-    }
-  };
-
-  // ---------- UI: Stars ----------
-  for(let i=0;i<5;i++){
-    const s = document.createElement("div");
-    s.className = "star";
-    s.textContent = "★";
-    elStars.appendChild(s);
-  }
-  function setStars(n){
-    state.stars = clamp(Math.round(n), 0, 5);
-    [...elStars.children].forEach((el,i)=> el.classList.toggle("on", i < state.stars));
-  }
-  function heatToStars(){
-    const h = state.heat;
-    if(h < 15) return 0;
-    if(h < 30) return 1;
-    if(h < 50) return 2;
-    if(h < 70) return 3;
-    if(h < 85) return 4;
-    return 5;
-  }
-
-  // ---------- Camera ----------
-  function currentPos(){
-    if(state.inInterior){
-      // in interior, the “world” is the room space
-      return state.inCar ? {x:car.x, y:car.y} : {x:player.x, y:player.y};
-    }
-    return state.inCar ? {x:car.x, y:car.y} : {x:player.x, y:player.y};
-  }
-  function camera(){
-    const viewW = canvas.width, viewH = canvas.height;
-    const p = currentPos();
-    // interior uses different bounds
-    const bounds = state.inInterior ? interiors[state.inInterior] : world;
-    const cx = clamp(p.x - viewW/2, 0, bounds.w - viewW);
-    const cy = clamp(p.y - viewH/2, 0, bounds.h - viewH);
-    return {x:cx,y:cy};
-  }
-
-  // ---------- Dialog ----------
-  function showDialog(title, sub, bodyHtml, choices){
-    dTitle.textContent = title;
-    dSub.textContent = sub;
-    dBody.innerHTML = bodyHtml;
-    dChoices.innerHTML = "";
-    choices.forEach(c=>{
-      const b = document.createElement("button");
-      b.className = "btn " + (c.primary ? "primary" : (c.danger ? "danger" : ""));
-      b.textContent = c.label;
-      b.onclick = () => c.onClick?.();
-      dChoices.appendChild(b);
-    });
-    dialog.classList.add("show");
-  }
-  function hideDialog(){
-    dialog.classList.remove("show");
-  }
-  dClose.onclick = hideDialog;
-
-  // ---------- Zones legend ----------
-  elZoneLegend.innerHTML =
-    `Zones: ${zones.map(z=>`${z.icon} ${z.label}`).join(" • ")}<br/>
-     Doors: 🟨 enter interiors (E). Bank cools heat. Funder pays missions. ISO gives risky boosts.`;
-
-  // ---------- Tools ----------
-  const TOOLS = [
-    { id:"script",  key:"1", name:"Script Blaster", hotkey:1, icon:"📣", desc:"Quick cash/rep but adds heat." },
-    { id:"scanner", key:"2", name:"Statement Scanner", hotkey:2, icon:"🧾", desc:"Boosts deal quality, lowers bust risk." },
-    { id:"cutter",  key:"3", name:"Rate Cutter", hotkey:3, icon:"✂️", desc:"Improves payout, slightly increases time/heat." },
-  ];
-  function activeTool(){
-    const i = clamp(state.toolIndex, 1, 3) - 1;
-    return TOOLS[i];
-  }
-  function renderToolPills(){
-    const t = activeTool();
-    elToolPills.innerHTML = TOOLS.map((x,idx)=>{
-      const unlocked = state.inventory[x.id].unlocked;
-      const on = (idx+1)===state.toolIndex;
-      const cls = on ? "blue" : "";
-      const lock = unlocked ? "" : " 🔒";
-      return `<span class="pill ${cls}"><b>${idx+1}</b> ${x.icon} ${x.name}${lock}</span>`;
-    }).join("");
-  }
-  renderToolPills();
-
-  function useTool(){
-    const t = activeTool();
-    const inv = state.inventory[t.id];
-    if(!inv.unlocked){
-      toast("Tool locked (progress story)");
-      beep(220,0.08,0.02);
-      return;
-    }
-
-    // Tool effects scale with level
-    const lvl = inv.level || 1;
-
-    if(t.id==="script"){
-      const gain = 160 + lvl*90;
-      state.cash += gain;
-      state.rep += 1 + Math.floor(lvl/2);
-      state.heat = clamp(state.heat + (10 - Math.min(3,lvl)), 0, 100);
-      // spam annoys NPCs a bit
-      npcs.forEach(n=> n.anger = clamp(n.anger + 0.8, 0, 10));
-      toast(`📣 Script Blaster: +$${gain} • heat ↑`);
-      beep(520,0.06,0.03);
-    }
-    if(t.id==="scanner"){
-      const dq = 6 + lvl*4;
-      state.dealQuality = clamp(state.dealQuality + dq, 0, 100);
-      state.skill += 1;
-      state.heat = clamp(state.heat - (2 + lvl), 0, 100);
-      toast(`🧾 Scanner: Deal Quality +${dq} • heat ↓`);
-      beep(660,0.05,0.03);
-    }
-    if(t.id==="cutter"){
-      // rate cutter improves payout but increases heat slightly (negotiation war)
-      state.skill += 1;
-      state.heat = clamp(state.heat + (3 + Math.max(0, 2-lvl)), 0, 100);
-      toast("✂️ Rate Cutter: payout boost armed");
-      beep(740,0.06,0.03);
-    }
-  }
-
-  // ---------- Interior Handling ----------
-  function enterInterior(type){
-    state.inInterior = type;
-    // move player/car into room origin positions
-    const room = interiors[type];
-    // “park car” outside; in interior you’re on-foot
-    state.inCar = false;
-    player.x = room.w * 0.25;
-    player.y = room.h * 0.55;
-    toast(`Entered ${room.name}`);
-    beep(480,0.06,0.03);
-  }
-  function exitInterior(){
-    const type = state.inInterior;
-    state.inInterior = null;
-    // return player near that building door in overworld
-    const door = doors.find(d=>d.zone===type);
-    if(door){
-      player.x = door.x + door.w + 12;
-      player.y = door.y + door.h + 12;
-    }
-    state.inCar = false;
-    toast("Exited building");
-    beep(420,0.06,0.03);
-  }
-
-  // ---------- Collision / Geometry ----------
-  function inRect(px,py,r, rect){
-    const nx = clamp(px, rect.x, rect.x+rect.w);
-    const ny = clamp(py, rect.y, rect.y+rect.h);
-    const dx = px-nx, dy = py-ny;
-    return (dx*dx + dy*dy) <= r*r;
-  }
-  function isOnRoad(x,y){
-    // in overworld only
-    for(const r of roads){
-      if(x>=r.x && x<=r.x+r.w && y>=r.y && y<=r.y+r.h) return true;
-    }
-    return false;
-  }
-
-  // ---------- Missions ----------
-  // “Story” + random jobs = GTA feel.
-  const Story = [
-    {
-      title:"Street Broker",
-      steps:[
-        { text:"Go to 🟦 Lead Alley and pick up a warm lead.", marker:"leads" },
-        { text:"Deliver to 🟩 Merchant Row. Get statements clean.", marker:"merchant" },
-        { text:"Drive to 🟪 Funder HQ. Close the deal.", marker:"funder" },
-        { text:"Cool down at 🟧 Bank District. Reduce heat.", marker:"bank" },
-      ],
-      reward:{ cash: 1200, rep: 4, unlock:"scanner" }
-    },
-    {
-      title:"Closer Era",
-      steps:[
-        { text:"Visit 🟥 ISO Lounge. Make a risky alliance.", marker:"iso" },
-        { text:"Run 🧾 Scanner 3 times to raise Deal Quality.", marker:null, requirement:{ scannerUses:3 } },
-        { text:"Close another deal at 🟪 Funder HQ.", marker:"funder" },
-        { text:"Escape cops at 2+ stars for 20 seconds (stay alive).", marker:null, requirement:{ surviveWanted:20, minStars:2 } },
-      ],
-      reward:{ cash: 2400, rep: 6, unlock:"cutter" }
-    },
-    {
-      title:"SuperBroker",
-      steps:[
-        { text:"Hit $10,000 cash total and rep 15.", marker:null, requirement:{ cash:10000, rep:15 } },
-        { text:"Close a deal at 3+ stars (high heat payout).", marker:"funder", requirement:{ minStars:3 } },
-        { text:"Visit Bank interior and clean your record.", marker:"bankInterior" },
-      ],
-      reward:{ cash: 5000, rep: 10, unlock:"lambo" }
-    }
-  ];
-
-  // Tracking for story requirements
-  const trackers = {
-    scannerUses: 0,
-    surviveWanted: 0,
-    surviveTimerOn: false,
-  };
-
-  function currentChapter(){
-    // based on storyFlags
-    if(!state.storyFlags.introDone) return 0;
-    if(!state.storyFlags.scannerUnlocked) return 0;
-    if(!state.storyFlags.cutterUnlocked) return 1;
-    if(!state.storyFlags.superCarUnlocked) return 2;
-    return 2;
-  }
-
-  let chapterIndex = 0;
-  let stepIndex = 0;
-
-  function setMissionText(){
-    const chap = Story[chapterIndex];
-    const step = chap.steps[stepIndex];
-    state.mission = `Story: ${chap.title}`;
-    elMission.textContent = state.mission;
-    elObjective.textContent = step.text;
-  }
-
-  function unlock(id){
-    if(id==="scanner"){
-      state.inventory.scanner.unlocked = true;
-      state.inventory.scanner.level = 1;
-      state.storyFlags.scannerUnlocked = true;
-      toast("Unlocked: Statement Scanner (2)");
-      beep(820,0.08,0.03);
-    }
-    if(id==="cutter"){
-      state.inventory.cutter.unlocked = true;
-      state.inventory.cutter.level = 1;
-      state.storyFlags.cutterUnlocked = true;
-      toast("Unlocked: Rate Cutter (3)");
-      beep(880,0.08,0.03);
-    }
-    if(id==="lambo"){
-      state.storyFlags.superCarUnlocked = true;
-      // unlock vehicle
-      toast("Unlocked: SuperBroker GT (upgrade car at Bank)");
-      beep(980,0.10,0.03);
-    }
-    renderToolPills();
-  }
-
-  function giveReward(reward){
-    state.cash += reward.cash || 0;
-    state.rep  += reward.rep || 0;
-    if(reward.unlock) unlock(reward.unlock);
-    toast(`Mission reward: +$${reward.cash||0} • +${reward.rep||0} rep`);
-  }
-
-  function advanceStep(){
-    const chap = Story[chapterIndex];
-    stepIndex++;
-    if(stepIndex >= chap.steps.length){
-      // chapter complete
-      giveReward(chap.reward || {});
-      if(chapterIndex === 0) state.storyFlags.introDone = true;
-      if(chapterIndex === 1) {} // cutter unlock handled in reward
-      if(chapterIndex === 2) {} // supercar unlock handled in reward
-
-      chapterIndex = clamp(chapterIndex + 1, 0, Story.length-1);
-      stepIndex = 0;
-      trackers.scannerUses = 0;
-      trackers.surviveWanted = 0;
-      trackers.surviveTimerOn = false;
-
-      showDialog(
-        "Story Progress",
-        "New chapter unlocked",
-        `<b>${Story[chapterIndex].title}</b><br/><span style="color:rgba(234,241,255,.75); font-weight:800;">
-         Do the objectives to unlock upgrades and expand your power.
-         </span>`,
-        [{label:"Let’s go", primary:true, onClick:()=>{ hideDialog(); }}]
-      );
-    }
-    setMissionText();
-  }
-
-  // Initialize story at chapter 0
-  chapterIndex = 0;
-  stepIndex = 0;
-  setMissionText();
-
-  // ---------- Random Jobs (side missions) ----------
-  const Jobs = [
-    { name:"Hot Lead Pickup", payout:[300,800], heat:+6, rep:+1, zone:"leads" },
-    { name:"Merchant Rescue",  payout:[600,1200], heat:+10, rep:+2, zone:"merchant" },
-    { name:"Funder Rush",      payout:[900,1800], heat:+14, rep:+2, zone:"funder" },
-    { name:"Bank Clean",       payout:[0,0], heat:-22, rep:+1, zone:"bank" },
-    { name:"ISO Promo",        payout:[400,1000], heat:+12, rep:+1, zone:"iso" },
-  ];
-  let activeJob = null;
-  function maybeOfferJob(){
-    if(activeJob) return;
-    if(Math.random() < 0.0025){ // occasional
-      activeJob = pick(Jobs);
-      toast(`Side Job: ${activeJob.name} (${activeJob.zone})`);
-      beep(600,0.05,0.03);
-    }
-  }
-  function completeJob(){
-    if(!activeJob) return;
-    const pay = randi(activeJob.payout[0], activeJob.payout[1]);
-    state.cash += pay;
-    state.rep += activeJob.rep || 0;
-    state.heat = clamp(state.heat + (activeJob.heat||0), 0, 100);
-    toast(`Job complete: +$${pay}`);
-    activeJob = null;
-  }
-
-  // ---------- Police / Wanted ----------
-  function updateWanted(dt){
-    // passive cooling
-    state.heat = clamp(state.heat - 0.008*dt, 0, 100);
-    setStars(heatToStars());
-
-    // survival tracker
-    const step = Story[chapterIndex].steps[stepIndex];
-    if(step?.requirement?.surviveWanted){
-      if(state.stars >= (step.requirement.minStars||1)){
-        trackers.surviveWanted += dt;
-        trackers.surviveTimerOn = true;
-      }else{
-        trackers.surviveTimerOn = false;
-      }
-    }
-  }
-
-  function spawnRoadblock(){
-    // roadblock near player on major road intersection
-    const p = currentPos();
-    const candidates = [
-      {x:520+60, y:1080+60}, {x:1520+60, y:1080+60}, {x:2480+60, y:1080+60},
-      {x:1520+60, y:420+60}, {x:1520+60, y:1760+60},
-    ];
-    const c = pick(candidates);
-    roadblocks.push({ x:c.x, y:c.y, r: 34, t: 12 }); // time to live
-  }
-
-  function updateRoadblocks(dt){
-    for(const rb of roadblocks) rb.t -= dt;
-    while(roadblocks.length && roadblocks[0].t <= 0) roadblocks.shift();
-  }
-
-  function updateCops(dt){
-    const wanted = state.stars;
-    // spawn occasional roadblocks at high stars
-    if(!state.inInterior && wanted >= 4 && Math.random() < 0.01 && roadblocks.length < 2){
-      spawnRoadblock();
-      toast("🚧 Roadblock deployed!");
-    }
-
-    const target = currentPos();
-
-    cops.forEach(c=>{
-      // patrol behavior when no wanted
-      if(wanted <= 0 || state.inInterior){
-        c.mode = "patrol";
-        const patrol = {x: (c.x<world.w/2? 300 : world.w-300), y: (c.y<world.h/2? 300 : world.h-300)};
-        const dx = patrol.x - c.x, dy = patrol.y - c.y;
-        c.vx = (c.vx + dx*0.00025*dt) * 0.965;
-        c.vy = (c.vy + dy*0.00025*dt) * 0.965;
-      } else {
-        c.mode = "chase";
-        const dx = target.x - c.x, dy = target.y - c.y;
-        const d = Math.max(1, Math.hypot(dx,dy));
-        const base = 1.6 + wanted*0.70;
-        // steering acceleration
-        c.vx = (c.vx + (dx/d)*0.20*(dt/16)) * 0.93;
-        c.vy = (c.vy + (dy/d)*0.20*(dt/16)) * 0.93;
-        // speed cap
-        const v = Math.hypot(c.vx,c.vy);
-        const cap = base;
-        if(v > cap){
-          c.vx = c.vx / v * cap;
-          c.vy = c.vy / v * cap;
-        }
-      }
-
-      // move
-      c.x = clamp(c.x + c.vx*(dt/16), 0, world.w);
-      c.y = clamp(c.y + c.vy*(dt/16), 0, world.h);
-
-      // bust
-      if(!state.inInterior && wanted > 0 && dist(c.x,c.y,target.x,target.y) < 26){
-        // bust penalty scales
-        const fine = 450 + wanted*250;
-        state.cash = Math.max(0, state.cash - fine);
-        state.rep = Math.max(0, state.rep - Math.max(1, Math.floor(wanted/2)));
-        state.heat = 25;
-        toast(`🚨 Busted! -$${fine}`);
-        beep(200,0.10,0.03);
-      }
-    });
-
-    // roadblock collisions (car only)
-    if(!state.inInterior && state.inCar && roadblocks.length){
-      roadblocks.forEach(rb=>{
-        if(dist(car.x,car.y,rb.x,rb.y) < rb.r+16){
-          // slam brakes + heat spike
-          car.vx *= 0.35; car.vy *= 0.35;
-          state.heat = clamp(state.heat + 8, 0, 100);
-          toast("Hit a roadblock!");
-          beep(180,0.08,0.03);
-        }
-      });
-    }
-  }
-
-  // ---------- Movement ----------
-  function updatePlayer(dt){
-    if(state.inCar) return;
-
-    const bounds = state.inInterior ? interiors[state.inInterior] : world;
-    let vx=0, vy=0;
-    if(keys["w"]||keys["arrowup"]) vy -= 1;
-    if(keys["s"]||keys["arrowdown"]) vy += 1;
-    if(keys["a"]||keys["arrowleft"]) vx -= 1;
-    if(keys["d"]||keys["arrowright"]) vx += 1;
-    if(vx || vy){
-      const len = Math.hypot(vx,vy);
-      vx/=len; vy/=len;
-    }
-
-    player.x = clamp(player.x + vx*player.speed*(dt/16), player.r, bounds.w - player.r);
-    player.y = clamp(player.y + vy*player.speed*(dt/16), player.r, bounds.h - player.r);
-  }
-
-  function updateCar(dt){
-    if(!state.inCar){
-      // car coasts
-      if(!state.inInterior){
-        car.vx *= 0.985;
-        car.vy *= 0.985;
-        car.x = clamp(car.x + car.vx*(dt/16), 0, world.w);
-        car.y = clamp(car.y + car.vy*(dt/16), 0, world.h);
-      }
-      return;
-    }
-    if(state.inInterior) return; // no car in interiors
-
-    const st = carStats();
-
-    const up = keys["w"]||keys["arrowup"];
-    const down = keys["s"]||keys["arrowdown"];
-    const left = keys["a"]||keys["arrowleft"];
-    const right = keys["d"]||keys["arrowright"];
-    const hb = keys[" "]; // handbrake
-
-    const speed = Math.hypot(car.vx,car.vy);
-    const turnScale = clamp(speed / 4, 0.25, 1.1);
-    if(left) car.ang -= st.turn * turnScale * (dt/16);
-    if(right) car.ang += st.turn * turnScale * (dt/16);
-
-    const ax = Math.cos(car.ang) * st.accel * (dt/16);
-    const ay = Math.sin(car.ang) * st.accel * (dt/16);
-
-    if(up){ car.vx += ax; car.vy += ay; }
-    if(down){ car.vx -= ax*0.75; car.vy -= ay*0.75; }
-
-    // road friction
-    const onRoad = isOnRoad(car.x,car.y);
-    const fr = hb ? car.handbrakeFriction : st.friction;
-    const roadBoost = onRoad ? 1.0 : 0.975; // offroad slows a bit
-    car.vx *= fr * roadBoost;
-    car.vy *= fr * roadBoost;
-
-    const v = Math.hypot(car.vx,car.vy);
-    const cap = hb ? st.max*1.08 : st.max;
-    if(v > cap){
-      car.vx = car.vx / v * cap;
-      car.vy = car.vy / v * cap;
-    }
-
-    car.x = clamp(car.x + car.vx*(dt/16), 0, world.w);
-    car.y = clamp(car.y + car.vy*(dt/16), 0, world.h);
-  }
-
-  // ---------- NPCs ----------
-  function updateNPCs(dt){
-    if(state.inInterior) return;
-    npcs.forEach(n=>{
-      n.talkCd = Math.max(0, n.talkCd - dt);
-      // wander
-      if(Math.random() < 0.01){
-        n.vx += rand(-0.35,0.35);
-        n.vy += rand(-0.35,0.35);
-      }
-      // cap
-      const v = Math.hypot(n.vx,n.vy);
-      if(v > 1.25){
-        n.vx = n.vx/v*1.25;
-        n.vy = n.vy/v*1.25;
-      }
-
-      n.x = clamp(n.x + n.vx*(dt/16), 0, world.w);
-      n.y = clamp(n.y + n.vy*(dt/16), 0, world.h);
-
-      // keep near roads a bit
-      if(!isOnRoad(n.x,n.y) && Math.random() < 0.02){
-        // drift to nearest road center
-        const target = pick([
-          {x:540,y:1080},{x:1540,y:1080},{x:2500,y:1080},
-          {x:1540,y:420},{x:1540,y:1760},
-        ]);
-        n.vx += (target.x - n.x)*0.00015*dt;
-        n.vy += (target.y - n.y)*0.00015*dt;
-      }
-
-      // anger decays slowly
-      n.anger = clamp(n.anger - 0.003*dt, 0, 10);
-    });
-  }
-
-  function talkToNPC(n){
-    if(n.talkCd > 0) return;
-    n.talkCd = 1200;
-
-    const isMerchant = n.type==="merchant";
-    const isRep = n.type==="rep";
-
-    const mood = n.anger > 6 ? "angry" : (n.anger > 3 ? "skeptical" : "open");
-
-    const base = isMerchant ? "Merchant" : (isRep ? "Funder Rep" : "Runner");
-    const title = `${base} Encounter`;
-    const sub = mood==="angry" ? "They’re annoyed. Choose carefully." : "You can negotiate or play it clean.";
-
-    const offerAmt = randi(8000, 70000);
-    const urgency = randi(1, 10);
-
-    const body = `
-      <div style="margin-bottom:8px;">
-        <b>File:</b> needs <b>$${offerAmt.toLocaleString()}</b> • urgency <b>${urgency}/10</b><br/>
-        <span style="color:rgba(234,241,255,.72); font-weight:800;">
-        Your Deal Quality: <b>${state.dealQuality}</b> • Heat: <b>${Math.round(state.heat)}%</b>
-        </span>
-      </div>
-      <div style="color:rgba(234,241,255,.72); font-weight:800;">
-        ${isMerchant ? "They can send statements if you sound legit." :
-          isRep ? "They can move faster if you package clean." :
-          "They can bring you leads for a cut."}
-      </div>
-    `;
-
-    const choices = [];
-
-    choices.push({
-      label:"Play it clean (rep + deal quality)",
-      primary:true,
-      onClick:()=>{
-        state.rep += 2;
-        state.dealQuality = clamp(state.dealQuality + 6, 0, 100);
-        state.heat = clamp(state.heat - 2, 0, 100);
-        toast("Clean talk: rep ↑ quality ↑");
-        beep(620,0.06,0.03);
-        hideDialog();
-      }
-    });
-
-    choices.push({
-      label:"Hard close (cash now, heat)",
-      onClick:()=>{
-        const cash = 220 + randi(0,260);
-        state.cash += cash;
-        state.heat = clamp(state.heat + 10, 0, 100);
-        n.anger = clamp(n.anger + 2.5, 0, 10);
-        toast(`Hard close: +$${cash} heat ↑`);
-        beep(420,0.06,0.03);
-        hideDialog();
-      }
-    });
-
-    if(state.inventory.scanner.unlocked){
-      choices.push({
-        label:"Use Scanner (quality big)",
-        onClick:()=>{
-          state.dealQuality = clamp(state.dealQuality + 10, 0, 100);
-          state.skill += 1;
-          trackers.scannerUses++;
-          toast("Scanner used: quality ↑");
-          beep(720,0.06,0.03);
-          hideDialog();
-        }
-      });
-    }
-
-    choices.push({
-      label:"Leave",
-      onClick:()=>{ hideDialog(); }
-    });
-
-    showDialog(title, sub, body, choices);
-  }
-
-  // ---------- Enter / Exit car and buildings ----------
-  function toggleCar(){
-    if(state.inInterior) return;
-    if(state.inCar){
-      state.inCar = false;
-      player.x = car.x + Math.cos(car.ang) * 26;
-      player.y = car.y + Math.sin(car.ang) * 26;
-      toast("Exited car");
-      beep(420,0.04,0.03);
-    } else {
-      if(dist(player.x,player.y,car.x,car.y) < 36){
-        state.inCar = true;
-        toast("Entered car");
-        beep(520,0.04,0.03);
-      } else toast("Get closer to car");
-    }
-  }
-
-  function tryEnterDoor(){
-    if(state.inInterior){
-      // exit with E if near exit marker (we’ll just allow anywhere)
-      exitInterior();
-      return;
-    }
-    if(state.inCar) return;
-
-    // check doors
-    for(const d of doors){
-      if(inRect(player.x, player.y, player.r, d)){
-        enterInterior(d.zone);
-        return;
-      }
-    }
-  }
-
-  // ---------- “Broker crimes” ----------
-  function spamOffers(){
-    // crime: quick cash but raises wanted and pisses NPCs
-    const gain = 260 + randi(0,240);
-    state.cash += gain;
-    state.heat = clamp(state.heat + 12, 0, 100);
-    state.rep = Math.max(0, state.rep - 1);
-    state.dealQuality = clamp(state.dealQuality - 4, 0, 100);
-    npcs.forEach(n=> n.anger = clamp(n.anger + 1.2, 0, 10));
-    toast(`📣 Spam offers: +$${gain} heat ↑`);
-    beep(360,0.06,0.03);
-  }
-
-  // ---------- Mission triggers ----------
-  function zoneById(id){ return zones.find(z=>z.id===id); }
-
-  function inZone(pos, z){
-    return pos.x>=z.x && pos.x<=z.x+z.w && pos.y>=z.y && pos.y<=z.y+z.h;
-  }
-
-  function missionCheck(dt){
-    const chap = Story[chapterIndex];
-    const step = chap.steps[stepIndex];
-    if(!step) return;
-
-    // requirement-based steps
-    if(step.requirement){
-      const req = step.requirement;
-      let ok = true;
-      if(req.scannerUses != null) ok = ok && (trackers.scannerUses >= req.scannerUses);
-      if(req.cash != null) ok = ok && (state.cash >= req.cash);
-      if(req.rep != null) ok = ok && (state.rep >= req.rep);
-      if(req.surviveWanted != null){
-        ok = ok && (trackers.surviveWanted >= req.surviveWanted);
-      }
-      if(req.minStars != null){
-        ok = ok && (state.stars >= req.minStars);
-      }
-      if(ok){
-        advanceStep();
-      }
-      return;
-    }
-
-    // marker-based steps
-    const p = currentPos();
-    if(step.marker){
-      if(step.marker === "bankInterior"){
-        if(state.inInterior === "bank"){
-          // doing “clean record” action in bank interior:
-          // allow it to complete after a small cool-down
-          state.missionTimer += dt;
-          if(state.missionTimer > 1500){
-            state.missionTimer = 0;
-            advanceStep();
-          }
-        }
-        return;
-      }
-
-      const z = zoneById(step.marker);
-      if(z && !state.inInterior && inZone(p, z)){
-        // step completion
-        // Add flavor effects per location
-        if(z.id==="leads"){
-          state.rep += 1;
-          state.cash += 200;
-          state.heat = clamp(state.heat + 4, 0, 100);
-          toast("Picked up warm lead");
-          beep(560,0.05,0.03);
-        }
-        if(z.id==="merchant"){
-          // quality depends on if scanner unlocked + current quality
-          const boost = Math.round(4 + state.dealQuality/25);
-          state.dealQuality = clamp(state.dealQuality + boost, 0, 100);
-          state.rep += 2;
-          state.cash += 320;
-          toast("Statements secured (quality ↑)");
-          beep(640,0.05,0.03);
-        }
-        if(z.id==="funder"){
-          // payout depends on quality + heat + cutter
-          const cutterArmed = state.inventory.cutter.unlocked && activeTool().id==="cutter";
-          const q = state.dealQuality/100;
-          const heatPenalty = (state.heat/120);
-          let pay = Math.round(900 + 2600*q*(1-heatPenalty));
-          if(state.stars >= 3) pay = Math.round(pay * 1.18); // high heat premium (risky)
-          if(cutterArmed) pay = Math.round(pay * (1.08 + state.inventory.cutter.level*0.02));
-
-          state.cash += Math.max(450, pay);
-          state.rep += 3;
-          state.heat = clamp(state.heat + 10, 0, 100);
-          state.dealQuality = clamp(state.dealQuality - 7, 0, 100);
-          toast(`Deal closed +$${Math.max(450,pay)}`);
-          beep(760,0.05,0.03);
-        }
-        if(z.id==="bank"){
-          // cool down
-          state.heat = clamp(state.heat - 32, 0, 100);
-          state.dealQuality = clamp(state.dealQuality + 4, 0, 100);
-          toast("Bank cool-down: heat ↓");
-          beep(520,0.05,0.03);
-        }
-        if(z.id==="iso"){
-          // risky bonus
-          state.cash += 400;
-          state.heat = clamp(state.heat + 10, 0, 100);
-          toast("ISO alliance: cash ↑ heat ↑");
-          beep(420,0.05,0.03);
-        }
-        advanceStep();
-      }
-    }
-  }
-
-  // ---------- Interior interactions ----------
-  function interiorLogic(dt){
-    if(!state.inInterior) return;
-
-    // Bank interior: heal heat, upgrade car, buy upgrades
-    if(state.inInterior === "bank"){
-      // passive cleaning
-      state.heat = clamp(state.heat - 0.025*dt, 0, 100);
-      // allow upgrades via interaction prompt (press Q inside bank)
-      if(keys["q"]){
-        // buy upgrades menu (debounced by dialog)
-        if(!dialog.classList.contains("show")){
-          showDialog(
-            "Bank Services",
-            "Upgrade your operation",
-            `<div style="margin-bottom:8px;">
-              <b>Cash:</b> $${state.cash.toLocaleString()} • <b>Rep:</b> ${state.rep} • <b>Skill:</b> ${state.skill}
-            </div>
-            <div style="color:rgba(234,241,255,.72); font-weight:800;">
-              Choose an upgrade. Higher tiers require reputation.
-            </div>`,
-            bankChoices()
-          );
-        }
-      }
-    }
-
-    // Funder interior: higher payout “premium desk” if rep is high
-    if(state.inInterior === "funder"){
-      if(keys["q"] && !dialog.classList.contains("show")){
-        showDialog(
-          "Funder Desk",
-          "Premium placement desk",
-          `<div style="margin-bottom:8px;">
-            Higher rep → better terms. Deal Quality helps. Heat hurts.
-          </div>
-          <div style="color:rgba(234,241,255,.72); font-weight:800;">
-            <b>Rep:</b> ${state.rep} • <b>Deal Quality:</b> ${state.dealQuality} • <b>Heat:</b> ${Math.round(state.heat)}%
-          </div>`,
-          funderDeskChoices()
-        );
-      }
-    }
-
-    // ISO interior: risky boosts + heat
-    if(state.inInterior === "iso"){
-      if(keys["q"] && !dialog.classList.contains("show")){
-        showDialog(
-          "ISO Lounge",
-          "High-risk, high-reward",
-          `<div style="margin-bottom:8px;">
-            Get a boost… but your Heat spikes and cops get interested.
-          </div>`,
-          isoChoices()
-        );
-      }
-    }
-  }
-
-  function bankChoices(){
-    const choices = [];
-
-    // upgrade scanner
-    if(state.inventory.scanner.unlocked){
-      const price = 1200 + state.inventory.scanner.level*800;
-      choices.push({
-        label:`Upgrade Scanner (L${state.inventory.scanner.level}→L${state.inventory.scanner.level+1}) $${price}`,
-        primary:true,
-        onClick:()=>{
-          if(state.cash < price){ toast("Not enough cash"); return; }
-          state.cash -= price;
-          state.inventory.scanner.level += 1;
-          state.skill += 1;
-          renderToolPills();
-          toast("Scanner upgraded");
-          hideDialog();
-        }
-      });
-    } else {
-      choices.push({
-        label:`Unlock Scanner (requires story)`,
-        onClick:()=>{ toast("Complete Story: Street Broker"); }
-      });
-    }
-
-    // upgrade cutter
-    if(state.inventory.cutter.unlocked){
-      const price = 1800 + state.inventory.cutter.level*1100;
-      choices.push({
-        label:`Upgrade Rate Cutter (L${state.inventory.cutter.level}→L${state.inventory.cutter.level+1}) $${price}`,
-        onClick:()=>{
-          if(state.cash < price){ toast("Not enough cash"); return; }
-          state.cash -= price;
-          state.inventory.cutter.level += 1;
-          state.skill += 1;
-          renderToolPills();
-          toast("Rate Cutter upgraded");
-          hideDialog();
-        }
-      });
-    } else {
-      choices.push({ label:"Unlock Rate Cutter (requires story)", onClick:()=>toast("Complete Story: Closer Era") });
-    }
-
-    // upgrade car
-    const upgrades = [];
-    if(state.rep >= 6) upgrades.push({model:"coupe", price: 2400});
-    if(state.rep >= 12) upgrades.push({model:"lambo", price: 6200});
-    if(state.rep >= 10) upgrades.push({model:"van", price: 2800});
-
-    upgrades.forEach(u=>{
-      const name = VEHICLES[u.model].name;
-      const label = `Buy vehicle: ${name} $${u.price}`;
-      choices.push({
-        label,
-        onClick:()=>{
-          if(state.cash < u.price){ toast("Not enough cash"); return; }
-          state.cash -= u.price;
-          car.model = u.model;
-          toast(`New vehicle: ${name}`);
-          hideDialog();
-        }
-      });
-    });
-
-    choices.push({ label:"Close", onClick:()=>hideDialog() });
-    return choices;
-  }
-
-  function funderDeskChoices(){
-    const choices = [];
-    const base = 900;
-    const q = state.dealQuality/100;
-    const heatPenalty = state.heat/130;
-    const repBoost = clamp(state.rep/25, 0, 0.8);
-    const pay = Math.max(400, Math.round(base + 3800*q*(1-heatPenalty) + 900*repBoost));
-
-    choices.push({
-      label:`Close a premium deal (+$${pay})`,
-      primary:true,
-      onClick:()=>{
-        state.cash += pay;
-        state.rep += 2;
-        state.heat = clamp(state.heat + 12, 0, 100);
-        state.dealQuality = clamp(state.dealQuality - 10, 0, 100);
-        toast(`Premium close +$${pay}`);
-        hideDialog();
-      }
-    });
-
-    choices.push({
-      label:"Renegotiate (heat ↓, quality ↑)",
-      onClick:()=>{
-        state.heat = clamp(state.heat - 10, 0, 100);
-        state.dealQuality = clamp(state.dealQuality + 6, 0, 100);
-        state.rep += 1;
-        toast("Renegotiated");
-        hideDialog();
-      }
-    });
-
-    choices.push({ label:"Close", onClick:()=>hideDialog() });
-    return choices;
-  }
-
-  function isoChoices(){
-    const choices = [];
-    choices.push({
-      label:"Take the ‘exclusive’ pricing (cash ↑ heat ↑↑)",
-      danger:true,
-      onClick:()=>{
-        const gain = 1400 + randi(0,600);
-        state.cash += gain;
-        state.heat = clamp(state.heat + 22, 0, 100);
-        state.rep += 1;
-        toast(`ISO boost +$${gain} (heat spiked)`);
-        hideDialog();
-      }
-    });
-    choices.push({
-      label:"Decline & build brand (rep ↑ heat ↓)",
-      primary:true,
-      onClick:()=>{
-        state.rep += 4;
-        state.heat = clamp(state.heat - 8, 0, 100);
-        toast("Brand move: rep ↑");
-        hideDialog();
-      }
-    });
-    choices.push({ label:"Close", onClick:()=>hideDialog() });
-    return choices;
-  }
-
-  // ---------- HUD ----------
-  function renderHud(){
-    elMode.textContent = state.inInterior ? `Interior (${state.inInterior})` : (state.inCar ? "In car" : "On foot");
-    elCash.textContent = "$" + state.cash.toLocaleString();
-    elRep.textContent  = state.rep.toLocaleString();
-    elSkill.textContent = state.skill.toLocaleString();
-
-    const h = Math.round(state.heat);
-    elHeatText.textContent = h + "%";
-    elHeatBar.style.width = h + "%";
-    elHeatBar.className = "fill " + (h < 40 ? "good" : (h < 75 ? "warn" : "bad"));
-
-    // mission text already set in setMissionText()
-    if(activeJob){
-      elMission.textContent = `${state.mission} • Side: ${activeJob.name}`;
-    } else {
-      elMission.textContent = state.mission;
-    }
-  }
-
-  // ---------- Minimap ----------
-  function drawMinimap(){
-    if(!state.showMap){ mmWrap.style.display="none"; return; }
-    mmWrap.style.display="block";
-
-    const W = mm.width, H = mm.height;
-    mmCtx.clearRect(0,0,W,H);
-
-    // background
-    mmCtx.globalAlpha = 1;
-    mmCtx.fillStyle = "rgba(7,12,28,.85)";
-    mmCtx.fillRect(0,0,W,H);
-
-    // scale
-    const bounds = state.inInterior ? interiors[state.inInterior] : world;
-    const sx = W / bounds.w;
-    const sy = H / bounds.h;
-
-    // roads (overworld only)
-    if(!state.inInterior){
-      mmCtx.fillStyle = "rgba(120,160,255,.10)";
-      roads.forEach(r=>{
-        mmCtx.fillRect(r.x*sx, r.y*sy, r.w*sx, r.h*sy);
-      });
-    }
-
-    // zones (overworld only)
-    if(!state.inInterior){
-      zones.forEach(z=>{
-        mmCtx.fillStyle = z.color + "55";
-        mmCtx.fillRect(z.x*sx, z.y*sy, z.w*sx, z.h*sy);
-      });
-    }
-
-    // doors
-    if(!state.inInterior){
-      mmCtx.fillStyle = "rgba(245,158,11,.8)";
-      doors.forEach(d=>{
-        mmCtx.fillRect(d.x*sx, d.y*sy, d.w*sx, d.h*sy);
-      });
-    }
-
-    // roadblocks
-    if(!state.inInterior){
-      mmCtx.fillStyle = "rgba(239,68,68,.75)";
-      roadblocks.forEach(rb=>{
-        mmCtx.beginPath();
-        mmCtx.arc(rb.x*sx, rb.y*sy, 5, 0, Math.PI*2);
-        mmCtx.fill();
-      });
-    }
-
-    // cops
-    if(!state.inInterior){
-      mmCtx.fillStyle = "rgba(239,68,68,.95)";
-      cops.forEach(c=>{
-        mmCtx.fillRect(c.x*sx-2, c.y*sy-2, 4, 4);
-      });
-    }
-
-    // player/car marker
-    const p = currentPos();
-    mmCtx.fillStyle = "rgba(234,241,255,.95)";
-    mmCtx.beginPath();
-    mmCtx.arc(p.x*sx, p.y*sy, 4.2, 0, Math.PI*2);
-    mmCtx.fill();
-
-    // objective marker (if marker exists)
-    const step = Story[chapterIndex]?.steps?.[stepIndex];
-    if(step?.marker && !state.inInterior){
-      const z = zoneById(step.marker);
-      if(z){
-        mmCtx.strokeStyle = "rgba(56,189,248,.95)";
-        mmCtx.lineWidth = 2;
-        mmCtx.strokeRect(z.x*sx, z.y*sy, z.w*sx, z.h*sy);
-      }
-    }
-
-    // side job marker
-    if(activeJob && !state.inInterior){
-      const z = zoneById(activeJob.zone);
-      if(z){
-        mmCtx.strokeStyle = "rgba(34,197,94,.95)";
-        mmCtx.lineWidth = 2;
-        mmCtx.strokeRect(z.x*sx+2, z.y*sy+2, z.w*sx-4, z.h*sy-4);
-      }
-    }
-  }
-
-  // ---------- Draw ----------
-  function rr(ctx,x,y,w,h,r){
-    ctx.beginPath();
-    ctx.moveTo(x+r,y);
-    ctx.lineTo(x+w-r,y);
-    ctx.quadraticCurveTo(x+w,y,x+w,y+r);
-    ctx.lineTo(x+w,y+h-r);
-    ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
-    ctx.lineTo(x+r,y+h);
-    ctx.quadraticCurveTo(x,y+h,x,y+h-r);
-    ctx.lineTo(x,y+r);
-    ctx.quadraticCurveTo(x,y,x+r,y);
-    ctx.closePath();
-  }
-
-  function drawOverworld(cam){
-    // background
-    ctx.fillStyle = "rgba(7,12,28,.55)";
-    ctx.fillRect(0,0,canvas.width, canvas.height);
-
-    const ox = -cam.x, oy = -cam.y;
-
-    // subtle city grid
-    ctx.globalAlpha = 0.35;
-    ctx.strokeStyle = "rgba(120,160,255,.12)";
-    for(let x=0; x<=world.w; x+=100){
-      ctx.beginPath(); ctx.moveTo(x+ox,0+oy); ctx.lineTo(x+ox,world.h+oy); ctx.stroke();
-    }
-    for(let y=0; y<=world.h; y+=100){
-      ctx.beginPath(); ctx.moveTo(0+ox,y+oy); ctx.lineTo(world.w+ox,y+oy); ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-
-    // roads
-    ctx.fillStyle = "rgba(120,160,255,.08)";
-    roads.forEach(r=>{
-      ctx.fillRect(r.x+ox, r.y+oy, r.w, r.h);
-    });
-
-    // zones
-    zones.forEach(z=>{
-      ctx.fillStyle = z.color + "1d";
-      ctx.strokeStyle = z.color + "80";
-      ctx.lineWidth = 2;
-      rr(ctx, z.x+ox, z.y+oy, z.w, z.h, 18);
-      ctx.fill(); ctx.stroke();
-
-      ctx.fillStyle = "rgba(234,241,255,.92)";
-      ctx.font = "900 14px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial";
-      ctx.fillText(`${z.icon} ${z.label}`, z.x+ox+12, z.y+oy+24);
-    });
-
-    // doors
-    doors.forEach(d=>{
-      ctx.fillStyle = "rgba(245,158,11,.18)";
-      ctx.strokeStyle = "rgba(245,158,11,.80)";
-      rr(ctx, d.x+ox, d.y+oy, d.w, d.h, 10);
-      ctx.fill(); ctx.stroke();
-      ctx.fillStyle = "rgba(234,241,255,.9)";
-      ctx.font = "900 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial";
-      ctx.fillText("🟨 E", d.x+ox+6, d.y+oy+28);
-    });
-
-    // NPCs
-    npcs.forEach(n=>{
-      const col = n.type==="merchant" ? "rgba(34,197,94,.9)" : (n.type==="rep" ? "rgba(167,139,250,.9)" : "rgba(56,189,248,.9)");
-      ctx.fillStyle = col;
-      ctx.globalAlpha = 0.20;
-      ctx.beginPath(); ctx.arc(n.x+ox, n.y+oy, 18, 0, Math.PI*2); ctx.fill();
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = "rgba(234,241,255,1)";
-      ctx.beginPath(); ctx.arc(n.x+ox, n.y+oy, 9, 0, Math.PI*2); ctx.fill();
-      // anger indicator
-      if(n.anger > 3){
-        ctx.fillStyle = "rgba(239,68,68,.95)";
-        ctx.beginPath(); ctx.arc(n.x+ox+3, n.y+oy-2, 3, 0, Math.PI*2); ctx.fill();
-      }
-    });
-
-    // roadblocks
-    roadblocks.forEach(rb=>{
-      ctx.fillStyle = "rgba(239,68,68,.20)";
-      ctx.beginPath(); ctx.arc(rb.x+ox, rb.y+oy, rb.r, 0, Math.PI*2); ctx.fill();
-      ctx.strokeStyle = "rgba(239,68,68,.85)";
-      ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.arc(rb.x+ox, rb.y+oy, rb.r, 0, Math.PI*2); ctx.stroke();
-      ctx.fillStyle = "rgba(234,241,255,.92)";
-      ctx.font = "900 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial";
-      ctx.fillText("🚧", rb.x+ox-6, rb.y+oy+4);
-    });
-
-    // cops
-    cops.forEach(c=>{
-      ctx.fillStyle = "rgba(239,68,68,.18)";
-      ctx.beginPath(); ctx.arc(c.x+ox, c.y+oy, 18, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = "rgba(234,241,255,1)";
-      ctx.beginPath(); ctx.arc(c.x+ox, c.y+oy, 9, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = "rgba(239,68,68,1)";
-      ctx.beginPath(); ctx.arc(c.x+ox+3, c.y+oy-2, 3, 0, Math.PI*2); ctx.fill();
-    });
-
-    // car
-    ctx.save();
-    ctx.translate(car.x+ox, car.y+oy);
-    ctx.rotate(car.ang);
-    ctx.fillStyle = "rgba(56,189,248,.22)";
-    rr(ctx, -car.w/2-9, -car.h/2-9, car.w+18, car.h+18, 10);
-    ctx.fill();
-    ctx.fillStyle = "rgba(234,241,255,1)";
-    rr(ctx, -car.w/2, -car.h/2, car.w, car.h, 6);
-    ctx.fill();
-    ctx.fillStyle = "rgba(10,20,51,1)";
-    rr(ctx, 1, -car.h/2+3, car.w/2-4, car.h-6, 4);
-    ctx.fill();
-    ctx.restore();
-
-    // player if on foot
-    if(!state.inCar){
-      ctx.fillStyle = "rgba(167,139,250,.22)";
-      ctx.beginPath(); ctx.arc(player.x+ox, player.y+oy, player.r+9, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = "rgba(234,241,255,1)";
-      ctx.beginPath(); ctx.arc(player.x+ox, player.y+oy, player.r, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = "rgba(10,20,51,1)";
-      ctx.beginPath(); ctx.arc(player.x+ox+4, player.y+oy-2, 3, 0, Math.PI*2); ctx.fill();
-    }
-
-    // UI hint at bottom
-    ctx.fillStyle = "rgba(234,241,255,.75)";
-    ctx.font = "900 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial";
-    ctx.fillText("E: enter/exit car/buildings • Q: spam offers • 1-3 tools • Bank cools heat • Avoid cops at high stars", 14, canvas.height - 18);
-  }
-
-  function drawInterior(cam){
-    const room = interiors[state.inInterior];
-    const ox = -cam.x, oy = -cam.y;
-
-    // background tint
-    ctx.fillStyle = "rgba(7,12,28,.65)";
-    ctx.fillRect(0,0,canvas.width, canvas.height);
-    ctx.fillStyle = room.tint + "10";
-    ctx.fillRect(0,0,canvas.width, canvas.height);
-
-    // room frame
-    ctx.strokeStyle = room.tint + "88";
-    ctx.lineWidth = 3;
-    rr(ctx, 40+ox, 40+oy, room.w-80, room.h-80, 22);
-    ctx.stroke();
-
-    ctx.fillStyle = "rgba(234,241,255,.92)";
-    ctx.font = "950 18px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial";
-    ctx.fillText(room.name, 60+ox, 82+oy);
-
-    // interaction hint
-    ctx.fillStyle = "rgba(234,241,255,.78)";
-    ctx.font = "900 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial";
-    ctx.fillText("Press Q for services. Press E to exit building.", 60+ox, 108+oy);
-
-    // a couple “furniture” blocks for vibe
-    ctx.fillStyle = "rgba(120,160,255,.10)";
-    rr(ctx, 120+ox, 170+oy, 240, 90, 18); ctx.fill();
-    rr(ctx, 520+ox, 170+oy, 260, 90, 18); ctx.fill();
-    rr(ctx, 120+ox, 320+oy, 660, 120, 22); ctx.fill();
-
-    // player only
-    ctx.fillStyle = "rgba(167,139,250,.22)";
-    ctx.beginPath(); ctx.arc(player.x+ox, player.y+oy, player.r+9, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = "rgba(234,241,255,1)";
-    ctx.beginPath(); ctx.arc(player.x+ox, player.y+oy, player.r, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = "rgba(10,20,51,1)";
-    ctx.beginPath(); ctx.arc(player.x+ox+4, player.y+oy-2, 3, 0, Math.PI*2); ctx.fill();
-  }
-
-  // ---------- Actions / Hotkeys ----------
-  let lastE=false, lastQ=false, lastSpace=false;
-  let last1=false, last2=false, last3=false;
-
-  function handleActions(){
-    const e = !!keys["e"];
-    const q = !!keys["q"];
-    const k1 = !!keys["1"], k2 = !!keys["2"], k3 = !!keys["3"];
-
-    if(e && !lastE){
-      // in priority: door/interior, car toggle
-      if(state.inInterior) tryEnterDoor();
-      else{
-        // if near door and on foot, enter; otherwise toggle car
-        if(!state.inCar) tryEnterDoor();
-        else toggleCar();
-      }
-    }
-
-    if(q && !lastQ){
-      if(state.inInterior){
-        // interior menus handled in interiorLogic (debounced by dialog)
-      } else {
-        // “crime” action only overworld
-        spamOffers();
-      }
-    }
-
-    if(k1 && !last1){ state.toolIndex=1; renderToolPills(); toast("Tool 1"); }
-    if(k2 && !last2){ state.toolIndex=2; renderToolPills(); toast("Tool 2"); }
-    if(k3 && !last3){ state.toolIndex=3; renderToolPills(); toast("Tool 3"); }
-
-    // Use tool when on-foot near NPC, or anytime as “ability”
-    // (triggered by Space tap when on foot, or Ctrl in car)
-    const space = !!keys[" "];
-    if(space && !lastSpace){
-      useTool();
-    }
-
-    lastE=e; lastQ=q; last1=k1; last2=k2; last3=k3; lastSpace=space;
-  }
-
-  // ---------- Proximity interactions ----------
-  function checkNPCInteractions(){
-    if(state.inInterior) return;
-    // talk to nearest NPC if on foot and close (auto-trigger)
-    if(state.inCar) return;
-    const near = npcs.find(n => dist(n.x,n.y,player.x,player.y) < 34);
-    if(near && !dialog.classList.contains("show")){
-      talkToNPC(near);
-    }
-  }
-
-  function checkSideJobCompletion(){
-    if(!activeJob || state.inInterior) return;
-    const z = zoneById(activeJob.zone);
-    const p = currentPos();
-    if(z && inZone(p,z)){
-      completeJob();
-    }
-  }
-
-  // ---------- Main Loop ----------
-  let lastT = now();
-
-  function tick(){
-    const t = now();
-    const dt = clamp(t - lastT, 10, 40);
-    lastT = t;
-
-    handleActions();
-
-    // interior vs overworld updates
-    if(state.inInterior){
-      updatePlayer(dt);
-      interiorLogic(dt);
-    } else {
-      updatePlayer(dt);
-      updateCar(dt);
-      updateNPCs(dt);
-      checkNPCInteractions();
-      checkSideJobCompletion();
-      maybeOfferJob();
-      updateRoadblocks(dt);
-    }
-
-    updateWanted(dt);
-    updateCops(dt);
-    missionCheck(dt);
-
-    // story: unlock logic if rewards not yet applied
-    // (chapter gating is handled by rewards + flags)
-
-    // Render
-    const cam = camera();
-    if(state.inInterior) drawInterior(cam);
-    else drawOverworld(cam);
-
-    drawMinimap();
-    renderHud();
-
-    requestAnimationFrame(tick);
-  }
-  tick();
-
-})();
-</script>
-</body>
-</html>
-<!doctype html>
-<html lang="en">
-<head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>MCA GTA • 3D Human (Web Prototype)</title>
+  <title>MCA Broker Simulator • 3D</title>
   <style>
-    html,body{margin:0;height:100%;overflow:hidden;background:#070a18;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#eaf1ff}
-    #ui{
-      position:fixed;top:12px;left:12px;z-index:10;
-      background:rgba(10,20,51,.78);border:1px solid rgba(28,43,102,.8);
-      border-radius:16px;padding:12px;box-shadow:0 18px 55px rgba(0,0,0,.55);
-      width:min(360px, calc(100vw - 24px));
-      backdrop-filter: blur(10px);
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #040714; font-family: system-ui, -apple-system, sans-serif; color: #eaf1ff; user-select: none; }
+    
+    /* Glassmorphism UI */
+    #ui {
+      position: fixed; top: 16px; left: 16px; z-index: 10;
+      background: rgba(10, 15, 30, 0.6); border: 1px solid rgba(50, 80, 200, 0.4);
+      border-radius: 16px; padding: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      width: min(320px, calc(100vw - 32px)); backdrop-filter: blur(12px);
     }
-    .row{display:flex;justify-content:space-between;gap:10px;align-items:center}
-    .k{opacity:.75;font-weight:800;font-size:12px}
-    .v{font-weight:950}
-    .tip{opacity:.75;font-weight:800;font-size:12px;line-height:1.35;margin-top:8px}
-    .pill{display:inline-flex;gap:8px;align-items:center;margin-top:10px;
-      border:1px solid rgba(44,70,160,.60);background:rgba(7,12,28,.45);
-      padding:6px 10px;border-radius:999px;font-size:12px;font-weight:950;opacity:.9
+    
+    .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .k { opacity: 0.7; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;}
+    .v { font-weight: 900; font-size: 15px; text-align: right; }
+    .money { color: #22c55e; font-size: 20px; }
+    
+    .tip { opacity: 0.7; font-weight: 600; font-size: 12px; line-height: 1.5; margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;}
+    
+    /* Stamina Bar */
+    #stamina-bg { width: 100%; height: 6px; background: rgba(0,0,0,0.5); border-radius: 3px; margin-top: 8px; overflow: hidden; }
+    #stamina-fill { width: 100%; height: 100%; background: #38bdf8; transition: width 0.1s linear; }
+
+    /* Interaction Prompt */
+    #interact {
+      position: fixed; left: 50%; transform: translateX(-50%); bottom: 80px; z-index: 10;
+      background: #eaf1ff; color: #040714; padding: 10px 20px; border-radius: 8px;
+      font-weight: 900; font-size: 16px; display: none; box-shadow: 0 0 20px rgba(234, 241, 255, 0.5);
     }
-    #toast{
-      position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:10;
-      background:rgba(10,20,51,.95);border:1px solid rgba(28,43,102,.85);
-      padding:10px 12px;border-radius:14px;box-shadow:0 18px 55px rgba(0,0,0,.55);
-      font-weight:950;display:none;max-width:min(720px,calc(100vw - 24px));
+    
+    /* Action Progress Bar */
+    #progress-container {
+      position: fixed; left: 50%; transform: translateX(-50%); bottom: 40px; z-index: 10;
+      width: 300px; height: 12px; background: rgba(0,0,0,0.8); border: 2px solid #eaf1ff;
+      border-radius: 6px; display: none; overflow: hidden;
     }
-    #toast.show{display:block;}
-    canvas{display:block;}
+    #progress-bar { width: 0%; height: 100%; background: #22c55e; }
+
+    /* Toasts */
+    #toast {
+      position: fixed; left: 50%; transform: translateX(-50%); top: 20px; z-index: 10;
+      background: rgba(20, 30, 60, 0.95); border: 1px solid #38bdf8;
+      padding: 12px 24px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      font-weight: 800; opacity: 0; transition: opacity 0.3s, top 0.3s; pointer-events: none;
+    }
+    #toast.show { opacity: 1; top: 40px; }
+    
+    canvas { display: block; }
   </style>
 </head>
 <body>
   <div id="ui">
-    <div class="row"><div class="k">Mode</div><div class="v" id="mode">3D Human</div></div>
-    <div class="row" style="margin-top:6px;"><div class="k">Mission</div><div class="v" id="mission">Go to Lead Alley</div></div>
+    <div class="row"><div class="k">Bank</div><div class="v money" id="cash">$500</div></div>
+    <div class="row"><div class="k">Deal Status</div><div class="v" id="mission" style="color:#38bdf8">Need Leads</div></div>
+    <div class="row"><div class="k">Stamina</div></div>
+    <div id="stamina-bg"><div id="stamina-fill"></div></div>
     <div class="tip">
-      Controls: <b>WASD</b> move • <b>Shift</b> sprint • <b>Mouse</b> look (drag) • Walk into glowing markers.
+      <b>WASD</b> Move • <b>SHIFT</b> Hustle (Sprint)<br>
+      <b>MOUSE</b> Look • <b>SPACE</b> Interact
     </div>
-    <div class="pill">🟦 Leads • 🟩 Merchant • 🟪 Funder • 🟧 Bank • 🟥 ISO</div>
   </div>
+  
+  <div id="interact">PRESS [SPACE] TO BUY LEADS</div>
+  <div id="progress-container"><div id="progress-bar"></div></div>
   <div id="toast"></div>
 
-  <!-- Three.js via CDN (works on GitHub Pages) -->
   <script type="module">
     import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 
-    // ---------- UI ----------
-    const missionEl = document.getElementById("mission");
+    // ---------- GAME STATE & UI ----------
+    let cash = 500;
+    let stamina = 100;
+    let missionState = 0; // 0: Leads, 1: Merchant, 2: Funder, 3: Bank
+    let isInteracting = false;
+    let currentMarker = null;
+
+    const uiCash = document.getElementById("cash");
+    const uiMission = document.getElementById("mission");
+    const uiStamina = document.getElementById("stamina-fill");
+    const uiInteract = document.getElementById("interact");
+    const uiProgContainer = document.getElementById("progress-container");
+    const uiProgBar = document.getElementById("progress-bar");
     const toastEl = document.getElementById("toast");
-    function toast(msg){
+
+    const states = [
+      { id: "leads", name: "Buy Leads ($100)", color: 0x38bdf8, action: "BUYING LEADS...", time: 1000 },
+      { id: "merchant", name: "Pitch Merchant", color: 0x22c55e, action: "PITCHING MCA...", time: 2500 },
+      { id: "funder", name: "Secure Funding", color: 0xa78bfa, action: "NEGOTIATING TERMS...", time: 2000 },
+      { id: "bank", name: "Close Deal", color: 0xf59e0b, action: "WIRING FUNDS...", time: 1500 }
+    ];
+
+    function showToast(msg, color = "#fff") {
       toastEl.textContent = msg;
+      toastEl.style.color = color;
       toastEl.classList.add("show");
-      setTimeout(()=>toastEl.classList.remove("show"), 1200);
+      setTimeout(() => toastEl.classList.remove("show"), 2000);
     }
 
-    // ---------- Scene ----------
+    function updateHUD() {
+      uiCash.textContent = "$" + cash.toLocaleString();
+      uiMission.textContent = states[missionState].name;
+      uiMission.style.color = "#" + states[missionState].color.toString(16).padStart(6, '0');
+    }
+
+    // ---------- SCENE SETUP ----------
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0x070a18, 20, 180);
+    scene.fog = new THREE.FogExp2(0x040714, 0.015);
 
-    const camera = new THREE.PerspectiveCamera(65, innerWidth/innerHeight, 0.1, 500);
-    camera.position.set(0, 4, 10);
-
-    const renderer = new THREE.WebGLRenderer({ antialias:true });
+    const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 500);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
     renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
 
     // Lights
-    const hemi = new THREE.HemisphereLight(0xaecbff, 0x0b1028, 0.9);
+    const hemi = new THREE.HemisphereLight(0x4466ff, 0x040714, 0.6);
     scene.add(hemi);
 
-    const sun = new THREE.DirectionalLight(0xffffff, 1.1);
-    sun.position.set(20, 35, 10);
-    sun.castShadow = true;
-    sun.shadow.mapSize.set(2048, 2048);
-    sun.shadow.camera.near = 1;
-    sun.shadow.camera.far = 120;
-    sun.shadow.camera.left = -50;
-    sun.shadow.camera.right = 50;
-    sun.shadow.camera.top = 50;
-    sun.shadow.camera.bottom = -50;
-    scene.add(sun);
+    const moon = new THREE.DirectionalLight(0x88aaff, 1.2);
+    moon.position.set(-20, 50, -20);
+    moon.castShadow = true;
+    moon.shadow.mapSize.set(2048, 2048);
+    moon.shadow.camera.near = 0.5;
+    moon.shadow.camera.far = 150;
+    const d = 60;
+    moon.shadow.camera.left = -d; moon.shadow.camera.right = d;
+    moon.shadow.camera.top = d; moon.shadow.camera.bottom = -d;
+    scene.add(moon);
 
     // Ground
-    const ground = new THREE.Mesh(
-      new THREE.PlaneGeometry(600, 600),
-      new THREE.MeshStandardMaterial({ color: 0x0b1028, roughness: 1, metalness: 0 })
-    );
+    const groundMat = new THREE.MeshStandardMaterial({ color: 0x0a0f24, roughness: 0.9, metalness: 0.2 });
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(800, 800), groundMat);
     ground.rotation.x = -Math.PI/2;
     ground.receiveShadow = true;
     scene.add(ground);
 
-    // Grid for vibe
-    const grid = new THREE.GridHelper(300, 60, 0x2a3aa8, 0x1a256b);
-    grid.position.y = 0.01;
+    const grid = new THREE.GridHelper(400, 80, 0x1c2b66, 0x0a102a);
+    grid.position.y = 0.05;
     scene.add(grid);
 
-    // Simple “city blocks” buildings
-    function building(x,z,w,h,d,color){
-      const b = new THREE.Mesh(
-        new THREE.BoxGeometry(w,h,d),
-        new THREE.MeshStandardMaterial({ color, roughness: 0.9, metalness: 0.05 })
-      );
-      b.position.set(x, h/2, z);
-      b.castShadow = true;
-      b.receiveShadow = true;
-      scene.add(b);
-      return b;
-    }
-    for(let i=0;i<40;i++){
-      const x = (Math.random()*200-100);
-      const z = (Math.random()*200-100);
-      if(Math.abs(x) < 12 && Math.abs(z) < 12) continue; // keep center clear
-      building(x, z, 6+Math.random()*12, 6+Math.random()*22, 6+Math.random()*12, 0x111a45);
-    }
+    // ---------- CITY GENERATOR ----------
+    const cityGroup = new THREE.Group();
+    const bldgMat = new THREE.MeshStandardMaterial({ color: 0x0d1430, roughness: 0.8, metalness: 0.5 });
+    
+    // Create structured city blocks
+    for(let x = -100; x <= 100; x += 35) {
+      for(let z = -100; z <= 100; z += 35) {
+        if (Math.abs(x) < 20 && Math.abs(z) < 20) continue; // Central plaza clear
+        if (Math.random() > 0.8) continue; // Leave some empty lots
 
-    // ---------- 3D Human (simple) ----------
-    // We’ll use a capsule-ish body: torso + head + legs
+        const w = 15 + Math.random() * 10;
+        const d = 15 + Math.random() * 10;
+        const h = 10 + Math.random() * 40;
+        
+        const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), bldgMat);
+        b.position.set(x + (Math.random()*4-2), h/2, z + (Math.random()*4-2));
+        b.castShadow = true;
+        b.receiveShadow = true;
+        
+        // Faux windows (simple wireframe overlay)
+        const edges = new THREE.LineSegments(
+          new THREE.EdgesGeometry(b.geometry),
+          new THREE.LineBasicMaterial({ color: 0x2a3aa8, transparent: true, opacity: 0.3 })
+        );
+        b.add(edges);
+        cityGroup.add(b);
+      }
+    }
+    scene.add(cityGroup);
+
+    // ---------- PLAYER (THE BROKER) ----------
     const human = new THREE.Group();
+    const matSuit = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.6 }); // Dark suit
+    const matSkin = new THREE.MeshStandardMaterial({ color: 0xffd1b3, roughness: 0.4 });
+    const matTie = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.2 });
 
-    const matBody = new THREE.MeshStandardMaterial({ color: 0xeaf1ff, roughness: 0.85 });
-    const matAccent = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.65 });
-
-    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.55, 0.9, 6, 12), matAccent);
+    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.5, 0.9, 4, 12), matSuit);
+    torso.position.y = 1.6;
     torso.castShadow = true;
-    torso.position.y = 1.55;
     human.add(torso);
 
-    const head = new THREE.Mesh(new THREE.SphereGeometry(0.38, 20, 16), matBody);
+    const tie = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.6, 0.6), matTie);
+    tie.position.set(0, 1.6, 0.26);
+    human.add(tie);
+
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.35, 16, 16), matSkin);
+    head.position.y = 2.5;
     head.castShadow = true;
-    head.position.y = 2.45;
     human.add(head);
 
-    const hips = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.35, 0.4), matBody);
-    hips.castShadow = true;
-    hips.position.y = 1.05;
-    human.add(hips);
-
-    const legGeo = new THREE.CapsuleGeometry(0.20, 0.65, 6, 10);
-    const legL = new THREE.Mesh(legGeo, matBody);
-    const legR = new THREE.Mesh(legGeo, matBody);
-    legL.castShadow = legR.castShadow = true;
-    legL.position.set(-0.22, 0.55, 0);
-    legR.position.set( 0.22, 0.55, 0);
+    // Limbs
+    const limbGeo = new THREE.CapsuleGeometry(0.18, 0.6, 4, 8);
+    const legL = new THREE.Mesh(limbGeo, matSuit); legL.position.set(-0.25, 0.6, 0); legL.castShadow = true;
+    const legR = new THREE.Mesh(limbGeo, matSuit); legR.position.set(0.25, 0.6, 0); legR.castShadow = true;
     human.add(legL, legR);
+
+    const armL = new THREE.Mesh(limbGeo, matSuit); armL.position.set(-0.75, 1.6, 0); armL.castShadow = true;
+    const armR = new THREE.Mesh(limbGeo, matSuit); armR.position.set(0.75, 1.6, 0); armR.castShadow = true;
+    human.add(armL, armR);
+
+    // Briefcase
+    const caseGeo = new THREE.BoxGeometry(0.2, 0.4, 0.5);
+    const caseMat = new THREE.MeshStandardMaterial({ color: 0x3e2723, roughness: 0.9 });
+    const briefcase = new THREE.Mesh(caseGeo, caseMat);
+    briefcase.position.set(0, -0.4, 0);
+    briefcase.castShadow = true;
+    armR.add(briefcase);
 
     scene.add(human);
 
-    // ---------- Mission markers ----------
-    function marker(color, x, z, label){
+    // ---------- LOCATIONS & MARKERS ----------
+    const markers = {};
+    
+    function createMarker(stateObj, x, z) {
       const g = new THREE.Group();
+      
+      const pad = new THREE.Mesh(
+        new THREE.CylinderGeometry(2, 2, 0.2, 32),
+        new THREE.MeshStandardMaterial({ color: stateObj.color, emissive: stateObj.color, emissiveIntensity: 0.4 })
+      );
+      pad.position.y = 0.1;
+      g.add(pad);
+
       const ring = new THREE.Mesh(
-        new THREE.TorusGeometry(1.25, 0.12, 14, 32),
-        new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.6 })
+        new THREE.TorusGeometry(1.8, 0.08, 8, 32),
+        new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 1 })
       );
       ring.rotation.x = -Math.PI/2;
-      ring.position.y = 0.06;
-      ring.castShadow = false;
+      ring.position.y = 0.3;
       g.add(ring);
+      
+      // Floating particles
+      const pGeo = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+      const pMat = new THREE.MeshBasicMaterial({ color: stateObj.color });
+      for(let i=0; i<3; i++) {
+        const p = new THREE.Mesh(pGeo, pMat);
+        p.position.set((Math.random()-0.5)*2, 1+Math.random()*2, (Math.random()-0.5)*2);
+        p.userData = { speed: Math.random()*0.02 + 0.01, offset: Math.random()*Math.PI*2 };
+        g.add(p);
+      }
 
-      const beam = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.18, 0.18, 3.2, 16),
-        new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.9, transparent:true, opacity:0.65 })
-      );
-      beam.position.y = 1.7;
-      g.add(beam);
+      const light = new THREE.PointLight(stateObj.color, 2, 15);
+      light.position.y = 2;
+      g.add(light);
 
       g.position.set(x, 0, z);
-      g.userData = { label };
+      g.userData = { id: stateObj.id, stateIndex: states.indexOf(stateObj) };
       scene.add(g);
       return g;
     }
 
-    const markers = {
-      leads:   marker(0x38bdf8, -28,  10, "Lead Alley"),
-      merchant:marker(0x22c55e,  22, -18, "Merchant Row"),
-      funder:  marker(0xa78bfa,  42,  26, "Funder HQ"),
-      bank:    marker(0xf59e0b,  10,  44, "Bank District"),
-      iso:     marker(0xef4444, -42, -26, "ISO Lounge"),
-    };
+    // Place locations around the central plaza
+    markers.leads = createMarker(states[0], -25, 25);
+    markers.merchant = createMarker(states[1], 25, 25);
+    markers.funder = createMarker(states[2], 25, -25);
+    markers.bank = createMarker(states[3], -25, -25);
 
-    const missionOrder = ["leads","merchant","funder","bank","iso"];
-    let missionIndex = 0;
-    function setMission(){
-      const key = missionOrder[missionIndex];
-      missionEl.textContent = "Go to " + markers[key].userData.label;
-    }
-    setMission();
+    const markerList = Object.values(markers);
 
-    // ---------- Controls (simple third person) ----------
+    // ---------- CONTROLS & PHYSICS ----------
     const keys = {};
-    addEventListener("keydown", e=> keys[e.key.toLowerCase()] = true);
-    addEventListener("keyup", e=> keys[e.key.toLowerCase()] = false);
+    addEventListener("keydown", e => { keys[e.code] = true; if(e.code === "Space") handleAction(); });
+    addEventListener("keyup", e => keys[e.code] = false);
 
-    // Mouse drag look
+    let yaw = 0, pitch = -0.2;
     let dragging = false;
-    let yaw = 0;   // rotate around Y
-    let pitch = -0.25;
-    let lastX = 0, lastY = 0;
-
-    renderer.domElement.addEventListener("mousedown", (e)=>{
-      dragging = true;
-      lastX = e.clientX; lastY = e.clientY;
-    });
-    addEventListener("mouseup", ()=> dragging = false);
-    addEventListener("mousemove", (e)=>{
+    renderer.domElement.addEventListener("mousedown", () => document.body.requestPointerLock());
+    document.addEventListener("pointerlockchange", () => { dragging = !!document.pointerLockElement; });
+    addEventListener("mousemove", (e) => {
       if(!dragging) return;
-      const dx = e.clientX - lastX;
-      const dy = e.clientY - lastY;
-      lastX = e.clientX; lastY = e.clientY;
-
-      yaw   -= dx * 0.004;
-      pitch -= dy * 0.003;
-      pitch = Math.max(-0.85, Math.min(0.15, pitch));
+      yaw -= e.movementX * 0.003;
+      pitch -= e.movementY * 0.003;
+      pitch = Math.max(-0.6, Math.min(0.4, pitch)); // Clamp camera
     });
 
     const vel = new THREE.Vector3();
     const dir = new THREE.Vector3();
 
-    function update(dt){
-      // movement direction in camera-relative space
-      const forward = (keys["w"]||keys["arrowup"]) ? 1 : 0;
-      const back    = (keys["s"]||keys["arrowdown"]) ? 1 : 0;
-      const left    = (keys["a"]||keys["arrowleft"]) ? 1 : 0;
-      const right   = (keys["d"]||keys["arrowright"]) ? 1 : 0;
-
-      const sprint = keys["shift"] ? 1.8 : 1.0;
-      const speed = 6.0 * sprint;
-
-      dir.set(0,0,0);
-      dir.z -= forward;
-      dir.z += back;
-      dir.x -= left;
-      dir.x += right;
-
-      if(dir.lengthSq() > 0){
-        dir.normalize();
-        // rotate by camera yaw
-        const angle = yaw;
-        const sin = Math.sin(angle), cos = Math.cos(angle);
-        const mx = dir.x * cos - dir.z * sin;
-        const mz = dir.x * sin + dir.z * cos;
-
-        vel.x = mx * speed;
-        vel.z = mz * speed;
-
-        // face the movement direction
-        human.rotation.y = Math.atan2(vel.x, vel.z);
-      } else {
-        vel.x = 0; vel.z = 0;
+    function handleAction() {
+      if (!currentMarker || isInteracting) return;
+      const targetState = currentMarker.userData.stateIndex;
+      
+      if (targetState !== missionState) {
+        showToast("Not ready for this yet. " + states[missionState].name + " first!", "#ef4444");
+        return;
       }
 
-      human.position.x += vel.x * dt;
-      human.position.z += vel.z * dt;
+      // Check cash requirement for leads
+      if (missionState === 0 && cash < 100) {
+        showToast("You're broke! Game Over.", "#ef4444");
+        return;
+      }
 
-      // keep within area
+      isInteracting = true;
+      uiInteract.style.display = "none";
+      uiProgContainer.style.display = "block";
+      uiProgBar.style.width = "0%";
+      
+      const s = states[missionState];
+      showToast(s.action, "#" + s.color.toString(16).padStart(6,'0'));
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 50; // update every 50ms
+        uiProgBar.style.width = (progress / s.time) * 100 + "%";
+        
+        if (progress >= s.time) {
+          clearInterval(interval);
+          completeAction();
+        }
+      }, 50);
+    }
+
+    function completeAction() {
+      isInteracting = false;
+      uiProgContainer.style.display = "none";
+      
+      // Economy Logic
+      if (missionState === 0) { cash -= 100; showToast("Bought Leads! -$100", "#ef4444"); }
+      if (missionState === 3) { cash += 600; showToast("Deal Funded! Commission: +$600", "#22c55e"); }
+
+      // Advance State
+      missionState = (missionState + 1) % states.length;
+      updateHUD();
+      
+      // Force UI refresh for prompt
+      currentMarker = null; 
+    }
+
+    function update(dt) {
+      if (isInteracting) return; // Freeze movement while acting
+
+      // Movement logic
+      const forward = (keys["KeyW"] || keys["ArrowUp"]) ? 1 : 0;
+      const back = (keys["KeyS"] || keys["ArrowDown"]) ? 1 : 0;
+      const left = (keys["KeyA"] || keys["ArrowLeft"]) ? 1 : 0;
+      const right = (keys["KeyD"] || keys["ArrowRight"]) ? 1 : 0;
+
+      let isSprinting = keys["ShiftLeft"] || keys["ShiftRight"];
+      if (isSprinting && stamina > 0 && (forward || back || left || right)) {
+        stamina = Math.max(0, stamina - 40 * dt);
+      } else {
+        isSprinting = false;
+        stamina = Math.min(100, stamina + 15 * dt);
+      }
+      uiStamina.style.width = stamina + "%";
+      uiStamina.style.background = stamina < 20 ? "#ef4444" : "#38bdf8";
+
+      const speed = isSprinting ? 12.0 : 5.0;
+
+      dir.set(right - left, 0, back - forward);
+      if (dir.lengthSq() > 0) {
+        dir.normalize();
+        const sin = Math.sin(yaw), cos = Math.cos(yaw);
+        vel.x = dir.x * cos + dir.z * sin;
+        vel.z = -dir.x * sin + dir.z * cos;
+
+        human.rotation.y = Math.atan2(vel.x, vel.z);
+      } else {
+        vel.set(0, 0, 0);
+      }
+
+      human.position.x += vel.x * speed * dt;
+      human.position.z += vel.z * speed * dt;
+
+      // Map bounds
       human.position.x = Math.max(-140, Math.min(140, human.position.x));
       human.position.z = Math.max(-140, Math.min(140, human.position.z));
 
-      // simple walking animation
-      const moving = (Math.abs(vel.x)+Math.abs(vel.z)) > 0.01;
+      // Animations
       const t = performance.now() * 0.01;
-      legL.rotation.x = moving ? Math.sin(t) * 0.6 : 0;
-      legR.rotation.x = moving ? -Math.sin(t) * 0.6 : 0;
+      const moving = vel.lengthSq() > 0.01;
+      const animSpeed = isSprinting ? 1.5 : 0.8;
+      
+      legL.rotation.x = moving ? Math.sin(t * animSpeed) * 0.7 : 0;
+      legR.rotation.x = moving ? -Math.sin(t * animSpeed) * 0.7 : 0;
+      armL.rotation.x = moving ? -Math.sin(t * animSpeed) * 0.5 : 0;
+      armR.rotation.x = moving ? Math.sin(t * animSpeed) * 0.5 : 0; // Briefcase arm swings!
 
-      // check marker collisions
-      const currentKey = missionOrder[missionIndex];
-      const m = markers[currentKey];
-      const d = human.position.distanceTo(m.position);
-      if(d < 2.0){
-        toast("✅ Completed: " + m.userData.label);
-        missionIndex = (missionIndex + 1) % missionOrder.length;
-        setMission();
+      // Marker Interactions & Animations
+      let nearMarker = null;
+      markerList.forEach(m => {
+        // Animate marker particles
+        m.children.forEach(c => {
+          if(c.userData.speed) {
+            c.position.y = 1.5 + Math.sin(t * c.userData.speed + c.userData.offset) * 0.5;
+            c.rotation.x += 0.02; c.rotation.y += 0.02;
+          }
+        });
+        // Check proximity
+        if (human.position.distanceTo(m.position) < 3.0) nearMarker = m;
+      });
+
+      if (nearMarker !== currentMarker) {
+        currentMarker = nearMarker;
+        if (currentMarker) {
+          const s = states[currentMarker.userData.stateIndex];
+          uiInteract.textContent = `PRESS [SPACE] TO ${s.name.toUpperCase()}`;
+          uiInteract.style.display = "block";
+          uiInteract.style.color = "#040714";
+          uiInteract.style.background = "#" + s.color.toString(16).padStart(6,'0');
+        } else {
+          uiInteract.style.display = "none";
+        }
       }
 
-      // camera follow (3rd person)
-      const target = new THREE.Vector3(human.position.x, 1.6, human.position.z);
-
-      const camDist = 9.5;
-      const camHeight = 3.2;
-
+      // Camera Follow
+      const target = new THREE.Vector3(human.position.x, 2.0, human.position.z);
+      const camDist = 8;
       const cx = target.x + Math.sin(yaw) * camDist;
       const cz = target.z + Math.cos(yaw) * camDist;
-      const cy = target.y + camHeight + pitch * 6.0;
+      const cy = target.y + 2.5 + pitch * 8.0;
 
-      camera.position.lerp(new THREE.Vector3(cx, cy, cz), 0.12);
+      camera.position.lerp(new THREE.Vector3(cx, cy, cz), 0.15);
       camera.lookAt(target);
     }
 
     let last = performance.now();
-    function loop(){
-      const t = performance.now();
-      const dt = Math.min(0.04, (t-last)/1000);
-      last = t;
+    function loop() {
+      const now = performance.now();
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
 
       update(dt);
       renderer.render(scene, camera);
       requestAnimationFrame(loop);
     }
+    
+    updateHUD();
     loop();
 
-    // resize
-    addEventListener("resize", ()=>{
-      camera.aspect = innerWidth/innerHeight;
+    addEventListener("resize", () => {
+      camera.aspect = innerWidth / innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(innerWidth, innerHeight);
     });
