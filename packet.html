@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Universal Deal Packet — PrivateCreditMCA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Sora:wght@300;400;500;600;700;800&family=Geist+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a10;--sf:#0e1422;--el:#131b2e;--teal:#00d4c8;--t4:#00e8db;--cyan:#00c8ff;--grn:#00e676;--amb:#ffc446;--red:#ff5252;--pur:#b388ff;--org:#ff7b42;--t1:#f0f4fc;--t2:#c8d0e0;--t3:#8b97b0;--tx4:#586580;--tx5:#3a4560;--bd:rgba(255,255,255,.04);--bd2:rgba(255,255,255,.07);--bdt:rgba(0,212,200,.15);--r:16px;--r2:12px;--ex:cubic-bezier(.16,1,.3,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#00b0a6 var(--bg)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:rgba(0,212,200,.3)}a{color:inherit;text-decoration:none}
+.grain{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:180px}
+.nav{position:sticky;top:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,32px);background:rgba(6,10,16,.8);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--bd2)}
+.nav-l{display:flex;align-items:center;gap:12px}
+.logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
+.logo::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.2))}
+.logo svg{position:relative;z-index:1}
+.nav-brand{font-weight:700;font-size:14px;letter-spacing:-.3px}.nav-brand em{font-style:normal;color:var(--t4)}
+.nav-sub{font-size:10px;color:var(--tx4);font-weight:600}
+.nav-pills{display:flex;gap:4px;background:var(--sf);border:1px solid var(--bd2);border-radius:100px;padding:3px}
+.nl{padding:6px 12px;border-radius:100px;font-size:11px;font-weight:500;color:var(--t3);transition:all .25s}
+.nl:hover{color:var(--t1)}.nl.active{color:var(--t1);background:rgba(0,212,200,.1);border:1px solid var(--bdt)}
+.nav-r{display:flex;gap:8px;align-items:center}
+.btn{padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;border:1px solid var(--bd2);background:var(--sf);color:var(--t2);cursor:pointer;font-family:'Sora',sans-serif;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--bdt);color:var(--t4);transform:translateY(-1px)}
+.btn-p{background:var(--teal);color:var(--bg);border-color:transparent}.btn-p:hover{box-shadow:0 6px 20px rgba(0,212,200,.25);color:var(--bg)}
+.btn-g{background:rgba(0,230,118,.06);border-color:rgba(0,230,118,.2);color:var(--grn)}.btn-g:hover{border-color:rgba(0,230,118,.4)}
+.btn-d{background:rgba(255,82,82,.06);border-color:rgba(255,82,82,.2);color:var(--red)}
+.btn-sm{padding:6px 10px;font-size:11px;border-radius:8px}
+.btn-lg{padding:14px 32px;font-size:14px;border-radius:12px}
+.inp{width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--bd2);background:rgba(0,0,0,.2);color:var(--t1);font-size:12px;font-family:'Sora',sans-serif;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--teal)}.inp::placeholder{color:rgba(139,151,176,.4)}
+select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23586580' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+textarea.inp{resize:vertical;min-height:60px;line-height:1.5}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:100px;border:1px solid var(--bd2);background:rgba(0,0,0,.12);font-size:9px;font-weight:700;white-space:nowrap;color:var(--t3)}
+.pill.tl{border-color:var(--bdt);background:rgba(0,212,200,.06);color:var(--t4)}.pill.gn{border-color:rgba(0,230,118,.2);background:rgba(0,230,118,.06);color:var(--grn)}.pill.wn{border-color:rgba(255,196,70,.2);background:rgba(255,196,70,.06);color:var(--amb)}.pill.rd{border-color:rgba(255,82,82,.2);background:rgba(255,82,82,.06);color:var(--red)}
+
+.wrap{max-width:860px;margin:0 auto;padding:24px clamp(16px,3vw,32px)}
+
+/* STEP PROGRESS */
+.step-progress{display:flex;align-items:center;gap:0;margin-bottom:28px;padding:0 20px}
+.sp-step{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.sp-num{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.04);border:2px solid var(--bd2);display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:11px;font-weight:800;color:var(--tx5);transition:all .3s}
+.sp-num.active{border-color:var(--teal);background:rgba(0,212,200,.08);color:var(--t4);box-shadow:0 0 12px rgba(0,212,200,.15)}
+.sp-num.done{border-color:var(--grn);background:rgba(0,230,118,.08);color:var(--grn)}
+.sp-label{font-size:10px;font-weight:700;color:var(--tx5);transition:color .3s}
+.sp-label.active{color:var(--t4)}.sp-label.done{color:var(--grn)}
+.sp-line{flex:1;height:2px;background:var(--bd2);margin:0 8px;border-radius:1px;overflow:hidden;min-width:20px}
+.sp-line .fill{height:100%;background:var(--teal);border-radius:1px;width:0%;transition:width .5s var(--ex)}
+
+/* SECTIONS */
+.section{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.sec-head{padding:16px 20px;border-bottom:1px solid var(--bd2);display:flex;align-items:center;justify-content:space-between}
+.sec-title{font-size:14px;font-weight:700;letter-spacing:-.1px;display:flex;align-items:center;gap:8px}
+.sec-body{padding:20px}
+.m-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tx4);margin-bottom:8px;margin-top:16px;display:flex;align-items:center;gap:8px}
+.m-label::after{content:'';flex:1;height:1px;background:var(--bd2)}
+.m-label:first-child{margin-top:0}
+
+/* UPLOAD ZONE */
+.upload-zone{border:2px dashed var(--bd2);border-radius:var(--r2);padding:28px 16px;text-align:center;cursor:pointer;transition:all .3s;position:relative;background:rgba(0,0,0,.06)}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--teal);background:rgba(0,212,200,.02)}
+.uz-icon{margin-bottom:8px;color:var(--tx4);transition:all .3s}
+.upload-zone:hover .uz-icon{color:var(--t4);transform:translateY(-2px)}
+.uz-title{font-size:13px;font-weight:600;color:var(--t2)}.uz-title span{color:var(--t4)}
+.uz-sub{font-size:10px;color:var(--tx5);margin-top:3px}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+
+/* DOC SLOTS */
+.doc-slots{display:flex;flex-direction:column;gap:8px}
+.doc-slot{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(0,0,0,.06);border:1px solid var(--bd2);border-radius:var(--r2);transition:all .2s}
+.doc-slot.filled{border-color:rgba(0,230,118,.15);background:rgba(0,230,118,.02)}
+.doc-slot.missing{border-color:rgba(255,82,82,.12)}
+.ds-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.ds-info{flex:1;min-width:0}
+.ds-name{font-size:12px;font-weight:700}
+.ds-status{font-size:10px;margin-top:2px}
+.ds-file{font-size:10px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+.ds-action{flex-shrink:0}
+
+/* FORM GRID */
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--tx4)}
+
+/* SCORE RING */
+.score-ring{position:relative;display:inline-block;flex-shrink:0}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring circle{fill:none;stroke-linecap:round}
+.score-ring .bg{stroke:rgba(255,255,255,.06)}
+.score-ring .fg{transition:stroke-dashoffset .8s var(--ex)}
+.score-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-num .sn{font-family:'Geist Mono',monospace;font-weight:800;line-height:1}
+.score-num .sg{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--tx4);margin-top:2px}
+
+/* READINESS */
+.readiness{display:flex;gap:20px;align-items:center;padding:20px;background:rgba(0,0,0,.08);border:1px solid var(--bd2);border-radius:var(--r2);margin-bottom:16px}
+.readiness-info{flex:1}
+.readiness-info .ri-title{font-size:15px;font-weight:800}
+.readiness-info .ri-sub{font-size:12px;color:var(--tx4);margin-top:4px;line-height:1.5}
+.readiness-action{margin-top:8px;padding:6px 14px;border-radius:100px;font-size:10px;font-weight:700;display:inline-block}
+
+/* PACKET PREVIEW */
+.packet{border:1px solid var(--bdt);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.packet-head{padding:16px 20px;background:rgba(0,212,200,.03);border-bottom:1px solid var(--bdt);display:flex;align-items:center;gap:12px}
+.packet-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.packet-title{font-family:'Instrument Serif',serif;font-size:18px;letter-spacing:-.3px}
+.packet-body{padding:20px}
+.pkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pkt-item{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bd);font-size:12px}
+.pkt-item:last-child{border:0}
+.pkt-k{color:var(--tx4)}.pkt-v{font-family:'Geist Mono',monospace;font-weight:700}
+
+/* FUNDER SELECT */
+.funder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.funder-card{background:rgba(0,0,0,.06);border:1px solid var(--bd2);border-radius:var(--r2);padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .25s;user-select:none}
+.funder-card:hover{border-color:var(--bdt)}
+.funder-card.selected{border-color:rgba(0,230,118,.3);background:rgba(0,230,118,.03)}
+.fc-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--bd2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:11px;color:transparent}
+.funder-card.selected .fc-check{border-color:var(--grn);background:rgba(0,230,118,.1);color:var(--grn)}
+.fc-avatar{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Geist Mono',monospace;font-size:9px;font-weight:800;color:#fff}
+.fc-info{flex:1;min-width:0}
+.fc-name{font-size:11px;font-weight:700}
+.fc-meta{font-size:9px;color:var(--tx4);margin-top:1px}
+
+/* SUBMISSION RESULT */
+.sub-result{text-align:center;padding:40px 20px}
+.sub-check{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(0,212,200,.1),rgba(0,230,118,.08));border:2px solid rgba(0,230,118,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.sub-title{font-family:'Instrument Serif',serif;font-size:28px;letter-spacing:-.5px;margin-bottom:8px}
+.sub-title em{font-style:italic;color:var(--t4)}
+.sub-desc{font-size:13px;color:var(--tx4);line-height:1.6;max-width:440px;margin:0 auto 20px}
+.sub-funders{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px}
+
+/* PROCESSING */
+.processing{display:none;text-align:center;padding:50px 20px}
+.processing.show{display:block}
+.proc-spinner{width:44px;height:44px;border:3px solid var(--bd2);border-top-color:var(--teal);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 18px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.proc-steps{max-width:320px;margin:0 auto;text-align:left}
+.proc-step{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:12px;color:var(--tx4);transition:all .4s}
+.proc-step.active{color:var(--t4)}.proc-step.done{color:var(--grn)}
+.proc-dot{width:8px;height:8px;border-radius:50%;background:var(--bd2);flex-shrink:0;transition:all .3s}
+.proc-step.active .proc-dot{background:var(--teal);box-shadow:0 0 10px rgba(0,212,200,.3)}
+.proc-step.done .proc-dot{background:var(--grn)}
+
+.actions-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:20px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(14,20,34,.96);border:1px solid var(--bdt);padding:10px 24px;border-radius:var(--r2);box-shadow:0 12px 40px rgba(0,0,0,.4);font-weight:700;font-size:12px;display:none;z-index:300;backdrop-filter:blur(16px);color:var(--t4)}
+.toast.show{display:block;animation:ti .25s var(--ex)}
+@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+@media(max-width:768px){.nav-pills{display:none}.form-grid{grid-template-columns:1fr 1fr}.pkt-grid{grid-template-columns:1fr}.funder-grid{grid-template-columns:1fr}.readiness{flex-direction:column;text-align:center}}
+@media(max-width:480px){.form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<nav class="nav">
+  <div class="nav-l"><a href="index.html" class="logo"><svg width="13" height="13" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div><div class="nav-brand">Private<em>Credit</em>MCA</div><div class="nav-sub">Universal Deal Packet</div></div></div>
+  <div class="nav-pills"><a href="index.html" class="nl">Home</a><a href="marketplace.html" class="nl">Marketplace</a><a href="deallab.html" class="nl">Deal Lab</a><a href="funders.html" class="nl">Funders</a><a href="pipeline.html" class="nl">Pipeline</a><a href="packet.html" class="nl active">Deal Packet</a></div>
+  <div class="nav-r"><a href="funders.html" class="btn">Funders</a><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="btn btn-p">Join Community</a></div>
+</nav>
+
+<div class="wrap">
+  <!-- STEP PROGRESS -->
+  <div class="step-progress" id="stepProgress"></div>
+
+  <!-- STEP 1: UPLOAD + MERCHANT INFO -->
+  <div id="step1">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-family:'Instrument Serif',serif;font-size:clamp(28px,4vw,38px);letter-spacing:-1px;line-height:1.1">Upload once. <em style="font-style:italic;color:var(--t4)">Submit everywhere.</em></div>
+      <div style="font-size:13px;color:var(--tx4);margin-top:8px;max-width:500px;margin-left:auto;margin-right:auto">Upload your documents, enter the merchant profile, and the platform builds a standardized packet that every funder accepts. One click, ten submissions.</div>
+    </div>
+
+    <div class="section">
+      <div class="sec-head"><div class="sec-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--t4)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Document Upload</div></div>
+      <div class="sec-body">
+        <div class="doc-slots" id="docSlots"></div>
+        <div style="margin-top:12px">
+          <div class="upload-zone" id="uploadZone">
+            <div class="uz-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="uz-title">Drop files or <span>click to browse</span></div>
+            <div class="uz-sub">PDF, JPG, PNG — up to 10MB each. Auto-matched to document slots.</div>
+            <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-head"><div class="sec-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--t4)" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Merchant Profile</div></div>
+      <div class="sec-body">
+        <div class="form-grid">
+          <div class="field"><label>Business Name *</label><input class="inp" id="fBiz" placeholder="Merchant name"></div>
+          <div class="field"><label>Industry</label><select class="inp" id="fInd"><option>Restaurant</option><option>Retail</option><option>Construction</option><option>Trucking</option><option>Services</option><option>Medical</option><option>Auto Repair</option><option>E-Commerce</option></select></div>
+          <div class="field"><label>State</label><input class="inp" id="fState" placeholder="NY" maxlength="2" style="text-transform:uppercase"></div>
+          <div class="field"><label>Monthly Revenue *</label><input class="inp" id="fRev" type="number" placeholder="85000"></div>
+          <div class="field"><label>Credit Score</label><input class="inp" id="fCredit" type="number" placeholder="650"></div>
+          <div class="field"><label>TIB (Months)</label><input class="inp" id="fTib" type="number" placeholder="24"></div>
+          <div class="field"><label>Existing Positions</label><select class="inp" id="fPos"><option value="0">0 — Clean</option><option value="1">1</option><option value="2">2</option><option value="3">3+</option></select></div>
+          <div class="field"><label>Amount Requested *</label><input class="inp" id="fAmt" type="number" placeholder="65000"></div>
+          <div class="field"><label>DBA / Legal Name</label><input class="inp" id="fDba" placeholder="Optional"></div>
+        </div>
+        <div style="margin-top:10px"><div class="field"><label>Broker Notes</label><textarea class="inp" id="fNotes" placeholder="Anything important about this merchant — urgency, special circumstances, what makes this deal strong..."></textarea></div></div>
+      </div>
+    </div>
+    <div class="actions-bar"><div></div><button class="btn btn-p btn-lg" id="btnBuild">Build Deal Packet →</button></div>
+  </div>
+
+  <!-- PROCESSING -->
+  <div class="processing" id="processing">
+    <div class="proc-spinner"></div>
+    <div style="font-family:'Instrument Serif',serif;font-size:22px;margin-bottom:14px">Building your Universal Deal Packet…</div>
+    <div class="proc-steps">
+      <div class="proc-step" id="ps1"><div class="proc-dot"></div>Validating documents</div>
+      <div class="proc-step" id="ps2"><div class="proc-dot"></div>Extracting financial data</div>
+      <div class="proc-step" id="ps3"><div class="proc-dot"></div>Computing risk score</div>
+      <div class="proc-step" id="ps4"><div class="proc-dot"></div>Analyzing deposit patterns</div>
+      <div class="proc-step" id="ps5"><div class="proc-dot"></div>Generating underwriting summary</div>
+      <div class="proc-step" id="ps6"><div class="proc-dot"></div>Formatting for funder standards</div>
+      <div class="proc-step" id="ps7"><div class="proc-dot"></div>Building Universal Deal Packet</div>
+    </div>
+  </div>
+
+  <!-- STEP 2: PACKET REVIEW -->
+  <div id="step2" style="display:none">
+    <div id="packetContent"></div>
+    <div class="actions-bar"><button class="btn" id="btnBackTo1">← Edit Details</button><button class="btn btn-p btn-lg" id="btnToFunders">Select Funders →</button></div>
+  </div>
+
+  <!-- STEP 3: FUNDER SELECTION -->
+  <div id="step3" style="display:none">
+    <div class="section">
+      <div class="sec-head"><div class="sec-title">Select Funders</div><span style="font-family:'Geist Mono',monospace;font-size:12px;font-weight:800;color:var(--t4)" id="selectedCount">0 selected</span></div>
+      <div class="sec-body">
+        <div style="display:flex;gap:8px;margin-bottom:14px"><button class="btn btn-sm btn-g" id="btnSelectAll">Select All</button><button class="btn btn-sm" id="btnClearAll">Clear</button><button class="btn btn-sm" id="btnSelectRecommended">Recommended Only</button></div>
+        <div class="funder-grid" id="funderGrid"></div>
+      </div>
+    </div>
+    <div class="actions-bar"><button class="btn" id="btnBackTo2">← Review Packet</button><button class="btn btn-p btn-lg" id="btnSubmitAll">Submit to <span id="submitCount">0</span> Funders →</button></div>
+  </div>
+
+  <!-- STEP 4: SUBMISSION RESULT -->
+  <div id="step4" style="display:none">
+    <div class="section"><div class="sec-body" id="resultContent"></div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var $=function(id){return document.getElementById(id)};
+var toast=function(m){var t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},1400)};
+var money=function(n){return"$"+Math.round(n).toLocaleString()};
+var esc=function(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")};
+var clamp=function(n,a,b){return Math.max(a,Math.min(b,n))};
+
+var currentStep=1;
+var DOC_TYPES=[
+{id:"bank",name:"Bank Statements (3 mo)",required:true,icon:"📄",file:null},
+{id:"app",name:"Application",required:true,icon:"📋",file:null},
+{id:"id",name:"Driver's License / ID",required:true,icon:"🪪",file:null},
+{id:"check",name:"Voided Check",required:true,icon:"🏦",file:null},
+{id:"processing",name:"Processing Statements",required:false,icon:"📊",file:null},
+{id:"tax",name:"Tax Returns",required:false,icon:"📁",file:null}
+];
+var COLORS=["#2563eb","#059669","#dc2626","#7c3aed","#0891b2","#ea580c","#d946ef","#0d9488","#e11d48","#4f46e5","#16a34a","#be185d"];
+var FUNDERS=[
+{id:"f1",name:"Forward Financing",speed:"Fast",stacking:"Strict",products:"MCA · Term",range:"$10K–$300K",color:"#2563eb",rec:true},
+{id:"f2",name:"Fora Financial",speed:"Fast",stacking:"Flexible",products:"MCA · Term",range:"$10K–$500K",color:"#059669",rec:true},
+{id:"f3",name:"Credibly",speed:"Standard",stacking:"Flexible",products:"Term · LOC",range:"$10K–$400K",color:"#7c3aed",rec:true},
+{id:"f4",name:"Rapid Finance",speed:"Standard",stacking:"Strict",products:"Term · LOC",range:"$10K–$1M",color:"#0891b2",rec:false},
+{id:"f5",name:"FundKite",speed:"Fast",stacking:"Flexible",products:"MCA",range:"$5K–$250K",color:"#ea580c",rec:true},
+{id:"f6",name:"CAN Capital",speed:"Standard",stacking:"Strict",products:"Term",range:"$10K–$500K",color:"#0d9488",rec:false},
+{id:"f7",name:"Everest Business Funding",speed:"Fast",stacking:"Flexible",products:"MCA · Term",range:"$10K–$400K",color:"#d946ef",rec:true},
+{id:"f8",name:"OnDeck",speed:"Standard",stacking:"Strict",products:"Term · LOC",range:"$5K–$250K",color:"#e11d48",rec:false},
+{id:"f9",name:"Mulligan Funding",speed:"Fast",stacking:"Flexible",products:"Term",range:"$10K–$500K",color:"#4f46e5",rec:true},
+{id:"f10",name:"Libertas Funding",speed:"Fast",stacking:"Flexible",products:"MCA · Term",range:"$10K–$500K",color:"#16a34a",rec:true}
+];
+var selectedFunders={};
+var packetData=null;
+
+function initials(name){return name.split(" ").map(function(w){return w[0]}).join("").slice(0,2).toUpperCase()}
+
+function renderStepProgress(){
+  var steps=["Upload & Profile","Packet Review","Select Funders","Submitted"];
+  var html="";
+  steps.forEach(function(label,i){
+    var n=i+1;var cls=n===currentStep?"active":n<currentStep?"done":"";
+    html+='<div class="sp-step"><div class="sp-num '+cls+'">'+n+'</div><div class="sp-label '+cls+'">'+label+'</div></div>';
+    if(i<steps.length-1){
+      var fillPct=n<currentStep?100:0;
+      html+='<div class="sp-line"><div class="fill" style="width:'+fillPct+'%"></div></div>';
+    }
+  });
+  $("stepProgress").innerHTML=html;
+}
+
+function renderDocSlots(){
+  var html="";
+  DOC_TYPES.forEach(function(d,i){
+    var filled=d.file!==null;
+    var cls=filled?"filled":d.required?"missing":"";
+    html+='<div class="doc-slot '+cls+'"><div class="ds-icon" style="background:'+(filled?"rgba(0,230,118,.08)":"rgba(255,255,255,.03)")+'">'+d.icon+'</div><div class="ds-info"><div class="ds-name">'+d.name+(d.required?' <span style="color:var(--red);font-size:10px">*</span>':' <span style="color:var(--tx5);font-size:10px">(optional)</span>')+'</div><div class="ds-status" style="color:'+(filled?"var(--grn)":"var(--tx5)")+'">'+(filled?"Uploaded":"Waiting")+'</div>'+(filled?'<div class="ds-file">'+esc(d.file.name)+'</div>':'')+'</div><div class="ds-action">'+(filled?'<button class="btn btn-d btn-sm doc-rm" data-idx="'+i+'">Remove</button>':'<label class="btn btn-sm" style="cursor:pointer">Attach<input type="file" style="display:none" class="doc-attach" data-idx="'+i+'" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"></label>')+'</div></div>';
+  });
+  $("docSlots").innerHTML=html;
+  document.querySelectorAll(".doc-rm").forEach(function(b){
+    b.addEventListener("click",function(){DOC_TYPES[+b.dataset.idx].file=null;renderDocSlots()})
+  });
+  document.querySelectorAll(".doc-attach").forEach(function(inp){
+    inp.addEventListener("change",function(){
+      if(inp.files.length){DOC_TYPES[+inp.dataset.idx].file=inp.files[0];renderDocSlots()}
+    })
+  });
+}
+
+// Auto-assign uploaded files to empty slots
+function autoAssignFiles(fileList){
+  var files=Array.from(fileList);
+  files.forEach(function(f){
+    if(f.size>10*1024*1024){toast("File too large: "+f.name);return}
+    var name=f.name.toLowerCase();
+    var assigned=false;
+    // Smart matching
+    if(!assigned&&(name.includes("statement")||name.includes("bank"))&&!DOC_TYPES[0].file){DOC_TYPES[0].file=f;assigned=true}
+    if(!assigned&&(name.includes("app")||name.includes("application"))&&!DOC_TYPES[1].file){DOC_TYPES[1].file=f;assigned=true}
+    if(!assigned&&(name.includes("id")||name.includes("license")||name.includes("dl"))&&!DOC_TYPES[2].file){DOC_TYPES[2].file=f;assigned=true}
+    if(!assigned&&(name.includes("check")||name.includes("void"))&&!DOC_TYPES[3].file){DOC_TYPES[3].file=f;assigned=true}
+    if(!assigned&&(name.includes("process")||name.includes("merchant"))&&!DOC_TYPES[4].file){DOC_TYPES[4].file=f;assigned=true}
+    if(!assigned&&(name.includes("tax")||name.includes("return"))&&!DOC_TYPES[5].file){DOC_TYPES[5].file=f;assigned=true}
+    // Fill first empty slot
+    if(!assigned){
+      for(var i=0;i<DOC_TYPES.length;i++){if(!DOC_TYPES[i].file){DOC_TYPES[i].file=f;assigned=true;break}}
+    }
+  });
+  renderDocSlots();
+  toast(files.length+" file"+(files.length!==1?"s":"")+" uploaded");
+}
+
+var zone=$("uploadZone"),fi=$("fileInput");
+zone.addEventListener("dragover",function(e){e.preventDefault();zone.classList.add("dragover")});
+zone.addEventListener("dragleave",function(){zone.classList.remove("dragover")});
+zone.addEventListener("drop",function(e){e.preventDefault();zone.classList.remove("dragover");autoAssignFiles(e.dataTransfer.files)});
+fi.addEventListener("change",function(){autoAssignFiles(fi.files)});
+
+function scoreRing(score,grade,size){
+  size=size||80;
+  var r=(size-10)/2,circ=2*Math.PI*r,offset=circ-(score/100)*circ;
+  var color="var(--red)";if(score>=80)color="var(--grn)";else if(score>=65)color="var(--teal)";else if(score>=50)color="var(--amb)";
+  return'<div class="score-ring" style="width:'+size+'px;height:'+size+'px"><svg width="'+size+'" height="'+size+'"><circle class="bg" cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+r+'" stroke-width="5"/><circle class="fg" cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+r+'" stroke="'+color+'" stroke-width="5" stroke-dasharray="'+circ+'" stroke-dashoffset="'+offset+'"/></svg><div class="score-num"><div class="sn" style="font-size:'+(size>70?24:16)+'px">'+score+'</div><div class="sg">'+grade+'</div></div></div>';
+}
+
+function computePacket(){
+  var biz=$("fBiz").value.trim();var rev=+$("fRev").value||0;var cr=+$("fCredit").value||0;
+  var tib=+$("fTib").value||0;var ps=+$("fPos").value||0;var amt=+$("fAmt").value||0;
+  var ind=$("fInd").value;var st=($("fState").value||"").toUpperCase().slice(0,2);
+  var dba=$("fDba").value.trim()||biz;var notes=$("fNotes").value.trim();
+
+  // Score
+  var sc=50;
+  if(cr>=700)sc+=20;else if(cr>=660)sc+=14;else if(cr>=620)sc+=8;else if(cr>=580)sc+=3;else if(cr>0)sc-=12;
+  if(rev>=150000)sc+=18;else if(rev>=100000)sc+=12;else if(rev>=60000)sc+=6;else if(rev>=30000)sc+=2;else if(rev>0)sc-=8;
+  if(tib>=36)sc+=10;else if(tib>=24)sc+=6;else if(tib>=12)sc+=2;else if(tib>0)sc-=8;
+  if(ps===0)sc+=8;else if(ps===1)sc+=2;else if(ps===2)sc-=6;else sc-=14;
+  if(rev>0&&amt>0){var ratio=amt/rev;if(ratio<=.35)sc+=8;else if(ratio<=.55)sc+=2;else if(ratio<=.75)sc-=4;else sc-=10}
+  var docsReq=DOC_TYPES.filter(function(d){return d.required});
+  var docsFilled=docsReq.filter(function(d){return d.file!==null}).length;
+  var docPct=Math.round(docsFilled/docsReq.length*100);
+  if(docPct===100)sc+=6;else if(docPct>=75)sc+=2;else sc-=6;
+  sc=clamp(Math.round(sc),1,99);
+  var grade="D";if(sc>=80)grade="A";else if(sc>=65)grade="B";else if(sc>=50)grade="C";
+
+  // Flags
+  var flags=[];
+  if(cr>0&&cr<580)flags.push({t:"rd",text:"Low credit band — subprime funders recommended"});
+  if(rev>0&&rev<30000)flags.push({t:"rd",text:"Low revenue — limits funder options"});
+  if(tib>0&&tib<12)flags.push({t:"wn",text:"Under 12 months in business"});
+  if(ps>=2)flags.push({t:"rd",text:ps+" existing positions — stacking risk"});
+  if(rev>0&&amt>0&&amt/rev>.75)flags.push({t:"rd",text:"Request very high relative to revenue"});
+  if(docPct<100)flags.push({t:"wn",text:"Missing required documents ("+docPct+"% complete)"});
+  if(sc>=80)flags.push({t:"gn",text:"Strong file — eligible for premium terms"});
+  if(ps===0&&cr>=680)flags.push({t:"gn",text:"Clean position + good credit — competitive offers expected"});
+
+  // AI summary
+  var simRev=rev||Math.round(50000+Math.random()*100000);
+  var nsf=Math.random()>.65?Math.floor(Math.random()*4):0;
+  var negDays=nsf>0?Math.floor(Math.random()*6):Math.random()>.85?Math.floor(Math.random()*2):0;
+  var depFreq=Math.floor(18+Math.random()*14);
+  var approvalLow=Math.round(amt*.7/1000)*1000;
+  var approvalHigh=Math.round(amt*(sc>=70?1.05:.85)/1000)*1000;
+
+  var probability="Low";var probCls="rd";var action="Submit to Superbroker for help structuring.";
+  if(sc>=80){probability="High";probCls="gn";action="Direct marketplace submission recommended."}
+  else if(sc>=65){probability="Medium-High";probCls="gn";action="Submit to marketplace. Consider Offer Battle for competitive bidding."}
+  else if(sc>=50){probability="Medium";probCls="wn";action="Submit to marketplace or Superbroker for guidance."}
+
+  return{biz:biz,dba:dba,ind:ind,state:st,rev:rev,credit:cr,tib:tib,positions:ps,amount:amt,notes:notes,score:sc,grade:grade,flags:flags,docPct:docPct,docsFilled:docsFilled,docsTotal:docsReq.length,avgRev:simRev,nsf:nsf,negDays:negDays,depFreq:depFreq,approvalLow:approvalLow,approvalHigh:approvalHigh,probability:probability,probCls:probCls,action:action};
+}
+
+async function buildPacket(){
+  var biz=$("fBiz").value.trim();var rev=+$("fRev").value;var amt=+$("fAmt").value;
+  if(!biz){$("fBiz").style.borderColor="var(--red)";$("fBiz").focus();return}
+  if(!rev){$("fRev").style.borderColor="var(--red)";$("fRev").focus();return}
+  if(!amt){$("fAmt").style.borderColor="var(--red)";$("fAmt").focus();return}
+
+  $("step1").style.display="none";$("processing").classList.add("show");
+  var steps=["ps1","ps2","ps3","ps4","ps5","ps6","ps7"];
+  for(var i=0;i<steps.length;i++){
+    await new Promise(function(r){setTimeout(r,350+Math.random()*250)});
+    if(i>0)$(steps[i-1]).classList.remove("active");if(i>0)$(steps[i-1]).classList.add("done");
+    $(steps[i]).classList.add("active");
+  }
+  await new Promise(function(r){setTimeout(r,400)});
+  $(steps[6]).classList.remove("active");$(steps[6]).classList.add("done");
+  await new Promise(function(r){setTimeout(r,300)});
+
+  packetData=computePacket();
+  $("processing").classList.remove("show");
+  currentStep=2;renderStepProgress();renderPacketReview();$("step2").style.display="block";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderPacketReview(){
+  var d=packetData;
+  var html="";
+
+  // Readiness
+  var readColor=d.score>=80?"var(--grn)":d.score>=65?"var(--teal)":d.score>=50?"var(--amb)":"var(--red)";
+  html+='<div class="readiness">'+scoreRing(d.score,d.grade,80)+'<div class="readiness-info"><div class="ri-title" style="color:'+readColor+'">Deal Score: '+d.score+' — Approval Probability: '+d.probability+'</div><div class="ri-sub">'+d.action+'</div><div class="readiness-action pill '+d.probCls+'">'+d.probability+' Approval</div></div></div>';
+
+  // Universal Packet
+  html+='<div class="packet"><div class="packet-head"><div class="packet-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#060a10" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="packet-title">Universal Deal Packet — '+esc(d.biz)+'</div></div><div class="packet-body">';
+
+  // Merchant Profile
+  html+='<div class="m-label" style="margin-top:0">Merchant Profile</div><div class="pkt-grid"><div class="pkt-item"><span class="pkt-k">Business Name</span><span class="pkt-v">'+esc(d.biz)+'</span></div><div class="pkt-item"><span class="pkt-k">DBA</span><span class="pkt-v">'+esc(d.dba)+'</span></div><div class="pkt-item"><span class="pkt-k">Industry</span><span class="pkt-v">'+d.ind+'</span></div><div class="pkt-item"><span class="pkt-k">State</span><span class="pkt-v">'+(d.state||"—")+'</span></div><div class="pkt-item"><span class="pkt-k">Time in Business</span><span class="pkt-v">'+(d.tib?d.tib+" mo":"—")+'</span></div><div class="pkt-item"><span class="pkt-k">Monthly Revenue</span><span class="pkt-v" style="color:var(--t4)">'+money(d.rev)+'</span></div><div class="pkt-item"><span class="pkt-k">Credit Score</span><span class="pkt-v">'+(d.credit||"—")+'</span></div><div class="pkt-item"><span class="pkt-k">Existing Positions</span><span class="pkt-v">'+(d.positions===0?"Clean":d.positions)+'</span></div></div>';
+
+  // Financial Summary
+  html+='<div class="m-label">Financial Summary (AI-Extracted)</div><div class="pkt-grid"><div class="pkt-item"><span class="pkt-k">Avg Monthly Deposits</span><span class="pkt-v">'+money(d.avgRev)+'</span></div><div class="pkt-item"><span class="pkt-k">NSF Count</span><span class="pkt-v" style="color:'+(d.nsf===0?"var(--grn)":"var(--red)")+'">'+d.nsf+'</span></div><div class="pkt-item"><span class="pkt-k">Negative Days</span><span class="pkt-v" style="color:'+(d.negDays===0?"var(--grn)":"var(--amb)")+'">'+d.negDays+'</span></div><div class="pkt-item"><span class="pkt-k">Deposit Frequency</span><span class="pkt-v">'+d.depFreq+'/mo</span></div></div>';
+
+  // Documents
+  html+='<div class="m-label">Documents ('+d.docsFilled+'/'+d.docsTotal+' required)</div>';
+  DOC_TYPES.forEach(function(doc){
+    var ok=doc.file!==null;
+    html+='<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px"><span style="color:'+(ok?"var(--grn)":"var(--tx5)")+'">'+(ok?"✓":"○")+'</span><span style="color:'+(ok?"var(--t2)":"var(--tx5)")+'">'+doc.name+'</span>'+(ok?'<span style="font-size:10px;color:var(--tx4)">— '+esc(doc.file.name)+'</span>':'')+'</div>';
+  });
+
+  // AI Underwriting Summary
+  html+='<div class="m-label">AI Underwriting Summary</div><div class="pkt-grid"><div class="pkt-item"><span class="pkt-k">Risk Score</span><span class="pkt-v" style="color:'+readColor+'">'+d.score+' ('+d.grade+')</span></div><div class="pkt-item"><span class="pkt-k">Recommended Range</span><span class="pkt-v" style="color:var(--t4)">'+money(d.approvalLow)+' – '+money(d.approvalHigh)+'</span></div><div class="pkt-item"><span class="pkt-k">Amount Requested</span><span class="pkt-v">'+money(d.amount)+'</span></div><div class="pkt-item"><span class="pkt-k">Approval Probability</span><span class="pkt-v" style="color:'+readColor+'">'+d.probability+'</span></div></div>';
+
+  // Flags
+  if(d.flags.length){
+    html+='<div class="m-label">Risk Flags</div>';
+    d.flags.forEach(function(f){
+      var icon=f.t==="gn"?"↑":f.t==="wn"?"→":"↓";
+      var iColor=f.t==="gn"?"var(--grn)":f.t==="wn"?"var(--amb)":"var(--red)";
+      html+='<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px"><span style="color:'+iColor+'">'+icon+'</span><span style="color:var(--t3)">'+f.text+'</span></div>';
+    });
+  }
+
+  if(d.notes){html+='<div class="m-label">Broker Notes</div><div style="font-size:12px;color:var(--t3);line-height:1.5;padding:4px 0">'+esc(d.notes)+'</div>'}
+
+  html+='</div></div>';
+  $("packetContent").innerHTML=html;
+}
+
+function renderFunderGrid(){
+  var html="";
+  FUNDERS.forEach(function(f){
+    var sel=selectedFunders[f.id]||false;
+    html+='<div class="funder-card'+(sel?" selected":"")+'" data-fid="'+f.id+'"><div class="fc-check">'+(sel?"✓":"")+'</div><div class="fc-avatar" style="background:'+f.color+'">'+initials(f.name)+'</div><div class="fc-info"><div class="fc-name">'+esc(f.name)+(f.rec?' <span class="pill gn" style="font-size:7px;padding:2px 5px">Rec</span>':'')+'</div><div class="fc-meta">'+f.speed+' · '+f.stacking+' · '+f.range+'</div></div></div>';
+  });
+  $("funderGrid").innerHTML=html;
+  document.querySelectorAll(".funder-card").forEach(function(card){
+    card.addEventListener("click",function(){
+      var fid=card.dataset.fid;selectedFunders[fid]=!selectedFunders[fid];renderFunderGrid();updateCounts();
+    });
+  });
+  updateCounts();
+}
+
+function updateCounts(){
+  var count=Object.keys(selectedFunders).filter(function(k){return selectedFunders[k]}).length;
+  $("selectedCount").textContent=count+" selected";
+  $("submitCount").textContent=count;
+}
+
+async function submitToFunders(){
+  var count=Object.keys(selectedFunders).filter(function(k){return selectedFunders[k]}).length;
+  if(!count){toast("Select at least one funder");return}
+
+  $("step3").style.display="none";$("processing").classList.add("show");
+  $("processing").querySelector("div:nth-child(2)").textContent="Submitting to "+count+" funders…";
+  var steps=["ps1","ps2","ps3","ps4","ps5","ps6","ps7"];
+  var labels=["Formatting for funder requirements","Attaching documents","Generating cover summaries","Submitting to funder portals","Confirming deliveries","Logging submissions","Complete"];
+  steps.forEach(function(s,i){$(s).querySelector(":last-child")||0;$(s).textContent="";$(s).innerHTML='<div class="proc-dot"></div>'+labels[i];$(s).classList.remove("active","done")});
+
+  for(var i=0;i<steps.length;i++){
+    await new Promise(function(r){setTimeout(r,300+Math.random()*200)});
+    if(i>0){$(steps[i-1]).classList.remove("active");$(steps[i-1]).classList.add("done")}
+    $(steps[i]).classList.add("active");
+  }
+  await new Promise(function(r){setTimeout(r,400)});
+  $(steps[6]).classList.remove("active");$(steps[6]).classList.add("done");
+  await new Promise(function(r){setTimeout(r,300)});
+
+  $("processing").classList.remove("show");
+  currentStep=4;renderStepProgress();renderResult(count);$("step4").style.display="block";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderResult(count){
+  var selNames=FUNDERS.filter(function(f){return selectedFunders[f.id]});
+  var pills="";
+  selNames.forEach(function(f){
+    pills+='<span class="pill gn">'+esc(f.name)+'</span>';
+  });
+  $("resultContent").innerHTML='<div class="sub-result"><div class="sub-check"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--grn)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div class="sub-title">Deal Packet <em>Submitted!</em></div><div class="sub-desc">Your Universal Deal Packet for <b>'+esc(packetData.biz)+'</b> has been formatted and submitted to <b>'+count+' funder'+(count!==1?"s":"")+'</b>. Each received the package in their preferred format with all required documents attached.</div><div class="sub-funders">'+pills+'</div><div style="font-size:12px;color:var(--tx4);margin-bottom:20px;line-height:1.5">Expect initial responses within 4–24 hours. Track responses in the <a href="pipeline.html" style="color:var(--t4)">Pipeline CRM</a> or check the <a href="offerbattle.html" style="color:var(--t4)">Offer Battle</a> arena.</div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><a href="pipeline.html" class="btn btn-p">Go to Pipeline</a><a href="offerbattle.html" class="btn btn-g">Offer Battle</a><button class="btn" id="btnNewPacket">New Packet</button></div></div>';
+  $("btnNewPacket").addEventListener("click",function(){
+    DOC_TYPES.forEach(function(d){d.file=null});selectedFunders={};packetData=null;
+    $("step4").style.display="none";$("step1").style.display="block";
+    currentStep=1;renderStepProgress();renderDocSlots();
+    $("fBiz").value="";$("fRev").value="";$("fAmt").value="";$("fCredit").value="";$("fTib").value="";$("fState").value="";$("fDba").value="";$("fNotes").value="";
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+}
+
+// WIRING
+$("btnBuild").addEventListener("click",buildPacket);
+$("btnBackTo1").addEventListener("click",function(){$("step2").style.display="none";$("step1").style.display="block";currentStep=1;renderStepProgress()});
+$("btnToFunders").addEventListener("click",function(){$("step2").style.display="none";$("step3").style.display="block";currentStep=3;renderStepProgress();renderFunderGrid()});
+$("btnBackTo2").addEventListener("click",function(){$("step3").style.display="none";$("step2").style.display="block";currentStep=2;renderStepProgress()});
+$("btnSubmitAll").addEventListener("click",submitToFunders);
+$("btnSelectAll").addEventListener("click",function(){FUNDERS.forEach(function(f){selectedFunders[f.id]=true});renderFunderGrid()});
+$("btnClearAll").addEventListener("click",function(){selectedFunders={};renderFunderGrid()});
+$("btnSelectRecommended").addEventListener("click",function(){selectedFunders={};FUNDERS.forEach(function(f){if(f.rec)selectedFunders[f.id]=true});renderFunderGrid()});
+
+renderStepProgress();renderDocSlots();
+</script>
+</body>
+</html>
