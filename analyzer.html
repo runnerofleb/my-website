@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Deal Analyzer</title>
+
+<style>
+body {
+  font-family: Arial;
+  background:#0f172a;
+  color:white;
+  text-align:center;
+  padding:40px;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:10px;
+width:400px;
+margin:auto;
+}
+
+input,select{
+width:90%;
+padding:10px;
+margin:8px;
+border-radius:6px;
+border:none;
+}
+
+button{
+padding:10px 20px;
+background:#22c55e;
+border:none;
+border-radius:6px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.result{
+margin-top:20px;
+font-size:18px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Broker Deal Analyzer</h1>
+
+<div class="card">
+
+<select id="industry">
+<option value="restaurant">Restaurant</option>
+<option value="retail">Retail</option>
+<option value="construction">Construction</option>
+<option value="trucking">Trucking</option>
+</select>
+
+<input id="credit" placeholder="Credit Score">
+
+<input id="revenue" placeholder="Monthly Revenue">
+
+<input id="positions" placeholder="Existing Positions">
+
+<input id="amount" placeholder="Funding Requested">
+
+<button onclick="analyze()">Analyze Deal</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<script>
+
+function analyze(){
+
+let credit = parseInt(document.getElementById("credit").value);
+let revenue = parseInt(document.getElementById("revenue").value);
+let positions = parseInt(document.getElementById("positions").value);
+
+let score = 50;
+
+if(credit >= 650) score += 20;
+else if(credit >= 600) score += 10;
+else score -= 10;
+
+if(revenue >= 100000) score += 20;
+else if(revenue >= 50000) score += 10;
+
+if(positions == 0) score += 15;
+if(positions >= 3) score -= 20;
+
+let grade;
+
+if(score >= 85) grade = "A";
+else if(score >= 70) grade = "B";
+else if(score >= 55) grade = "C";
+else grade = "D";
+
+document.getElementById("result").innerHTML =
+
+`
+Deal Score: ${score}/100<br>
+Risk Grade: ${grade}<br><br>
+
+Recommended Funders:<br>
+Credibly<br>
+Fundkite<br>
+Everest Business Funding
+`;
+
+}
+
+</script>
+
+</body>
+</html>
