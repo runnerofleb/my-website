@@ -2,273 +2,807 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Funder Directory</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BrokerOS • Funder Directory</title>
   <style>
-    body { font-family: Arial, sans-serif; background:#0b0f14; color:#e8eef6; margin:0; }
-    header { padding:16px 20px; border-bottom:1px solid #1a2430; position:sticky; top:0; background:#0b0f14; }
-    a { color:#7dd3fc; text-decoration:none; }
-    .wrap { max-width:1100px; margin:0 auto; padding:20px; }
-    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
-    .card { background:#0f1620; border:1px solid #1a2430; border-radius:14px; padding:14px; }
-    .row { display:flex; gap:10px; flex-wrap:wrap; }
-    input, select { background:#0b0f14; color:#e8eef6; border:1px solid #243244; border-radius:10px; padding:10px; }
-    button { background:#22c55e; border:none; border-radius:10px; padding:10px 12px; font-weight:700; cursor:pointer; }
-    button.secondary { background:#1f2937; color:#e8eef6; border:1px solid #243244; }
-    .pill { display:inline-block; padding:4px 8px; border:1px solid #243244; border-radius:999px; font-size:12px; opacity:.9; }
-    .muted { opacity:.8; font-size:13px; }
-    .list { display:grid; grid-template-columns: 1fr; gap:12px; margin-top:14px; }
-    .funder-title { display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
-    .score { font-weight:800; }
-    @media (max-width: 900px){ .grid { grid-template-columns:1fr; } }
+    :root{
+      --bg:#0b1026;
+      --panel:#0a1433;
+      --panel2:#0b1b44;
+      --border:#1c2b66;
+      --text:#eaf1ff;
+      --muted:#a7b4cc;
+      --muted2:#7d8aa3;
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --blue:#38bdf8;
+      --vio:#a78bfa;
+      --pink:#fb7185;
+      --shadow:0 18px 45px rgba(0,0,0,.40);
+      --r:18px;
+      --r2:14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1000px 540px at 12% 8%, rgba(56,189,248,.18), transparent 55%),
+        radial-gradient(900px 520px at 70% 12%, rgba(34,197,94,.12), transparent 55%),
+        radial-gradient(900px 520px at 86% 70%, rgba(251,113,133,.10), transparent 55%),
+        var(--bg);
+    }
+    a{ color:var(--blue); text-decoration:none; font-weight:800; }
+    a:hover{ text-decoration:underline; }
+
+    header{
+      position: sticky; top:0; z-index:50;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:16px 22px;
+      background: rgba(9,12,25,.75);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(28,43,102,.65);
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:950; letter-spacing:-.2px;
+    }
+    .logo{
+      width:34px; height:34px; border-radius:14px;
+      background: linear-gradient(90deg, var(--good), var(--blue), var(--vio));
+      box-shadow: 0 14px 40px rgba(56,189,248,.14);
+      flex: 0 0 auto;
+    }
+    .brand small{
+      display:block;
+      color:var(--muted);
+      font-weight:800;
+      font-size:12px;
+      margin-top:2px;
+      letter-spacing:0;
+    }
+    nav{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+    nav a{
+      padding:8px 10px;
+      border:1px solid rgba(28,43,102,.75);
+      background: rgba(10,20,51,.55);
+      border-radius:999px;
+      color:var(--muted);
+    }
+    nav a.active{
+      color:var(--text);
+      border-color: rgba(56,189,248,.40);
+      background: rgba(56,189,248,.12);
+    }
+
+    .wrap{ max-width:1200px; margin:0 auto; padding:18px; }
+
+    .hero{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .hero h1{ margin:0; font-size:28px; letter-spacing:-.4px; }
+    .hero p{ margin:8px 0 0; color:var(--muted); max-width: 860px; line-height:1.35; }
+    .hero .ctaRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+
+    .btn{
+      border:1px solid rgba(28,43,102,.85);
+      background: rgba(10,20,51,.70);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      cursor:pointer;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+      white-space: nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(56,189,248,.40); }
+    .btn.primary{
+      background: linear-gradient(90deg, rgba(34,197,94,.22), rgba(56,189,248,.18));
+      border-color: rgba(34,197,94,.35);
+    }
+    .btn.primary:hover{ border-color: rgba(34,197,94,.55); }
+    .btn.danger{
+      background: rgba(239,68,68,.12);
+      border-color: rgba(239,68,68,.35);
+    }
+    .btn.small{ padding:8px 10px; border-radius: 12px; font-size: 13px; }
+
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap: 14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .drawer{ position: static !important; top:auto !important; }
+    }
+
+    .panel{
+      background: rgba(10,20,51,.72);
+      border:1px solid rgba(28,43,102,.80);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panelHeader{
+      padding: 14px 14px 12px;
+      border-bottom:1px solid rgba(28,43,102,.65);
+      background: rgba(10,20,51,.50);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .panelHeader .t{ font-weight: 950; }
+    .panelHeader .s{ color:var(--muted); font-size:12px; margin-top:4px; font-weight:800; }
+    .panelBody{ padding: 14px; }
+
+    .filters{
+      display:grid;
+      grid-template-columns: 1.3fr 1fr 1fr 1fr;
+      gap: 10px;
+      align-items:center;
+    }
+    @media (max-width: 980px){
+      .filters{ grid-template-columns: 1fr 1fr; }
+    }
+
+    input, select{
+      width:100%;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(44,70,160,.75);
+      background: rgba(7,12,28,.65);
+      color: var(--text);
+      outline:none;
+    }
+    input::placeholder{ color: rgba(167,180,204,.6); }
+
+    .pillRow{ display:flex; gap:8px; flex-wrap:wrap; }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(44,70,160,.70);
+      background: rgba(7,12,28,.45);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .pill strong{ color: var(--text); }
+    .pill.good{ border-color: rgba(34,197,94,.45); background: rgba(34,197,94,.10); color: rgba(34,197,94,.95); }
+    .pill.warn{ border-color: rgba(245,158,11,.50); background: rgba(245,158,11,.10); color: rgba(245,158,11,.95); }
+    .pill.bad{ border-color: rgba(239,68,68,.55); background: rgba(239,68,68,.10); color: rgba(239,68,68,.98); }
+    .pill.score{ border-color: rgba(56,189,248,.45); background: rgba(56,189,248,.12); color: var(--text); }
+
+    .cards{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top:12px;
+    }
+    @media (max-width: 780px){
+      .cards{ grid-template-columns: 1fr; }
+    }
+    .card{
+      border:1px solid rgba(28,43,102,.75);
+      background: rgba(7,12,28,.45);
+      border-radius: 14px;
+      padding: 12px;
+      cursor:pointer;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+    }
+    .card:hover{
+      transform: translateY(-1px);
+      border-color: rgba(56,189,248,.30);
+      background: rgba(7,12,28,.55);
+    }
+    .cardTop{
+      display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
+    }
+    .name{
+      font-weight: 950;
+      letter-spacing:-.1px;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:6px;
+      line-height:1.35;
+    }
+    .metaRow{
+      margin-top:10px;
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+
+    .chip{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:5px 10px;
+      border-radius:999px;
+      border:1px solid rgba(44,70,160,.70);
+      background: rgba(10,20,51,.55);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .chip b{ color:var(--text); }
+    .chip.star{ border-color: rgba(251,113,133,.35); background: rgba(251,113,133,.10); color: rgba(251,113,133,.95); }
+    .chip.fit{ border-color: rgba(56,189,248,.35); background: rgba(56,189,248,.10); color: var(--text); }
+    .chip.fast{ border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.10); color: rgba(34,197,94,.95); }
+    .chip.flex{ border-color: rgba(167,139,250,.40); background: rgba(167,139,250,.10); color: rgba(167,139,250,.98); }
+
+    .drawer{
+      position: sticky;
+      top: 88px;
+    }
+    .drawerEmpty{
+      padding:14px;
+      color:var(--muted);
+      line-height:1.35;
+      font-weight:800;
+    }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top:10px;
+    }
+    .kv .box{
+      border:1px solid rgba(28,43,102,.75);
+      background: rgba(7,12,28,.45);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .kv .k{ color:var(--muted); font-size:12px; font-weight:900; }
+    .kv .v{ margin-top:6px; font-weight:950; }
+
+    .divider{ height:1px; background: rgba(28,43,102,.65); margin: 12px 0; }
+
+    .toast{
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10,20,51,.95);
+      border: 1px solid rgba(28,43,102,.85);
+      padding: 10px 12px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      font-weight: 950;
+      display:none;
+      z-index: 200;
+    }
+    .toast.show{ display:block; }
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="wrap">
-      <div class="row" style="justify-content:space-between; align-items:center;">
-        <div><strong>Funder Directory</strong> <span class="muted">+ Smart Matching (beta)</span></div>
-        <div class="row">
-          <a href="index.html">Home</a>
-          <a href="superbroker.html">SuperBroker</a>
-          <a href="gameroom.html">GameRoom</a>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <div class="wrap">
-    <div class="grid">
-      <div class="card">
-        <h3 style="margin-top:0;">Directory Search</h3>
-        <div class="row">
-          <input id="q" placeholder="Search by name..." style="flex:1;" />
-          <select id="product">
-            <option value="">Any product</option>
-            <option value="mca">MCA</option>
-            <option value="rba">Revenue-based</option>
-            <option value="term_loan">Term loan</option>
-            <option value="loc">Line of credit</option>
-          </select>
-        </div>
-        <div class="muted" style="margin-top:10px;">
-          This is a starter dataset. Fill in requirements over time and matching gets sharper.
-        </div>
-        <div id="dir" class="list"></div>
-      </div>
-
-      <div class="card">
-        <h3 style="margin-top:0;">Smart Deal Match (simple rules)</h3>
-        <div class="row">
-          <select id="industry">
-            <option value="">Industry (optional)</option>
-            <option>restaurant</option>
-            <option>retail</option>
-            <option>trucking</option>
-            <option>construction</option>
-            <option>services</option>
-          </select>
-          <input id="credit" type="number" placeholder="Credit (e.g. 620)" />
-          <input id="rev" type="number" placeholder="Monthly revenue (e.g. 85000)" />
-          <input id="tib" type="number" placeholder="Time in biz (months)" />
-          <select id="pos">
-            <option value="">Position</option>
-            <option value="1st">1st</option>
-            <option value="2nd">2nd</option>
-            <option value="3rd+">3rd+</option>
-          </select>
-          <select id="stack">
-            <option value="">Stacking needed?</option>
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
-          </select>
-        </div>
-
-        <div class="row" style="margin-top:12px;">
-          <button id="matchBtn">Match Funders</button>
-          <button class="secondary" id="resetBtn">Reset</button>
-        </div>
-
-        <div id="matches" class="list"></div>
-        <div class="muted" style="margin-top:10px;">
-          Scoring is transparent + adjustable. Later you can use real outcomes to tune it.
-        </div>
-      </div>
+<header>
+  <div class="brand">
+    <div class="logo"></div>
+    <div>
+      BrokerOS <small>Funder Directory • smart fit scores • shortlist • compare</small>
     </div>
   </div>
 
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="analyzer.html">Deal Lab</a>
+    <a class="active" href="funders.html">Funders</a>
+    <a href="leaderboard.html">Leaderboard</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <h1>Funder Directory</h1>
+      <p>
+        Search funders, filter by style, then click a card to see details.
+        If you ran a deal in <a href="analyzer.html">Deal Lab</a>, BrokerOS will show a <b>Fit Score</b> automatically.
+      </p>
+    </div>
+    <div class="ctaRow">
+      <button class="btn" id="btnUseLab">Use Deal Lab Deal</button>
+      <button class="btn primary" id="btnClearLab">Clear Deal</button>
+      <button class="btn" id="btnCompare">Compare (0)</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Left: Directory -->
+    <div class="panel">
+      <div class="panelHeader">
+        <div>
+          <div class="t">Directory</div>
+          <div class="s">Playful, fast, and broker-friendly. V1 uses your notes + a simple fit model.</div>
+        </div>
+        <div class="pillRow" id="summaryPills"></div>
+      </div>
+
+      <div class="panelBody">
+        <div class="filters">
+          <input id="q" placeholder="Search by name (e.g. Forward, CAN, OnDeck)…" />
+          <select id="speed">
+            <option value="">Speed (any)</option>
+            <option value="fast">Fast</option>
+            <option value="standard">Standard</option>
+          </select>
+          <select id="creditBand">
+            <option value="">Credit (any)</option>
+            <option value="low">Low (sub-600)</option>
+            <option value="mid">Mid (600–659)</option>
+            <option value="high">High (660+)</option>
+          </select>
+          <select id="positionsTol">
+            <option value="">Positions (any)</option>
+            <option value="strict">Strict (0–1)</option>
+            <option value="flex">Flexible (2+)</option>
+          </select>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+          <div class="pillRow" id="labPills"></div>
+          <button class="btn small danger" id="btnResetFilters">Reset Filters</button>
+        </div>
+
+        <div class="cards" id="cards"></div>
+      </div>
+    </div>
+
+    <!-- Right: Drawer -->
+    <div class="panel drawer">
+      <div class="panelHeader">
+        <div>
+          <div class="t">Funder Profile</div>
+          <div class="s">Click a funder to view notes + shortlist actions.</div>
+        </div>
+        <div class="pillRow">
+          <button class="btn small" id="btnFav">★ Favorite</button>
+          <button class="btn small" id="btnShort">＋ Compare</button>
+        </div>
+      </div>
+      <div class="panelBody" id="drawerBody">
+        <div class="drawerEmpty">Select a funder to see the full profile.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-  let FUNDERS = [];
+  const LAB_KEY = "brokeros_deal_lab_v1";     // from analyzer.html
+  const FAV_KEY = "brokeros_funder_favs_v1";
+  const COMP_KEY = "brokeros_funder_compare_v1";
 
-  function hasProduct(f, p) {
-    if (!p) return true;
-    return (f.products || []).includes(p);
+  const $ = (id) => document.getElementById(id);
+  const toastEl = $("toast");
+  const toast = (msg) => {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    setTimeout(()=>toastEl.classList.remove("show"), 1400);
+  };
+
+  function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
+
+  // V1 directory data (you can enrich later)
+  const FUNDERS = [
+    { name:"Forward Financing", url:"https://forwardfinancing.com/", speed:"fast", credit:"mid", positions:"strict", min:10000, max:300000, notes:"Often strong on speed + simplicity. Good first look for mid credit, clean bank." },
+    { name:"Credibly", url:"https://www.credibly.com/", speed:"standard", credit:"mid", positions:"flex", min:10000, max:400000, notes:"Broader product set. Good for mid-range deals and flexible structures." },
+    { name:"Fora Financial", url:"https://www.forafinancial.com/", speed:"fast", credit:"mid", positions:"flex", min:10000, max:500000, notes:"Good when you need momentum. Often competitive in mid-tier files." },
+    { name:"Rapid Finance", url:"https://www.rapidfinance.com/", speed:"standard", credit:"high", positions:"strict", min:10000, max:1000000, notes:"Often prefers cleaner files. Aim higher credit + stability." },
+    { name:"FundKite", url:"https://fundkite.com/", speed:"fast", credit:"low", positions:"flex", min:5000, max:250000, notes:"Can work lower bands. Useful when stacking exists—be conservative." },
+    { name:"CAN Capital", url:"https://cancapital.com/", speed:"standard", credit:"high", positions:"strict", min:10000, max:500000, notes:"Typically wants stronger profiles. Great for clean revenue and lower pressure." },
+    { name:"Everest Business Funding", url:"https://everestbf.com/", speed:"fast", credit:"mid", positions:"flex", min:10000, max:400000, notes:"Solid for mid-tier. Use when you need speed + decent flexibility." },
+    { name:"Pearl Capital", url:"https://pearlcapital.com/", speed:"standard", credit:"high", positions:"strict", min:20000, max:600000, notes:"More conservative vibe. Best for stronger credit + established TIB." },
+    { name:"OnDeck", url:"https://www.ondeck.com/", speed:"standard", credit:"high", positions:"strict", min:5000, max:250000, notes:"Strong brand. Often likes cleaner files; good when you can qualify." },
+    { name:"Mulligan Funding", url:"https://www.mulliganfunding.com/", speed:"fast", credit:"mid", positions:"flex", min:10000, max:500000, notes:"Often works a wide variety; good for momentum and workable stacking." },
+    { name:"IOU Financial", url:"https://ioufinancial.com/", speed:"standard", credit:"high", positions:"strict", min:10000, max:350000, notes:"More bank-like. Push cleaner deals and stronger time in business." },
+    { name:"Bitty Advance", url:"https://bittyadvance.com/", speed:"fast", credit:"low", positions:"flex", min:5000, max:150000, notes:"Useful for small deals + faster movement. Keep expectations realistic." },
+    { name:"LCF Group", url:"https://thelcfgroup.com/", speed:"standard", credit:"mid", positions:"flex", min:10000, max:300000, notes:"Mid-tier flexibility. Can be a good second look after strict lenders." },
+    { name:"Kalamata Capital Group", url:"https://www.kalamatacapitalgroup.com/", speed:"standard", credit:"mid", positions:"flex", min:10000, max:350000, notes:"Decent flexibility. Works as part of a broader matching set." },
+    { name:"Lendini", url:"https://www.lendini.com/", speed:"standard", credit:"mid", positions:"strict", min:10000, max:250000, notes:"More structured approach. Best for cleaner stacks (0–1 pos) and stable revenue." },
+    { name:"Libertas Funding", url:"https://libertasfunding.com/", speed:"fast", credit:"mid", positions:"flex", min:10000, max:500000, notes:"Often strong speed. Use when you need an aggressive pass with controlled risk." }
+  ];
+
+  // ---- Deal Lab pulling (optional) ----
+  function getLabDeal(){
+    try{
+      const raw = localStorage.getItem(LAB_KEY);
+      if (!raw) return null;
+      const d = JSON.parse(raw);
+      return {
+        industry: d.industry || "",
+        revenue: Number(d.revenue || 0),
+        credit: Number(d.credit || 0),
+        tib: Number(d.tib || 0),
+        positions: Number(d.positions || 0),
+        amount: Number(d.amount || 0),
+        factor: Number(d.factor || 1.35),
+        term: Number(d.term || 120),
+        holdback: Number(d.holdback || 12)
+      };
+    } catch { return null; }
   }
 
-  function textMatch(f, q) {
-    if (!q) return true;
-    return (f.name || "").toLowerCase().includes(q.toLowerCase());
+  function creditBandFromScore(cs){
+    if (!cs) return "";
+    if (cs < 600) return "low";
+    if (cs < 660) return "mid";
+    return "high";
   }
 
-  function renderDirectory(list) {
-    const dir = document.getElementById("dir");
-    dir.innerHTML = "";
-    list.forEach(f => {
-      const el = document.createElement("div");
-      el.className = "card";
-      el.innerHTML = `
-        <div class="funder-title">
-          <div><strong>${f.name}</strong></div>
-          <a href="${f.website}" target="_blank" rel="noreferrer">Website →</a>
-        </div>
-        <div class="row" style="margin-top:8px;">
-          ${(f.products || []).map(p => `<span class="pill">${p}</span>`).join("") || `<span class="pill">product: unknown</span>`}
-          <span class="pill">stacking: ${f.stacking || "unknown"}</span>
-          <span class="pill">speed: ${f.speed || "varies"}</span>
-        </div>
-        <div class="muted" style="margin-top:8px;">
-          min credit: ${f.min_credit ?? "?"} · min rev: ${f.min_monthly_revenue ?? "?"} · time in biz: ${f.min_time_in_business_months ?? "?"} months
-        </div>
-        ${f.notes ? `<div class="muted" style="margin-top:8px;">${f.notes}</div>` : ``}
-      `;
-      dir.appendChild(el);
+  // Simple fit score (V1) – tune later with real outcomes
+  function fitScore(f, deal){
+    if (!deal) return null;
+    let s = 80;
+
+    // credit fit
+    const band = creditBandFromScore(deal.credit);
+    if (f.credit === "high" && band !== "high") s -= (band === "mid" ? 12 : 22);
+    if (f.credit === "mid" && band === "low") s -= 10;
+    if (f.credit === "low" && band === "high") s -= 2;
+
+    // stacking fit
+    if (f.positions === "strict" && deal.positions >= 2) s -= 18;
+    if (f.positions === "strict" && deal.positions === 1) s -= 6;
+
+    // amount fit
+    if (deal.amount && (deal.amount < f.min || deal.amount > f.max)) s -= 20;
+
+    // payment pressure proxy (simple)
+    const payback = deal.amount * deal.factor;
+    const daily = deal.term ? payback / deal.term : 0;
+    const dailyRev = deal.revenue ? deal.revenue / 22 : 0;
+    const pressure = dailyRev ? daily / dailyRev : 0;
+
+    if (pressure > 0.55) s -= 18;
+    else if (pressure > 0.40) s -= 10;
+    else if (pressure > 0.30) s -= 5;
+    else s += 2;
+
+    // speed preference
+    if (f.speed === "fast") s += 2;
+
+    return clamp(Math.round(s), 1, 99);
+  }
+
+  // ---- Favorites / Compare ----
+  function getFavs(){ try{ return JSON.parse(localStorage.getItem(FAV_KEY)||"[]"); } catch { return []; } }
+  function setFavs(a){ localStorage.setItem(FAV_KEY, JSON.stringify(a)); }
+  function isFav(name){ return getFavs().includes(name); }
+
+  function getCompare(){ try{ return JSON.parse(localStorage.getItem(COMP_KEY)||"[]"); } catch { return []; } }
+  function setCompare(a){ localStorage.setItem(COMP_KEY, JSON.stringify(a)); }
+
+  let selected = null;
+
+  function renderSummary(deal){
+    const total = FUNDERS.length;
+    const favs = getFavs().length;
+    $("summaryPills").innerHTML = `
+      <span class="pill"><strong>${total}</strong> funders</span>
+      <span class="pill"><strong>${favs}</strong> favorites</span>
+      <span class="pill score">${deal ? `Fit enabled` : `Fit: off`}</span>
+    `;
+
+    $("labPills").innerHTML = deal ? `
+      <span class="pill"><strong>Deal</strong> ${deal.industry}</span>
+      <span class="pill"><strong>Amt</strong> $${Math.round(deal.amount||0).toLocaleString()}</span>
+      <span class="pill"><strong>Credit</strong> ${deal.credit||"—"}</span>
+      <span class="pill"><strong>Pos</strong> ${deal.positions||0}</span>
+    ` : `<span class="pill">No Deal Lab deal loaded</span>`;
+  }
+
+  function applyFilters(list){
+    const q = ($("q").value||"").toLowerCase().trim();
+    const speed = $("speed").value;
+    const creditBand = $("creditBand").value;
+    const posTol = $("positionsTol").value;
+
+    let out = list.slice();
+
+    if (q){
+      out = out.filter(f => f.name.toLowerCase().includes(q));
+    }
+    if (speed){
+      out = out.filter(f => f.speed === speed);
+    }
+    if (creditBand){
+      out = out.filter(f => f.credit === creditBand);
+    }
+    if (posTol){
+      out = out.filter(f => f.positions === posTol);
+    }
+
+    return out;
+  }
+
+  function chip(text, cls=""){
+    return `<span class="chip ${cls}">${text}</span>`;
+  }
+
+  function renderCards(){
+    const deal = getLabDeal();
+    renderSummary(deal);
+
+    const list = applyFilters(FUNDERS);
+
+    // sort by fit if deal exists
+    list.sort((a,b)=>{
+      const fa = fitScore(a, deal) ?? 0;
+      const fb = fitScore(b, deal) ?? 0;
+      return fb - fa;
     });
-  }
 
-  function scoreMatch(f, deal) {
-    // Simple scoring. Feel free to tweak weights.
-    let score = 0;
-    let reasons = [];
-
-    // Credit
-    if (deal.credit != null && deal.credit !== "") {
-      if (f.min_credit == null) {
-        score += 5; reasons.push("credit: unknown");
-      } else if (deal.credit >= f.min_credit) {
-        score += 25; reasons.push("credit fits");
-      } else {
-        score -= 30; reasons.push("credit below min");
-      }
-    }
-
-    // Revenue
-    if (deal.rev != null && deal.rev !== "") {
-      if (f.min_monthly_revenue == null) {
-        score += 5; reasons.push("rev: unknown");
-      } else if (deal.rev >= f.min_monthly_revenue) {
-        score += 20; reasons.push("revenue fits");
-      } else {
-        score -= 20; reasons.push("revenue below min");
-      }
-    }
-
-    // Time in business
-    if (deal.tib != null && deal.tib !== "") {
-      if (f.min_time_in_business_months == null) {
-        score += 4; reasons.push("time: unknown");
-      } else if (deal.tib >= f.min_time_in_business_months) {
-        score += 15; reasons.push("time in biz fits");
-      } else {
-        score -= 15; reasons.push("time in biz too low");
-      }
-    }
-
-    // Position
-    if (deal.pos) {
-      const p = (f.positions || ["any"]);
-      if (p.includes("any") || p.includes(deal.pos)) {
-        score += 12; reasons.push("position fits");
-      } else {
-        score -= 18; reasons.push("position mismatch");
-      }
-    }
-
-    // Stacking preference (if deal needs it)
-    if (deal.stackingNeeded) {
-      if (f.stacking === "yes") { score += 14; reasons.push("stacking ok"); }
-      else if (f.stacking === "sometimes") { score += 6; reasons.push("stacking maybe"); }
-      else if (f.stacking === "unknown") { score += 2; reasons.push("stacking unknown"); }
-      else { score -= 20; reasons.push("no stacking"); }
-    }
-
-    // Industry (light weight because data may be blank initially)
-    if (deal.industry) {
-      const pref = (f.industries_preferred || []);
-      const avoid = (f.industries_avoid || []);
-      if (avoid.includes(deal.industry)) { score -= 10; reasons.push("industry avoid"); }
-      else if (pref.includes(deal.industry)) { score += 8; reasons.push("industry preferred"); }
-      else { score += 1; reasons.push("industry neutral"); }
-    }
-
-    return { score, reasons };
-  }
-
-  function renderMatches(results) {
-    const box = document.getElementById("matches");
+    const box = $("cards");
     box.innerHTML = "";
-    results.slice(0, 8).forEach(r => {
-      const f = r.funder;
+
+    if (!list.length){
+      box.innerHTML = `<div class="card" style="grid-column:1/-1;">
+        <div class="name">No matches</div>
+        <div class="sub">Try clearing filters or searching a different name.</div>
+      </div>`;
+      return;
+    }
+
+    list.forEach(f=>{
+      const fit = fitScore(f, deal);
+      const fav = isFav(f.name);
+
       const el = document.createElement("div");
       el.className = "card";
       el.innerHTML = `
-        <div class="funder-title">
-          <div><strong>${f.name}</strong></div>
-          <div class="score">Score: ${r.score}</div>
+        <div class="cardTop">
+          <div>
+            <div class="name">${f.name}</div>
+            <div class="sub">${f.notes}</div>
+          </div>
+          <div class="pillRow" style="justify-content:flex-end;">
+            ${fav ? `<span class="chip star">★</span>` : ``}
+            ${deal ? `<span class="chip fit">Fit <b>${fit}</b></span>` : ``}
+          </div>
         </div>
-        <div class="muted" style="margin-top:8px;">${r.reasons.join(" · ")}</div>
-        <div class="row" style="margin-top:10px;">
-          <a class="pill" href="${f.website}" target="_blank" rel="noreferrer">Open website</a>
-          <span class="pill">stacking: ${f.stacking || "unknown"}</span>
-          <span class="pill">speed: ${f.speed || "varies"}</span>
+
+        <div class="metaRow">
+          ${chip(f.speed === "fast" ? "⚡ Fast" : "⏳ Standard", f.speed==="fast"?"fast":"")}
+          ${chip(`Credit: ${f.credit.toUpperCase()}`, "flex")}
+          ${chip(f.positions==="flex" ? "Stack-friendly" : "Strict stack", f.positions==="flex"?"flex":"")}
+          ${chip(`$${f.min.toLocaleString()}–$${f.max.toLocaleString()}`)}
         </div>
       `;
+
+      el.addEventListener("click", ()=>{
+        selected = f;
+        renderDrawer();
+      });
+
       box.appendChild(el);
     });
+
+    // compare button count
+    $("btnCompare").textContent = `Compare (${getCompare().length})`;
   }
 
-  async function init() {
-    const res = await fetch("funders.json");
-    FUNDERS = await res.json();
+  function renderDrawer(){
+    const deal = getLabDeal();
+    const body = $("drawerBody");
 
-    // initial render
-    renderDirectory(FUNDERS);
-
-    // directory filters
-    const q = document.getElementById("q");
-    const product = document.getElementById("product");
-    function applyDirFilters() {
-      const filtered = FUNDERS.filter(f => textMatch(f, q.value) && hasProduct(f, product.value));
-      renderDirectory(filtered);
+    if (!selected){
+      body.innerHTML = `<div class="drawerEmpty">Select a funder to see the full profile.</div>`;
+      return;
     }
-    q.addEventListener("input", applyDirFilters);
-    product.addEventListener("change", applyDirFilters);
 
-    // matching
-    document.getElementById("matchBtn").addEventListener("click", () => {
-      const deal = {
-        industry: document.getElementById("industry").value || "",
-        credit: Number(document.getElementById("credit").value || ""),
-        rev: Number(document.getElementById("rev").value || ""),
-        tib: Number(document.getElementById("tib").value || ""),
-        pos: document.getElementById("pos").value || "",
-        stackingNeeded: document.getElementById("stack").value === "yes"
-      };
+    const fav = isFav(selected.name);
+    const fit = fitScore(selected, deal);
 
-      const results = FUNDERS.map(f => {
-        const out = scoreMatch(f, deal);
-        return { funder: f, score: out.score, reasons: out.reasons };
-      }).sort((a,b) => b.score - a.score);
+    $("btnFav").textContent = fav ? "★ Favorited" : "★ Favorite";
 
-      renderMatches(results);
-    });
+    const compare = getCompare();
+    const inComp = compare.includes(selected.name);
+    $("btnShort").textContent = inComp ? "✓ In Compare" : "＋ Compare";
 
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      ["industry","credit","rev","tib","pos","stack"].forEach(id => document.getElementById(id).value = "");
-      document.getElementById("matches").innerHTML = "";
-    });
+    body.innerHTML = `
+      <div style="font-weight:950; font-size:18px; letter-spacing:-.2px;">${selected.name}</div>
+      <div class="pillRow" style="margin-top:10px;">
+        ${deal ? `<span class="pill score">Fit Score <strong>${fit}</strong></span>` : `<span class="pill">Fit Score: run Deal Lab</span>`}
+        <span class="pill">${selected.speed === "fast" ? "⚡ Fast" : "⏳ Standard"}</span>
+        <span class="pill">Credit: <strong>${selected.credit.toUpperCase()}</strong></span>
+        <span class="pill">${selected.positions==="flex" ? "Stack-friendly" : "Strict on stack"}</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="kv">
+        <div class="box">
+          <div class="k">Typical Size</div>
+          <div class="v">$${selected.min.toLocaleString()} – $${selected.max.toLocaleString()}</div>
+        </div>
+        <div class="box">
+          <div class="k">Speed</div>
+          <div class="v">${selected.speed === "fast" ? "Fast turn" : "Standard"}</div>
+        </div>
+        <div class="box">
+          <div class="k">Credit Target</div>
+          <div class="v">${selected.credit.toUpperCase()}</div>
+        </div>
+        <div class="box">
+          <div class="k">Positions</div>
+          <div class="v">${selected.positions === "flex" ? "Flexible" : "Strict"}</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div style="font-weight:950;">Broker Notes</div>
+      <div class="sub">${selected.notes}</div>
+
+      <div class="divider"></div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn primary small" href="${selected.url}" target="_blank" rel="noopener">Visit Website</a>
+        <button class="btn small" id="btnCopy">Copy Link</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sub">
+        Pro move: run Deal Lab → come back here → sort by Fit Score → shortlist 3 funders → push to Marketplace.
+      </div>
+    `;
+
+    // wire copy button
+    const copyBtn = document.getElementById("btnCopy");
+    if (copyBtn){
+      copyBtn.addEventListener("click", async ()=>{
+        try{
+          await navigator.clipboard.writeText(selected.url);
+          toast("Link copied");
+        } catch {
+          toast("Copy not allowed here");
+        }
+      });
+    }
   }
 
-  init();
+  function toggleFav(){
+    if (!selected) return;
+    const favs = getFavs();
+    const i = favs.indexOf(selected.name);
+    if (i >= 0) favs.splice(i,1);
+    else favs.push(selected.name);
+    setFavs(favs);
+    toast(i>=0 ? "Unfavorited" : "Favorited");
+    renderDrawer();
+    renderCards();
+  }
+
+  function toggleCompare(){
+    if (!selected) return;
+    const comp = getCompare();
+    const i = comp.indexOf(selected.name);
+    if (i >= 0) comp.splice(i,1);
+    else {
+      if (comp.length >= 4){
+        toast("Compare max is 4");
+        return;
+      }
+      comp.push(selected.name);
+    }
+    setCompare(comp);
+    $("btnCompare").textContent = `Compare (${comp.length})`;
+    renderDrawer();
+    renderCards();
+  }
+
+  function showCompare(){
+    const comp = getCompare();
+    if (!comp.length){
+      toast("Compare list is empty");
+      return;
+    }
+
+    const deal = getLabDeal();
+    const picks = FUNDERS.filter(f => comp.includes(f.name));
+
+    // simple compare modal via alert-like render in drawer
+    selected = null;
+    const body = $("drawerBody");
+    body.innerHTML = `
+      <div style="font-weight:950; font-size:18px; letter-spacing:-.2px;">Compare</div>
+      <div class="sub">Top picks side-by-side (V1).</div>
+      <div class="divider"></div>
+      <div class="list">
+        ${picks.map(f=>{
+          const fit = fitScore(f, deal);
+          return `
+            <div class="card" style="cursor:default;">
+              <div class="cardTop">
+                <div>
+                  <div class="name">${f.name}</div>
+                  <div class="sub">${f.notes}</div>
+                </div>
+                <div class="pillRow">
+                  ${deal ? `<span class="chip fit">Fit <b>${fit}</b></span>` : ``}
+                </div>
+              </div>
+              <div class="metaRow">
+                ${chip(f.speed === "fast" ? "⚡ Fast" : "⏳ Standard", f.speed==="fast"?"fast":"")}
+                ${chip(`Credit: ${f.credit.toUpperCase()}`, "flex")}
+                ${chip(f.positions==="flex" ? "Stack-friendly" : "Strict stack", f.positions==="flex"?"flex":"")}
+                ${chip(`$${f.min.toLocaleString()}–$${f.max.toLocaleString()}`)}
+              </div>
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn small primary" href="${f.url}" target="_blank" rel="noopener">Open</a>
+                <button class="btn small danger" data-rm="${f.name}">Remove</button>
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    `;
+
+    body.querySelectorAll("[data-rm]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const name = btn.getAttribute("data-rm");
+        const c = getCompare().filter(x=>x !== name);
+        setCompare(c);
+        toast("Removed");
+        $("btnCompare").textContent = `Compare (${c.length})`;
+        showCompare();
+      });
+    });
+
+    renderDrawer();
+    renderCards();
+  }
+
+  // buttons
+  $("btnFav").addEventListener("click", toggleFav);
+  $("btnShort").addEventListener("click", toggleCompare);
+  $("btnCompare").addEventListener("click", showCompare);
+
+  $("btnResetFilters").addEventListener("click", ()=>{
+    $("q").value = "";
+    $("speed").value = "";
+    $("creditBand").value = "";
+    $("positionsTol").value = "";
+    renderCards();
+    toast("Filters reset");
+  });
+
+  ["q","speed","creditBand","positionsTol"].forEach(id=>{
+    $(id).addEventListener("input", renderCards);
+    $(id).addEventListener("change", renderCards);
+  });
+
+  $("btnUseLab").addEventListener("click", ()=>{
+    const d = getLabDeal();
+    if (!d){ toast("Run Deal Lab first"); return; }
+    toast("Fit enabled");
+    renderCards();
+    renderDrawer();
+  });
+
+  $("btnClearLab").addEventListener("click", ()=>{
+    localStorage.removeItem(LAB_KEY);
+    toast("Deal cleared");
+    renderCards();
+    renderDrawer();
+  });
+
+  // init
+  renderCards();
+  renderDrawer();
 </script>
 </body>
 </html>
