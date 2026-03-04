@@ -36,7 +36,7 @@
         radial-gradient(900px 520px at 86% 70%, rgba(251,113,133,.10), transparent 55%),
         var(--bg);
     }
-    a{ color:var(--blue); text-decoration:none; font-weight:700; }
+    a{ color:var(--blue); text-decoration:none; font-weight:800; }
     a:hover{ text-decoration:underline; }
 
     header{
@@ -56,6 +56,7 @@
       width:34px; height:34px; border-radius:14px;
       background: linear-gradient(90deg, var(--good), var(--blue), var(--vio));
       box-shadow: 0 14px 40px rgba(56,189,248,.14);
+      flex: 0 0 auto;
     }
     .brand small{
       display:block;
@@ -178,6 +179,7 @@
     input[type="range"]{
       padding:0;
       height: 34px;
+      accent-color: #38bdf8;
     }
 
     .pillRow{ display:flex; gap:8px; flex-wrap:wrap; }
@@ -234,6 +236,7 @@
       width: 50%;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--good), var(--blue), var(--vio));
+      transition: width .15s ease;
     }
     .meter .meta{
       display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
@@ -243,10 +246,7 @@
       margin-top:10px;
     }
 
-    .list{
-      display:grid;
-      gap:10px;
-    }
+    .list{ display:grid; gap:10px; }
     .card{
       border:1px solid rgba(28,43,102,.75);
       background: rgba(7,12,28,.45);
@@ -259,6 +259,16 @@
     }
     .card .sub{ margin-top:6px; color:var(--muted); font-size:12px; line-height:1.35; }
     .card .actions{ margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
+
+    .scenarioRow{
+      display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
+    }
+    .scenarioRow .meta{
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
 
     .toast{
       position: fixed;
@@ -313,7 +323,7 @@
   </div>
 
   <div class="grid">
-    <!-- Left: Inputs + Outputs -->
+    <!-- Left -->
     <div class="panel">
       <div class="panelHeader">
         <div>
@@ -416,9 +426,8 @@
             <span id="stressLabel">—</span>
             <span class="mono" id="stressValue">—</span>
           </div>
-          <div class="sub" style="color:var(--muted); font-size:12px; margin-top:8px; line-height:1.35;">
-            This is a simple indicator: higher payment pressure + more stacking lowers stability.
-            V2 can use bank-statement metrics.
+          <div style="color:var(--muted); font-size:12px; margin-top:8px; line-height:1.35;">
+            Simple indicator (V1). V2 can use statement metrics.
           </div>
         </div>
 
@@ -434,7 +443,7 @@
       </div>
     </div>
 
-    <!-- Right: Scenarios + Tips -->
+    <!-- Right -->
     <div class="panel">
       <div class="panelHeader">
         <div>
@@ -472,7 +481,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // Storage keys (must match your marketplace.html)
+  // must match marketplace.html
   const MARKET_KEY = "brokerDeals";
   const LAB_KEY = "brokeros_deal_lab_v1";
   const SCEN_KEY = "brokeros_deal_scenarios_v1";
@@ -482,145 +491,11 @@
   const toast = (msg) => {
     toastEl.textContent = msg;
     toastEl.classList.add("show");
-    setTimeout(()=>toastEl.classList.remove("show"), 1300);
+    setTimeout(()=>toastEl.classList.remove("show"), 1400);
   };
 
-  const money = (n) => {
-    if (!isFinite(n)) return "—";
-    return "$" + Math.round(n).toLocaleString();
-  };
-
-  function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
-
-  // Deterministic score (NOT random) so it feels legit
-  function scoreDeal(d){
-    let score = 50;
-    const flags = [];
-
-    const credit = Number(d.credit||0);
-    const rev = Number(d.revenue||0);
-    const tib = Number(d.tib||0);
-    const pos = Number(d.positions||0);
-    const amt = Number(d.amount||0);
-    const factor = Number(d.factor||1.35);
-    const term = Number(d.term||120);
-    const hold = Number(d.holdback||12);
-
-    // credit
-    if (credit >= 700) score += 22;
-    else if (credit >= 660) score += 16;
-    else if (credit >= 620) score += 10;
-    else if (credit >= 580) score += 4;
-    else { score -= 14; flags.push("Low credit band"); }
-
-    // revenue
-    if (rev >= 150000) score += 18;
-    else if (rev >= 100000) score += 13;
-    else if (rev >= 60000) score += 8;
-    else if (rev >= 30000) score += 3;
-    else { score -= 12; flags.push("Low monthly revenue"); }
-
-    // time in biz
-    if (tib >= 36) score += 12;
-    else if (tib >= 24) score += 9;
-    else if (tib >= 12) score += 5;
-    else { score -= 10; flags.push("Short time in business"); }
-
-    // positions
-    if (pos === 0) score += 10;
-    else if (pos === 1) score += 3;
-    else if (pos === 2) score -= 7;
-    else { score -= 16; flags.push("Heavy stacking risk"); }
-
-    // amount vs revenue
-    if (rev > 0 && amt > 0){
-      const ratio = amt / rev;
-      if (ratio <= 0.35) score += 10;
-      else if (ratio <= 0.55) score += 4;
-      else if (ratio <= 0.75) { score -= 6; flags.push("Request is high vs revenue"); }
-      else { score -= 14; flags.push("Request is very high vs revenue"); }
-    }
-
-    // structure realism
-    if (factor >= 1.48) { score -= 6; flags.push("High factor increases friction"); }
-    if (term <= 80) { score -= 6; flags.push("Short term = higher daily payment"); }
-    if (hold >= 20) { score -= 6; flags.push("High holdback may strain cashflow"); }
-
-    score = clamp(score, 1, 99);
-
-    let grade = "D";
-    if (score >= 85) grade = "A";
-    else if (score >= 72) grade = "B";
-    else if (score >= 58) grade = "C";
-
-    return { score, grade, flags };
-  }
-
-  function calc(d){
-    const rev = Number(d.revenue||0);
-    const amt = Number(d.amount||0);
-    const factor = Number(d.factor||1.35);
-    const term = Number(d.term||120);
-
-    const payback = amt * factor;
-    const daily = term ? (payback / term) : 0;
-    const dailyRev = rev ? (rev / 22) : 0;
-    const pressure = dailyRev ? (daily / dailyRev) : 0; // 0.00 - 1.00+
-
-    return { payback, daily, dailyRev, pressure };
-  }
-
-  function stressScore(pressure, positions){
-    // Higher is better (0-100)
-    let s = 100;
-    // pressure: 0.10 is great, 0.30 okay, 0.45 risky, 0.60+ bad
-    s -= clamp((pressure - 0.18) * 160, 0, 70);
-    // stacking penalty
-    s -= clamp((positions || 0) * 10, 0, 35);
-    return clamp(Math.round(s), 1, 99);
-  }
-
-  function stressLabel(n){
-    if (n >= 80) return { t:"Smooth ✅", cls:"good" };
-    if (n >= 60) return { t:"Manageable ⚡", cls:"warn" };
-    return { t:"Stressed ⚠️", cls:"bad" };
-  }
-
-  function getState(){
-    try{
-      const raw = localStorage.getItem(LAB_KEY);
-      if (!raw) return null;
-      return JSON.parse(raw);
-    } catch { return null; }
-  }
-  function setState(s){
-    localStorage.setItem(LAB_KEY, JSON.stringify(s));
-  }
-
-  function getScenarios(){
-    try{
-      return JSON.parse(localStorage.getItem(SCEN_KEY) || "[]");
-    } catch { return []; }
-  }
-  function setScenarios(arr){
-    localStorage.setItem(SCEN_KEY, JSON.stringify(arr));
-  }
-
-  function pushToMarketplace(d){
-    let deals = [];
-    try{ deals = JSON.parse(localStorage.getItem(MARKET_KEY) || "[]"); } catch { deals = []; }
-
-    deals.unshift({
-      industry: d.industry,
-      revenue: Number(d.revenue),
-      credit: Number(d.credit),
-      amount: Number(d.amount),
-      score: d.score,
-      status: "available"
-    });
-
-    localStorage.setItem(MARKET_KEY, JSON.stringify(deals));
-  }
+  const money = (n) => isFinite(n) ? "$" + Math.round(n).toLocaleString() : "—";
+  const clamp = (n,a,b) => Math.max(a, Math.min(b,n));
 
   function readForm(){
     return {
@@ -650,12 +525,179 @@
     $("holdback").value = s.holdback ?? 12;
   }
 
+  function scoreDeal(d){
+    let score = 50;
+    const flags = [];
+
+    const credit = Number(d.credit||0);
+    const rev = Number(d.revenue||0);
+    const tib = Number(d.tib||0);
+    const pos = Number(d.positions||0);
+    const amt = Number(d.amount||0);
+    const factor = Number(d.factor||1.35);
+    const term = Number(d.term||120);
+    const hold = Number(d.holdback||12);
+
+    if (credit >= 700) score += 22;
+    else if (credit >= 660) score += 16;
+    else if (credit >= 620) score += 10;
+    else if (credit >= 580) score += 4;
+    else { score -= 14; flags.push("Low credit band"); }
+
+    if (rev >= 150000) score += 18;
+    else if (rev >= 100000) score += 13;
+    else if (rev >= 60000) score += 8;
+    else if (rev >= 30000) score += 3;
+    else { score -= 12; flags.push("Low monthly revenue"); }
+
+    if (tib >= 36) score += 12;
+    else if (tib >= 24) score += 9;
+    else if (tib >= 12) score += 5;
+    else { score -= 10; flags.push("Short time in business"); }
+
+    if (pos === 0) score += 10;
+    else if (pos === 1) score += 3;
+    else if (pos === 2) score -= 7;
+    else { score -= 16; flags.push("Heavy stacking risk"); }
+
+    if (rev > 0 && amt > 0){
+      const ratio = amt / rev;
+      if (ratio <= 0.35) score += 10;
+      else if (ratio <= 0.55) score += 4;
+      else if (ratio <= 0.75) { score -= 6; flags.push("Request high vs revenue"); }
+      else { score -= 14; flags.push("Request very high vs revenue"); }
+    }
+
+    if (factor >= 1.48) { score -= 6; flags.push("High factor increases friction"); }
+    if (term <= 80) { score -= 6; flags.push("Short term = higher daily payment"); }
+    if (hold >= 20) { score -= 6; flags.push("High holdback may strain cashflow"); }
+
+    score = clamp(score, 1, 99);
+    let grade = "D";
+    if (score >= 85) grade = "A";
+    else if (score >= 72) grade = "B";
+    else if (score >= 58) grade = "C";
+
+    return { score, grade, flags };
+  }
+
+  function calc(d){
+    const rev = Number(d.revenue||0);
+    const amt = Number(d.amount||0);
+    const factor = Number(d.factor||1.35);
+    const term = Number(d.term||120);
+
+    const payback = amt * factor;
+    const daily = term ? (payback / term) : 0;
+    const dailyRev = rev ? (rev / 22) : 0;
+    const pressure = dailyRev ? (daily / dailyRev) : 0;
+
+    return { payback, daily, dailyRev, pressure };
+  }
+
+  function stressScore(pressure, positions){
+    let s = 100;
+    s -= clamp((pressure - 0.18) * 160, 0, 70);
+    s -= clamp((positions || 0) * 10, 0, 35);
+    return clamp(Math.round(s), 1, 99);
+  }
+
+  function stressLabel(n){
+    if (n >= 80) return { t:"Smooth ✅", cls:"good" };
+    if (n >= 60) return { t:"Manageable ⚡", cls:"warn" };
+    return { t:"Stressed ⚠️", cls:"bad" };
+  }
+
+  function saveLab(){
+    localStorage.setItem(LAB_KEY, JSON.stringify(readForm()));
+  }
+  function loadLab(){
+    try{
+      const raw = localStorage.getItem(LAB_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch { return null; }
+  }
+
+  function getScenarios(){
+    try{ return JSON.parse(localStorage.getItem(SCEN_KEY) || "[]"); }
+    catch { return []; }
+  }
+  function setScenarios(arr){
+    localStorage.setItem(SCEN_KEY, JSON.stringify(arr));
+  }
+
+  function pushToMarketplace(payload){
+    let deals = [];
+    try{ deals = JSON.parse(localStorage.getItem(MARKET_KEY) || "[]"); } catch { deals = []; }
+    deals.unshift(payload);
+    localStorage.setItem(MARKET_KEY, JSON.stringify(deals));
+  }
+
+  function renderScenarios(){
+    const box = $("scenarios");
+    const arr = getScenarios();
+
+    if (!arr.length){
+      box.innerHTML = `<div class="card"><div class="title">No saved scenarios yet</div><div class="sub">Click <b>Save Scenario</b> to store variants.</div></div>`;
+      return;
+    }
+
+    box.innerHTML = "";
+    arr.slice().reverse().forEach((s, idxFromEnd)=>{
+      const idx = arr.length - 1 - idxFromEnd;
+
+      const d = s.data;
+      const scored = scoreDeal(d);
+      const { pressure } = calc(d);
+
+      const el = document.createElement("div");
+      el.className = "card";
+      el.innerHTML = `
+        <div class="scenarioRow">
+          <div>
+            <div class="title">${s.name} <span class="pill score">Score <strong>${scored.score}</strong> • ${scored.grade}</span></div>
+            <div class="meta">
+              ${d.industry} • ${money(d.amount)} • factor ${Number(d.factor).toFixed(2)} • ${d.term}d • pressure ${(pressure*100).toFixed(0)}%
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+            <button class="btn small" data-load="${idx}">Load</button>
+            <button class="btn small danger" data-del="${idx}">Delete</button>
+          </div>
+        </div>
+      `;
+      box.appendChild(el);
+    });
+
+    box.querySelectorAll("[data-load]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const i = Number(btn.getAttribute("data-load"));
+        const arr = getScenarios();
+        if (!arr[i]) return;
+        writeForm(arr[i].data);
+        render();
+        toast("Scenario loaded");
+      });
+    });
+
+    box.querySelectorAll("[data-del]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const i = Number(btn.getAttribute("data-del"));
+        const arr = getScenarios();
+        arr.splice(i,1);
+        setScenarios(arr);
+        renderScenarios();
+        toast("Deleted");
+      });
+    });
+  }
+
   function render(){
     const d = readForm();
     const { payback, daily, dailyRev, pressure } = calc(d);
     const scored = scoreDeal(d);
 
-    // bind label values
     $("vIndustry").textContent = d.industry;
     $("vState").textContent = d.state || "—";
     $("vRev").textContent = d.revenue ? money(d.revenue) : "—";
@@ -664,13 +706,111 @@
     $("vPos").textContent = isFinite(d.positions) ? d.positions : "—";
 
     $("vAmt").textContent = money(d.amount);
-    $("vFactor").textContent = d.factor.toFixed(2);
+    $("vFactor").textContent = Number(d.factor).toFixed(2);
     $("vTerm").textContent = d.term + " days";
     $("vHold").textContent = d.holdback + "%";
 
-    // top pills
-    const top = $("topPills");
-    top.innerHTML = `
+    $("topPills").innerHTML = `
       <span class="pill score">Deal Score <strong>${scored.score}</strong> • Grade <strong>${scored.grade}</strong></span>
       <span class="pill"><strong>Pressure</strong> ${(pressure*100).toFixed(0)}%</span>
-      <span class="pill"><strong>
+      <span class="pill"><strong>Stack</strong> ${d.positions}</span>
+    `;
+
+    $("kPayback").textContent = payback ? money(payback) : "—";
+    $("kDaily").textContent = daily ? money(daily) : "—";
+    $("kDailyRev").textContent = dailyRev ? money(dailyRev) : "—";
+    $("kPressure").textContent = isFinite(pressure) && pressure>0 ? (pressure*100).toFixed(0) + "%" : "—";
+
+    const ss = stressScore(pressure, d.positions);
+    const sl = stressLabel(ss);
+    $("stressFill").style.width = ss + "%";
+    $("stressLabel").textContent = sl.t;
+    $("stressValue").textContent = `Stability ${ss}/99`;
+    $("stressLabel").className = "";
+    $("stressLabel").classList.add(sl.cls);
+
+    const flags = scored.flags;
+    $("riskCount").innerHTML = `Flags <strong>${flags.length}</strong>`;
+    $("flags").innerHTML = flags.length
+      ? flags.map(f=>`• ${f}`).join("<br>")
+      : "No flags yet. Looks clean on the basics.";
+
+    saveLab();
+  }
+
+  // Wire inputs
+  const inputs = ["industry","state","revenue","credit","tib","positions","amount","factor","term","holdback"];
+  inputs.forEach(id=>{
+    const el = $(id);
+    el.addEventListener("input", render);
+    el.addEventListener("change", render);
+  });
+
+  $("btnExample").addEventListener("click", ()=>{
+    writeForm({
+      industry:"Restaurant", state:"NY",
+      revenue: 95000, credit: 620, tib: 18, positions: 1,
+      amount: 45000, factor: 1.39, term: 120, holdback: 12
+    });
+    render();
+    toast("Example loaded");
+  });
+
+  $("btnReset").addEventListener("click", ()=>{
+    localStorage.removeItem(LAB_KEY);
+    writeForm({
+      industry:"Restaurant", state:"",
+      revenue:"", credit:"", tib:"", positions:"",
+      amount: 45000, factor: 1.39, term: 120, holdback: 12
+    });
+    render();
+    toast("Reset");
+  });
+
+  $("btnSave").addEventListener("click", ()=>{
+    const name = prompt("Scenario name:", "Fast Close");
+    if (!name) return;
+    const arr = getScenarios();
+    arr.push({ name, at: new Date().toISOString(), data: readForm() });
+    setScenarios(arr);
+    renderScenarios();
+    toast("Saved");
+  });
+
+  $("btnClear").addEventListener("click", ()=>{
+    setScenarios([]);
+    renderScenarios();
+    toast("Cleared");
+  });
+
+  $("btnSend").addEventListener("click", ()=>{
+    const d = readForm();
+    const scored = scoreDeal(d);
+
+    if (!d.revenue || !d.credit || !d.amount){
+      toast("Add revenue, credit, and amount first");
+      return;
+    }
+
+    pushToMarketplace({
+      industry: d.industry,
+      revenue: Number(d.revenue),
+      credit: Number(d.credit),
+      amount: Number(d.amount),
+      score: scored.score,
+      status: "available"
+    });
+
+    toast("Sent to Marketplace ✅");
+  });
+
+  // Init defaults + restore last session
+  const saved = loadLab();
+  if (saved) writeForm(saved);
+  else writeForm({ amount:45000, factor:1.39, term:120, holdback:12, industry:"Restaurant" });
+
+  renderScenarios();
+  render();
+</script>
+</body>
+</html>
