@@ -544,7 +544,7 @@ body::before {
   </div>
   <div class="topnav-right">
     <a href="privatecreditmca-account.html?view=login" class="topnav-btn secondary" style="text-decoration:none">Log In</a>
-    <button class="topnav-btn" onclick="openSubmit()">+ Submit a Deal</button>
+    <a href="privatecreditmca-submit.html" class="topnav-btn" style="text-decoration:none">+ Submit a Deal</a>
   </div>
 </nav>
 
@@ -1074,9 +1074,7 @@ function acceptOffer(e) {
   btn.closest('tr').style.background = 'var(--accent-dim)';
 }
 
-function openSubmit() {
-  alert('🚀 Submit a Deal flow would open here — upload docs, run AI analysis, push to marketplace.');
-}
+// Submit a Deal now links to privatecreditmca-submit.html
 
 // ═══════════════════════════════════════════
 // LIVE ACTIVITY FEED
