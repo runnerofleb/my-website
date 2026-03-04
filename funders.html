@@ -1,483 +1,362 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BrokerOS — Funder Directory</title>
-  <style>
-    :root{
-      --bg0:#05070f; --bg1:#070b18; --card:#0b1330; --card2:#0a1026;
-      --line:rgba(120,160,255,.18);
-      --txt:#eaf0ff; --muted:rgba(234,240,255,.72);
-      --brand1:#7c5cff; --brand2:#22d3ee; --good:#34d399; --warn:#f59e0b;
-      --shadow: 0 30px 80px rgba(0,0,0,.55);
-      --r:22px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; color:var(--txt);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      background:
-        radial-gradient(900px 500px at 12% 12%, rgba(124,92,255,.20), transparent 55%),
-        radial-gradient(900px 500px at 88% 22%, rgba(34,211,238,.16), transparent 55%),
-        radial-gradient(900px 500px at 35% 92%, rgba(52,211,153,.10), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      min-height:100vh;
-    }
-    .top{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(14px);
-      background: linear-gradient(180deg, rgba(6,10,22,.85), rgba(6,10,22,.55));
-      border-bottom:1px solid var(--line);
-    }
-    .wrap{max-width:1180px; margin:0 auto; padding:18px 18px;}
-    .bar{display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;}
-    .logo{
-      display:flex; align-items:center; gap:12px;
-      font-weight:800; letter-spacing:.2px;
-    }
-    .pill{
-      width:38px; height:38px; border-radius:14px;
-      background: linear-gradient(135deg, var(--brand1), var(--brand2));
-      box-shadow: 0 12px 30px rgba(124,92,255,.25);
-    }
-    nav{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
-    nav a{
-      color:var(--muted); text-decoration:none;
-      padding:10px 14px; border-radius:999px;
-      border:1px solid rgba(120,160,255,.16);
-      background: rgba(10,16,38,.55);
-    }
-    nav a:hover{border-color:rgba(120,160,255,.28); color:var(--txt)}
-    nav a.active{
-      color:var(--txt);
-      border-color:rgba(34,211,238,.40);
-      box-shadow: 0 0 0 4px rgba(34,211,238,.10);
-    }
 
-    .hero{padding:24px 0 8px;}
-    .h1{font-size:44px; line-height:1.05; margin:8px 0 10px; font-weight:900;}
-    .sub{color:var(--muted); max-width:820px; font-size:16px; line-height:1.6;}
-    .controls{
-      margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-      padding:14px; border-radius:var(--r);
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(11,19,48,.80), rgba(10,16,38,.55));
-      box-shadow: var(--shadow);
-    }
-    .search{
-      flex:1; min-width:220px;
-      display:flex; gap:10px; align-items:center;
-      padding:12px 14px; border-radius:16px;
-      border:1px solid rgba(120,160,255,.18);
-      background: rgba(6,10,22,.55);
-    }
-    .search input{
-      width:100%; border:none; outline:none; background:transparent;
-      color:var(--txt); font-size:14px;
-    }
-    .chiprow{display:flex; gap:8px; flex-wrap:wrap;}
-    .chip{
-      cursor:pointer; user-select:none;
-      padding:10px 12px; border-radius:999px;
-      border:1px solid rgba(120,160,255,.18);
-      background: rgba(6,10,22,.35);
-      color:var(--muted); font-size:13px; font-weight:600;
-    }
-    .chip.on{
-      color:var(--txt);
-      border-color: rgba(124,92,255,.45);
-      box-shadow: 0 0 0 4px rgba(124,92,255,.12);
-      background: rgba(124,92,255,.10);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    .grid{
-      display:grid; gap:14px;
-      grid-template-columns: repeat(12, 1fr);
-      margin:16px 0 60px;
-    }
-    .card{
-      grid-column: span 6;
-      border-radius: var(--r);
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(11,19,48,.88), rgba(10,16,38,.70));
-      box-shadow: var(--shadow);
-      padding:16px;
-      position:relative;
-      overflow:hidden;
-    }
-    @media (max-width: 980px){ .card{grid-column: span 12;} .h1{font-size:36px;} }
-    .card:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background: radial-gradient(500px 200px at 20% 0%, rgba(124,92,255,.18), transparent 55%),
-                  radial-gradient(500px 220px at 80% 0%, rgba(34,211,238,.14), transparent 60%);
-      opacity:.8; pointer-events:none;
-    }
-    .row{display:flex; gap:12px; align-items:flex-start; position:relative;}
-    .mark{
-      width:44px; height:44px; border-radius:16px;
-      background: rgba(6,10,22,.55);
-      border:1px solid rgba(120,160,255,.18);
-      display:flex; align-items:center; justify-content:center;
-      overflow:hidden;
-      flex:0 0 auto;
-    }
-    .mark img{width:100%; height:100%; object-fit:cover;}
-    .name{font-weight:900; font-size:18px; margin:0}
-    .meta{color:var(--muted); font-size:13px; margin-top:3px; line-height:1.45;}
-    .tags{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; position:relative;}
-    .tag{
-      font-size:12px; font-weight:800; letter-spacing:.2px;
-      padding:8px 10px; border-radius:999px;
-      border:1px solid rgba(120,160,255,.18);
-      background: rgba(6,10,22,.35);
-      color: rgba(234,240,255,.85);
-    }
-    .tag.good{border-color:rgba(52,211,153,.35); background:rgba(52,211,153,.10)}
-    .tag.warn{border-color:rgba(245,158,11,.35); background:rgba(245,158,11,.10)}
-    .split{
-      display:grid; grid-template-columns: 1fr 1fr; gap:10px;
-      margin-top:12px; position:relative;
-    }
-    .box{
-      border-radius:18px;
-      border:1px solid rgba(120,160,255,.16);
-      background: rgba(6,10,22,.35);
-      padding:12px;
-      min-height:84px;
-    }
-    .k{color:rgba(234,240,255,.70); font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.12em;}
-    .v{margin-top:6px; color:var(--txt); font-size:13px; line-height:1.45;}
-    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; position:relative;}
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:10px;
-      border-radius: 999px;
-      padding:10px 14px;
-      font-weight:900; font-size:13px;
-      text-decoration:none;
-      border:1px solid rgba(120,160,255,.18);
-      background: rgba(6,10,22,.35);
-      color: var(--txt);
-    }
-    .btn.primary{
-      border-color: rgba(34,211,238,.40);
-      background: linear-gradient(135deg, rgba(34,211,238,.18), rgba(124,92,255,.16));
-      box-shadow: 0 0 0 4px rgba(34,211,238,.10);
-    }
-    .footnote{color:rgba(234,240,255,.55); font-size:12px; margin-top:10px; position:relative;}
-  </style>
+<title>BrokerOS • Funder Directory</title>
+
+<style>
+
+body{
+font-family:Inter,Arial;
+margin:0;
+background:#0f172a;
+color:white;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 30px;
+background:#020617;
+border-bottom:1px solid #1e293b;
+}
+
+.logo{
+font-size:22px;
+font-weight:800;
+background:linear-gradient(90deg,#22c55e,#38bdf8);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+nav a{
+margin:0 10px;
+color:#94a3b8;
+text-decoration:none;
+font-weight:600;
+}
+
+nav a:hover{
+color:white;
+}
+
+.container{
+padding:30px;
+max-width:1200px;
+margin:auto;
+}
+
+h1{
+margin-bottom:10px;
+}
+
+.search{
+width:100%;
+padding:12px;
+margin-bottom:20px;
+border-radius:8px;
+border:none;
+background:#020617;
+color:white;
+border:1px solid #1e293b;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:20px;
+}
+
+.card{
+background:#020617;
+border:1px solid #1e293b;
+border-radius:12px;
+padding:18px;
+transition:.2s;
+}
+
+.card:hover{
+transform:translateY(-3px);
+border-color:#38bdf8;
+}
+
+.logo-box{
+height:40px;
+margin-bottom:10px;
+}
+
+.logo-box img{
+max-height:40px;
+}
+
+.title{
+font-size:18px;
+font-weight:700;
+margin-bottom:5px;
+}
+
+.tags{
+margin:10px 0;
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.tag{
+font-size:11px;
+padding:4px 8px;
+border-radius:20px;
+background:#0f172a;
+border:1px solid #1e293b;
+}
+
+.box{
+margin-top:8px;
+font-size:13px;
+color:#cbd5f5;
+}
+
+button{
+margin-top:12px;
+background:linear-gradient(90deg,#22c55e,#16a34a);
+border:none;
+padding:8px 14px;
+border-radius:8px;
+font-weight:700;
+cursor:pointer;
+color:white;
+}
+
+button:hover{
+opacity:.9;
+}
+
+</style>
+
 </head>
+
 <body>
-  <div class="top">
-    <div class="wrap">
-      <div class="bar">
-        <div class="logo"><div class="pill"></div> BrokerOS <span style="color:rgba(234,240,255,.55);font-weight:700">/ Funder Directory</span></div>
-        <nav>
-          <a href="index.html">Home</a>
-          <a href="marketplace.html">Marketplace</a>
-          <a href="deal-lab.html">Deal Lab</a>
-          <a class="active" href="funders.html">Funders</a>
-          <a href="superbroker.html">SuperBroker</a>
-        </nav>
-      </div>
-    </div>
-  </div>
 
-  <div class="wrap hero">
-    <div class="h1">Funder Directory</div>
-    <div class="sub">
-      World-class, broker-friendly snapshots. Search, filter, and click through to apply.
-      <br><span style="opacity:.75">Tip: minimums change — treat these as “reported / published” guidelines, not guarantees.</span>
-    </div>
+<header>
 
-    <div class="controls">
-      <div class="search">
-        <span style="opacity:.7">🔎</span>
-        <input id="q" placeholder="Search funders… (ex: 'low credit', 'fast', 'line of credit', 'restaurant')" />
-      </div>
-      <div class="chiprow" id="chips"></div>
-    </div>
+<div class="logo">BrokerOS</div>
 
-    <div class="grid" id="grid"></div>
-  </div>
+<nav>
+<a href="index.html">Home</a>
+<a href="marketplace.html">Marketplace</a>
+<a href="deal-lab.html">Deal Lab</a>
+<a href="funders.html">Funders</a>
+<a href="superbroker.html">SuperBroker</a>
+</nav>
 
-  <script>
-    // Simple, good-enough filters for v1 (no backend).
-    const FILTERS = [
-      { id:"fast", label:"⚡ Fast funding" },
-      { id:"lowcredit", label:"🪪 Low credit OK" },
-      { id:"newbiz", label:"🌱 6mo+ in biz" },
-      { id:"highrev", label:"💰 Higher revenue" },
-      { id:"mca", label:"🧾 MCA / RBF" },
-      { id:"term", label:"📆 Term loan" },
-      { id:"loc", label:"🧰 Line of credit" },
-    ];
+</header>
 
-    // Logos: Clearbit is easiest. If one fails later, we swap to a saved image in /assets.
-    const funders = [
-      {
-        name:"Forward Financing",
-        domain:"forwardfinancing.com",
-        link:"https://forwardfinancing.com/",
-        products:["MCA / working capital"],
-        requirements:"1+ year in business • $10k+ monthly revenue • 500+ credit (published)",
-        speed:"Fast underwriting; online application",
-        bestFor:"Small businesses that need quick working capital and may not qualify elsewhere.",
-        tags:["fast","lowcredit","mca","term"]
-      },
-      {
-        name:"Credibly",
-        domain:"credibly.com",
-        link:"https://www.credibly.com/",
-        products:["MCA","Business loans","Financing options vary"],
-        requirements:"Typically 6+ months • 500+ credit • ~$15k+ avg monthly deposits (published guidance)",
-        speed:"Fast online process",
-        bestFor:"Newer businesses with deposits and imperfect credit that still need options.",
-        tags:["fast","lowcredit","newbiz","mca"]
-      },
-      {
-        name:"Fora Financial",
-        domain:"forafinancial.com",
-        link:"https://www.forafinancial.com/",
-        products:["Short-term loan","MCA"],
-        requirements:"Commonly reported: 6+ months • ~570+ credit • ~$240k+ annual revenue (varies)",
-        speed:"Often same-day decisions (varies)",
-        bestFor:"Borrowers who need speed and can support higher annual revenue thresholds.",
-        tags:["fast","newbiz","highrev","term","mca"]
-      },
-      {
-        name:"Rapid Finance",
-        domain:"rapidfinance.com",
-        link:"https://www.rapidfinance.com/",
-        products:["Term loan","LOC","SBA (via partners)","MCA / WC options"],
-        requirements:"Often reported around: 2+ years • ~620+ credit • ~$200k annual revenue (varies by product)",
-        speed:"Fast prequal + multiple products",
-        bestFor:"More established businesses wanting multiple product types.",
-        tags:["fast","term","loc","highrev"]
-      },
-      {
-        name:"FundKite",
-        domain:"fundkite.com",
-        link:"https://fundkite.com/",
-        products:["Revenue-based funding / MCA"],
-        requirements:"Published RBF guidance: 6+ months • $20k+ monthly revenue • 550+ credit",
-        speed:"Online application; quick decisions",
-        bestFor:"Revenue-strong shops that want RBF-style payments.",
-        tags:["fast","newbiz","mca"]
-      },
-      {
-        name:"CAN Capital",
-        domain:"cancapital.com",
-        link:"https://cancapital.com/",
-        products:["Working capital loans","Financing options"],
-        requirements:"FAQ lists: 3+ years time in business • guarantor FICO ≥ 600 (published)",
-        speed:"Fast prequal flow",
-        bestFor:"More established businesses looking for working capital structures.",
-        tags:["term","loc","highrev"]
-      },
-      {
-        name:"Everest Business Funding",
-        domain:"everestbf.com",
-        link:"https://everestbf.com/",
-        products:["Business funding / working capital"],
-        requirements:"Published: $5k+ monthly revenue • 500+ credit • business checking account",
-        speed:"Fast pre-approval flow",
-        bestFor:"Smaller businesses that need access quickly (if cashflow supports).",
-        tags:["fast","lowcredit","mca","newbiz"]
-      },
-      {
-        name:"Pearl Capital",
-        domain:"pearlcapital.com",
-        link:"https://pearlcapital.com/",
-        products:["MCA / ISO-focused funding"],
-        requirements:"Published: 3+ months operational history • any FICO score",
-        speed:"ISO-friendly flow",
-        bestFor:"Brokers placing early-stage files / thin credit scenarios.",
-        tags:["fast","lowcredit","newbiz","mca"]
-      },
-      {
-        name:"OnDeck",
-        domain:"ondeck.com",
-        link:"https://www.ondeck.com/",
-        products:["Term loan","Line of credit"],
-        requirements:"Published: 1+ year • $100k+ annual revenue • 625+ FICO",
-        speed:"Streamlined online app",
-        bestFor:"Owners who want a known online lender with term/LOC options.",
-        tags:["fast","term","loc"]
-      },
-      {
-        name:"Mulligan Funding",
-        domain:"mulliganfunding.com",
-        link:"https://www.mulliganfunding.com/",
-        products:["Working capital solutions"],
-        requirements:"Partner page lists: 625+ credit • 6+ months • $750k+ annualized revenue",
-        speed:"Advisor-assisted process",
-        bestFor:"Higher-revenue businesses needing sizable working capital.",
-        tags:["fast","highrev","newbiz"]
-      },
-      {
-        name:"IOU Financial",
-        domain:"ioufinancial.com",
-        link:"https://ioufinancial.com/",
-        products:["Term loans"],
-        requirements:"Company states: 600+ credit • ~1 year in business can be enough (varies)",
-        speed:"Fast process; clear pricing focus",
-        bestFor:"1+ year files that want a term-loan style structure.",
-        tags:["fast","term"]
-      },
-      {
-        name:"Bitty Advance",
-        domain:"bittyadvance.com",
-        link:"https://bittyadvance.com/",
-        products:["Revenue-based financing / MCA"],
-        requirements:"Published: 6+ months • $5k monthly revenue • 500+ credit",
-        speed:"Aims for ~24h approvals (varies)",
-        bestFor:"Smaller files that need an accessible entry point.",
-        tags:["fast","lowcredit","newbiz","mca"]
-      },
-      {
-        name:"LCF Group",
-        domain:"thelcfgroup.com",
-        link:"https://thelcfgroup.com/",
-        products:["Lines of credit","Working capital options"],
-        requirements:"Requirements vary by program; publish “file-dependent” info in v1",
-        speed:"Fast application flow",
-        bestFor:"Brokers wanting LOC-style options (verify program fit).",
-        tags:["loc","fast"]
-      },
-      {
-        name:"Kalamata Capital Group",
-        domain:"kalamatacapitalgroup.com",
-        link:"https://www.kalamatacapitalgroup.com/",
-        products:["MCA / fintech + analytics positioning"],
-        requirements:"Requirements vary; confirm on submission (v1 shows “varies by file”)",
-        speed:"Fast funding positioning",
-        bestFor:"Deal flow needing MCA-style solutions + fintech tooling.",
-        tags:["mca","fast","newbiz"]
-      },
-      {
-        name:"Lendini",
-        domain:"lendini.com",
-        link:"https://www.lendini.com/",
-        products:["Revenue-based financing"],
-        requirements:"Requirements vary; evaluate mainly on revenue performance (v1 shows “varies by file”)",
-        speed:"Fast funding positioning",
-        bestFor:"Revenue-based repayment preference vs fixed payment stress.",
-        tags:["mca","fast","newbiz"]
-      },
-      {
-        name:"Libertas Funding",
-        domain:"libertasfunding.com",
-        link:"https://libertasfunding.com/",
-        products:["Revenue-based financing (larger tickets)"],
-        requirements:"Requirements vary; larger-ticket positioning (v1 shows “varies by file”)",
-        speed:"Fast for larger deals",
-        bestFor:"Bigger working-capital needs; verify minimums per program.",
-        tags:["fast","highrev"]
-      },
-    ];
+<div class="container">
 
-    const chipsEl = document.getElementById("chips");
-    const gridEl = document.getElementById("grid");
-    const qEl = document.getElementById("q");
+<h1>Funder Directory</h1>
+<p style="color:#94a3b8">Search and explore MCA and business funding partners.</p>
 
-    const state = { q:"", on:new Set() };
+<input id="search" class="search" placeholder="Search funders...">
 
-    function makeChip(f){
-      const el = document.createElement("div");
-      el.className = "chip";
-      el.textContent = f.label;
-      el.onclick = () => {
-        if(state.on.has(f.id)) state.on.delete(f.id); else state.on.add(f.id);
-        render();
-      };
-      el.dataset.id = f.id;
-      return el;
-    }
+<div id="grid" class="grid"></div>
 
-    function scoreMatch(text, q){
-      if(!q) return true;
-      return text.toLowerCase().includes(q.toLowerCase());
-    }
+</div>
 
-    function render(){
-      // chip styles
-      [...chipsEl.children].forEach(c=>{
-        c.classList.toggle("on", state.on.has(c.dataset.id));
-      });
+<script>
 
-      const q = qEl.value.trim();
-      const cards = funders.filter(f=>{
-        const hay = [
-          f.name, f.products.join(" "), f.requirements, f.speed, f.bestFor, f.tags.join(" ")
-        ].join(" • ");
-        if(!scoreMatch(hay, q)) return false;
-        for(const t of state.on){
-          if(!f.tags.includes(t)) return false;
-        }
-        return true;
-      });
+const funders=[
 
-      gridEl.innerHTML = "";
-      cards.forEach(f=>{
-        const card = document.createElement("div");
-        card.className = "card";
-        const logoUrl = `https://logo.clearbit.com/${f.domain}`;
+{
+name:"Forward Financing",
+domain:"forwardfinancing.com",
+products:"Working capital advance",
+req:"1+ year business • $10k monthly revenue • 500+ credit",
+best:"Quick funding for small businesses"
+},
 
-        card.innerHTML = `
-          <div class="row">
-            <div class="mark"><img src="${logoUrl}" alt="${f.name} logo" onerror="this.style.display='none'" /></div>
-            <div>
-              <p class="name">${f.name}</p>
-              <div class="meta">${f.products.join(" • ")}</div>
-            </div>
-          </div>
+{
+name:"Credibly",
+domain:"credibly.com",
+products:"Business loans, MCA",
+req:"6+ months business • ~500 credit • $15k deposits",
+best:"Newer businesses needing flexible funding"
+},
 
-          <div class="tags">
-            ${f.tags.map(t=>{
-              const kind = (t==="lowcredit"||t==="fast") ? "good" : (t==="highrev" ? "warn" : "");
-              const label = ({
-                fast:"⚡ Fast", lowcredit:"🪪 Low credit", newbiz:"🌱 Newer biz",
-                highrev:"💰 Higher rev", mca:"🧾 MCA/RBF", term:"📆 Term", loc:"🧰 LOC"
-              })[t] || t;
-              return `<span class="tag ${kind}">${label}</span>`;
-            }).join("")}
-          </div>
+{
+name:"Fora Financial",
+domain:"forafinancial.com",
+products:"Short-term loan, MCA",
+req:"~570 credit • 6 months business",
+best:"Fast funding with moderate revenue"
+},
 
-          <div class="split">
-            <div class="box">
-              <div class="k">Reported minimums</div>
-              <div class="v">${f.requirements}</div>
-            </div>
-            <div class="box">
-              <div class="k">Best for</div>
-              <div class="v">${f.bestFor}</div>
-            </div>
-            <div class="box">
-              <div class="k">Speed / notes</div>
-              <div class="v">${f.speed}</div>
-            </div>
-            <div class="box">
-              <div class="k">Playbook</div>
-              <div class="v">Prequal → Collect 3–6 mo bank stmts → Match structure → Submit clean file</div>
-            </div>
-          </div>
+{
+name:"Rapid Finance",
+domain:"rapidfinance.com",
+products:"Term loan, LOC",
+req:"~620 credit • 2 years business",
+best:"Established businesses"
+},
 
-          <div class="actions">
-            <a class="btn primary" href="${f.link}" target="_blank" rel="noopener">Visit / Apply ↗</a>
-            <a class="btn" href="deal-lab.html">Run in Deal Lab</a>
-          </div>
+{
+name:"FundKite",
+domain:"fundkite.com",
+products:"Revenue-based funding",
+req:"6 months business • $20k monthly revenue",
+best:"Revenue based deals"
+},
 
-          <div class="footnote">BrokerOS v1: publish fast, then iterate with real placement data.</div>
-        `;
-        gridEl.appendChild(card);
-      });
-    }
+{
+name:"CAN Capital",
+domain:"cancapital.com",
+products:"Working capital loans",
+req:"~600 credit • 3 years business",
+best:"Established companies"
+},
 
-    FILTERS.forEach(f=>chipsEl.appendChild(makeChip(f)));
-    qEl.addEventListener("input", render);
-    render();
-  </script>
+{
+name:"Everest Business Funding",
+domain:"everestbf.com",
+products:"Working capital advance",
+req:"500 credit • $5k revenue",
+best:"Quick smaller deals"
+},
+
+{
+name:"Pearl Capital",
+domain:"pearlcapital.com",
+products:"MCA",
+req:"3 months business",
+best:"Early stage businesses"
+},
+
+{
+name:"OnDeck",
+domain:"ondeck.com",
+products:"Term loan, LOC",
+req:"625 credit • 1 year business",
+best:"Established companies"
+},
+
+{
+name:"Mulligan Funding",
+domain:"mulliganfunding.com",
+products:"Working capital",
+req:"625 credit • $750k annual revenue",
+best:"High revenue companies"
+},
+
+{
+name:"IOU Financial",
+domain:"ioufinancial.com",
+products:"Term loans",
+req:"600 credit • 1 year business",
+best:"Short term loans"
+},
+
+{
+name:"Bitty Advance",
+domain:"bittyadvance.com",
+products:"Revenue financing",
+req:"500 credit • $5k revenue",
+best:"Small businesses"
+},
+
+{
+name:"LCF Group",
+domain:"thelcfgroup.com",
+products:"LOC, working capital",
+req:"Varies",
+best:"LOC deals"
+},
+
+{
+name:"Kalamata Capital Group",
+domain:"kalamatacapitalgroup.com",
+products:"MCA",
+req:"Varies",
+best:"Fintech-driven deals"
+},
+
+{
+name:"Lendini",
+domain:"lendini.com",
+products:"Revenue financing",
+req:"Varies",
+best:"Revenue based deals"
+},
+
+{
+name:"Libertas Funding",
+domain:"libertasfunding.com",
+products:"Revenue financing",
+req:"Varies",
+best:"Large funding deals"
+}
+
+];
+
+const grid=document.getElementById("grid")
+
+function render(list){
+
+grid.innerHTML=""
+
+list.forEach(f=>{
+
+grid.innerHTML+=`
+
+<div class="card">
+
+<div class="logo-box">
+<img src="https://logo.clearbit.com/${f.domain}">
+</div>
+
+<div class="title">${f.name}</div>
+
+<div class="tags">
+<div class="tag">${f.products}</div>
+</div>
+
+<div class="box"><b>Requirements:</b><br>${f.req}</div>
+
+<div class="box"><b>Best for:</b><br>${f.best}</div>
+
+<button onclick="window.open('https://${f.domain}')">
+Visit Website
+</button>
+
+</div>
+
+`
+
+})
+
+}
+
+render(funders)
+
+document.getElementById("search").addEventListener("input",e=>{
+
+let q=e.target.value.toLowerCase()
+
+let filtered=funders.filter(f=>
+f.name.toLowerCase().includes(q)||
+f.products.toLowerCase().includes(q)||
+f.best.toLowerCase().includes(q)
+)
+
+render(filtered)
+
+})
+
+</script>
+
 </body>
+
 </html>
