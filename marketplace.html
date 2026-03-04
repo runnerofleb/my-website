@@ -1,138 +1,1484 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BrokerOS Marketplace</title>
+  <style>
+    :root{
+      --bg:#070b12;
+      --panel:#0c1220;
+      --panel2:#0a101c;
+      --border:#1a2640;
+      --text:#eaf1ff;
+      --muted:#a7b4cc;
+      --muted2:#7d8aa3;
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --info:#60a5fa;
+      --accent:#7dd3fc;
+      --shadow:0 16px 40px rgba(0,0,0,.35);
+      --radius:16px;
+    }
 
-<title>Broker Marketplace</title>
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 700px at 15% 10%, rgba(125,211,252,.14), transparent 55%),
+                  radial-gradient(1200px 700px at 80% 15%, rgba(34,197,94,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    a{ color:var(--accent); text-decoration:none; }
+    a:hover{ text-decoration:underline; }
 
-<style>
+    .wrap{ max-width:1200px; margin:0 auto; padding:18px; }
 
-body{
-font-family:Arial;
-background:#0f172a;
-color:white;
-padding:40px;
-}
+    header{
+      position: sticky; top: 0; z-index: 30;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,18,.72);
+      border-bottom: 1px solid rgba(26,38,64,.7);
+    }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px 18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:900; letter-spacing:.2px;
+    }
+    .logo{
+      width:34px; height:34px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(125,211,252,.95), rgba(34,197,94,.75));
+      box-shadow: 0 10px 30px rgba(125,211,252,.15);
+    }
+    .brand .sub{ font-weight:700; color:var(--muted); font-size:12px; margin-top:2px; }
 
-h1{
-text-align:center;
-}
+    .nav{
+      display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border:1px solid var(--border);
+      background: rgba(12,18,32,.7);
+      border-radius:999px;
+      color:var(--muted);
+    }
+    .chip strong{ color:var(--text); font-weight:800; }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-margin-top:30px;
-}
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(12,18,32,.85);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight:800;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(125,211,252,.35); }
+    .btn.primary{ background: rgba(34,197,94,.18); border-color: rgba(34,197,94,.35); }
+    .btn.primary:hover{ border-color: rgba(34,197,94,.55); }
+    .btn.danger{ background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.35); }
+    .btn.small{ padding:8px 10px; border-radius: 10px; font-size:13px; }
+    .btn.ghost{ background: transparent; }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
 
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:10px;
-}
+    .roleToggle{
+      display:flex; align-items:center; gap:8px;
+      background: rgba(12,18,32,.75);
+      border:1px solid var(--border);
+      border-radius: 14px;
+      padding:6px;
+    }
+    .roleToggle button{
+      border:0; background:transparent; color:var(--muted);
+      padding:8px 10px; border-radius: 10px;
+      font-weight:900; cursor:pointer;
+    }
+    .roleToggle button.active{
+      background: rgba(125,211,252,.15);
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(125,211,252,.22);
+    }
 
-button{
-margin-top:10px;
-padding:8px 15px;
-background:#22c55e;
-border:none;
-border-radius:6px;
-cursor:pointer;
-font-weight:bold;
-}
+    .hero{
+      padding:18px;
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .hero h1{
+      margin:0;
+      font-size: 28px;
+      letter-spacing: -.3px;
+    }
+    .hero p{ margin:6px 0 0; color:var(--muted); max-width: 780px; }
+    .heroRight{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      justify-content:flex-end;
+    }
 
-</style>
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
 
+    .panel{
+      background: rgba(12,18,32,.78);
+      border: 1px solid rgba(26,38,64,.8);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panelHeader{
+      padding:14px 14px 10px;
+      border-bottom:1px solid rgba(26,38,64,.75);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .tabs{ display:flex; gap:8px; flex-wrap:wrap; }
+    .tab{
+      padding:8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(26,38,64,.9);
+      background: rgba(10,16,28,.6);
+      color: var(--muted);
+      font-weight:900;
+      cursor:pointer;
+      font-size:13px;
+    }
+    .tab.active{
+      background: rgba(125,211,252,.16);
+      border-color: rgba(125,211,252,.28);
+      color: var(--text);
+    }
+
+    .controls{
+      padding: 12px 14px;
+      display:grid;
+      grid-template-columns: 1fr 140px 160px 160px;
+      gap:10px;
+      border-bottom:1px solid rgba(26,38,64,.75);
+      background: rgba(10,16,28,.45);
+    }
+    @media (max-width: 980px){
+      .controls{ grid-template-columns: 1fr 1fr; }
+    }
+    input, select, textarea{
+      width:100%;
+      padding:10px 12px;
+      border-radius: 12px;
+      border:1px solid rgba(36,50,68,.95);
+      background: rgba(7,11,18,.75);
+      color: var(--text);
+      outline:none;
+    }
+    input::placeholder, textarea::placeholder{ color: rgba(167,180,204,.65); }
+
+    .list{
+      padding: 12px;
+      display:grid;
+      gap: 10px;
+    }
+
+    .dealCard{
+      background: rgba(10,16,28,.62);
+      border: 1px solid rgba(26,38,64,.9);
+      border-radius: 16px;
+      padding: 12px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:10px;
+      transition: transform .08s ease, border-color .15s ease;
+    }
+    .dealCard:hover{ transform: translateY(-1px); border-color: rgba(125,211,252,.22); }
+
+    @media (max-width: 980px){
+      .dealCard{ grid-template-columns: 1fr; }
+    }
+
+    .dealTop{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    }
+    .dealTitle{
+      font-weight: 950;
+      font-size: 16px;
+      letter-spacing: -.1px;
+    }
+    .dealMeta{
+      margin-top:6px;
+      display:flex; gap:8px; flex-wrap:wrap;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .pill{
+      display:inline-flex; align-items:center;
+      padding:5px 10px;
+      border-radius:999px;
+      border:1px solid rgba(36,50,68,.95);
+      background: rgba(7,11,18,.35);
+      color: var(--muted);
+      font-size:12px;
+      font-weight:800;
+      gap:6px;
+    }
+    .pill strong{ color:var(--text); }
+    .status{
+      font-weight:950;
+      border: 1px solid rgba(36,50,68,.95);
+      background: rgba(7,11,18,.45);
+    }
+    .status.available{ border-color: rgba(34,197,94,.40); color: rgba(34,197,94,.95); }
+    .status.requested{ border-color: rgba(245,158,11,.45); color: rgba(245,158,11,.95); }
+    .status.review{ border-color: rgba(96,165,250,.45); color: rgba(96,165,250,.95); }
+    .status.offer{ border-color: rgba(167,139,250,.5); color: rgba(167,139,250,.95); }
+    .status.funded{ border-color: rgba(34,197,94,.55); color: rgba(34,197,94,.95); }
+    .status.dead{ border-color: rgba(239,68,68,.55); color: rgba(239,68,68,.95); }
+
+    .score{
+      font-weight:950;
+      color: var(--text);
+      border:1px solid rgba(125,211,252,.25);
+      background: rgba(125,211,252,.10);
+    }
+
+    .dealRight{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:flex-end;
+      justify-content:space-between;
+    }
+    .dealActions{
+      display:flex; gap:8px; flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .hint{ color:var(--muted2); font-size:12px; line-height:1.35; text-align:right; }
+
+    /* Side panel */
+    .side{
+      padding: 14px;
+      display:grid;
+      gap: 12px;
+    }
+    .kpiRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .kpi{
+      background: rgba(10,16,28,.62);
+      border:1px solid rgba(26,38,64,.9);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .kpi .label{ color:var(--muted); font-size:12px; }
+    .kpi .value{ font-weight:950; font-size:18px; margin-top:6px; }
+
+    .mini{
+      background: rgba(10,16,28,.62);
+      border:1px solid rgba(26,38,64,.9);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .mini h3{ margin:0 0 10px; font-size:14px; }
+    .mini ul{ margin:0; padding-left:18px; color:var(--muted); }
+    .mini li{ margin:6px 0; }
+
+    /* Modal */
+    .modalBackdrop{
+      position: fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index: 100;
+    }
+    .modalBackdrop.show{ display:flex; }
+    .modal{
+      width: min(980px, 100%);
+      max-height: 92vh;
+      overflow: auto;
+      background: rgba(12,18,32,.96);
+      border:1px solid rgba(26,38,64,.85);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+    .modalHeader{
+      position: sticky; top:0;
+      padding:12px 14px;
+      border-bottom:1px solid rgba(26,38,64,.75);
+      background: rgba(12,18,32,.96);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      z-index: 2;
+    }
+    .modalHeader .left{ display:flex; flex-direction:column; gap:4px; }
+    .modalHeader .title{ font-weight:950; }
+    .modalHeader .subtitle{ color:var(--muted); font-size:12px; }
+    .modalBody{ padding: 12px 14px; display:grid; grid-template-columns: 1fr .9fr; gap:12px; }
+    @media (max-width: 980px){ .modalBody{ grid-template-columns:1fr; } }
+
+    .thread{
+      background: rgba(7,11,18,.55);
+      border:1px solid rgba(26,38,64,.85);
+      border-radius: 16px;
+      padding: 12px;
+      display:grid;
+      gap:10px;
+      min-height: 260px;
+    }
+    .msg{
+      border:1px solid rgba(26,38,64,.85);
+      background: rgba(10,16,28,.65);
+      border-radius: 14px;
+      padding: 10px;
+    }
+    .msg .meta{ display:flex; justify-content:space-between; gap:10px; color:var(--muted); font-size:12px; }
+    .msg .text{ margin-top:6px; color: var(--text); line-height:1.35; }
+    .msg .who{ font-weight:900; color:var(--text); }
+    .composer{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .dealFacts{
+      background: rgba(7,11,18,.55);
+      border:1px solid rgba(26,38,64,.85);
+      border-radius: 16px;
+      padding: 12px;
+      display:grid;
+      gap:10px;
+    }
+    .factGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .fact{
+      border:1px solid rgba(26,38,64,.85);
+      background: rgba(10,16,28,.65);
+      border-radius: 14px;
+      padding: 10px;
+    }
+    .fact .k{ color:var(--muted); font-size:12px; }
+    .fact .v{ margin-top:6px; font-weight:950; }
+
+    .divider{ height:1px; background: rgba(26,38,64,.75); margin: 6px 0; }
+
+    .muted{ color:var(--muted); }
+    .rightActions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+
+    .toast{
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(12,18,32,.95);
+      border: 1px solid rgba(26,38,64,.85);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      display:none;
+      z-index: 200;
+      font-weight:800;
+    }
+    .toast.show{ display:block; }
+  </style>
 </head>
-
 <body>
 
-<h1>Deal Marketplace</h1>
+<header>
+  <div class="topbar wrap">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <div>BrokerOS Marketplace</div>
+        <div class="sub">Deal feed • matching • deal rooms • workflow</div>
+      </div>
+    </div>
 
-<div class="grid" id="dealBoard"></div>
+    <div class="nav">
+      <span class="chip"><strong>Mode</strong> <span id="modeLabel">Both</span></span>
+      <a href="index.html" class="chip">Home</a>
+      <a href="superbroker.html" class="chip">SuperBroker</a>
+      <a href="funders.html" class="chip">Funder Directory</a>
+      <a href="gameroom.html" class="chip">GameRoom</a>
+    </div>
 
-<script>
+    <div class="heroRight">
+      <div class="roleToggle" title="Switch perspective">
+        <button id="roleBroker">Broker</button>
+        <button id="roleFunder">Funder</button>
+        <button id="roleBoth" class="active">Both</button>
+      </div>
+      <button class="btn primary" id="btnQuickPost">Post Deal</button>
+    </div>
+  </div>
+</header>
 
-let deals = [
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <h1>Deal Marketplace Dashboard</h1>
+      <p id="heroText">A workflow-driven deal board. Post deals as a broker, request deals as a funder, and move them through status with a Deal Room thread. Everything persists in your browser.</p>
+    </div>
+  </div>
 
-{
-industry:"Restaurant",
-revenue:95000,
-credit:620,
-amount:45000,
-score:78,
-status:"Available"
-},
+  <div class="grid">
+    <!-- Main panel -->
+    <div class="panel">
+      <div class="panelHeader">
+        <div class="tabs">
+          <button class="tab active" data-tab="feed">Deal Feed</button>
+          <button class="tab" data-tab="mine">My Deals</button>
+          <button class="tab" data-tab="post">Post Deal</button>
+        </div>
+        <div class="rightActions">
+          <button class="btn small ghost" id="btnReset">Reset Demo Data</button>
+        </div>
+      </div>
 
-{
-industry:"Retail",
-revenue:120000,
-credit:650,
-amount:60000,
-score:85,
-status:"Available"
-},
+      <div class="controls" id="controls">
+        <input id="q" placeholder="Search industry / notes (e.g. restaurant, stacked, seasonal)" />
+        <select id="filterStatus">
+          <option value="">All statuses</option>
+          <option value="available">Available</option>
+          <option value="requested">Requested</option>
+          <option value="review">In Review</option>
+          <option value="offer">Offer Sent</option>
+          <option value="funded">Funded</option>
+          <option value="dead">Dead</option>
+        </select>
+        <select id="filterIndustry">
+          <option value="">All industries</option>
+          <option value="restaurant">Restaurant</option>
+          <option value="retail">Retail</option>
+          <option value="construction">Construction</option>
+          <option value="trucking">Trucking</option>
+          <option value="services">Services</option>
+        </select>
+        <select id="sortBy">
+          <option value="newest">Sort: Newest</option>
+          <option value="score">Sort: Score</option>
+          <option value="amount">Sort: Amount</option>
+          <option value="revenue">Sort: Revenue</option>
+        </select>
+      </div>
 
-{
-industry:"Construction",
-revenue:80000,
-credit:600,
-amount:40000,
-score:70,
-status:"Available"
-},
+      <div class="list" id="mainList"></div>
 
-{
-industry:"Trucking",
-revenue:70000,
-credit:590,
-amount:35000,
-score:64,
-status:"Available"
-}
+      <!-- Post panel (hidden until tab) -->
+      <div class="list" id="postPanel" style="display:none;">
+        <div class="dealCard" style="grid-template-columns:1fr;">
+          <div>
+            <div class="dealTitle">Post a Deal (Broker)</div>
+            <div class="dealMeta">Create a clean deal card. You can edit later. (V1: saved locally)</div>
+            <div class="divider"></div>
 
-]
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+              <div>
+                <label class="muted" style="font-size:12px;">Industry</label>
+                <select id="pIndustry">
+                  <option value="restaurant">Restaurant</option>
+                  <option value="retail">Retail</option>
+                  <option value="construction">Construction</option>
+                  <option value="trucking">Trucking</option>
+                  <option value="services">Services</option>
+                </select>
+              </div>
+              <div>
+                <label class="muted" style="font-size:12px;">State (optional)</label>
+                <input id="pState" placeholder="e.g. NY" maxlength="2" />
+              </div>
 
-function loadDeals(){
+              <div>
+                <label class="muted" style="font-size:12px;">Monthly Revenue ($)</label>
+                <input id="pRevenue" type="number" placeholder="e.g. 85000" />
+              </div>
+              <div>
+                <label class="muted" style="font-size:12px;">Credit Score</label>
+                <input id="pCredit" type="number" placeholder="e.g. 620" />
+              </div>
 
-let board = document.getElementById("dealBoard")
+              <div>
+                <label class="muted" style="font-size:12px;">Time in Business (months)</label>
+                <input id="pTib" type="number" placeholder="e.g. 18" />
+              </div>
+              <div>
+                <label class="muted" style="font-size:12px;">Positions (0,1,2,3+)</label>
+                <input id="pPos" type="number" placeholder="e.g. 1" />
+              </div>
 
-board.innerHTML=""
+              <div>
+                <label class="muted" style="font-size:12px;">Funding Requested ($)</label>
+                <input id="pAmount" type="number" placeholder="e.g. 45000" />
+              </div>
+              <div>
+                <label class="muted" style="font-size:12px;">Urgency</label>
+                <select id="pUrgency">
+                  <option value="normal">Normal</option>
+                  <option value="fast">Fast (24–48h)</option>
+                  <option value="same_day">Same day</option>
+                </select>
+              </div>
+            </div>
 
-deals.forEach(d=>{
+            <div style="margin-top:10px;">
+              <label class="muted" style="font-size:12px;">Notes (what matters)</label>
+              <textarea id="pNotes" rows="3" placeholder="e.g. Clean 1st, stable deposits, wants speed. Or: seasonal dip, needs restructure."></textarea>
+            </div>
 
-board.innerHTML+=`
+            <div class="divider"></div>
+            <div class="rightActions">
+              <button class="btn" id="btnFillExample">Fill Example</button>
+              <button class="btn primary" id="btnPostDeal">Post Deal</button>
+            </div>
 
-<div class="card">
+            <div class="muted" style="margin-top:10px; font-size:12px;">
+              V2: statement upload + verification badges + real messaging/accounts.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<b>${d.industry}</b><br><br>
+    <!-- Side panel -->
+    <div class="panel">
+      <div class="panelHeader">
+        <div class="dealTitle">Control Panel</div>
+        <div class="pill score" title="Local demo score / status engine">V1</div>
+      </div>
+      <div class="side">
+        <div class="kpiRow">
+          <div class="kpi">
+            <div class="label">Active deals</div>
+            <div class="value" id="kpiActive">—</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Requested deals</div>
+            <div class="value" id="kpiRequested">—</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Offer stage</div>
+            <div class="value" id="kpiOffer">—</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Funded</div>
+            <div class="value" id="kpiFunded">—</div>
+          </div>
+        </div>
 
-Revenue: $${d.revenue}/mo<br>
-Credit: ${d.credit}<br>
-Needs: $${d.amount}<br>
-Score: ${d.score}<br>
-Status: ${d.status}<br>
+        <div class="mini">
+          <h3>How it feels “real”</h3>
+          <ul>
+            <li><b>Statuses</b> + a <b>Deal Room</b> thread</li>
+            <li><b>My Deals</b> tab (your workflow)</li>
+            <li><b>Persisted state</b> via localStorage</li>
+          </ul>
+        </div>
 
-<button onclick="requestDeal()">Request Deal</button>
+        <div class="mini">
+          <h3>Next world-class upgrades</h3>
+          <ul>
+            <li>Account login (broker/funder)</li>
+            <li>Real Deal Rooms + attachments</li>
+            <li>Verification badges (statements)</li>
+            <li>Smart matching via funders.json</li>
+          </ul>
+        </div>
 
+        <div class="mini">
+          <h3>Safety notes</h3>
+          <ul>
+            <li>Don’t post PII on deal cards</li>
+            <li>V1 is local-only demo storage</li>
+            <li>V2 adds secure backend + access control</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-`
+<!-- Deal Room Modal -->
+<div class="modalBackdrop" id="modalBackdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Deal Room">
+    <div class="modalHeader">
+      <div class="left">
+        <div class="title" id="modalTitle">Deal Room</div>
+        <div class="subtitle" id="modalSubtitle">—</div>
+      </div>
+      <div class="rightActions">
+        <button class="btn small" id="btnModalClose">Close</button>
+      </div>
+    </div>
 
-})
+    <div class="modalBody">
+      <div>
+        <div class="thread" id="thread"></div>
+        <div class="composer">
+          <input id="msgInput" placeholder="Message… (e.g. ‘Can you confirm positions and last 60 days NSFs?’)" />
+          <button class="btn primary" id="btnSendMsg">Send</button>
+        </div>
+        <div class="muted" style="margin-top:8px; font-size:12px;">
+          Tip: Use the actions on the right to move the deal through workflow.
+        </div>
+      </div>
 
+      <div class="dealFacts">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+          <div class="pill status" id="modalStatus">Status</div>
+          <div class="pill score" id="modalScore">Score</div>
+        </div>
+
+        <div class="factGrid" id="factGrid"></div>
+
+        <div class="divider"></div>
+
+        <div id="roleActions">
+          <!-- filled by JS depending on role + status -->
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="muted" style="font-size:12px;">
+          V1 stores everything locally. V2 makes this a real multi-user marketplace.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================
+   Marketplace V1 (Local)
+   ========================= */
+
+const STORAGE_KEY = "brokeros_marketplace_v1";
+const ROLE_KEY = "brokeros_marketplace_role";
+const DEFAULT_ROLE = "both"; // broker | funder | both
+
+// Status order (workflow)
+const STATUS = {
+  available: "Available",
+  requested: "Requested",
+  review: "In Review",
+  offer: "Offer Sent",
+  funded: "Funded",
+  dead: "Dead"
+};
+
+function nowISO(){ return new Date().toISOString(); }
+function fmtMoney(n){
+  if (n == null || isNaN(n)) return "—";
+  return "$" + Math.round(n).toLocaleString();
+}
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+function uid(){
+  return "d_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+}
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1400);
 }
 
-function requestDeal(){
+// Basic deterministic deal scoring (transparent V1)
+function scoreDeal(d){
+  let score = 50;
+  const flags = [];
 
-alert("Deal request sent!")
+  const credit = Number(d.credit || 0);
+  const rev = Number(d.revenue || 0);
+  const tib = Number(d.tib || 0);
+  const pos = Number(d.positions || 0);
+  const amt = Number(d.amount || 0);
 
+  // Credit
+  if (credit >= 700) score += 24;
+  else if (credit >= 660) score += 18;
+  else if (credit >= 620) score += 12;
+  else if (credit >= 580) score += 5;
+  else { score -= 14; flags.push("Low credit band"); }
+
+  // Revenue strength
+  if (rev >= 150000) score += 22;
+  else if (rev >= 100000) score += 16;
+  else if (rev >= 60000) score += 10;
+  else if (rev >= 30000) score += 4;
+  else { score -= 12; flags.push("Low monthly revenue"); }
+
+  // Time in business
+  if (tib >= 36) score += 14;
+  else if (tib >= 24) score += 10;
+  else if (tib >= 12) score += 6;
+  else { score -= 10; flags.push("Short time in business"); }
+
+  // Stacking / positions
+  if (pos === 0) score += 12;
+  else if (pos === 1) score += 4;
+  else if (pos === 2) score -= 6;
+  else { score -= 16; flags.push("Heavy stacking risk"); }
+
+  // Funding request vs revenue (rough capacity check)
+  if (rev > 0 && amt > 0){
+    const ratio = amt / rev; // requested as a fraction of monthly revenue
+    if (ratio <= 0.35) score += 10;
+    else if (ratio <= 0.55) score += 4;
+    else if (ratio <= 0.75) score -= 6;
+    else { score -= 14; flags.push("Requested amount high vs revenue"); }
+  }
+
+  // Industry nudge (tiny)
+  const ind = (d.industry || "").toLowerCase();
+  if (["restaurant","retail","services","construction"].includes(ind)) score += 2;
+  if (["trucking"].includes(ind)) score -= 2;
+
+  score = clamp(score, 1, 99);
+
+  let grade = "D";
+  let likelihood = "Low";
+  if (score >= 85){ grade="A"; likelihood="High"; }
+  else if (score >= 72){ grade="B"; likelihood="Moderate"; }
+  else if (score >= 58){ grade="C"; likelihood="Medium-Low"; }
+
+  // Suggested max funding (rough)
+  const suggestedMax = rev ? Math.round(rev * (pos >= 2 ? 0.35 : 0.55)) : null;
+
+  return { score, grade, likelihood, flags, suggestedMax };
 }
 
-loadDeals()
+function defaultState(){
+  const seed = [
+    {
+      id: uid(),
+      createdAt: nowISO(),
+      createdBy: "broker",
+      industry: "restaurant",
+      state: "NY",
+      revenue: 95000,
+      credit: 620,
+      tib: 18,
+      positions: 1,
+      amount: 45000,
+      urgency: "fast",
+      notes: "Clean 1st. Wants speed. Stable deposits. No recent dips reported.",
+      status: "available",
+      requestedBy: [],
+      offer: null,
+      thread: [
+        { at: nowISO(), who: "System", text: "Deal posted. Keep PII off the card. Use the Deal Room for questions and next steps." }
+      ]
+    },
+    {
+      id: uid(),
+      createdAt: nowISO(),
+      createdBy: "broker",
+      industry: "retail",
+      state: "NJ",
+      revenue: 120000,
+      credit: 660,
+      tib: 30,
+      positions: 0,
+      amount: 60000,
+      urgency: "normal",
+      notes: "Seasonal lift expected. Strong revenue. Prefers 1st position.",
+      status: "available",
+      requestedBy: [],
+      offer: null,
+      thread: [
+        { at: nowISO(), who: "System", text: "Tip: Funders can request the deal and ask for docs. Move statuses as the deal progresses." }
+      ]
+    },
+    {
+      id: uid(),
+      createdAt: nowISO(),
+      createdBy: "broker",
+      industry: "construction",
+      state: "FL",
+      revenue: 80000,
+      credit: 605,
+      tib: 14,
+      positions: 2,
+      amount: 40000,
+      urgency: "fast",
+      notes: "2 positions existing. Needs restructure or careful sizing.",
+      status: "available",
+      requestedBy: [],
+      offer: null,
+      thread: [{ at: nowISO(), who: "System", text: "This deal may benefit from asking about positions/stacking and recent NSFs." }]
+    },
+    {
+      id: uid(),
+      createdAt: nowISO(),
+      createdBy: "broker",
+      industry: "trucking",
+      state: "TX",
+      revenue: 70000,
+      credit: 590,
+      tib: 10,
+      positions: 3,
+      amount: 35000,
+      urgency: "same_day",
+      notes: "Choppy month. High urgency. Likely needs docs and a conservative offer.",
+      status: "available",
+      requestedBy: [],
+      offer: null,
+      thread: [{ at: nowISO(), who: "System", text: "High urgency + stacking. Consider 'Needs Info' or smaller sizing." }]
+    }
+  ];
 
+  // Add computed fields (score etc.)
+  return { deals: seed.map(enrichDeal), my: { broker: { posted: [] }, funder: { requested: [] } } };
+}
+
+function enrichDeal(d){
+  const m = scoreDeal(d);
+  return { ...d, metrics: m };
+}
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    // Backfill + re-enrich scores (in case scoring logic changes)
+    parsed.deals = (parsed.deals || []).map(enrichDeal);
+    parsed.my = parsed.my || { broker:{posted:[]}, funder:{requested:[]} };
+    parsed.my.broker = parsed.my.broker || { posted: [] };
+    parsed.my.funder = parsed.my.funder || { requested: [] };
+    return parsed;
+  } catch {
+    return defaultState();
+  }
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+let state = loadState();
+let activeTab = "feed";
+let role = (localStorage.getItem(ROLE_KEY) || DEFAULT_ROLE); // broker/funder/both
+let selectedDealId = null;
+
+function setRole(r){
+  role = r;
+  localStorage.setItem(ROLE_KEY, role);
+  document.getElementById("roleBroker").classList.toggle("active", role==="broker");
+  document.getElementById("roleFunder").classList.toggle("active", role==="funder");
+  document.getElementById("roleBoth").classList.toggle("active", role==="both");
+  document.getElementById("modeLabel").textContent = role.charAt(0).toUpperCase() + role.slice(1);
+  const heroText = document.getElementById("heroText");
+  if (role === "broker") heroText.textContent = "Broker view: post deals, manage requests, move deals through workflow, and close.";
+  else if (role === "funder") heroText.textContent = "Funder view: browse scored deals, request them, ask questions, and send offers.";
+  else heroText.textContent = "Both view: switch perspectives and experience the full workflow. Everything persists in your browser.";
+  render();
+}
+
+function setTab(t){
+  activeTab = t;
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b.dataset.tab === t));
+  document.getElementById("controls").style.display = (t === "post") ? "none" : "grid";
+  document.getElementById("postPanel").style.display = (t === "post") ? "block" : "none";
+  document.getElementById("mainList").style.display = (t === "post") ? "none" : "grid";
+  render();
+}
+
+function dealStatusPill(status){
+  const cls = status || "available";
+  const label = STATUS[cls] || "—";
+  return `<span class="pill status ${cls}">${label}</span>`;
+}
+
+function scorePill(metrics){
+  const s = metrics?.score ?? "—";
+  const g = metrics?.grade ?? "—";
+  const l = metrics?.likelihood ?? "—";
+  return `<span class="pill score" title="Grade ${g} • Approval Likelihood: ${l}">Score: <strong>${s}</strong></span>`;
+}
+
+function kpis(){
+  const deals = state.deals || [];
+  const active = deals.filter(d => !["funded","dead"].includes(d.status)).length;
+  const requested = deals.filter(d => d.status === "requested").length;
+  const offer = deals.filter(d => d.status === "offer").length;
+  const funded = deals.filter(d => d.status === "funded").length;
+  document.getElementById("kpiActive").textContent = active;
+  document.getElementById("kpiRequested").textContent = requested;
+  document.getElementById("kpiOffer").textContent = offer;
+  document.getElementById("kpiFunded").textContent = funded;
+}
+
+function applyFilters(list){
+  const q = (document.getElementById("q").value || "").toLowerCase().trim();
+  const fs = document.getElementById("filterStatus").value;
+  const fi = document.getElementById("filterIndustry").value;
+  const sortBy = document.getElementById("sortBy").value;
+
+  let out = list.slice();
+
+  if (q){
+    out = out.filter(d => {
+      const blob = `${d.industry} ${d.notes || ""} ${d.state || ""}`.toLowerCase();
+      return blob.includes(q);
+    });
+  }
+  if (fs) out = out.filter(d => d.status === fs);
+  if (fi) out = out.filter(d => (d.industry || "").toLowerCase() === fi);
+
+  out.sort((a,b)=>{
+    if (sortBy === "score") return (b.metrics?.score||0) - (a.metrics?.score||0);
+    if (sortBy === "amount") return (b.amount||0) - (a.amount||0);
+    if (sortBy === "revenue") return (b.revenue||0) - (a.revenue||0);
+    // newest
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
+  return out;
+}
+
+function myDeals(){
+  const deals = state.deals || [];
+  const mine = [];
+  const requestedIds = new Set(state.my?.funder?.requested || []);
+  const postedIds = new Set(state.my?.broker?.posted || []);
+
+  deals.forEach(d=>{
+    if (role === "broker"){
+      if (postedIds.has(d.id)) mine.push(d);
+    } else if (role === "funder"){
+      if (requestedIds.has(d.id)) mine.push(d);
+    } else {
+      if (postedIds.has(d.id) || requestedIds.has(d.id)) mine.push(d);
+    }
+  });
+  return mine;
+}
+
+function primaryCTAForDeal(d){
+  const status = d.status;
+  const requestedIds = new Set(state.my?.funder?.requested || []);
+  const postedIds = new Set(state.my?.broker?.posted || []);
+  const iRequested = requestedIds.has(d.id);
+  const iPosted = postedIds.has(d.id);
+
+  // Determine what to show on card depending on role
+  if (role === "funder"){
+    if (status === "available") return { label: "Request Deal", action: ()=>requestDeal(d.id) };
+    if (status === "requested" && iRequested) return { label: "Open Deal Room", action: ()=>openDealRoom(d.id) };
+    return { label: "Open Deal Room", action: ()=>openDealRoom(d.id) };
+  }
+
+  if (role === "broker"){
+    if (!iPosted) return { label: "View", action: ()=>openDealRoom(d.id) };
+    return { label: "Manage", action: ()=>openDealRoom(d.id) };
+  }
+
+  // both
+  if (status === "available") return { label: "Open Deal Room", action: ()=>openDealRoom(d.id) };
+  return { label: "Open Deal Room", action: ()=>openDealRoom(d.id) };
+}
+
+function renderList(list){
+  const box = document.getElementById("mainList");
+  box.innerHTML = "";
+
+  if (!list.length){
+    box.innerHTML = `<div class="dealCard" style="grid-template-columns:1fr;">
+      <div>
+        <div class="dealTitle">No deals found</div>
+        <div class="dealMeta">Try clearing filters or post a new deal.</div>
+      </div>
+    </div>`;
+    return;
+  }
+
+  list.forEach(d=>{
+    const m = d.metrics || scoreDeal(d);
+    const cta = primaryCTAForDeal(d);
+
+    const requestedCount = (d.requestedBy || []).length;
+    const requestedHint = requestedCount ? `${requestedCount} request${requestedCount>1?"s":""}` : "No requests yet";
+
+    const rightHint = (d.status === "available")
+      ? "Available in feed"
+      : (d.status === "requested")
+        ? requestedHint
+        : (d.status === "review")
+          ? "In underwriting review"
+          : (d.status === "offer")
+            ? "Offer active"
+            : (d.status === "funded")
+              ? "Closed ✅"
+              : "Closed ❌";
+
+    const el = document.createElement("div");
+    el.className = "dealCard";
+    el.innerHTML = `
+      <div>
+        <div class="dealTop">
+          <div>
+            <div class="dealTitle">${titleCase(d.industry)} Deal • ${fmtMoney(d.amount)}</div>
+            <div class="dealMeta">
+              <span class="pill"><strong>Rev</strong> ${fmtMoney(d.revenue)}/mo</span>
+              <span class="pill"><strong>Credit</strong> ${d.credit ?? "—"}</span>
+              <span class="pill"><strong>TIB</strong> ${d.tib ?? "—"} mo</span>
+              <span class="pill"><strong>Pos</strong> ${d.positions ?? "—"}</span>
+              <span class="pill"><strong>State</strong> ${d.state || "—"}</span>
+              <span class="pill"><strong>Urgency</strong> ${humanUrgency(d.urgency)}</span>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+            ${dealStatusPill(d.status)}
+            ${scorePill(m)}
+          </div>
+        </div>
+
+        <div class="dealMeta" style="margin-top:10px; color:var(--muted);">
+          ${escapeHtml(d.notes || "—")}
+        </div>
+
+        ${(m.flags && m.flags.length) ? `
+          <div class="dealMeta" style="margin-top:10px;">
+            ${m.flags.slice(0,3).map(f => `<span class="pill" style="border-color:rgba(245,158,11,.35); background:rgba(245,158,11,.08); color:#ffd28a;">⚠ ${escapeHtml(f)}</span>`).join("")}
+          </div>
+        ` : ``}
+      </div>
+
+      <div class="dealRight">
+        <div class="dealActions">
+          <button class="btn small" data-open="${d.id}">Deal Room</button>
+          <button class="btn small primary" data-cta="${d.id}">${cta.label}</button>
+          ${role !== "funder" ? `<button class="btn small" data-advance="${d.id}">Advance</button>` : ``}
+        </div>
+        <div class="hint">${rightHint}</div>
+      </div>
+    `;
+
+    box.appendChild(el);
+
+    el.querySelector(`[data-open="${d.id}"]`).addEventListener("click", ()=>openDealRoom(d.id));
+    el.querySelector(`[data-cta="${d.id}"]`).addEventListener("click", cta.action);
+    const adv = el.querySelector(`[data-advance="${d.id}"]`);
+    if (adv) adv.addEventListener("click", ()=>advanceStatus(d.id));
+  });
+}
+
+function render(){
+  kpis();
+
+  if (activeTab === "post") return;
+
+  let list = state.deals || [];
+  if (activeTab === "mine") list = myDeals();
+  list = applyFilters(list);
+  renderList(list);
+}
+
+function titleCase(s){
+  if (!s) return "—";
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+function humanUrgency(u){
+  if (u === "same_day") return "Same day";
+  if (u === "fast") return "Fast";
+  return "Normal";
+}
+
+/* ===== Actions ===== */
+
+function requestDeal(id){
+  // funder requests deal -> becomes requested if available
+  const d = state.deals.find(x => x.id === id);
+  if (!d) return;
+
+  if (!state.my?.funder) state.my.funder = { requested: [] };
+  if (!state.my.funder.requested.includes(id)) state.my.funder.requested.push(id);
+
+  d.requestedBy = d.requestedBy || [];
+  if (!d.requestedBy.includes("funder_demo")) d.requestedBy.push("funder_demo");
+
+  if (d.status === "available") d.status = "requested";
+
+  d.thread = d.thread || [];
+  d.thread.push({ at: nowISO(), who: "Funder", text: "Requested deal. Please share docs / clarify positions and recent NSFs." });
+
+  // re-enrich
+  Object.assign(d, enrichDeal(d));
+
+  saveState();
+  toast("Deal requested");
+  openDealRoom(id);
+  render();
+}
+
+function advanceStatus(id){
+  const d = state.deals.find(x => x.id === id);
+  if (!d) return;
+
+  // Broker can advance through a sane path
+  const order = ["available","requested","review","offer","funded"];
+  const idx = order.indexOf(d.status);
+  if (idx === -1 || d.status === "funded" || d.status === "dead") return;
+
+  // If trying to move to requested but no requests exist, keep available
+  if (d.status === "available" && (!d.requestedBy || d.requestedBy.length === 0)){
+    toast("No funder requests yet");
+    return;
+  }
+
+  d.status = order[idx+1] || d.status;
+  d.thread = d.thread || [];
+  d.thread.push({ at: nowISO(), who: "System", text: `Status moved to: ${STATUS[d.status]}` });
+
+  saveState();
+  toast("Status advanced");
+  render();
+  if (selectedDealId === id) renderDealRoom(id);
+}
+
+function markDead(id){
+  const d = state.deals.find(x => x.id === id);
+  if (!d) return;
+  d.status = "dead";
+  d.thread = d.thread || [];
+  d.thread.push({ at: nowISO(), who: "System", text: "Deal marked Dead." });
+  saveState();
+  toast("Marked dead");
+  render();
+  if (selectedDealId === id) renderDealRoom(id);
+}
+function markFunded(id){
+  const d = state.deals.find(x => x.id === id);
+  if (!d) return;
+  d.status = "funded";
+  d.thread = d.thread || [];
+  d.thread.push({ at: nowISO(), who: "System", text: "Deal marked Funded ✅" });
+  saveState();
+  toast("Marked funded");
+  render();
+  if (selectedDealId === id) renderDealRoom(id);
+}
+function sendOffer(id){
+  const d = state.deals.find(x => x.id === id);
+  if (!d) return;
+  d.status = "offer";
+  d.offer = d.offer || { amount: d.amount, factor: 1.39, termDays: 120 };
+  d.thread = d.thread || [];
+  d.thread.push({ at: nowISO(), who: "Funder", text: `Offer sent: ${fmtMoney(d.offer.amount)} • factor ${d.offer.factor} • ${d.offer.termDays} days` });
+  saveState();
+  toast("Offer sent");
+  render();
+  if (selectedDealId === id) renderDealRoom(id);
+}
+
+/* ===== Deal Room ===== */
+
+function openDealRoom(id){
+  selectedDealId = id;
+  document.getElementById("modalBackdrop").classList.add("show");
+  document.getElementById("modalBackdrop").setAttribute("aria-hidden","false");
+  renderDealRoom(id);
+}
+
+function closeDealRoom(){
+  selectedDealId = null;
+  document.getElementById("modalBackdrop").classList.remove("show");
+  document.getElementById("modalBackdrop").setAttribute("aria-hidden","true");
+}
+
+function renderDealRoom(id){
+  const d = state.deals.find(x => x.id === id);
+  if (!d) return;
+
+  const m = d.metrics || scoreDeal(d);
+  document.getElementById("modalTitle").textContent = `${titleCase(d.industry)} Deal • ${fmtMoney(d.amount)}`;
+  document.getElementById("modalSubtitle").textContent = `Rev ${fmtMoney(d.revenue)}/mo • Credit ${d.credit ?? "—"} • ${STATUS[d.status]}`;
+
+  const statusEl = document.getElementById("modalStatus");
+  statusEl.className = `pill status ${d.status}`;
+  statusEl.textContent = STATUS[d.status] || "Status";
+
+  const scoreEl = document.getElementById("modalScore");
+  scoreEl.textContent = `Score ${m.score} • Grade ${m.grade}`;
+  scoreEl.title = `Approval likelihood: ${m.likelihood}`;
+
+  // Facts
+  const fg = document.getElementById("factGrid");
+  fg.innerHTML = "";
+  const facts = [
+    ["Monthly Revenue", `${fmtMoney(d.revenue)}`],
+    ["Funding Requested", `${fmtMoney(d.amount)}`],
+    ["Credit Score", `${d.credit ?? "—"}`],
+    ["Time in Business", `${(d.tib ?? "—")} months`],
+    ["Positions", `${d.positions ?? "—"}`],
+    ["State", `${d.state || "—"}`],
+    ["Urgency", `${humanUrgency(d.urgency)}`],
+    ["Suggested Max", `${m.suggestedMax ? fmtMoney(m.suggestedMax) : "—"}`],
+  ];
+  facts.forEach(([k,v])=>{
+    const el = document.createElement("div");
+    el.className = "fact";
+    el.innerHTML = `<div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(String(v))}</div>`;
+    fg.appendChild(el);
+  });
+
+  // Thread
+  const thread = document.getElementById("thread");
+  thread.innerHTML = "";
+  (d.thread || []).slice(-50).forEach(msg=>{
+    const el = document.createElement("div");
+    el.className = "msg";
+    el.innerHTML = `
+      <div class="meta">
+        <div class="who">${escapeHtml(msg.who)}</div>
+        <div>${new Date(msg.at).toLocaleString()}</div>
+      </div>
+      <div class="text">${escapeHtml(msg.text)}</div>
+    `;
+    thread.appendChild(el);
+  });
+  thread.scrollTop = thread.scrollHeight;
+
+  // Role actions
+  const ra = document.getElementById("roleActions");
+  ra.innerHTML = roleActionsHtml(d);
+
+  wireRoleActions(d.id);
+}
+
+function roleActionsHtml(d){
+  const requestedIds = new Set(state.my?.funder?.requested || []);
+  const postedIds = new Set(state.my?.broker?.posted || []);
+  const iRequested = requestedIds.has(d.id);
+  const iPosted = postedIds.has(d.id);
+
+  const funderBlock = `
+    <div class="muted" style="font-size:12px; margin-bottom:8px;">Funder actions</div>
+    <div class="rightActions">
+      ${d.status === "available" ? `<button class="btn primary small" data-act="request">Request Deal</button>` : ``}
+      ${(d.status === "requested" || d.status === "review") ? `<button class="btn small primary" data-act="offer">Send Offer</button>` : ``}
+      <button class="btn small" data-act="openWebsite" disabled title="V2: funder profile links">Funder Profile</button>
+    </div>
+  `;
+
+  const brokerBlock = `
+    <div class="divider"></div>
+    <div class="muted" style="font-size:12px; margin-bottom:8px;">Broker actions</div>
+    <div class="rightActions">
+      <button class="btn small" data-act="advance">Advance Status</button>
+      <button class="btn small primary" data-act="funded">Mark Funded</button>
+      <button class="btn small danger" data-act="dead">Mark Dead</button>
+    </div>
+  `;
+
+  const ownership = `
+    <div class="muted" style="font-size:12px; margin-bottom:8px;">Ownership</div>
+    <div class="rightActions">
+      ${!iPosted ? `<button class="btn small" data-act="claimBroker">Claim as Broker</button>` : `<span class="pill">Broker: You</span>`}
+      ${!iRequested ? `<button class="btn small" data-act="claimFunder">Claim as Funder</button>` : `<span class="pill">Funder: You</span>`}
+    </div>
+  `;
+
+  // Show based on role selection
+  if (role === "broker") return ownership + brokerBlock;
+  if (role === "funder") return ownership + funderBlock;
+
+  // both
+  return ownership + funderBlock + brokerBlock;
+}
+
+function wireRoleActions(id){
+  const root = document.getElementById("roleActions");
+
+  const btn = (act) => root.querySelector(`[data-act="${act}"]`);
+
+  const requestBtn = btn("request");
+  if (requestBtn) requestBtn.addEventListener("click", ()=>requestDeal(id));
+
+  const offerBtn = btn("offer");
+  if (offerBtn) offerBtn.addEventListener("click", ()=>sendOffer(id));
+
+  const advBtn = btn("advance");
+  if (advBtn) advBtn.addEventListener("click", ()=>advanceStatus(id));
+
+  const deadBtn = btn("dead");
+  if (deadBtn) deadBtn.addEventListener("click", ()=>markDead(id));
+
+  const fundedBtn = btn("funded");
+  if (fundedBtn) fundedBtn.addEventListener("click", ()=>markFunded(id));
+
+  const claimBrokerBtn = btn("claimBroker");
+  if (claimBrokerBtn) claimBrokerBtn.addEventListener("click", ()=>{
+    if (!state.my?.broker) state.my.broker = { posted: [] };
+    if (!state.my.broker.posted.includes(id)) state.my.broker.posted.push(id);
+    saveState();
+    toast("Claimed as broker");
+    renderDealRoom(id);
+    render();
+  });
+
+  const claimFunderBtn = btn("claimFunder");
+  if (claimFunderBtn) claimFunderBtn.addEventListener("click", ()=>{
+    if (!state.my?.funder) state.my.funder = { requested: [] };
+    if (!state.my.funder.requested.includes(id)) state.my.funder.requested.push(id);
+    saveState();
+    toast("Claimed as funder");
+    renderDealRoom(id);
+    render();
+  });
+}
+
+function sendMessage(){
+  if (!selectedDealId) return;
+  const d = state.deals.find(x => x.id === selectedDealId);
+  if (!d) return;
+
+  const input = document.getElementById("msgInput");
+  const text = (input.value || "").trim();
+  if (!text) return;
+
+  const who =
+    role === "broker" ? "Broker" :
+    role === "funder" ? "Funder" :
+    "You";
+
+  d.thread = d.thread || [];
+  d.thread.push({ at: nowISO(), who, text });
+
+  input.value = "";
+  saveState();
+  renderDealRoom(selectedDealId);
+}
+
+/* ===== Posting ===== */
+
+function fillExample(){
+  document.getElementById("pIndustry").value = "services";
+  document.getElementById("pState").value = "CA";
+  document.getElementById("pRevenue").value = 88000;
+  document.getElementById("pCredit").value = 635;
+  document.getElementById("pTib").value = 22;
+  document.getElementById("pPos").value = 1;
+  document.getElementById("pAmount").value = 42000;
+  document.getElementById("pUrgency").value = "normal";
+  document.getElementById("pNotes").value = "Service business, consistent deposits, needs working capital. Looking for clean terms, fast close.";
+}
+
+function postDeal(){
+  const d = {
+    id: uid(),
+    createdAt: nowISO(),
+    createdBy: "broker",
+    industry: document.getElementById("pIndustry").value,
+    state: (document.getElementById("pState").value || "").toUpperCase().slice(0,2),
+    revenue: Number(document.getElementById("pRevenue").value || 0),
+    credit: Number(document.getElementById("pCredit").value || 0),
+    tib: Number(document.getElementById("pTib").value || 0),
+    positions: Number(document.getElementById("pPos").value || 0),
+    amount: Number(document.getElementById("pAmount").value || 0),
+    urgency: document.getElementById("pUrgency").value,
+    notes: (document.getElementById("pNotes").value || "").trim(),
+    status: "available",
+    requestedBy: [],
+    offer: null,
+    thread: [{ at: nowISO(), who: "System", text: "Deal posted. Keep PII off the card. Move it through status as it progresses." }]
+  };
+
+  if (!d.revenue || !d.credit || !d.amount){
+    toast("Fill revenue, credit, amount");
+    return;
+  }
+
+  const enriched = enrichDeal(d);
+  state.deals.unshift(enriched);
+
+  // Mark as mine for broker
+  if (!state.my?.broker) state.my.broker = { posted: [] };
+  state.my.broker.posted.push(enriched.id);
+
+  saveState();
+  toast("Deal posted");
+  setTab("feed");
+}
+
+function resetDemo(){
+  localStorage.removeItem(STORAGE_KEY);
+  state = loadState();
+  toast("Demo reset");
+  render();
+}
+
+/* ===== Utilities ===== */
+
+function escapeHtml(s){
+  return String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+/* ===== Wiring ===== */
+
+document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", ()=>setTab(b.dataset.tab)));
+
+["q","filterStatus","filterIndustry","sortBy"].forEach(id=>{
+  document.getElementById(id).addEventListener("input", render);
+  document.getElementById(id).addEventListener("change", render);
+});
+
+document.getElementById("roleBroker").addEventListener("click", ()=>setRole("broker"));
+document.getElementById("roleFunder").addEventListener("click", ()=>setRole("funder"));
+document.getElementById("roleBoth").addEventListener("click", ()=>setRole("both"));
+
+document.getElementById("btnReset").addEventListener("click", resetDemo);
+document.getElementById("btnFillExample").addEventListener("click", fillExample);
+document.getElementById("btnPostDeal").addEventListener("click", postDeal);
+
+document.getElementById("btnQuickPost").addEventListener("click", ()=>setTab("post"));
+
+document.getElementById("btnModalClose").addEventListener("click", closeDealRoom);
+document.getElementById("modalBackdrop").addEventListener("click", (e)=>{ if (e.target.id === "modalBackdrop") closeDealRoom(); });
+
+document.getElementById("btnSendMsg").addEventListener("click", sendMessage);
+document.getElementById("msgInput").addEventListener("keydown", (e)=>{
+  if (e.key === "Enter") sendMessage();
+});
+
+// Init role + tab
+setRole(role);
+setTab("feed");
+render();
 </script>
 
 </body>
-
 </html>
