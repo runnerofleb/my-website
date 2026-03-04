@@ -1,186 +1,676 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BrokerOS • Deal Lab</title>
+  <style>
+    :root{
+      --bg:#0b1026;
+      --panel:#0a1433;
+      --panel2:#0b1b44;
+      --border:#1c2b66;
+      --text:#eaf1ff;
+      --muted:#a7b4cc;
+      --muted2:#7d8aa3;
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --blue:#38bdf8;
+      --vio:#a78bfa;
+      --pink:#fb7185;
+      --shadow:0 18px 45px rgba(0,0,0,.40);
+      --r:18px;
+      --r2:14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1000px 540px at 12% 8%, rgba(56,189,248,.18), transparent 55%),
+        radial-gradient(900px 520px at 70% 12%, rgba(34,197,94,.12), transparent 55%),
+        radial-gradient(900px 520px at 86% 70%, rgba(251,113,133,.10), transparent 55%),
+        var(--bg);
+    }
+    a{ color:var(--blue); text-decoration:none; font-weight:700; }
+    a:hover{ text-decoration:underline; }
 
-<title>Broker Deal Analyzer</title>
+    header{
+      position: sticky; top:0; z-index:50;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:16px 22px;
+      background: rgba(9,12,25,.75);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(28,43,102,.65);
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:950;
+      letter-spacing:-.2px;
+    }
+    .logo{
+      width:34px; height:34px; border-radius:14px;
+      background: linear-gradient(90deg, var(--good), var(--blue), var(--vio));
+      box-shadow: 0 14px 40px rgba(56,189,248,.14);
+    }
+    .brand small{
+      display:block;
+      color:var(--muted);
+      font-weight:800;
+      font-size:12px;
+      margin-top:2px;
+      letter-spacing:0;
+    }
+    nav{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+    nav a{
+      padding:8px 10px;
+      border:1px solid rgba(28,43,102,.75);
+      background: rgba(10,20,51,.55);
+      border-radius:999px;
+      color:var(--muted);
+    }
+    nav a.active{
+      color:var(--text);
+      border-color: rgba(56,189,248,.40);
+      background: rgba(56,189,248,.12);
+    }
 
-<style>
+    .wrap{ max-width:1200px; margin:0 auto; padding:18px; }
 
-body{
-font-family:Arial;
-background:#0f172a;
-color:white;
-text-align:center;
-padding:40px;
-}
+    .hero{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .hero h1{
+      margin:0;
+      font-size:28px;
+      letter-spacing:-.4px;
+    }
+    .hero p{ margin:8px 0 0; color:var(--muted); max-width: 820px; line-height:1.35; }
+    .hero .ctaRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
 
-.container{
-width:450px;
-margin:auto;
-background:#1e293b;
-padding:25px;
-border-radius:10px;
-}
+    .btn{
+      border:1px solid rgba(28,43,102,.85);
+      background: rgba(10,20,51,.70);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      cursor:pointer;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+      white-space: nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(56,189,248,.40); }
+    .btn.primary{
+      background: linear-gradient(90deg, rgba(34,197,94,.22), rgba(56,189,248,.18));
+      border-color: rgba(34,197,94,.35);
+    }
+    .btn.primary:hover{ border-color: rgba(34,197,94,.55); }
+    .btn.danger{
+      background: rgba(239,68,68,.12);
+      border-color: rgba(239,68,68,.35);
+    }
+    .btn.small{ padding:8px 10px; border-radius: 12px; font-size: 13px; }
 
-input,select{
-width:90%;
-padding:10px;
-margin:8px;
-border-radius:6px;
-border:none;
-}
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
 
-button{
-padding:12px 22px;
-background:#22c55e;
-border:none;
-border-radius:6px;
-font-weight:bold;
-cursor:pointer;
-}
+    .panel{
+      background: rgba(10,20,51,.72);
+      border:1px solid rgba(28,43,102,.80);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panelHeader{
+      padding: 14px 14px 12px;
+      border-bottom:1px solid rgba(28,43,102,.65);
+      background: rgba(10,20,51,.50);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .panelHeader .t{ font-weight: 950; }
+    .panelHeader .s{ color:var(--muted); font-size:12px; margin-top:4px; font-weight:800; }
 
-.results{
-margin-top:25px;
-text-align:left;
-background:#020617;
-padding:15px;
-border-radius:8px;
-}
+    .panelBody{ padding: 14px; }
 
-</style>
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 980px){ .row{ grid-template-columns:1fr; } }
 
+    .field label{
+      display:flex; justify-content:space-between; gap:10px; align-items:baseline;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      margin-bottom:6px;
+    }
+    .field label span.value{
+      color:var(--text);
+      font-family: var(--mono);
+      font-weight:900;
+      font-size:12px;
+    }
+    input, select{
+      width:100%;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(44,70,160,.75);
+      background: rgba(7,12,28,.65);
+      color: var(--text);
+      outline:none;
+    }
+    input::placeholder{ color: rgba(167,180,204,.6); }
+    input[type="range"]{
+      padding:0;
+      height: 34px;
+    }
+
+    .pillRow{ display:flex; gap:8px; flex-wrap:wrap; }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(44,70,160,.70);
+      background: rgba(7,12,28,.45);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .pill strong{ color: var(--text); }
+    .pill.good{ border-color: rgba(34,197,94,.45); background: rgba(34,197,94,.10); color: rgba(34,197,94,.95); }
+    .pill.warn{ border-color: rgba(245,158,11,.50); background: rgba(245,158,11,.10); color: rgba(245,158,11,.95); }
+    .pill.bad{ border-color: rgba(239,68,68,.55); background: rgba(239,68,68,.10); color: rgba(239,68,68,.98); }
+    .pill.score{ border-color: rgba(56,189,248,.45); background: rgba(56,189,248,.12); color: var(--text); }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+    .kpi{
+      border:1px solid rgba(28,43,102,.75);
+      background: rgba(7,12,28,.45);
+      border-radius: var(--r2);
+      padding: 12px;
+    }
+    .kpi .k{ color:var(--muted); font-size:12px; font-weight:900; }
+    .kpi .v{ margin-top:6px; font-weight:950; font-size:18px; }
+    .kpi .hint{ margin-top:6px; color:var(--muted2); font-size:12px; line-height:1.35; }
+
+    .meter{
+      margin-top:12px;
+      border:1px solid rgba(28,43,102,.75);
+      background: rgba(7,12,28,.45);
+      border-radius: var(--r2);
+      padding: 12px;
+    }
+    .bar{
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(167,180,204,.18);
+      overflow:hidden;
+      border:1px solid rgba(44,70,160,.55);
+      margin-top:10px;
+    }
+    .bar > div{
+      height:100%;
+      width: 50%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--good), var(--blue), var(--vio));
+    }
+    .meter .meta{
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      color:var(--muted);
+      font-weight:900;
+      font-size:12px;
+      margin-top:10px;
+    }
+
+    .list{
+      display:grid;
+      gap:10px;
+    }
+    .card{
+      border:1px solid rgba(28,43,102,.75);
+      background: rgba(7,12,28,.45);
+      border-radius: var(--r2);
+      padding: 12px;
+    }
+    .card .title{
+      font-weight: 950;
+      display:flex; justify-content:space-between; gap:10px; align-items:center;
+    }
+    .card .sub{ margin-top:6px; color:var(--muted); font-size:12px; line-height:1.35; }
+    .card .actions{ margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
+
+    .toast{
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10,20,51,.95);
+      border: 1px solid rgba(28,43,102,.85);
+      padding: 10px 12px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      font-weight: 950;
+      display:none;
+      z-index: 200;
+    }
+    .toast.show{ display:block; }
+  </style>
 </head>
 
 <body>
+<header>
+  <div class="brand">
+    <div class="logo"></div>
+    <div>
+      BrokerOS <small>Deal Lab • simulate structures • ship to Marketplace</small>
+    </div>
+  </div>
 
-<h1>SuperBroker Deal Analyzer</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a class="active" href="analyzer.html">Deal Lab</a>
+    <a href="funders.html">Funders</a>
+    <a href="leaderboard.html">Leaderboard</a>
+  </nav>
+</header>
 
-<div class="container">
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <h1>Deal Lab Simulator</h1>
+      <p>
+        Enter the deal basics, then tune <b>amount</b>, <b>factor</b>, <b>term</b>, and <b>holdback</b>.
+        BrokerOS estimates payment pressure and flags risk. When it looks right, hit <b>Send to Marketplace</b>.
+      </p>
+    </div>
+    <div class="ctaRow">
+      <button class="btn" id="btnExample">Load Example</button>
+      <button class="btn primary" id="btnSend">Send to Marketplace</button>
+      <button class="btn danger" id="btnReset">Reset Lab</button>
+    </div>
+  </div>
 
-<select id="industry">
-<option value="restaurant">Restaurant</option>
-<option value="retail">Retail</option>
-<option value="construction">Construction</option>
-<option value="trucking">Trucking</option>
-</select>
+  <div class="grid">
+    <!-- Left: Inputs + Outputs -->
+    <div class="panel">
+      <div class="panelHeader">
+        <div>
+          <div class="t">Deal Inputs</div>
+          <div class="s">No PII. Keep it clean and fast.</div>
+        </div>
+        <div class="pillRow" id="topPills"></div>
+      </div>
 
-<input id="credit" placeholder="Credit Score">
+      <div class="panelBody">
+        <div class="row">
+          <div class="field">
+            <label>Industry <span class="value" id="vIndustry"></span></label>
+            <select id="industry">
+              <option value="Restaurant">Restaurant</option>
+              <option value="Retail">Retail</option>
+              <option value="Construction">Construction</option>
+              <option value="Trucking">Trucking</option>
+              <option value="Services">Services</option>
+            </select>
+          </div>
 
-<input id="revenue" placeholder="Monthly Revenue">
+          <div class="field">
+            <label>State (optional) <span class="value" id="vState"></span></label>
+            <input id="state" placeholder="e.g. NY" maxlength="2" />
+          </div>
 
-<input id="months" placeholder="Months In Business">
+          <div class="field">
+            <label>Monthly Revenue ($) <span class="value" id="vRev"></span></label>
+            <input id="revenue" type="number" placeholder="e.g. 85000" />
+          </div>
 
-<input id="positions" placeholder="Existing Positions">
+          <div class="field">
+            <label>Credit Score <span class="value" id="vCredit"></span></label>
+            <input id="credit" type="number" placeholder="e.g. 620" />
+          </div>
 
-<input id="amount" placeholder="Funding Requested">
+          <div class="field">
+            <label>Time in Business (months) <span class="value" id="vTib"></span></label>
+            <input id="tib" type="number" placeholder="e.g. 18" />
+          </div>
 
-<button onclick="analyze()">Analyze Deal</button>
+          <div class="field">
+            <label>Positions (0–4) <span class="value" id="vPos"></span></label>
+            <input id="positions" type="number" min="0" max="4" placeholder="e.g. 1" />
+          </div>
+        </div>
 
-<div class="results" id="results"></div>
+        <div style="height:12px"></div>
 
+        <div class="row">
+          <div class="field">
+            <label>Funding Amount <span class="value" id="vAmt"></span></label>
+            <input id="amount" type="range" min="5000" max="200000" step="1000" />
+          </div>
+
+          <div class="field">
+            <label>Factor <span class="value" id="vFactor"></span></label>
+            <input id="factor" type="range" min="1.10" max="1.60" step="0.01" />
+          </div>
+
+          <div class="field">
+            <label>Term (business days) <span class="value" id="vTerm"></span></label>
+            <input id="term" type="range" min="60" max="200" step="5" />
+          </div>
+
+          <div class="field">
+            <label>Holdback (%) <span class="value" id="vHold"></span></label>
+            <input id="holdback" type="range" min="5" max="25" step="1" />
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="k">Total Payback</div>
+            <div class="v" id="kPayback">—</div>
+            <div class="hint">Amount × factor (simple V1)</div>
+          </div>
+          <div class="kpi">
+            <div class="k">Daily Payment</div>
+            <div class="v" id="kDaily">—</div>
+            <div class="hint">Payback ÷ term</div>
+          </div>
+          <div class="kpi">
+            <div class="k">Estimated Daily Revenue</div>
+            <div class="v" id="kDailyRev">—</div>
+            <div class="hint">Monthly revenue ÷ 22 business days</div>
+          </div>
+          <div class="kpi">
+            <div class="k">Payment Pressure</div>
+            <div class="v" id="kPressure">—</div>
+            <div class="hint">Daily payment ÷ daily revenue</div>
+          </div>
+        </div>
+
+        <div class="meter">
+          <div style="font-weight:950;">Cashflow Stress Test</div>
+          <div class="bar"><div id="stressFill"></div></div>
+          <div class="meta">
+            <span id="stressLabel">—</span>
+            <span class="mono" id="stressValue">—</span>
+          </div>
+          <div class="sub" style="color:var(--muted); font-size:12px; margin-top:8px; line-height:1.35;">
+            This is a simple indicator: higher payment pressure + more stacking lowers stability.
+            V2 can use bank-statement metrics.
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="card">
+          <div class="title">
+            Risk Flags
+            <span class="pill score" id="riskCount">0</span>
+          </div>
+          <div class="sub" id="flags">No flags yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Scenarios + Tips -->
+    <div class="panel">
+      <div class="panelHeader">
+        <div>
+          <div class="t">Scenarios</div>
+          <div class="s">Save variants like “Fast Close” vs “Conservative”.</div>
+        </div>
+        <div class="pillRow">
+          <button class="btn small" id="btnSave">Save Scenario</button>
+          <button class="btn small danger" id="btnClear">Clear</button>
+        </div>
+      </div>
+
+      <div class="panelBody">
+        <div class="list" id="scenarios"></div>
+
+        <div style="height:12px"></div>
+
+        <div class="card">
+          <div class="title">Pro Tips</div>
+          <div class="sub">
+            • Lower <b>payment pressure</b> = higher approval odds.<br>
+            • With <b>2+ positions</b>, keep amount conservative.<br>
+            • Use scenarios to compare a fast offer vs a clean offer.
+          </div>
+          <div class="actions">
+            <a class="btn small" href="marketplace.html">Go to Marketplace</a>
+            <a class="btn small" href="funders.html">Browse Funders</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
+  // Storage keys (must match your marketplace.html)
+  const MARKET_KEY = "brokerDeals";
+  const LAB_KEY = "brokeros_deal_lab_v1";
+  const SCEN_KEY = "brokeros_deal_scenarios_v1";
 
-function analyze(){
+  const $ = (id) => document.getElementById(id);
+  const toastEl = $("toast");
+  const toast = (msg) => {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    setTimeout(()=>toastEl.classList.remove("show"), 1300);
+  };
 
-let credit = parseInt(document.getElementById("credit").value)
-let revenue = parseInt(document.getElementById("revenue").value)
-let months = parseInt(document.getElementById("months").value)
-let positions = parseInt(document.getElementById("positions").value)
-let amount = parseInt(document.getElementById("amount").value)
+  const money = (n) => {
+    if (!isFinite(n)) return "—";
+    return "$" + Math.round(n).toLocaleString();
+  };
 
-let score = 50
-let flags = []
+  function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
 
-// credit scoring
-if(credit >= 680) score += 25
-else if(credit >= 620) score += 15
-else if(credit >= 580) score += 5
-else{
-score -= 15
-flags.push("Low credit profile")
-}
+  // Deterministic score (NOT random) so it feels legit
+  function scoreDeal(d){
+    let score = 50;
+    const flags = [];
 
-// revenue strength
-if(revenue >= 100000) score += 20
-else if(revenue >= 50000) score += 10
-else{
-score -= 10
-flags.push("Low revenue level")
-}
+    const credit = Number(d.credit||0);
+    const rev = Number(d.revenue||0);
+    const tib = Number(d.tib||0);
+    const pos = Number(d.positions||0);
+    const amt = Number(d.amount||0);
+    const factor = Number(d.factor||1.35);
+    const term = Number(d.term||120);
+    const hold = Number(d.holdback||12);
 
-// time in business
-if(months >= 24) score += 15
-else if(months >= 12) score += 8
-else{
-score -= 10
-flags.push("Short time in business")
-}
+    // credit
+    if (credit >= 700) score += 22;
+    else if (credit >= 660) score += 16;
+    else if (credit >= 620) score += 10;
+    else if (credit >= 580) score += 4;
+    else { score -= 14; flags.push("Low credit band"); }
 
-// stacking risk
-if(positions == 0) score += 10
-else if(positions == 1) score += 3
-else{
-score -= 20
-flags.push("High stack risk")
-}
+    // revenue
+    if (rev >= 150000) score += 18;
+    else if (rev >= 100000) score += 13;
+    else if (rev >= 60000) score += 8;
+    else if (rev >= 30000) score += 3;
+    else { score -= 12; flags.push("Low monthly revenue"); }
 
-// funding capacity
-let maxFunding = Math.round(revenue * 0.6)
+    // time in biz
+    if (tib >= 36) score += 12;
+    else if (tib >= 24) score += 9;
+    else if (tib >= 12) score += 5;
+    else { score -= 10; flags.push("Short time in business"); }
 
-// payment estimate
-let factor = 1.42
-let totalPayback = Math.round(amount * factor)
-let dailyPayment = Math.round(totalPayback / 120)
+    // positions
+    if (pos === 0) score += 10;
+    else if (pos === 1) score += 3;
+    else if (pos === 2) score -= 7;
+    else { score -= 16; flags.push("Heavy stacking risk"); }
 
-// grade
-let grade
+    // amount vs revenue
+    if (rev > 0 && amt > 0){
+      const ratio = amt / rev;
+      if (ratio <= 0.35) score += 10;
+      else if (ratio <= 0.55) score += 4;
+      else if (ratio <= 0.75) { score -= 6; flags.push("Request is high vs revenue"); }
+      else { score -= 14; flags.push("Request is very high vs revenue"); }
+    }
 
-if(score >= 85) grade = "A"
-else if(score >= 70) grade = "B"
-else if(score >= 55) grade = "C"
-else grade = "D"
+    // structure realism
+    if (factor >= 1.48) { score -= 6; flags.push("High factor increases friction"); }
+    if (term <= 80) { score -= 6; flags.push("Short term = higher daily payment"); }
+    if (hold >= 20) { score -= 6; flags.push("High holdback may strain cashflow"); }
 
-document.getElementById("results").innerHTML =
+    score = clamp(score, 1, 99);
 
-`
-<h3>Deal Score: ${score}/100</h3>
+    let grade = "D";
+    if (score >= 85) grade = "A";
+    else if (score >= 72) grade = "B";
+    else if (score >= 58) grade = "C";
 
-Risk Grade: ${grade}
+    return { score, grade, flags };
+  }
 
-<br><br>
+  function calc(d){
+    const rev = Number(d.revenue||0);
+    const amt = Number(d.amount||0);
+    const factor = Number(d.factor||1.35);
+    const term = Number(d.term||120);
 
-Estimated Max Funding: $${maxFunding}
+    const payback = amt * factor;
+    const daily = term ? (payback / term) : 0;
+    const dailyRev = rev ? (rev / 22) : 0;
+    const pressure = dailyRev ? (daily / dailyRev) : 0; // 0.00 - 1.00+
 
-<br>
+    return { payback, daily, dailyRev, pressure };
+  }
 
-Daily Payment Estimate: $${dailyPayment}
+  function stressScore(pressure, positions){
+    // Higher is better (0-100)
+    let s = 100;
+    // pressure: 0.10 is great, 0.30 okay, 0.45 risky, 0.60+ bad
+    s -= clamp((pressure - 0.18) * 160, 0, 70);
+    // stacking penalty
+    s -= clamp((positions || 0) * 10, 0, 35);
+    return clamp(Math.round(s), 1, 99);
+  }
 
-<br>
+  function stressLabel(n){
+    if (n >= 80) return { t:"Smooth ✅", cls:"good" };
+    if (n >= 60) return { t:"Manageable ⚡", cls:"warn" };
+    return { t:"Stressed ⚠️", cls:"bad" };
+  }
 
-Total Payback: $${totalPayback}
+  function getState(){
+    try{
+      const raw = localStorage.getItem(LAB_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch { return null; }
+  }
+  function setState(s){
+    localStorage.setItem(LAB_KEY, JSON.stringify(s));
+  }
 
-<br><br>
+  function getScenarios(){
+    try{
+      return JSON.parse(localStorage.getItem(SCEN_KEY) || "[]");
+    } catch { return []; }
+  }
+  function setScenarios(arr){
+    localStorage.setItem(SCEN_KEY, JSON.stringify(arr));
+  }
 
-<b>Risk Flags</b><br>
-${flags.join("<br>")}
+  function pushToMarketplace(d){
+    let deals = [];
+    try{ deals = JSON.parse(localStorage.getItem(MARKET_KEY) || "[]"); } catch { deals = []; }
 
-<br><br>
+    deals.unshift({
+      industry: d.industry,
+      revenue: Number(d.revenue),
+      credit: Number(d.credit),
+      amount: Number(d.amount),
+      score: d.score,
+      status: "available"
+    });
 
-<b>Best Funder Matches</b><br>
+    localStorage.setItem(MARKET_KEY, JSON.stringify(deals));
+  }
 
-Credibly<br>
-Everest Business Funding<br>
-Fundkite<br>
-Forward Financing
+  function readForm(){
+    return {
+      industry: $("industry").value,
+      state: ($("state").value || "").toUpperCase().slice(0,2),
+      revenue: Number($("revenue").value || 0),
+      credit: Number($("credit").value || 0),
+      tib: Number($("tib").value || 0),
+      positions: Number($("positions").value || 0),
+      amount: Number($("amount").value || 0),
+      factor: Number($("factor").value || 1.35),
+      term: Number($("term").value || 120),
+      holdback: Number($("holdback").value || 12),
+    };
+  }
 
-`
+  function writeForm(s){
+    $("industry").value = s.industry ?? "Restaurant";
+    $("state").value = s.state ?? "";
+    $("revenue").value = s.revenue ?? "";
+    $("credit").value = s.credit ?? "";
+    $("tib").value = s.tib ?? "";
+    $("positions").value = s.positions ?? "";
+    $("amount").value = s.amount ?? 45000;
+    $("factor").value = s.factor ?? 1.39;
+    $("term").value = s.term ?? 120;
+    $("holdback").value = s.holdback ?? 12;
+  }
 
-}
+  function render(){
+    const d = readForm();
+    const { payback, daily, dailyRev, pressure } = calc(d);
+    const scored = scoreDeal(d);
 
-</script>
+    // bind label values
+    $("vIndustry").textContent = d.industry;
+    $("vState").textContent = d.state || "—";
+    $("vRev").textContent = d.revenue ? money(d.revenue) : "—";
+    $("vCredit").textContent = d.credit ? d.credit : "—";
+    $("vTib").textContent = d.tib ? d.tib + " mo" : "—";
+    $("vPos").textContent = isFinite(d.positions) ? d.positions : "—";
 
-</body>
+    $("vAmt").textContent = money(d.amount);
+    $("vFactor").textContent = d.factor.toFixed(2);
+    $("vTerm").textContent = d.term + " days";
+    $("vHold").textContent = d.holdback + "%";
 
-</html>
+    // top pills
+    const top = $("topPills");
+    top.innerHTML = `
+      <span class="pill score">Deal Score <strong>${scored.score}</strong> • Grade <strong>${scored.grade}</strong></span>
+      <span class="pill"><strong>Pressure</strong> ${(pressure*100).toFixed(0)}%</span>
+      <span class="pill"><strong>
