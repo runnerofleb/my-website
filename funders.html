@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Funder Directory</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#0b0f14; color:#e8eef6; margin:0; }
+    header { padding:16px 20px; border-bottom:1px solid #1a2430; position:sticky; top:0; background:#0b0f14; }
+    a { color:#7dd3fc; text-decoration:none; }
+    .wrap { max-width:1100px; margin:0 auto; padding:20px; }
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+    .card { background:#0f1620; border:1px solid #1a2430; border-radius:14px; padding:14px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; }
+    input, select { background:#0b0f14; color:#e8eef6; border:1px solid #243244; border-radius:10px; padding:10px; }
+    button { background:#22c55e; border:none; border-radius:10px; padding:10px 12px; font-weight:700; cursor:pointer; }
+    button.secondary { background:#1f2937; color:#e8eef6; border:1px solid #243244; }
+    .pill { display:inline-block; padding:4px 8px; border:1px solid #243244; border-radius:999px; font-size:12px; opacity:.9; }
+    .muted { opacity:.8; font-size:13px; }
+    .list { display:grid; grid-template-columns: 1fr; gap:12px; margin-top:14px; }
+    .funder-title { display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
+    .score { font-weight:800; }
+    @media (max-width: 900px){ .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="row" style="justify-content:space-between; align-items:center;">
+        <div><strong>Funder Directory</strong> <span class="muted">+ Smart Matching (beta)</span></div>
+        <div class="row">
+          <a href="index.html">Home</a>
+          <a href="superbroker.html">SuperBroker</a>
+          <a href="gameroom.html">GameRoom</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+      <div class="card">
+        <h3 style="margin-top:0;">Directory Search</h3>
+        <div class="row">
+          <input id="q" placeholder="Search by name..." style="flex:1;" />
+          <select id="product">
+            <option value="">Any product</option>
+            <option value="mca">MCA</option>
+            <option value="rba">Revenue-based</option>
+            <option value="term_loan">Term loan</option>
+            <option value="loc">Line of credit</option>
+          </select>
+        </div>
+        <div class="muted" style="margin-top:10px;">
+          This is a starter dataset. Fill in requirements over time and matching gets sharper.
+        </div>
+        <div id="dir" class="list"></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0;">Smart Deal Match (simple rules)</h3>
+        <div class="row">
+          <select id="industry">
+            <option value="">Industry (optional)</option>
+            <option>restaurant</option>
+            <option>retail</option>
+            <option>trucking</option>
+            <option>construction</option>
+            <option>services</option>
+          </select>
+          <input id="credit" type="number" placeholder="Credit (e.g. 620)" />
+          <input id="rev" type="number" placeholder="Monthly revenue (e.g. 85000)" />
+          <input id="tib" type="number" placeholder="Time in biz (months)" />
+          <select id="pos">
+            <option value="">Position</option>
+            <option value="1st">1st</option>
+            <option value="2nd">2nd</option>
+            <option value="3rd+">3rd+</option>
+          </select>
+          <select id="stack">
+            <option value="">Stacking needed?</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+
+        <div class="row" style="margin-top:12px;">
+          <button id="matchBtn">Match Funders</button>
+          <button class="secondary" id="resetBtn">Reset</button>
+        </div>
+
+        <div id="matches" class="list"></div>
+        <div class="muted" style="margin-top:10px;">
+          Scoring is transparent + adjustable. Later you can use real outcomes to tune it.
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  let FUNDERS = [];
+
+  function hasProduct(f, p) {
+    if (!p) return true;
+    return (f.products || []).includes(p);
+  }
+
+  function textMatch(f, q) {
+    if (!q) return true;
+    return (f.name || "").toLowerCase().includes(q.toLowerCase());
+  }
+
+  function renderDirectory(list) {
+    const dir = document.getElementById("dir");
+    dir.innerHTML = "";
+    list.forEach(f => {
+      const el = document.createElement("div");
+      el.className = "card";
+      el.innerHTML = `
+        <div class="funder-title">
+          <div><strong>${f.name}</strong></div>
+          <a href="${f.website}" target="_blank" rel="noreferrer">Website →</a>
+        </div>
+        <div class="row" style="margin-top:8px;">
+          ${(f.products || []).map(p => `<span class="pill">${p}</span>`).join("") || `<span class="pill">product: unknown</span>`}
+          <span class="pill">stacking: ${f.stacking || "unknown"}</span>
+          <span class="pill">speed: ${f.speed || "varies"}</span>
+        </div>
+        <div class="muted" style="margin-top:8px;">
+          min credit: ${f.min_credit ?? "?"} · min rev: ${f.min_monthly_revenue ?? "?"} · time in biz: ${f.min_time_in_business_months ?? "?"} months
+        </div>
+        ${f.notes ? `<div class="muted" style="margin-top:8px;">${f.notes}</div>` : ``}
+      `;
+      dir.appendChild(el);
+    });
+  }
+
+  function scoreMatch(f, deal) {
+    // Simple scoring. Feel free to tweak weights.
+    let score = 0;
+    let reasons = [];
+
+    // Credit
+    if (deal.credit != null && deal.credit !== "") {
+      if (f.min_credit == null) {
+        score += 5; reasons.push("credit: unknown");
+      } else if (deal.credit >= f.min_credit) {
+        score += 25; reasons.push("credit fits");
+      } else {
+        score -= 30; reasons.push("credit below min");
+      }
+    }
+
+    // Revenue
+    if (deal.rev != null && deal.rev !== "") {
+      if (f.min_monthly_revenue == null) {
+        score += 5; reasons.push("rev: unknown");
+      } else if (deal.rev >= f.min_monthly_revenue) {
+        score += 20; reasons.push("revenue fits");
+      } else {
+        score -= 20; reasons.push("revenue below min");
+      }
+    }
+
+    // Time in business
+    if (deal.tib != null && deal.tib !== "") {
+      if (f.min_time_in_business_months == null) {
+        score += 4; reasons.push("time: unknown");
+      } else if (deal.tib >= f.min_time_in_business_months) {
+        score += 15; reasons.push("time in biz fits");
+      } else {
+        score -= 15; reasons.push("time in biz too low");
+      }
+    }
+
+    // Position
+    if (deal.pos) {
+      const p = (f.positions || ["any"]);
+      if (p.includes("any") || p.includes(deal.pos)) {
+        score += 12; reasons.push("position fits");
+      } else {
+        score -= 18; reasons.push("position mismatch");
+      }
+    }
+
+    // Stacking preference (if deal needs it)
+    if (deal.stackingNeeded) {
+      if (f.stacking === "yes") { score += 14; reasons.push("stacking ok"); }
+      else if (f.stacking === "sometimes") { score += 6; reasons.push("stacking maybe"); }
+      else if (f.stacking === "unknown") { score += 2; reasons.push("stacking unknown"); }
+      else { score -= 20; reasons.push("no stacking"); }
+    }
+
+    // Industry (light weight because data may be blank initially)
+    if (deal.industry) {
+      const pref = (f.industries_preferred || []);
+      const avoid = (f.industries_avoid || []);
+      if (avoid.includes(deal.industry)) { score -= 10; reasons.push("industry avoid"); }
+      else if (pref.includes(deal.industry)) { score += 8; reasons.push("industry preferred"); }
+      else { score += 1; reasons.push("industry neutral"); }
+    }
+
+    return { score, reasons };
+  }
+
+  function renderMatches(results) {
+    const box = document.getElementById("matches");
+    box.innerHTML = "";
+    results.slice(0, 8).forEach(r => {
+      const f = r.funder;
+      const el = document.createElement("div");
+      el.className = "card";
+      el.innerHTML = `
+        <div class="funder-title">
+          <div><strong>${f.name}</strong></div>
+          <div class="score">Score: ${r.score}</div>
+        </div>
+        <div class="muted" style="margin-top:8px;">${r.reasons.join(" · ")}</div>
+        <div class="row" style="margin-top:10px;">
+          <a class="pill" href="${f.website}" target="_blank" rel="noreferrer">Open website</a>
+          <span class="pill">stacking: ${f.stacking || "unknown"}</span>
+          <span class="pill">speed: ${f.speed || "varies"}</span>
+        </div>
+      `;
+      box.appendChild(el);
+    });
+  }
+
+  async function init() {
+    const res = await fetch("funders.json");
+    FUNDERS = await res.json();
+
+    // initial render
+    renderDirectory(FUNDERS);
+
+    // directory filters
+    const q = document.getElementById("q");
+    const product = document.getElementById("product");
+    function applyDirFilters() {
+      const filtered = FUNDERS.filter(f => textMatch(f, q.value) && hasProduct(f, product.value));
+      renderDirectory(filtered);
+    }
+    q.addEventListener("input", applyDirFilters);
+    product.addEventListener("change", applyDirFilters);
+
+    // matching
+    document.getElementById("matchBtn").addEventListener("click", () => {
+      const deal = {
+        industry: document.getElementById("industry").value || "",
+        credit: Number(document.getElementById("credit").value || ""),
+        rev: Number(document.getElementById("rev").value || ""),
+        tib: Number(document.getElementById("tib").value || ""),
+        pos: document.getElementById("pos").value || "",
+        stackingNeeded: document.getElementById("stack").value === "yes"
+      };
+
+      const results = FUNDERS.map(f => {
+        const out = scoreMatch(f, deal);
+        return { funder: f, score: out.score, reasons: out.reasons };
+      }).sort((a,b) => b.score - a.score);
+
+      renderMatches(results);
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      ["industry","credit","rev","tib","pos","stack"].forEach(id => document.getElementById(id).value = "");
+      document.getElementById("matches").innerHTML = "";
+    });
+  }
+
+  init();
+</script>
+</body>
+</html>
