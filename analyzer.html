@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Deal Analyzer</title>
+
+<title>Broker Deal Analyzer</title>
 
 <style>
-body {
-  font-family: Arial;
-  background:#0f172a;
-  color:white;
-  text-align:center;
-  padding:40px;
+
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+padding:40px;
 }
 
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:10px;
-width:400px;
+.container{
+width:450px;
 margin:auto;
+background:#1e293b;
+padding:25px;
+border-radius:10px;
 }
 
 input,select{
@@ -29,7 +31,7 @@ border:none;
 }
 
 button{
-padding:10px 20px;
+padding:12px 22px;
 background:#22c55e;
 border:none;
 border-radius:6px;
@@ -37,19 +39,23 @@ font-weight:bold;
 cursor:pointer;
 }
 
-.result{
-margin-top:20px;
-font-size:18px;
+.results{
+margin-top:25px;
+text-align:left;
+background:#020617;
+padding:15px;
+border-radius:8px;
 }
+
 </style>
 
 </head>
 
 <body>
 
-<h1>Broker Deal Analyzer</h1>
+<h1>SuperBroker Deal Analyzer</h1>
 
-<div class="card">
+<div class="container">
 
 <select id="industry">
 <option value="restaurant">Restaurant</option>
@@ -62,13 +68,15 @@ font-size:18px;
 
 <input id="revenue" placeholder="Monthly Revenue">
 
+<input id="months" placeholder="Months In Business">
+
 <input id="positions" placeholder="Existing Positions">
 
 <input id="amount" placeholder="Funding Requested">
 
 <button onclick="analyze()">Analyze Deal</button>
 
-<div class="result" id="result"></div>
+<div class="results" id="results"></div>
 
 </div>
 
@@ -76,44 +84,103 @@ font-size:18px;
 
 function analyze(){
 
-let credit = parseInt(document.getElementById("credit").value);
-let revenue = parseInt(document.getElementById("revenue").value);
-let positions = parseInt(document.getElementById("positions").value);
+let credit = parseInt(document.getElementById("credit").value)
+let revenue = parseInt(document.getElementById("revenue").value)
+let months = parseInt(document.getElementById("months").value)
+let positions = parseInt(document.getElementById("positions").value)
+let amount = parseInt(document.getElementById("amount").value)
 
-let score = 50;
+let score = 50
+let flags = []
 
-if(credit >= 650) score += 20;
-else if(credit >= 600) score += 10;
-else score -= 10;
+// credit scoring
+if(credit >= 680) score += 25
+else if(credit >= 620) score += 15
+else if(credit >= 580) score += 5
+else{
+score -= 15
+flags.push("Low credit profile")
+}
 
-if(revenue >= 100000) score += 20;
-else if(revenue >= 50000) score += 10;
+// revenue strength
+if(revenue >= 100000) score += 20
+else if(revenue >= 50000) score += 10
+else{
+score -= 10
+flags.push("Low revenue level")
+}
 
-if(positions == 0) score += 15;
-if(positions >= 3) score -= 20;
+// time in business
+if(months >= 24) score += 15
+else if(months >= 12) score += 8
+else{
+score -= 10
+flags.push("Short time in business")
+}
 
-let grade;
+// stacking risk
+if(positions == 0) score += 10
+else if(positions == 1) score += 3
+else{
+score -= 20
+flags.push("High stack risk")
+}
 
-if(score >= 85) grade = "A";
-else if(score >= 70) grade = "B";
-else if(score >= 55) grade = "C";
-else grade = "D";
+// funding capacity
+let maxFunding = Math.round(revenue * 0.6)
 
-document.getElementById("result").innerHTML =
+// payment estimate
+let factor = 1.42
+let totalPayback = Math.round(amount * factor)
+let dailyPayment = Math.round(totalPayback / 120)
+
+// grade
+let grade
+
+if(score >= 85) grade = "A"
+else if(score >= 70) grade = "B"
+else if(score >= 55) grade = "C"
+else grade = "D"
+
+document.getElementById("results").innerHTML =
 
 `
-Deal Score: ${score}/100<br>
-Risk Grade: ${grade}<br><br>
+<h3>Deal Score: ${score}/100</h3>
 
-Recommended Funders:<br>
+Risk Grade: ${grade}
+
+<br><br>
+
+Estimated Max Funding: $${maxFunding}
+
+<br>
+
+Daily Payment Estimate: $${dailyPayment}
+
+<br>
+
+Total Payback: $${totalPayback}
+
+<br><br>
+
+<b>Risk Flags</b><br>
+${flags.join("<br>")}
+
+<br><br>
+
+<b>Best Funder Matches</b><br>
+
 Credibly<br>
+Everest Business Funding<br>
 Fundkite<br>
-Everest Business Funding
-`;
+Forward Financing
+
+`
 
 }
 
 </script>
 
 </body>
+
 </html>
