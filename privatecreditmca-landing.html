@@ -4,250 +4,250 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PrivateCreditMCA — The Live Marketplace for MCA Deals</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-@font-face{font-family:'Satoshi';src:url('https://api.fontshare.com/v2/css?f=satoshi@400,500,700,900&display=swap');font-display:swap}
 :root{
-  --bg:#06090F;--bg2:#0C1017;--bg3:#111620;--bgc:#161C28;
-  --srf:#1A2030;--srf2:#222A3A;
-  --bdr:rgba(255,255,255,.06);--bdr2:rgba(255,255,255,.1);--bdr3:rgba(255,255,255,.15);
-  --tx:#F4F5F7;--tx2:#9CA3B4;--tx3:#5C6478;
-  --b:#3B82F6;--bd:#2563EB;--bl:rgba(59,130,246,.12);--blg:rgba(59,130,246,.06);
-  --tl:#10B981;--tll:rgba(16,185,129,.12);
-  --gn:#22C55E;--gnl:rgba(34,197,94,.12);
-  --rd:#EF4444;--rdl:rgba(239,68,68,.12);
-  --am:#F59E0B;--aml:rgba(245,158,11,.12);
-  --vl:#8B5CF6;--vll:rgba(139,92,246,.12);
+  --bg:#050A12;--bg2:#0A1020;--bg3:#0F162B;--bgc:#141D36;
+  --srf:#182040;--srf2:#1E2850;
+  --bdr:rgba(255,255,255,.06);--bdr2:rgba(255,255,255,.09);--bdr3:rgba(255,255,255,.14);
+  --tx:#EFF1F5;--tx2:#8892A8;--tx3:#4F5B73;
+  --ac:#635BFF;--acd:#5046E4;--acl:rgba(99,91,255,.1);--acg:rgba(99,91,255,.04);
+  --em:#00D4AA;--eml:rgba(0,212,170,.1);
+  --gn:#34D399;--gnl:rgba(52,211,153,.1);
+  --rd:#F87171;--rdl:rgba(248,113,113,.08);
+  --am:#FBBF24;--aml:rgba(251,191,36,.08);
+  --cy:#22D3EE;--cyl:rgba(34,211,238,.08);
   --r:12px;--rs:8px;
-  --sh:0 2px 8px rgba(0,0,0,.3),0 8px 32px rgba(0,0,0,.2);
-  --shl:0 4px 16px rgba(0,0,0,.4),0 16px 64px rgba(0,0,0,.3);
+  --sh:0 2px 8px rgba(0,0,0,.4),0 12px 40px rgba(0,0,0,.25);
+  --shl:0 8px 30px rgba(0,0,0,.5),0 24px 80px rgba(0,0,0,.35);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Instrument Sans',system-ui,sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-.mono{font-family:'IBM Plex Mono',monospace}
-.serif{font-family:'Newsreader',Georgia,serif;font-style:italic}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden;font-feature-settings:'cv02','cv03','cv04','cv11'}
+.mono{font-family:'IBM Plex Mono',monospace;font-feature-settings:normal}
 a{text-decoration:none;color:inherit}
 .c{max-width:1200px;margin:0 auto;padding:0 40px}
 
-/* ═══ GRAIN ═══ */
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.025;
-background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* ═══ MESH GRADIENT HERO BG ═══ */
+.mesh{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.mesh-orb{position:absolute;border-radius:50%;filter:blur(100px);mix-blend-mode:screen;animation:float 20s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.05)}66%{transform:translate(-20px,15px) scale(.95)}}
+.mesh-orb.a{width:600px;height:600px;background:radial-gradient(circle,rgba(99,91,255,.2),transparent 70%);top:-10%;right:10%;animation-delay:0s}
+.mesh-orb.b{width:500px;height:500px;background:radial-gradient(circle,rgba(0,212,170,.1),transparent 70%);bottom:0;left:5%;animation-delay:-7s}
+.mesh-orb.c{width:400px;height:400px;background:radial-gradient(circle,rgba(34,211,238,.06),transparent 70%);top:40%;right:-5%;animation-delay:-14s}
 
-/* ═══ AMBIENT ═══ */
-.glow{position:absolute;border-radius:50%;pointer-events:none;filter:blur(120px)}
-.glow.blue{background:rgba(59,130,246,.08);width:600px;height:600px}
-.glow.teal{background:rgba(16,185,129,.06);width:500px;height:500px}
-.glow.violet{background:rgba(139,92,246,.05);width:400px;height:400px}
+/* ═══ NOISE ═══ */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.018;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* ═══ NAV ═══ */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(6,9,15,.7);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--bdr)}
-.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;letter-spacing:-.2px}
-.logo .mk{width:28px;height:28px;border-radius:7px;background:var(--b);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.logo .mk::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.2),transparent)}
-.logo .mk svg{width:14px;height:14px}
-.logo .dim{color:var(--tx3)}
-.nv{display:flex;gap:32px}.nv a{color:var(--tx3);font-size:13px;font-weight:500;transition:color .2s;letter-spacing:.2px}.nv a:hover{color:var(--tx)}
-.ncta{background:var(--b);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;transition:all .25s;display:inline-flex;align-items:center;gap:6px;letter-spacing:.2px}
-.ncta:hover{background:var(--bd);box-shadow:0 0 24px rgba(59,130,246,.3);transform:translateY(-1px)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(5,10,18,.65);backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid var(--bdr)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:-.3px}
+.logo .mk{width:26px;height:26px;border-radius:7px;background:var(--ac);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 0 16px rgba(99,91,255,.3)}
+.logo .mk::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.25),transparent)}
+.logo .mk svg{width:13px;height:13px}
+.logo .dim{color:var(--tx3);font-weight:500}
+.nv{display:flex;gap:32px}.nv a{color:var(--tx3);font-size:13px;font-weight:500;transition:color .25s;letter-spacing:.1px}.nv a:hover{color:var(--tx)}
+.ncta{background:var(--ac);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;transition:all .3s;display:inline-flex;align-items:center;gap:6px;box-shadow:0 0 20px rgba(99,91,255,.2)}
+.ncta:hover{background:var(--acd);box-shadow:0 0 32px rgba(99,91,255,.35);transform:translateY(-1px)}
 .ncta svg{width:12px;height:12px}
 
 /* ═══ HERO ═══ */
-.hero{padding:160px 0 100px;position:relative;overflow:hidden;min-height:100vh;display:flex;align-items:center}
-.hero-g{display:grid;grid-template-columns:1.1fr 1fr;gap:80px;align-items:center}
+.hero{padding:160px 0 120px;position:relative;min-height:100vh;display:flex;align-items:center}
+.hero-g{display:grid;grid-template-columns:1.15fr .85fr;gap:80px;align-items:center}
 .hero-left{position:relative;z-index:2}
-.h-pill{display:inline-flex;align-items:center;gap:8px;background:var(--blg);border:1px solid rgba(59,130,246,.15);padding:6px 16px;border-radius:100px;font-size:12px;font-weight:600;color:var(--b);margin-bottom:28px;animation:fu .7s ease both}
-.h-pill .dot{width:5px;height:5px;border-radius:50%;background:var(--gn);animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.h-pill{display:inline-flex;align-items:center;gap:8px;background:var(--acl);border:1px solid rgba(99,91,255,.15);padding:6px 16px 6px 12px;border-radius:100px;font-size:12px;font-weight:600;color:var(--ac);margin-bottom:32px;animation:fu .7s ease both;letter-spacing:.2px}
+.h-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--em);box-shadow:0 0 8px rgba(0,212,170,.5);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 8px rgba(0,212,170,.5)}50%{opacity:.5;box-shadow:0 0 4px rgba(0,212,170,.2)}}
 
-h1{font-size:clamp(48px,5.2vw,68px);font-weight:700;letter-spacing:-3px;line-height:1.02;margin-bottom:24px;animation:fu .7s ease .08s both}
-h1 .em{background:linear-gradient(135deg,var(--b),var(--tl));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-h1 .it{font-family:'Newsreader',Georgia,serif;font-style:italic;font-weight:400;letter-spacing:-1px}
-.h-sub{font-size:18px;color:var(--tx2);line-height:1.7;max-width:480px;margin-bottom:40px;animation:fu .7s ease .16s both}
+h1{font-size:clamp(44px,5vw,64px);font-weight:800;letter-spacing:-2.5px;line-height:1.04;margin-bottom:24px;animation:fu .7s ease .08s both}
+h1 .em{background:linear-gradient(135deg,var(--ac) 0%,var(--em) 50%,var(--cy) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% 100%;animation:shimmer 6s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:100% 50%}50%{background-position:0% 50%}100%{background-position:100% 50%}}
+.h-sub{font-size:17px;color:var(--tx2);line-height:1.75;max-width:480px;margin-bottom:40px;animation:fu .7s ease .16s both;font-weight:400}
 .h-acts{display:flex;gap:12px;flex-wrap:wrap;animation:fu .7s ease .24s both}
-.btn-p{background:var(--b);color:#fff;padding:14px 32px;border-radius:10px;font-weight:600;font-size:15px;border:none;cursor:pointer;font-family:inherit;transition:all .3s;display:inline-flex;align-items:center;gap:8px;letter-spacing:.2px}
-.btn-p:hover{background:var(--bd);box-shadow:0 0 40px rgba(59,130,246,.25),0 8px 32px rgba(0,0,0,.3);transform:translateY(-2px)}
-.btn-s{background:transparent;color:var(--tx);padding:14px 32px;border-radius:10px;font-weight:600;font-size:15px;border:1px solid var(--bdr2);cursor:pointer;font-family:inherit;transition:all .3s}
-.btn-s:hover{border-color:var(--bdr3);background:var(--srf);box-shadow:var(--sh)}
+.btn-p{background:var(--ac);color:#fff;padding:14px 30px;border-radius:10px;font-weight:600;font-size:15px;border:none;cursor:pointer;font-family:inherit;transition:all .3s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 0 32px rgba(99,91,255,.2),0 4px 16px rgba(0,0,0,.3)}
+.btn-p:hover{background:var(--acd);box-shadow:0 0 48px rgba(99,91,255,.3),0 8px 32px rgba(0,0,0,.4);transform:translateY(-2px)}
+.btn-s{background:rgba(255,255,255,.04);color:var(--tx);padding:14px 30px;border-radius:10px;font-weight:600;font-size:15px;border:1px solid var(--bdr2);cursor:pointer;font-family:inherit;transition:all .3s;backdrop-filter:blur(8px)}
+.btn-s:hover{border-color:var(--bdr3);background:rgba(255,255,255,.07)}
 .h-proof{margin-top:36px;display:flex;gap:28px;animation:fu .7s ease .32s both}
-.h-proof span{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;letter-spacing:.3px}
-.h-proof .ck{color:var(--tl)}
-@keyframes fu{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.h-proof span{font-size:12px;color:var(--tx3);display:flex;align-items:center;gap:5px;letter-spacing:.3px;font-weight:500}
+.h-proof .ck{color:var(--em);font-size:11px}
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
 /* ═══ HERO CARD ═══ */
-.hc{position:relative;z-index:2;animation:fu .9s ease .12s both;perspective:1000px}
-.hc-inner{background:var(--bg2);border:1px solid var(--bdr2);border-radius:16px;overflow:hidden;box-shadow:var(--shl);transform:rotateY(-2deg) rotateX(1deg);transition:transform .5s ease}
-.hc:hover .hc-inner{transform:rotateY(0) rotateX(0)}
-.hc-bar{background:var(--bg3);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bdr)}
+.hc{position:relative;z-index:2;animation:fu .9s ease .12s both}
+.hc-wrap{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--bdr2);background:var(--bg2);box-shadow:var(--shl),0 0 80px rgba(99,91,255,.06);transform:perspective(1200px) rotateY(-3deg) rotateX(1.5deg);transition:transform .6s cubic-bezier(.23,1,.32,1)}
+.hc:hover .hc-wrap{transform:perspective(1200px) rotateY(0deg) rotateX(0deg)}
+.hc-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,91,255,.4),rgba(0,212,170,.3),transparent);z-index:2}
+.hc-bar{background:var(--bg3);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bdr)}
 .hc-bar .lab{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--tx3)}
 .hc-bar .live{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:600;color:var(--rd);text-transform:uppercase;letter-spacing:1.5px}
-.hc-bar .live .dot{width:5px;height:5px;border-radius:50%;background:var(--rd);animation:pulse 1s infinite}
-.hc-body{padding:24px}
-.hc-deal{display:flex;justify-content:space-between;align-items:start;margin-bottom:18px}
-.hc-biz{font-size:17px;font-weight:700;letter-spacing:-.3px}.hc-meta{font-size:12px;color:var(--tx3);margin-top:3px}
-.hc-amt{text-align:right}.hc-amt .n{font-size:28px;font-weight:700;color:var(--b);letter-spacing:-1px}.hc-amt .l{font-size:11px;color:var(--tx3)}
-.hc-offers{border-top:1px solid var(--bdr);padding-top:14px;margin-top:4px}
-.hc-ol{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);margin-bottom:10px}
-.hc-o{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bdr);font-size:13px}
+.hc-bar .live .dot{width:5px;height:5px;border-radius:50%;background:var(--rd);box-shadow:0 0 6px rgba(248,113,113,.5);animation:pulse 1.2s infinite}
+.hc-body{padding:22px}
+.hc-deal{display:flex;justify-content:space-between;align-items:start;margin-bottom:16px}
+.hc-biz{font-size:16px;font-weight:700;letter-spacing:-.3px}.hc-meta{font-size:11px;color:var(--tx3);margin-top:3px}
+.hc-amt{text-align:right}.hc-amt .n{font-size:26px;font-weight:800;color:var(--ac);letter-spacing:-1px;text-shadow:0 0 20px rgba(99,91,255,.2)}.hc-amt .l{font-size:10px;color:var(--tx3)}
+.hc-offers{border-top:1px solid var(--bdr);padding-top:12px;margin-top:4px}
+.hc-ol{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);margin-bottom:8px}
+.hc-o{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bdr);font-size:12px}
 .hc-o:last-child{border:none}.hc-fn{font-weight:600;color:var(--tx2)}.hc-tm{color:var(--tx3)}
-.hc-bg{font-size:9px;padding:3px 10px;border-radius:100px;font-weight:600;letter-spacing:.5px}
+.hc-bg{font-size:9px;padding:3px 10px;border-radius:100px;font-weight:600;letter-spacing:.3px}
 .hc-bg.g{background:var(--gnl);color:var(--gn)}.hc-bg.a{background:var(--aml);color:var(--am)}
-.hc-ai{margin-top:14px;background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--rs);padding:14px 18px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
-.hc-ai .itm .l{font-size:9px;color:var(--tx3);letter-spacing:.5px;text-transform:uppercase}.hc-ai .itm .v{font-size:14px;font-weight:700;margin-top:2px}.hc-ai .itm .v.gd{color:var(--tl)}
+.hc-ai{margin-top:12px;background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--rs);padding:12px 16px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+.hc-ai .itm .l{font-size:8px;color:var(--tx3);letter-spacing:.5px;text-transform:uppercase}.hc-ai .itm .v{font-size:13px;font-weight:700;margin-top:2px}.hc-ai .itm .v.gd{color:var(--em)}
 
 /* ═══ TICKER ═══ */
-.tkr{border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);padding:12px 0;overflow:hidden;background:var(--bg2)}
+.tkr{border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);padding:11px 0;overflow:hidden;background:rgba(10,16,32,.6)}
 .tkr-t{display:flex;gap:48px;animation:scrl 45s linear infinite;width:max-content}
 @keyframes scrl{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.ti{display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:12px;color:var(--tx3);letter-spacing:.2px}
+.ti{display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:11px;color:var(--tx3);letter-spacing:.2px}
 .ti strong{color:var(--tx2);font-weight:600}
-.td{width:5px;height:5px;border-radius:50%}.td.g{background:var(--gn)}.td.a{background:var(--am)}.td.b{background:var(--b)}
+.td{width:5px;height:5px;border-radius:50%}.td.g{background:var(--gn);box-shadow:0 0 4px rgba(52,211,153,.3)}.td.a{background:var(--am)}.td.b{background:var(--ac)}
 
 /* ═══ SECTIONS ═══ */
 .sec{padding:120px 0;position:relative;overflow:hidden}
 .sec.alt{background:var(--bg2)}
-.s-lab{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--b);margin-bottom:14px}
-.s-ttl{font-size:clamp(32px,3.8vw,52px);font-weight:700;letter-spacing:-2px;line-height:1.06;margin-bottom:16px}
-.s-dsc{font-size:17px;color:var(--tx2);max-width:540px;line-height:1.7}
+.sec.alt::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,var(--bg),var(--bg2) 15%,var(--bg2) 85%,var(--bg));pointer-events:none}
+.sec.alt>*{position:relative;z-index:1}
+.s-lab{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--ac);margin-bottom:14px}
+.s-ttl{font-size:clamp(30px,3.6vw,48px);font-weight:800;letter-spacing:-2px;line-height:1.06;margin-bottom:16px}
+.s-dsc{font-size:16px;color:var(--tx2);max-width:540px;line-height:1.75;font-weight:400}
 
 /* ═══ MARKETPLACE ═══ */
-.mk-g{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
-.dc{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;transition:all .4s;position:relative;overflow:hidden}
-.dc:hover{border-color:var(--bdr2);box-shadow:var(--shl);transform:translateY(-6px)}
-.dc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--b),var(--tl));opacity:0;transition:opacity .3s}
-.dc:hover::before{opacity:1}
-.dc-tp{display:flex;justify-content:space-between;margin-bottom:12px}
+.mk-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:56px}
+.dc{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:22px;transition:all .4s;position:relative;overflow:hidden}
+.dc:hover{border-color:var(--bdr2);box-shadow:var(--shl),0 0 40px rgba(99,91,255,.04);transform:translateY(-6px)}
+.dc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ac),var(--em),transparent);opacity:0;transition:opacity .3s}
+.dc:hover::before{opacity:.6}
+.dc-tp{display:flex;justify-content:space-between;margin-bottom:10px}
 .dc-lv{display:flex;align-items:center;gap:5px;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--rd)}
-.dc-lv .dot{width:4px;height:4px;border-radius:50%;background:var(--rd);animation:pulse 1s infinite}
+.dc-lv .dot{width:4px;height:4px;border-radius:50%;background:var(--rd);box-shadow:0 0 4px rgba(248,113,113,.4)}
 .dc-tm{font-size:10px;color:var(--tx3)}
-.dc-bz{font-size:16px;font-weight:700;margin-bottom:3px;letter-spacing:-.3px}.dc-mt{font-size:12px;color:var(--tx3);margin-bottom:10px}
-.dc-am{font-size:22px;font-weight:700;letter-spacing:-.5px;margin-bottom:14px;color:var(--tx)}.dc-am span{font-size:12px;color:var(--tx3);font-weight:400}
-.dc-os{border-top:1px solid var(--bdr);padding-top:10px}
-.dc-o{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:12px;border-bottom:1px solid var(--bdr)}.dc-o:last-child{border:none}
+.dc-bz{font-size:15px;font-weight:700;margin-bottom:3px;letter-spacing:-.2px}.dc-mt{font-size:11px;color:var(--tx3);margin-bottom:10px}
+.dc-am{font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:12px}.dc-am span{font-size:11px;color:var(--tx3);font-weight:400}
+.dc-os{border-top:1px solid var(--bdr);padding-top:8px}
+.dc-o{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:11px;border-bottom:1px solid var(--bdr)}.dc-o:last-child{border:none}
 .dc-ofn{font-weight:600;color:var(--tx2)}.dc-otm{color:var(--tx3)}
-.dc-ob{font-size:9px;padding:2px 8px;border-radius:100px;font-weight:600}.dc-ob.g{background:var(--gnl);color:var(--gn)}.dc-ob.a{background:var(--aml);color:var(--am)}
-.dc-ft{margin-top:12px;text-align:center;font-size:12px;font-weight:600;color:var(--b)}
+.dc-ob{font-size:8px;padding:2px 8px;border-radius:100px;font-weight:600}.dc-ob.g{background:var(--gnl);color:var(--gn)}.dc-ob.a{background:var(--aml);color:var(--am)}
+.dc-ft{margin-top:10px;text-align:center;font-size:12px;font-weight:600;color:var(--ac)}
 
 /* ═══ TRANSFORM ═══ */
-.tf-g{display:grid;grid-template-columns:1fr 60px 1fr;gap:0;align-items:start;margin-top:56px}
-.tf-bx{border-radius:16px;padding:32px;border:1px solid var(--bdr)}
-.tf-bx.old{background:var(--rdl);border-color:rgba(239,68,68,.08)}
-.tf-bx.new{background:linear-gradient(135deg,var(--bl),var(--tll));border-color:rgba(59,130,246,.08)}
-.tf-lb{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:20px}
-.tf-bx.old .tf-lb{color:var(--rd)}.tf-bx.new .tf-lb{color:var(--b)}
-.tf-st{display:flex;align-items:center;gap:12px;padding:10px 0;font-size:13px;color:var(--tx2);line-height:1.5}
-.tf-st .ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.tf-bx.old .ic{background:rgba(239,68,68,.06)}.tf-bx.new .ic{background:rgba(59,130,246,.08)}
+.tf-g{display:grid;grid-template-columns:1fr 48px 1fr;gap:0;align-items:start;margin-top:56px}
+.tf-bx{border-radius:14px;padding:30px;border:1px solid var(--bdr)}
+.tf-bx.old{background:var(--rdl);border-color:rgba(248,113,113,.06)}
+.tf-bx.new{background:linear-gradient(135deg,var(--acl),var(--eml));border-color:rgba(99,91,255,.08)}
+.tf-lb{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:18px}
+.tf-bx.old .tf-lb{color:var(--rd)}.tf-bx.new .tf-lb{color:var(--ac)}
+.tf-st{display:flex;align-items:center;gap:12px;padding:9px 0;font-size:13px;color:var(--tx2);line-height:1.5}
+.tf-st .ic{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.tf-bx.old .ic{background:rgba(248,113,113,.06)}.tf-bx.new .ic{background:rgba(99,91,255,.08)}
 .tf-bx.new .tf-st{color:var(--tx)}
-.tf-ar{display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--b);padding-top:80px}
+.tf-ar{display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--ac);padding-top:80px}
 
 /* ═══ PROTECTION ═══ */
-.pr-g{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
-.pr-c{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:32px;transition:all .4s}
-.pr-c:hover{border-color:var(--bdr2);box-shadow:var(--shl);transform:translateY(-4px)}
-.pr-ic{width:48px;height:48px;border-radius:12px;background:var(--bl);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px}
-.pr-c h3{font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-.2px}
-.pr-c p{font-size:14px;color:var(--tx2);line-height:1.7}
+.pr-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:56px}
+.pr-c{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:28px;transition:all .4s}
+.pr-c:hover{border-color:var(--bdr2);box-shadow:var(--sh)}
+.pr-ic{width:44px;height:44px;border-radius:11px;background:var(--acl);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:16px}
+.pr-c h3{font-size:15px;font-weight:700;margin-bottom:6px;letter-spacing:-.2px}
+.pr-c p{font-size:13px;color:var(--tx2);line-height:1.7}
 
 /* ═══ STEPS ═══ */
 .stp-g{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px;position:relative}
-.stp-g::before{content:'';position:absolute;top:28px;left:14%;right:14%;height:1px;background:var(--bdr)}
-.stp{text-align:center;position:relative;padding:0 14px}
-.stp-n{width:56px;height:56px;border-radius:50%;background:var(--bg3);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;margin:0 auto 18px;position:relative;z-index:2;color:var(--b);transition:all .4s}
-.stp:hover .stp-n{border-color:var(--b);box-shadow:0 0 20px rgba(59,130,246,.15);background:var(--bl)}
-.stp h3{font-size:14px;font-weight:700;margin-bottom:6px;letter-spacing:-.2px}.stp p{font-size:13px;color:var(--tx2);line-height:1.6}
-.ai-mini{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--rs);padding:14px;margin-top:14px;text-align:left;max-width:200px;margin-left:auto;margin-right:auto}
-.ai-mini .ai-lb{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--b);margin-bottom:8px}
-.ai-r{display:flex;justify-content:space-between;padding:3px 0;font-size:10px}.ai-r .l{color:var(--tx3)}.ai-r .v{font-weight:600}.ai-r .v.g{color:var(--tl)}
+.stp-g::before{content:'';position:absolute;top:24px;left:14%;right:14%;height:1px;background:linear-gradient(90deg,var(--bdr),var(--ac),var(--em),var(--bdr));opacity:.3}
+.stp{text-align:center;position:relative;padding:0 12px}
+.stp-n{width:48px;height:48px;border-radius:50%;background:var(--bg3);border:1px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;margin:0 auto 16px;position:relative;z-index:2;color:var(--ac);transition:all .4s}
+.stp:hover .stp-n{border-color:var(--ac);box-shadow:0 0 24px rgba(99,91,255,.2);background:var(--acl)}
+.stp h3{font-size:14px;font-weight:700;margin-bottom:6px;letter-spacing:-.2px}.stp p{font-size:12px;color:var(--tx2);line-height:1.6}
+.ai-m{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--rs);padding:12px;margin-top:12px;text-align:left;max-width:190px;margin-left:auto;margin-right:auto}
+.ai-lb{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ac);margin-bottom:6px}
+.ai-r{display:flex;justify-content:space-between;padding:3px 0;font-size:10px}.ai-r .l{color:var(--tx3)}.ai-r .v{font-weight:600}.ai-r .v.g{color:var(--em)}
 
 /* ═══ PATHS ═══ */
-.pa-g{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:56px}
-.pa-c{background:var(--bg3);border:1px solid var(--bdr);border-radius:16px;padding:36px;transition:all .4s;position:relative;overflow:hidden}
+.pa-g{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:56px}
+.pa-c{background:var(--bg3);border:1px solid var(--bdr);border-radius:14px;padding:32px;transition:all .4s;position:relative;overflow:hidden}
 .pa-c:hover{box-shadow:var(--shl)}
-.pa-c.ft{border-color:rgba(59,130,246,.15)}
-.pa-c.ft::before{content:'RECOMMENDED';position:absolute;top:16px;right:16px;font-size:8px;font-weight:700;letter-spacing:2px;background:var(--b);color:#fff;padding:4px 10px;border-radius:5px}
-.pa-c h3{font-size:19px;font-weight:700;margin-bottom:8px;letter-spacing:-.3px}
-.pa-c .pd{font-size:14px;color:var(--tx2);margin-bottom:22px;line-height:1.6}
-.pb{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;color:var(--tx2)}.pb .ck{color:var(--tl)}
-.pa-cta{margin-top:24px;display:block;width:100%;text-align:center;padding:12px;border-radius:10px;font-weight:600;font-size:14px;border:none;cursor:pointer;font-family:inherit;transition:all .3s;letter-spacing:.2px}
-.pa-c.ft .pa-cta{background:var(--b);color:#fff}.pa-c.ft .pa-cta:hover{box-shadow:0 0 24px rgba(59,130,246,.3)}
+.pa-c.ft{border-color:rgba(99,91,255,.15)}
+.pa-c.ft::before{content:'RECOMMENDED';position:absolute;top:14px;right:14px;font-size:8px;font-weight:700;letter-spacing:1.5px;background:var(--ac);color:#fff;padding:4px 10px;border-radius:5px}
+.pa-c h3{font-size:18px;font-weight:700;margin-bottom:8px;letter-spacing:-.3px}
+.pa-c .pd{font-size:13px;color:var(--tx2);margin-bottom:20px;line-height:1.7}
+.pb{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;color:var(--tx2)}.pb .ck{color:var(--em);font-size:11px}
+.pa-cta{margin-top:24px;display:block;width:100%;text-align:center;padding:12px;border-radius:9px;font-weight:600;font-size:13px;border:none;cursor:pointer;font-family:inherit;transition:all .3s;letter-spacing:.2px}
+.pa-c.ft .pa-cta{background:var(--ac);color:#fff;box-shadow:0 0 20px rgba(99,91,255,.15)}.pa-c.ft .pa-cta:hover{box-shadow:0 0 32px rgba(99,91,255,.3)}
 .pa-c:not(.ft) .pa-cta{background:var(--srf);color:var(--tx);border:1px solid var(--bdr)}
 
 /* ═══ STATS ═══ */
-.stat-sec{padding:80px 0;position:relative;overflow:hidden;background:var(--bg);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr)}
+.stat-sec{padding:80px 0;position:relative;border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);background:linear-gradient(180deg,var(--bg),var(--bg2),var(--bg))}
 .stat-g{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.stat{text-align:center}.stat .sv{font-size:clamp(36px,4.5vw,56px);font-weight:700;letter-spacing:-2px;background:linear-gradient(135deg,var(--tx),var(--tx2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.stat .sl{font-size:13px;color:var(--tx3);margin-top:4px}
+.stat{text-align:center}.stat .sv{font-size:clamp(32px,4vw,52px);font-weight:800;letter-spacing:-2px;background:linear-gradient(135deg,var(--ac),var(--em));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat .sl{font-size:12px;color:var(--tx3);margin-top:4px;font-weight:500}
 
 /* ═══ TOOLS ═══ */
 .tools{padding:120px 0}
-.tiers{margin-top:56px;display:flex;flex-direction:column;gap:56px}
-.tier .tlb{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.tiers{margin-top:56px;display:flex;flex-direction:column;gap:48px}
+.tier .tlb{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:12px}
 .tier .tlb::after{content:'';flex:1;height:1px;background:var(--bdr)}
-.tier .tlb.c{color:var(--b)}.tier .tlb.i{color:var(--tl)}.tier .tlb.g{color:var(--vl)}
-.bento{display:grid;gap:14px}
+.tier .tlb.c{color:var(--ac)}.tier .tlb.i{color:var(--em)}.tier .tlb.g{color:var(--cy)}
+.bento{display:grid;gap:12px}
 .bento.b1{grid-template-columns:1fr 1fr}
 .bento.b2{grid-template-columns:1fr 1fr 1fr}
 
-.bc{background:var(--bg3);border:1px solid var(--bdr);border-radius:14px;padding:28px;transition:all .4s;position:relative;overflow:hidden;display:flex;flex-direction:column}
-.bc:hover{border-color:var(--bdr2);box-shadow:var(--shl);transform:translateY(-4px)}
-.bc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .3s}
-.bc:hover::before{opacity:1}
-.bc.bt-b::before{background:linear-gradient(90deg,var(--b),var(--tl))}
-.bc.bt-t::before{background:linear-gradient(90deg,var(--tl),var(--gn))}
-.bc.bt-v::before{background:linear-gradient(90deg,var(--vl),var(--b))}
-.bc.bt-a::before{background:linear-gradient(90deg,var(--am),var(--rd))}
-.bc.bt-g::before{background:linear-gradient(90deg,var(--gn),var(--tl))}
+.bc{background:var(--bg3);border:1px solid var(--bdr);border-radius:13px;padding:26px;transition:all .4s;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.bc:hover{border-color:var(--bdr2);box-shadow:var(--sh);transform:translateY(-3px)}
+.bc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;opacity:0;transition:opacity .3s}
+.bc:hover::before{opacity:.5}
+.bc.bt-a::before{background:linear-gradient(90deg,transparent,var(--ac),var(--em),transparent)}
+.bc.bt-e::before{background:linear-gradient(90deg,transparent,var(--em),var(--gn),transparent)}
+.bc.bt-c::before{background:linear-gradient(90deg,transparent,var(--cy),var(--ac),transparent)}
 
-.bc.feat{grid-column:1/-1;display:grid;grid-template-columns:1.1fr 1fr;gap:36px;align-items:center}
+.bc.feat{grid-column:1/-1;display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
 .bc.feat .bcl{display:flex;flex-direction:column}
-.bc.feat .bcr{background:var(--bg);border:1px solid var(--bdr);border-radius:10px;padding:20px;position:relative;overflow:hidden}
-.bc.feat .bcr::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--b),transparent)}
+.bc.feat .bcr{background:var(--bg);border:1px solid var(--bdr);border-radius:10px;padding:18px;position:relative;overflow:hidden}
+.bc.feat .bcr::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,91,255,.3),transparent)}
 
-.bci{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:16px;flex-shrink:0}
-.bci.bl{background:var(--bl)}.bci.tl{background:var(--tll)}.bci.vl{background:var(--vll)}.bci.al{background:var(--aml)}.bci.gl{background:var(--gnl)}.bci.rl{background:var(--rdl)}
-.bc h3{font-size:17px;font-weight:700;margin-bottom:6px;letter-spacing:-.3px}
-.bc .bd{font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:16px;flex:1}
-.bc .blnk{font-size:12px;font-weight:600;color:var(--b);display:inline-flex;align-items:center;gap:4px;transition:gap .2s;letter-spacing:.2px}
+.bci{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:14px;flex-shrink:0}
+.bci.ac{background:var(--acl)}.bci.em{background:var(--eml)}.bci.cy{background:var(--cyl)}.bci.am{background:var(--aml)}.bci.gn{background:var(--gnl)}.bci.rd{background:var(--rdl)}
+.bc h3{font-size:16px;font-weight:700;margin-bottom:5px;letter-spacing:-.2px}
+.bc .bd{font-size:12px;color:var(--tx2);line-height:1.7;margin-bottom:14px;flex:1}
+.bc .blnk{font-size:11px;font-weight:600;color:var(--ac);display:inline-flex;align-items:center;gap:4px;transition:gap .2s}
 .bc:hover .blnk{gap:7px}
-.mn-r{display:flex;justify-content:space-between;padding:6px 0;font-size:11px;border-bottom:1px solid var(--bdr)}.mn-r:last-child{border:none}
-.mn-r .ml{color:var(--tx3)}.mn-r .mv{font-weight:600}.mn-r .mv.gd{color:var(--gn)}.mn-r .mv.wn{color:var(--am)}
-.mn-lb{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--b);margin-bottom:8px}
-.mn-bg{display:inline-flex;padding:3px 8px;border-radius:5px;font-size:9px;font-weight:600;margin:2px}
-.mn-bg.g{background:var(--gnl);color:var(--gn)}.mn-bg.b{background:var(--bl);color:var(--b)}.mn-bg.a{background:var(--aml);color:var(--am)}
-.mn-of{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.mn-ofi{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:8px;text-align:center;font-size:10px}
-.mn-ofi .mf{font-weight:700;font-size:12px;color:var(--b)}.mn-ofi .mol{color:var(--tx3);margin-top:2px}
-.mn-kan{display:flex;gap:4px;overflow:hidden}
-.mn-col{flex:1;background:var(--bg);border:1px solid var(--bdr);border-radius:4px;padding:4px;min-width:0}
-.mn-col-h{font-size:7px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--tx3);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mn-dt{width:100%;height:4px;border-radius:2px;margin-bottom:2px}
-.mn-dt.b{background:var(--bl)}.mn-dt.g{background:var(--gnl)}.mn-dt.a{background:var(--aml)}.mn-dt.t{background:var(--tll)}.mn-dt.v{background:var(--vll)}
-.mn-sc{width:38px;height:38px;border-radius:50%;border:2px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--b)}
+.mn-r{display:flex;justify-content:space-between;padding:5px 0;font-size:10px;border-bottom:1px solid var(--bdr)}.mn-r:last-child{border:none}
+.mn-r .ml{color:var(--tx3)}.mn-r .mv{font-weight:600}.mn-r .mv.gd{color:var(--em)}.mn-r .mv.wn{color:var(--am)}
+.mn-lb{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ac);margin-bottom:6px}
+.mn-bg{display:inline-flex;padding:2px 7px;border-radius:4px;font-size:8px;font-weight:600;margin:2px}
+.mn-bg.g{background:var(--gnl);color:var(--gn)}.mn-bg.b{background:var(--acl);color:var(--ac)}.mn-bg.a{background:var(--aml);color:var(--am)}.mn-bg.c{background:var(--cyl);color:var(--cy)}
+.mn-of{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.mn-ofi{background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;padding:8px;text-align:center;font-size:9px}
+.mn-ofi .mf{font-weight:700;font-size:11px;color:var(--ac)}.mn-ofi .mol{color:var(--tx3);margin-top:1px}
+.mn-kan{display:flex;gap:3px;overflow:hidden}
+.mn-col{flex:1;background:var(--bg);border:1px solid var(--bdr);border-radius:4px;padding:3px;min-width:0}
+.mn-col-h{font-size:6px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--tx3);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mn-dt{width:100%;height:3px;border-radius:2px;margin-bottom:2px}
+.mn-dt.a{background:var(--acl)}.mn-dt.g{background:var(--gnl)}.mn-dt.e{background:var(--eml)}.mn-dt.c{background:var(--cyl)}
 
 /* ═══ FINAL CTA ═══ */
-.final{text-align:center;padding:140px 0;position:relative}
-.final h2{font-size:clamp(36px,4.5vw,56px);font-weight:700;letter-spacing:-2.5px;line-height:1.06;max-width:700px;margin:0 auto 16px}
-.final p{font-size:17px;color:var(--tx2);max-width:480px;margin:0 auto 40px;line-height:1.7}
+.final{text-align:center;padding:140px 0;position:relative;overflow:hidden}
+.final h2{font-size:clamp(32px,4.2vw,52px);font-weight:800;letter-spacing:-2.5px;line-height:1.06;max-width:680px;margin:0 auto 16px}
+.final p{font-size:16px;color:var(--tx2);max-width:480px;margin:0 auto 40px;line-height:1.75;font-weight:400}
 
 /* ═══ FOOTER ═══ */
-footer{border-top:1px solid var(--bdr);padding:36px 40px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--tx3)}
-.fl{display:flex;gap:24px}.fl a{color:var(--tx3);transition:color .2s;letter-spacing:.2px}.fl a:hover{color:var(--tx)}
+footer{border-top:1px solid var(--bdr);padding:32px 40px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--tx3)}
+.fl{display:flex;gap:24px}.fl a{color:var(--tx3);transition:color .25s;letter-spacing:.2px}.fl a:hover{color:var(--tx)}
 
 /* ═══ REVEAL ═══ */
-.rv{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}.rv.vis{opacity:1;transform:translateY(0)}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}.rv.vis{opacity:1;transform:translateY(0)}
 
 @media(max-width:1000px){
-.hero-g{grid-template-columns:1fr}.hc{max-width:520px;margin-top:48px}
+.hero-g{grid-template-columns:1fr}.hc{max-width:520px;margin-top:48px}.hc-wrap{transform:none}
 .mk-g,.pr-g,.bento.b1,.bento.b2{grid-template-columns:1fr}
 .bc.feat{grid-template-columns:1fr}
-.tf-g{grid-template-columns:1fr;gap:16px}.tf-ar{padding:12px 0;transform:rotate(90deg)}
-.stp-g{grid-template-columns:1fr 1fr;gap:24px}.stp-g::before{display:none}
+.tf-g{grid-template-columns:1fr;gap:14px}.tf-ar{padding:12px 0;transform:rotate(90deg)}
+.stp-g{grid-template-columns:1fr 1fr;gap:20px}.stp-g::before{display:none}
 .pa-g{grid-template-columns:1fr}
 .stat-g{grid-template-columns:1fr 1fr}
-.nv{display:none}footer{flex-direction:column;gap:16px;text-align:center}
+.nv{display:none}footer{flex-direction:column;gap:14px;text-align:center}
 }
-@media(max-width:600px){.stat-g,.stp-g{grid-template-columns:1fr}.h-proof{flex-direction:column;gap:12px}}
+@media(max-width:600px){.stat-g,.stp-g{grid-template-columns:1fr}.h-proof{flex-direction:column;gap:10px}}
 </style>
 </head>
 <body>
@@ -257,26 +257,23 @@ footer{border-top:1px solid var(--bdr);padding:36px 40px;display:flex;justify-co
   <a href="privatecreditmca-submit.html" class="ncta"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>Submit a Deal</a>
 </nav>
 
-<!-- ═══ HERO ═══ -->
 <section class="hero">
-  <div class="glow blue" style="top:-200px;right:-100px"></div>
-  <div class="glow teal" style="bottom:-100px;left:-150px"></div>
+  <div class="mesh"><div class="mesh-orb a"></div><div class="mesh-orb b"></div><div class="mesh-orb c"></div></div>
 <div class="c"><div class="hero-g">
   <div class="hero-left">
     <div class="h-pill"><span class="dot"></span>136 deals competing right now</div>
-    <h1>Submit once.<br>Funders fight over<br><span class="em">your deal.</span></h1>
-    <p class="h-sub">You email a deal to 12 funders. Three respond. One lowballs you. The other two ghost. There's a better way — a live marketplace where 50+ funders compete for your deal.</p>
+    <h1>Where MCA Brokers<br><span class="em">Run Deals</span></h1>
+    <p class="h-sub">Submit your deal once and let the funding network compete. Built for brokers who want faster approvals, better terms, and full control of their merchant relationships.</p>
     <div class="h-acts">
       <a href="privatecreditmca-submit.html"><button class="btn-p">Submit a Deal →</button></a>
-      <a href="privatecreditmca-account.html"><button class="btn-s">Create Free Account</button></a>
     </div>
     <div class="h-proof">
-      <span><span class="ck">✓</span>Free for brokers — always</span>
-      <span><span class="ck">✓</span>First offer in 4.2 hours avg</span>
-      <span><span class="ck">✓</span>Merchant info stays hidden</span>
+      <span><span class="ck">✓</span> Free for brokers — always</span>
+      <span><span class="ck">✓</span> First offer in 4.2 hours avg</span>
+      <span><span class="ck">✓</span> Merchant info stays hidden</span>
     </div>
   </div>
-  <div class="hc"><div class="hc-inner">
+  <div class="hc"><div class="hc-wrap">
     <div class="hc-bar"><span class="lab">Live Deal</span><span class="live"><span class="dot"></span>Live</span></div>
     <div class="hc-body">
       <div class="hc-deal"><div><div class="hc-biz">Peak Roofing Co</div><div class="hc-meta">Construction · FL · $128K/mo revenue</div></div><div class="hc-amt"><div class="n">$110K</div><div class="l">requested</div></div></div>
@@ -291,27 +288,25 @@ footer{border-top:1px solid var(--bdr);padding:36px 40px;display:flex;justify-co
 </div></div>
 </section>
 
-<!-- ═══ TICKER ═══ -->
 <div class="tkr"><div class="tkr-t">
-  <div class="ti"><span class="td g"></span><strong>QuickFix Auto</strong>TX · 3 offers · $80K</div>
-  <div class="ti"><span class="td a"></span><strong>Nonna's Trattoria</strong>NY · 2 offers · $65K</div>
-  <div class="ti"><span class="td g"></span><strong>Peak Roofing</strong>FL · reviewing · $110K</div>
-  <div class="ti"><span class="td b"></span><strong>Bright Smile Dental</strong>CA · new · $45K</div>
-  <div class="ti"><span class="td g"></span><strong>Metro Logistics</strong>NJ · 4 offers · $92K</div>
-  <div class="ti"><span class="td a"></span><strong>Casa Verde</strong>AZ · 1 offer · $38K</div>
-  <div class="ti"><span class="td g"></span><strong>TechServe IT</strong>IL · funded · $120K</div>
-  <div class="ti"><span class="td b"></span><strong>Harbor Fish</strong>MA · new · $55K</div>
-  <div class="ti"><span class="td g"></span><strong>QuickFix Auto</strong>TX · 3 offers · $80K</div>
-  <div class="ti"><span class="td a"></span><strong>Nonna's Trattoria</strong>NY · 2 offers · $65K</div>
-  <div class="ti"><span class="td g"></span><strong>Peak Roofing</strong>FL · reviewing · $110K</div>
-  <div class="ti"><span class="td b"></span><strong>Bright Smile Dental</strong>CA · new · $45K</div>
-  <div class="ti"><span class="td g"></span><strong>Metro Logistics</strong>NJ · 4 offers · $92K</div>
-  <div class="ti"><span class="td a"></span><strong>Casa Verde</strong>AZ · 1 offer · $38K</div>
-  <div class="ti"><span class="td g"></span><strong>TechServe IT</strong>IL · funded · $120K</div>
-  <div class="ti"><span class="td b"></span><strong>Harbor Fish</strong>MA · new · $55K</div>
+  <div class="ti"><span class="td g"></span><strong>QuickFix Auto</strong> TX · 3 offers · $80K</div>
+  <div class="ti"><span class="td a"></span><strong>Nonna's Trattoria</strong> NY · 2 offers · $65K</div>
+  <div class="ti"><span class="td g"></span><strong>Peak Roofing</strong> FL · reviewing · $110K</div>
+  <div class="ti"><span class="td b"></span><strong>Bright Smile Dental</strong> CA · new · $45K</div>
+  <div class="ti"><span class="td g"></span><strong>Metro Logistics</strong> NJ · 4 offers · $92K</div>
+  <div class="ti"><span class="td a"></span><strong>Casa Verde</strong> AZ · 1 offer · $38K</div>
+  <div class="ti"><span class="td g"></span><strong>TechServe IT</strong> IL · funded · $120K</div>
+  <div class="ti"><span class="td b"></span><strong>Harbor Fish</strong> MA · new · $55K</div>
+  <div class="ti"><span class="td g"></span><strong>QuickFix Auto</strong> TX · 3 offers · $80K</div>
+  <div class="ti"><span class="td a"></span><strong>Nonna's Trattoria</strong> NY · 2 offers · $65K</div>
+  <div class="ti"><span class="td g"></span><strong>Peak Roofing</strong> FL · reviewing · $110K</div>
+  <div class="ti"><span class="td b"></span><strong>Bright Smile Dental</strong> CA · new · $45K</div>
+  <div class="ti"><span class="td g"></span><strong>Metro Logistics</strong> NJ · 4 offers · $92K</div>
+  <div class="ti"><span class="td a"></span><strong>Casa Verde</strong> AZ · 1 offer · $38K</div>
+  <div class="ti"><span class="td g"></span><strong>TechServe IT</strong> IL · funded · $120K</div>
+  <div class="ti"><span class="td b"></span><strong>Harbor Fish</strong> MA · new · $55K</div>
 </div></div>
 
-<!-- ═══ MARKETPLACE ═══ -->
 <section class="sec alt"><div class="c">
   <div class="rv"><div class="s-lab">Live Marketplace</div><div class="s-ttl">This Is Happening<br>Right Now</div><div class="s-dsc">These aren't mock-ups. Real deals. Real offers. Updating live.</div></div>
   <div class="mk-g rv" style="transition-delay:.1s">
@@ -321,7 +316,6 @@ footer{border-top:1px solid var(--bdr);padding:36px 40px;display:flex;justify-co
   </div>
 </div></section>
 
-<!-- ═══ TRANSFORM ═══ -->
 <section class="sec"><div class="c">
   <div class="rv" style="text-align:center"><div class="s-lab">The Shift</div><div class="s-ttl">The Way You Fund Deals<br>Is Broken. Here's the Fix.</div></div>
   <div class="tf-g rv" style="transition-delay:.1s">
@@ -331,7 +325,6 @@ footer{border-top:1px solid var(--bdr);padding:36px 40px;display:flex;justify-co
   </div>
 </div></section>
 
-<!-- ═══ PROTECTION ═══ -->
 <section class="sec alt"><div class="c">
   <div class="rv" style="text-align:center"><div class="s-lab">Broker Protection</div><div class="s-ttl">Your Merchant. Your Commission.<br>Nobody Gets Around You.</div><div class="s-dsc" style="margin:0 auto">The reason most brokers don't use platforms is fear — fear that a funder contacts the merchant directly, forwards the packet, or cuts you out. We built the entire platform to make that impossible.</div></div>
   <div class="pr-g rv" style="transition-delay:.1s">
@@ -341,27 +334,24 @@ footer{border-top:1px solid var(--bdr);padding:36px 40px;display:flex;justify-co
   </div>
 </div></section>
 
-<!-- ═══ HOW IT WORKS ═══ -->
 <section class="sec" id="how"><div class="c">
   <div class="rv" style="text-align:center"><div class="s-lab">How It Works</div><div class="s-ttl">Four Steps.<br>Upload to Funded.</div></div>
   <div class="stp-g rv" style="transition-delay:.1s">
-    <div class="stp"><div class="stp-n">1</div><h3>Upload Documents</h3><p>Drop in bank statements, the signed application, and an ID. The platform builds a clean deal packet every funder accepts.</p></div>
-    <div class="stp"><div class="stp-n">2</div><h3>AI Analyzes in Seconds</h3><p>Before you send it anywhere, you know exactly what you're working with.</p><div class="ai-mini"><div class="ai-lb mono">AI BankIQ</div><div class="ai-r"><span class="l">Revenue</span><span class="v">$82K/mo</span></div><div class="ai-r"><span class="l">NSFs</span><span class="v g">2</span></div><div class="ai-r"><span class="l">Risk</span><span class="v g">78/B</span></div><div class="ai-r"><span class="l">Approval</span><span class="v">$45K–$62K</span></div></div></div>
-    <div class="stp"><div class="stp-n">3</div><h3>One Click to Go Live</h3><p>Your deal enters the marketplace. Funders are notified. Reviews start immediately. You don't send a single email.</p></div>
-    <div class="stp"><div class="stp-n">4</div><h3>Offers Appear. You Choose.</h3><p>Every offer shows amount, factor rate, total cost — side by side. Accept the best one. Done.</p></div>
+    <div class="stp"><div class="stp-n">1</div><h3>Upload Documents</h3><p>Drop in bank statements, signed application, and an ID. The platform builds a clean deal packet every funder accepts.</p></div>
+    <div class="stp"><div class="stp-n">2</div><h3>AI Analyzes in Seconds</h3><p>Before you send it anywhere, you know exactly what you're working with.</p><div class="ai-m"><div class="ai-lb mono">AI BankIQ</div><div class="ai-r"><span class="l">Revenue</span><span class="v">$82K/mo</span></div><div class="ai-r"><span class="l">NSFs</span><span class="v g">2</span></div><div class="ai-r"><span class="l">Risk</span><span class="v g">78/B</span></div><div class="ai-r"><span class="l">Approval</span><span class="v">$45K–$62K</span></div></div></div>
+    <div class="stp"><div class="stp-n">3</div><h3>One Click to Go Live</h3><p>Your deal enters the marketplace. Funders are notified. Reviews start immediately.</p></div>
+    <div class="stp"><div class="stp-n">4</div><h3>Offers Appear. You Choose.</h3><p>Every offer shows amount, factor rate, total cost — side by side. Accept the best one.</p></div>
   </div>
 </div></section>
 
-<!-- ═══ TWO PATHS ═══ -->
 <section class="sec alt" id="paths"><div class="c">
-  <div class="rv" style="text-align:center"><div class="s-lab">Get Started</div><div class="s-ttl">Choose How You Want<br>to Place Your Deal</div><div class="s-dsc" style="margin:0 auto">Different brokers work different ways. Both paths lead to funded deals.</div></div>
+  <div class="rv" style="text-align:center"><div class="s-lab">Get Started</div><div class="s-ttl">Choose How You Want<br>to Place Your Deal</div></div>
   <div class="pa-g rv" style="transition-delay:.1s">
-    <div class="pa-c ft"><h3>Submit to Marketplace</h3><p class="pd">You're an experienced broker. You know a good offer when you see one. Submit your deal, let funders compete, and pick the best terms yourself.</p><div class="pb"><span class="ck">✓</span>Access to 50+ active funders</div><div class="pb"><span class="ck">✓</span>Competing offers within hours</div><div class="pb"><span class="ck">✓</span>Full control — you choose when to accept</div><div class="pb"><span class="ck">✓</span>Side-by-side comparison on every offer</div><a href="privatecreditmca-submit.html" class="pa-cta">Submit a Deal →</a></div>
-    <div class="pa-c"><h3>Hand It to a Superbroker</h3><p class="pd">Newer to the space, or the deal is complex — stacking, high NSFs, short time in business. A senior broker reviews the file, structures it, and places it with the right funders.</p><div class="pb"><span class="ck">✓</span>Expert eyes on every file</div><div class="pb"><span class="ck">✓</span>Better approval odds on tough deals</div><div class="pb"><span class="ck">✓</span>White-glove support to funding</div><div class="pb"><span class="ck">✓</span>You still earn the full commission</div><a href="privatecreditmca-account.html" class="pa-cta">Talk to a Superbroker →</a></div>
+    <div class="pa-c ft"><h3>Submit to Marketplace</h3><p class="pd">You're an experienced broker. You know a good offer when you see one. Submit your deal, let funders compete, and pick the best terms.</p><div class="pb"><span class="ck">✓</span> Access to 50+ active funders</div><div class="pb"><span class="ck">✓</span> Competing offers within hours</div><div class="pb"><span class="ck">✓</span> Full control — you choose when to accept</div><div class="pb"><span class="ck">✓</span> Side-by-side comparison on every offer</div><a href="privatecreditmca-submit.html" class="pa-cta">Submit a Deal →</a></div>
+    <div class="pa-c"><h3>Hand It to a Superbroker</h3><p class="pd">Newer to the space, or the deal is complex. A senior broker reviews the file, structures it, and places it with the right funders.</p><div class="pb"><span class="ck">✓</span> Expert eyes on every file</div><div class="pb"><span class="ck">✓</span> Better approval odds on tough deals</div><div class="pb"><span class="ck">✓</span> White-glove support to funding</div><div class="pb"><span class="ck">✓</span> You still earn the full commission</div><a href="privatecreditmca-account.html" class="pa-cta">Talk to a Superbroker →</a></div>
   </div>
 </div></section>
 
-<!-- ═══ STATS ═══ -->
 <section class="stat-sec"><div class="c"><div class="stat-g rv">
   <div class="stat"><div class="sv">$9.9M</div><div class="sl">Pipeline Volume</div></div>
   <div class="stat"><div class="sv">136</div><div class="sl">Active Deals</div></div>
@@ -369,78 +359,33 @@ footer{border-top:1px solid var(--bdr);padding:36px 40px;display:flex;justify-co
   <div class="stat"><div class="sv">4.2h</div><div class="sl">Avg. First Offer</div></div>
 </div></div></section>
 
-<!-- ═══ TOOLS ═══ -->
 <section class="tools" id="tools"><div class="c">
   <div class="rv" style="text-align:center"><div class="s-lab">Platform</div><div class="s-ttl">Built to Move Deals,<br>Not Manage Busywork</div><div class="s-dsc" style="margin:0 auto">Nine tools. Three layers. Every one exists to get your deal from uploaded to funded faster.</div></div>
-
   <div class="tiers rv" style="transition-delay:.1s">
-
     <div class="tier"><div class="tlb c">Core Platform — How Deals Move</div>
     <div class="bento b1">
-      <a href="privatecreditmca-submit.html" class="bc feat bt-b" style="text-decoration:none;color:inherit">
-        <div class="bcl"><div class="bci bl">📦</div><h3>Universal Deal Packet</h3><div class="bd">Every funder has a different submission format. You used to reformat the same deal 10 times. Now you upload once — bank statements, application, ID — and the platform builds a single clean file that every funder accepts.</div><span class="blnk">Try it — Submit a Deal →</span></div>
-        <div class="bcr"><div class="mn-lb">Deal Packet Preview</div><div class="mn-r"><span class="ml">📊 Bank Statements</span><span class="mv gd">4 months ✓</span></div><div class="mn-r"><span class="ml">📝 Application</span><span class="mv gd">Signed ✓</span></div><div class="mn-r"><span class="ml">🪪 Owner ID</span><span class="mv gd">Verified ✓</span></div><div class="mn-r"><span class="ml">📋 Deal Summary</span><span class="mv gd">Auto-generated ✓</span></div><div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--bdr);font-size:10px;color:var(--tx3);text-align:center">Accepted by all 50+ funders</div></div>
-      </a>
-      <a href="privatecreditmca-offerbattle.html" class="bc feat bt-b" style="text-decoration:none;color:inherit">
-        <div class="bcl"><div class="bci vl">⚔️</div><h3>Offer Battle</h3><div class="bd">When multiple funders want the same deal, their offers appear side by side — amount, factor rate, total cost, daily payment. No calling around. No comparing PDFs. Pick the winner.</div><span class="blnk">See a live example →</span></div>
-        <div class="bcr"><div class="mn-lb">⚔️ Competing Offers — Metro Logistics $180K</div><div class="mn-of"><div class="mn-ofi"><div class="mf">$160K</div><div class="mol">Credibly · 1.29</div></div><div class="mn-ofi"><div class="mf">$165K</div><div class="mol">Rapid · 1.31</div></div><div class="mn-ofi"><div class="mf">$170K</div><div class="mol">Fora · 1.33</div></div><div class="mn-ofi" style="border-color:rgba(34,197,94,.2)"><div class="mf" style="color:var(--gn)">$175K</div><div class="mol">National · 1.35</div></div></div></div>
-      </a>
-      <a href="privatecreditmca-pipeline.html" class="bc bt-b" style="text-decoration:none;color:inherit">
-        <div class="bci bl">📈</div><h3>Pipeline CRM</h3><div class="bd">Every deal from first call to funded, tracked on a drag-and-drop kanban board. Six stages. Real-time offer counts. No spreadsheets.</div>
-        <div class="mn-kan" style="margin-bottom:12px"><div class="mn-col"><div class="mn-col-h">Lead</div><div class="mn-dt b"></div><div class="mn-dt b"></div><div class="mn-dt b"></div></div><div class="mn-col"><div class="mn-col-h">Docs</div><div class="mn-dt v"></div><div class="mn-dt v"></div></div><div class="mn-col"><div class="mn-col-h">UW</div><div class="mn-dt a"></div><div class="mn-dt a"></div></div><div class="mn-col"><div class="mn-col-h">Live</div><div class="mn-dt t"></div><div class="mn-dt t"></div><div class="mn-dt t"></div><div class="mn-dt t"></div></div><div class="mn-col"><div class="mn-col-h">Offers</div><div class="mn-dt g"></div><div class="mn-dt g"></div><div class="mn-dt g"></div></div><div class="mn-col"><div class="mn-col-h">Funded</div><div class="mn-dt g"></div><div class="mn-dt g"></div><div class="mn-dt g"></div></div></div>
-        <span class="blnk">Open Pipeline →</span>
-      </a>
-      <a href="privatecreditmca-funders.html" class="bc bt-g" style="text-decoration:none;color:inherit">
-        <div class="bci gl">📖</div><h3>Funder Directory</h3><div class="bd">16 funders with real policies — deal ranges, product types, stacking rules, speed ratings, and AI-matched fit scores. Stop guessing who funds what.</div>
-        <div style="margin-bottom:12px"><span class="mn-bg b">MCA</span><span class="mn-bg g">TERM</span><span class="mn-bg a">LOC</span><span class="mn-bg g">PRIME</span><span class="mn-bg a">SUBPRIME</span><span class="mn-bg b">⚡ FAST</span></div>
-        <span class="blnk">Browse Funders →</span>
-      </a>
+      <a href="privatecreditmca-submit.html" class="bc feat bt-a" style="text-decoration:none;color:inherit"><div class="bcl"><div class="bci ac">📦</div><h3>Universal Deal Packet</h3><div class="bd">Every funder has a different submission format. You used to reformat the same deal 10 times. Now you upload once and the platform builds a single clean file that every funder accepts.</div><span class="blnk">Try it — Submit a Deal →</span></div><div class="bcr"><div class="mn-lb">Deal Packet Preview</div><div class="mn-r"><span class="ml">📊 Bank Statements</span><span class="mv gd">4 months ✓</span></div><div class="mn-r"><span class="ml">📝 Application</span><span class="mv gd">Signed ✓</span></div><div class="mn-r"><span class="ml">🪪 Owner ID</span><span class="mv gd">Verified ✓</span></div><div class="mn-r"><span class="ml">📋 Deal Summary</span><span class="mv gd">Auto-generated ✓</span></div><div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--bdr);font-size:9px;color:var(--tx3);text-align:center">Accepted by all 50+ funders</div></div></a>
+      <a href="privatecreditmca-offerbattle.html" class="bc feat bt-a" style="text-decoration:none;color:inherit"><div class="bcl"><div class="bci ac">⚔️</div><h3>Offer Battle</h3><div class="bd">When multiple funders want the same deal, their offers appear side by side — amount, factor rate, total cost, daily payment. No calling around. Pick the winner.</div><span class="blnk">See a live example →</span></div><div class="bcr"><div class="mn-lb">⚔️ Competing Offers</div><div class="mn-of"><div class="mn-ofi"><div class="mf">$160K</div><div class="mol">Credibly · 1.29</div></div><div class="mn-ofi"><div class="mf">$165K</div><div class="mol">Rapid · 1.31</div></div><div class="mn-ofi"><div class="mf">$170K</div><div class="mol">Fora · 1.33</div></div><div class="mn-ofi" style="border-color:rgba(52,211,153,.15)"><div class="mf" style="color:var(--gn)">$175K</div><div class="mol">National · 1.35</div></div></div></div></a>
+      <a href="privatecreditmca-pipeline.html" class="bc bt-a" style="text-decoration:none;color:inherit"><div class="bci ac">📈</div><h3>Pipeline CRM</h3><div class="bd">Every deal from first call to funded, tracked on a drag-and-drop kanban board. Six stages. Real-time offer counts.</div><div class="mn-kan" style="margin-bottom:10px"><div class="mn-col"><div class="mn-col-h">Lead</div><div class="mn-dt a"></div><div class="mn-dt a"></div><div class="mn-dt a"></div></div><div class="mn-col"><div class="mn-col-h">Docs</div><div class="mn-dt c"></div><div class="mn-dt c"></div></div><div class="mn-col"><div class="mn-col-h">UW</div><div class="mn-dt e"></div><div class="mn-dt e"></div></div><div class="mn-col"><div class="mn-col-h">Live</div><div class="mn-dt a"></div><div class="mn-dt a"></div><div class="mn-dt a"></div><div class="mn-dt a"></div></div><div class="mn-col"><div class="mn-col-h">Offers</div><div class="mn-dt g"></div><div class="mn-dt g"></div><div class="mn-dt g"></div></div><div class="mn-col"><div class="mn-col-h">Funded</div><div class="mn-dt g"></div><div class="mn-dt g"></div><div class="mn-dt g"></div></div></div><span class="blnk">Open Pipeline →</span></a>
+      <a href="privatecreditmca-funders.html" class="bc bt-e" style="text-decoration:none;color:inherit"><div class="bci gn">📖</div><h3>Funder Directory</h3><div class="bd">16 funders with real policies — deal ranges, product types, stacking rules, speed ratings, and AI-matched fit scores.</div><div style="margin-bottom:10px"><span class="mn-bg b">MCA</span><span class="mn-bg g">TERM</span><span class="mn-bg a">LOC</span><span class="mn-bg g">PRIME</span><span class="mn-bg a">SUBPRIME</span><span class="mn-bg c">⚡ FAST</span></div><span class="blnk">Browse Funders →</span></a>
     </div></div>
-
     <div class="tier"><div class="tlb i">Intelligence Layer — Know Before You Submit</div>
     <div class="bento b2">
-      <a href="privatecreditmca-bankiq.html" class="bc bt-t" style="text-decoration:none;color:inherit">
-        <div class="bci tl">🧠</div><h3>AI BankIQ</h3><div class="bd">Upload bank statements. In seconds you get monthly revenue, NSF count, daily balance trends, existing MCA detection, and a risk score with approval range.</div>
-        <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rs);padding:10px;margin-bottom:12px"><div class="mn-lb">Sample Analysis</div><div class="mn-r"><span class="ml">Revenue</span><span class="mv gd">$74K/mo</span></div><div class="mn-r"><span class="ml">NSFs</span><span class="mv wn">2</span></div><div class="mn-r"><span class="ml">Risk Score</span><span class="mv gd">78/B</span></div><div class="mn-r"><span class="ml">Approval</span><span class="mv">$45K–$62K</span></div></div>
-        <span class="blnk">Try AI BankIQ →</span>
-      </a>
-      <div class="bc bt-a">
-        <div class="bci al">🧪</div><h3>Deal Lab</h3><div class="bd">Test different funding amounts, estimate factor rates, simulate daily payment burden, and see which structures funders will approve.</div>
-        <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rs);padding:10px;margin-bottom:12px"><div class="mn-lb">Simulation</div><div class="mn-r"><span class="ml">Amount</span><span class="mv">$80K</span></div><div class="mn-r"><span class="ml">Est. Factor</span><span class="mv">1.35</span></div><div class="mn-r"><span class="ml">Daily Payment</span><span class="mv wn">$600</span></div><div class="mn-r"><span class="ml">Payment Burden</span><span class="mv gd">17.8%</span></div></div>
-        <span class="blnk" style="color:var(--tx3)">Coming soon</span>
-      </div>
-      <div class="bc bt-a">
-        <div class="bci rl">🔥</div><h3>Deal Heat Map</h3><div class="bd">See which industries are hot, where funders are most active, and what deal sizes are getting funded fastest right now.</div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px"><span class="mn-bg g">Restaurant ↑ 23%</span><span class="mn-bg g">Trucking ↑ 18%</span><span class="mn-bg b">Construction ↑ 12%</span><span class="mn-bg a">Retail ↓ 5%</span></div>
-        <span class="blnk" style="color:var(--tx3)">Coming soon</span>
-      </div>
+      <a href="privatecreditmca-bankiq.html" class="bc bt-e" style="text-decoration:none;color:inherit"><div class="bci em">🧠</div><h3>AI BankIQ</h3><div class="bd">Upload bank statements. In seconds you get revenue, NSFs, balance trends, MCA detection, and a risk score.</div><div style="background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rs);padding:10px;margin-bottom:10px"><div class="mn-lb">Analysis</div><div class="mn-r"><span class="ml">Revenue</span><span class="mv gd">$74K/mo</span></div><div class="mn-r"><span class="ml">NSFs</span><span class="mv wn">2</span></div><div class="mn-r"><span class="ml">Risk</span><span class="mv gd">78/B</span></div><div class="mn-r"><span class="ml">Approval</span><span class="mv">$45K–$62K</span></div></div><span class="blnk">Try AI BankIQ →</span></a>
+      <div class="bc bt-c"><div class="bci am">🧪</div><h3>Deal Lab</h3><div class="bd">Test funding amounts, estimate factor rates, simulate daily payment burden before you submit.</div><div style="background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rs);padding:10px;margin-bottom:10px"><div class="mn-lb">Simulation</div><div class="mn-r"><span class="ml">Amount</span><span class="mv">$80K</span></div><div class="mn-r"><span class="ml">Est. Factor</span><span class="mv">1.35</span></div><div class="mn-r"><span class="ml">Daily</span><span class="mv wn">$600</span></div><div class="mn-r"><span class="ml">Burden</span><span class="mv gd">17.8%</span></div></div><span class="blnk" style="color:var(--tx3)">Coming soon</span></div>
+      <div class="bc bt-c"><div class="bci rd">🔥</div><h3>Deal Heat Map</h3><div class="bd">See which industries are hot, where funders are active, and what deal sizes are funding fastest.</div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px"><span class="mn-bg g">Restaurant ↑ 23%</span><span class="mn-bg g">Trucking ↑ 18%</span><span class="mn-bg b">Construction ↑ 12%</span><span class="mn-bg a">Retail ↓ 5%</span></div><span class="blnk" style="color:var(--tx3)">Coming soon</span></div>
     </div></div>
-
     <div class="tier"><div class="tlb g">Growth Tools — Build Your Business</div>
     <div class="bento b2">
-      <div class="bc bt-v">
-        <div class="bci vl">⭐</div><h3>Trust & Reputation</h3><div class="bd">Your verified broker profile shows funding rate, close time, deal volume, and funder ratings. The better your track record, the more funders trust your submissions.</div>
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div class="mn-sc">92</div><div style="font-size:11px"><div style="font-weight:700">Reputation Score</div><div style="color:var(--tx3)">75% funding rate · 4.8 rating</div></div></div>
-        <span class="blnk" style="color:var(--tx3)">Coming soon</span>
-      </div>
-      <div class="bc bt-v">
-        <div class="bci vl">🎓</div><h3>MCA Academy</h3><div class="bd">Training modules on underwriting, sales scripts that close, deal structuring for complex files, and funder matching strategies.</div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px"><span class="mn-bg b">Underwriting 101</span><span class="mn-bg g">Sales Scripts</span><span class="mn-bg a">Stacking Strategy</span></div>
-        <span class="blnk" style="color:var(--tx3)">Coming soon</span>
-      </div>
-      <div class="bc bt-v">
-        <div class="bci tl">🎯</div><h3>Superbroker Network</h3><div class="bd">Complex deal? Hand it to a senior broker. They structure it, place it with the right funders, and get it funded — while you keep the full commission.</div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px"><span class="mn-bg g">Stacking Expert</span><span class="mn-bg b">High NSF Specialist</span><span class="mn-bg a">New Business Files</span></div>
-        <span class="blnk">Talk to a Superbroker →</span>
-      </div>
+      <div class="bc bt-c"><div class="bci cy">⭐</div><h3>Trust & Reputation</h3><div class="bd">Verified broker profile with funding rate, close time, and funder ratings. Your track record works for you.</div><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><div style="width:34px;height:34px;border-radius:50%;border:2px solid var(--ac);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--ac)">92</div><div style="font-size:10px"><div style="font-weight:700">Reputation Score</div><div style="color:var(--tx3)">75% funding rate</div></div></div><span class="blnk" style="color:var(--tx3)">Coming soon</span></div>
+      <div class="bc bt-c"><div class="bci cy">🎓</div><h3>MCA Academy</h3><div class="bd">Training on underwriting, sales scripts, deal structuring, and funder matching. Level up at your own pace.</div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px"><span class="mn-bg b">Underwriting 101</span><span class="mn-bg g">Sales Scripts</span><span class="mn-bg a">Stacking</span></div><span class="blnk" style="color:var(--tx3)">Coming soon</span></div>
+      <div class="bc bt-c"><div class="bci em">🎯</div><h3>Superbroker Network</h3><div class="bd">Complex deal? A senior broker structures it, places it, and gets it funded — you keep the full commission.</div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px"><span class="mn-bg g">Stacking Expert</span><span class="mn-bg b">High NSF</span><span class="mn-bg a">New Business</span></div><span class="blnk">Talk to a Superbroker →</span></div>
     </div></div>
-
   </div>
 </div></section>
 
-<!-- ═══ FINAL CTA ═══ -->
 <section class="final">
-  <div class="glow blue" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="mesh" style="opacity:.5"><div class="mesh-orb a" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div></div>
   <div class="c rv">
     <div class="s-lab">Ready?</div>
     <h2>You Do the Work. Make Sure You're Getting the <span class="em">Best Offer.</span></h2>
@@ -450,9 +395,9 @@ footer{border-top:1px solid var(--bdr);padding:36px 40px;display:flex;justify-co
       <a href="privatecreditmca-account.html"><button class="btn-s">Create Free Account</button></a>
     </div>
     <div class="h-proof" style="justify-content:center;margin-top:32px">
-      <span><span class="ck">✓</span>Free for brokers</span>
-      <span><span class="ck">✓</span>No credit card</span>
-      <span><span class="ck">✓</span>50+ funders competing</span>
+      <span><span class="ck">✓</span> Free for brokers</span>
+      <span><span class="ck">✓</span> No credit card</span>
+      <span><span class="ck">✓</span> 50+ funders competing</span>
     </div>
   </div>
 </section>
