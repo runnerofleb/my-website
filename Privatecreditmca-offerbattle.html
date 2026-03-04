@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrivateCreditMCA — Offer Battle</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAFBFD;--bgw:#fff;--bgd:#0A0F1E;--sf:#F1F4F9;--bdr:#E2E7F0;--bdr2:#C9D1DE;--bdrf:rgba(0,85,255,.35);--tx:#0A0F1E;--tx2:#3D4A5C;--tx3:#7C8BA1;--brand:#0055FF;--brandd:#003FCC;--brandl:#E8F0FF;--teal:#00BFA6;--teall:#E6FAF7;--gn:#00C853;--gnl:#E8F8EF;--rd:#E53935;--rdl:#FDE8E8;--am:#F59E0B;--aml:#FEF3C7;--vl:#7C3AED;--vll:#F1EAFE;--r:14px;--rs:8px;--sh:0 1px 3px rgba(10,15,30,.04),0 4px 14px rgba(10,15,30,.06);--shl:0 4px 12px rgba(10,15,30,.04),0 16px 48px rgba(10,15,30,.08)}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;min-height:100vh}.mono{font-family:'IBM Plex Mono',monospace}a{text-decoration:none;color:inherit}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:18px;letter-spacing:-.3px}.logo .mark{width:28px;height:28px;border-radius:8px;background:var(--brand);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.logo .mark::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.2),transparent)}.logo .mark svg{width:16px;height:16px}.logo span.dim{color:var(--tx3);font-weight:600}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(250,251,253,.88);backdrop-filter:blur(16px) saturate(1.5);border-bottom:1px solid var(--bdr)}
+.nc{display:flex;gap:28px}.nc a{font-size:13px;font-weight:600;color:var(--tx3);padding:6px 0;border-bottom:2px solid transparent;transition:all .2s}.nc a:hover,.nc a.on{color:var(--tx);border-color:var(--brand)}
+.nr{display:flex;gap:12px}.nb{padding:8px 20px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;border:none;display:inline-flex;align-items:center;gap:6px;transition:all .2s}.nb.p{background:var(--brand);color:#fff}.nb.s{background:transparent;color:var(--tx2);border:1.5px solid var(--bdr)}
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+
+.page{max-width:1100px;margin:0 auto;padding:88px 32px 60px}
+.deal-info{display:flex;justify-content:space-between;align-items:start;margin-bottom:28px;flex-wrap:wrap;gap:16px}
+.di-left h1{font-size:28px;font-weight:900;letter-spacing:-.5px;display:flex;align-items:center;gap:10px}
+.di-left .tags{display:flex;gap:6px;margin-top:6px}.tg{padding:4px 12px;border-radius:8px;font-size:11px;font-weight:600}.tg.i{background:var(--brandl);color:var(--brand)}.tg.s{background:var(--vll);color:var(--vl)}.tg.r{background:var(--gnl);color:var(--gn)}.tg.live{background:var(--rdl);color:var(--rd);display:flex;align-items:center;gap:5px}.tg.live .dot{width:5px;height:5px;border-radius:50%;background:var(--rd);animation:pulse 1s infinite}
+.di-right{display:flex;gap:14px}.di-stat{background:var(--bgw);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 22px;text-align:center}.di-stat .sv{font-size:24px;font-weight:900;color:var(--brand)}.di-stat .sl{font-size:11px;color:var(--tx3);margin-top:2px}
+
+.battle-label{font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--brand);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+.battle-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:32px}
+.offer-card{background:var(--bgw);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;transition:all .35s;position:relative;overflow:hidden;animation:fu .5s ease both}
+.offer-card:hover{box-shadow:var(--shl);transform:translateY(-4px)}.offer-card:hover::before{opacity:1}
+.offer-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .3s}
+.offer-card.best::before{opacity:1;background:var(--gn)}.offer-card.best{border-color:rgba(0,200,83,.2)}
+.offer-card .badge{position:absolute;top:14px;right:14px;font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:6px}
+.offer-card .badge.best-b{background:var(--gnl);color:var(--gn)}.offer-card .badge.rev-b{background:var(--aml);color:var(--am)}
+
+.of-funder{font-size:18px;font-weight:700;margin-bottom:14px}
+.of-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.of-item{background:var(--sf);border-radius:var(--rs);padding:12px;text-align:center}.of-item .ol{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--tx3)}.of-item .ov{font-size:20px;font-weight:800;margin-top:3px}.of-item .ov.gd{color:var(--gn)}.of-item .ov.wn{color:var(--am)}
+
+.of-details{border-top:1px solid var(--sf);padding-top:12px;margin-bottom:16px}
+.od-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px}.od-row .odl{color:var(--tx3)}.od-row .odv{font-weight:600}
+
+.of-actions{display:flex;gap:8px}
+.oa{flex:1;padding:10px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;border:none;text-align:center;transition:all .2s}
+.oa.accept{background:var(--brand);color:#fff}.oa.accept:hover{background:var(--brandd)}.oa.counter{background:var(--sf);color:var(--tx2);border:1px solid var(--bdr)}.oa.counter:hover{background:var(--bgw)}
+.oa.accepted{background:var(--gn);color:#fff;pointer-events:none}
+
+.compare-table{background:var(--bgw);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;margin-bottom:28px}
+.ct-h{padding:18px 22px;border-bottom:1px solid var(--bdr);font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+table{width:100%;border-collapse:collapse}th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--tx3);padding:12px 20px;border-bottom:1px solid var(--bdr)}td{padding:14px 20px;border-bottom:1px solid var(--bdr);font-size:14px}tr:last-child td{border-bottom:none}tr:hover td{background:var(--sf)}
+.fn{font-weight:600}.best-val{color:var(--gn);font-weight:700;position:relative}.best-val::after{content:'★';margin-left:4px;font-size:10px}
+
+@media(max-width:900px){.nc{display:none}.di-right{flex-wrap:wrap}.battle-grid{grid-template-columns:1fr}.of-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<nav><a href="privatecreditmca-landing.html" class="logo"><div class="mark"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="9" width="3" height="5" rx="1" fill="white"/><rect x="6.5" y="6" width="3" height="8" rx="1" fill="white"/><rect x="11" y="3" width="3" height="11" rx="1" fill="white"/></svg></div>PrivateCredit<span class="dim">MCA</span></a><div class="nc"><a href="privatecreditmca-landing.html">Home</a><a href="privatecreditmca-marketplace.html">Marketplace</a><a href="privatecreditmca-account.html?view=profile">Dashboard</a><a href="privatecreditmca-funders.html">Funder Directory</a></div><div class="nr"><a href="privatecreditmca-account.html?view=login" class="nb s">Log In</a><a href="privatecreditmca-submit.html" class="nb p">+ Submit a Deal</a></div></nav>
+
+<div class="page">
+  <div class="deal-info">
+    <div class="di-left">
+      <h1>⚔️ Offer Battle</h1>
+      <div style="font-size:22px;font-weight:800;margin:8px 0">Metro Logistics LLC</div>
+      <div class="tags"><span class="tg live"><span class="dot"></span>Live</span><span class="tg i">Trucking</span><span class="tg s">NJ</span><span class="tg r">88/A</span></div>
+    </div>
+    <div class="di-right"><div class="di-stat"><div class="sv">$180K</div><div class="sl">Requested</div></div><div class="di-stat"><div class="sv">$210K</div><div class="sl">Monthly Rev</div></div><div class="di-stat"><div class="sv">4</div><div class="sl">Offers</div></div></div>
+  </div>
+
+  <div class="battle-label">⚔️ Competing Offers — Pick Your Winner</div>
+  <div class="battle-grid" id="bGrid"></div>
+
+  <div class="compare-table">
+    <div class="ct-h">📊 Side-by-Side Comparison</div>
+    <table><thead><tr><th>Metric</th><th>Credibly</th><th>Rapid Finance</th><th>Fora Financial</th><th>National Funding</th></tr></thead>
+    <tbody>
+      <tr><td class="fn">Amount</td><td class="mono">$160K</td><td class="mono">$165K</td><td class="mono">$170K</td><td class="mono best-val">$175K</td></tr>
+      <tr><td class="fn">Factor Rate</td><td class="mono best-val">1.29</td><td class="mono">1.31</td><td class="mono">1.33</td><td class="mono">1.35</td></tr>
+      <tr><td class="fn">Total Cost</td><td class="mono best-val">$206.4K</td><td class="mono">$216.2K</td><td class="mono">$226.1K</td><td class="mono">$236.3K</td></tr>
+      <tr><td class="fn">Daily Payment</td><td class="mono best-val">$1,147</td><td class="mono">$1,201</td><td class="mono">$1,256</td><td class="mono">$1,313</td></tr>
+      <tr><td class="fn">Term</td><td class="mono">180 days</td><td class="mono">180 days</td><td class="mono">180 days</td><td class="mono">180 days</td></tr>
+      <tr><td class="fn">Speed</td><td>Fast</td><td>Standard</td><td>Fast</td><td>Standard</td></tr>
+      <tr><td class="fn">Stacking</td><td>Flex</td><td>Strict</td><td>Flex</td><td>Reviewing</td></tr>
+    </tbody></table>
+  </div>
+</div>
+<script>
+const offers=[
+{funder:"Credibly",amount:160000,factor:1.29,status:"active",speed:"Fast",stack:"Flex",best:false},
+{funder:"Rapid Finance",amount:165000,factor:1.31,status:"active",speed:"Standard",stack:"Strict",best:false},
+{funder:"Fora Financial",amount:170000,factor:1.33,status:"active",speed:"Fast",stack:"Flex",best:false},
+{funder:"National Funding",amount:175000,factor:1.35,status:"reviewing",speed:"Standard",stack:"—",best:true}
+];
+function fmt(n){return'$'+(n>=1000?(n/1000).toFixed(0)+'K':n)}
+function fmtFull(n){return'$'+n.toLocaleString()}
+function render(){
+const g=document.getElementById('bGrid');
+// find best amount and best factor
+const bestAmt=Math.max(...offers.map(o=>o.amount));
+const bestFac=Math.min(...offers.filter(o=>o.status==='active').map(o=>o.factor));
+g.innerHTML=offers.map((o,i)=>{
+  const cost=Math.round(o.amount*o.factor);
+  const daily=Math.round(cost/180);
+  const isBestAmt=o.amount===bestAmt;
+  const isBestFac=o.factor===bestFac&&o.status==='active';
+  const badge=isBestAmt?'<div class="badge best-b">Best Amount</div>':isBestFac?'<div class="badge best-b">Best Rate</div>':o.status==='reviewing'?'<div class="badge rev-b">Reviewing</div>':'';
+  return '<div class="offer-card'+(isBestAmt||isBestFac?' best':'')+'" style="animation-delay:'+(i*.06)+'s">'+badge+'<div class="of-funder">'+o.funder+'</div><div class="of-grid"><div class="of-item"><div class="ol">Amount</div><div class="ov'+(isBestAmt?' gd':'')+'">'+fmt(o.amount)+'</div></div><div class="of-item"><div class="ol">Factor</div><div class="ov'+(isBestFac?' gd':'')+'">'+o.factor.toFixed(2)+'</div></div></div><div class="of-details"><div class="od-row"><span class="odl">Total Cost</span><span class="odv mono">'+fmtFull(cost)+'</span></div><div class="od-row"><span class="odl">Daily Payment</span><span class="odv mono">'+fmtFull(daily)+'</span></div><div class="od-row"><span class="odl">Term</span><span class="odv">180 days</span></div><div class="od-row"><span class="odl">Speed</span><span class="odv">'+o.speed+'</span></div></div><div class="of-actions">'+(o.status==='active'?'<button class="oa accept" onclick="accept(this,\''+o.funder+'\')">Accept Offer</button><button class="oa counter">Counter</button>':'<button class="oa counter" style="flex:1">⏳ Reviewing...</button>')+'</div></div>'
+}).join('');
+}
+function accept(btn,funder){
+  btn.textContent='Accepted ✓';btn.className='oa accepted';
+  const sib=btn.nextElementSibling;if(sib)sib.style.display='none';
+  btn.closest('.offer-card').style.borderColor='rgba(0,200,83,.3)';btn.closest('.offer-card').style.background='var(--gnl)';
+}
+render();
+</script>
+</body></html>
