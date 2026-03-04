@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrivateCreditMCA — Deal Heat Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050A12;--bg2:#0A1020;--bg3:#0F162B;--bgc:#141D36;
+  --srf:#182040;--srf2:#1E2850;
+  --bdr:rgba(255,255,255,.06);--bdr2:rgba(255,255,255,.09);--bdr3:rgba(255,255,255,.14);
+  --tx:#EFF1F5;--tx2:#8892A8;--tx3:#4F5B73;
+  --ac:#635BFF;--acd:#5046E4;--acl:rgba(99,91,255,.1);
+  --em:#00D4AA;--eml:rgba(0,212,170,.1);
+  --gn:#34D399;--gnl:rgba(52,211,153,.1);
+  --rd:#F87171;--rdl:rgba(248,113,113,.08);
+  --am:#FBBF24;--aml:rgba(251,191,36,.08);
+  --cy:#22D3EE;--cyl:rgba(34,211,238,.08);
+  --r:12px;--rs:8px;
+  --sh:0 2px 8px rgba(0,0,0,.4),0 12px 40px rgba(0,0,0,.25);
+  --shl:0 8px 30px rgba(0,0,0,.5),0 24px 80px rgba(0,0,0,.35);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden;font-feature-settings:'cv02','cv03','cv04','cv11'}
+.mono{font-family:'IBM Plex Mono',monospace;font-feature-settings:normal}
+a{text-decoration:none;color:inherit}
+.c{max-width:1200px;margin:0 auto;padding:0 40px}
+
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.018;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(5,10,18,.7);backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid var(--bdr)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:-.3px}
+.logo .mk{width:26px;height:26px;border-radius:7px;background:var(--ac);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 0 16px rgba(99,91,255,.3)}
+.logo .mk::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.25),transparent)}
+.logo .mk svg{width:13px;height:13px}
+.logo .dim{color:var(--tx3);font-weight:500}
+.nv{display:flex;gap:32px}.nv a{color:var(--tx3);font-size:13px;font-weight:500;transition:color .25s}.nv a:hover,.nv a.on{color:var(--tx)}
+.ncta{background:var(--ac);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;transition:all .3s;display:inline-flex;align-items:center;gap:6px;box-shadow:0 0 20px rgba(99,91,255,.2)}
+.ncta:hover{background:var(--acd);box-shadow:0 0 32px rgba(99,91,255,.35)}
+.ncta svg{width:12px;height:12px}
+
+/* ═══ HEADER ═══ */
+.hdr{padding:100px 0 40px}
+.hdr-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px}
+.hdr h1{font-size:28px;font-weight:800;letter-spacing:-.8px;display:flex;align-items:center;gap:12px}
+.hdr .pill{display:inline-flex;align-items:center;gap:6px;background:var(--rdl);border:1px solid rgba(248,113,113,.1);padding:3px 10px;border-radius:6px;font-size:9px;font-weight:600;color:var(--rd);text-transform:uppercase;letter-spacing:1.5px}
+.hdr .pill .dot{width:5px;height:5px;border-radius:50%;background:var(--rd);box-shadow:0 0 6px rgba(248,113,113,.4);animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 6px rgba(248,113,113,.4)}50%{opacity:.4;box-shadow:0 0 2px rgba(248,113,113,.1)}}
+.hdr p{font-size:15px;color:var(--tx2);margin-top:6px}
+.hdr-period{display:flex;gap:6px}
+.per{padding:5px 14px;border-radius:6px;font-size:11px;font-weight:600;border:1px solid var(--bdr);background:transparent;color:var(--tx3);cursor:pointer;font-family:inherit;transition:all .2s}
+.per:hover{border-color:var(--bdr2);color:var(--tx2)}
+.per.on{border-color:rgba(99,91,255,.3);color:var(--ac);background:var(--acl)}
+
+/* ═══ TOP STATS ═══ */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:32px}
+.st{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;text-align:center;transition:all .3s}
+.st:hover{border-color:var(--bdr2)}
+.st .sv{font-size:24px;font-weight:800;letter-spacing:-.5px}.st .sv.ac{background:linear-gradient(135deg,var(--ac),var(--em));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.st .sl{font-size:10px;color:var(--tx3);margin-top:4px;letter-spacing:.3px}
+
+/* ═══ GRID ═══ */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.grid.tri{grid-template-columns:1fr 1fr 1fr}
+.grid.full{grid-template-columns:1fr}
+
+.card{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;transition:all .3s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--bdr2)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ac),var(--em),transparent);opacity:0;transition:opacity .3s}
+.card:hover::before{opacity:.4}
+.card .ch{font-size:14px;font-weight:700;letter-spacing:-.2px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card .ch .ic{font-size:16px}
+.card .cd{font-size:11px;color:var(--tx3);margin-bottom:16px}
+
+/* ═══ INDUSTRY BARS ═══ */
+.bar-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--bdr)}
+.bar-row:last-child{border:none}
+.bar-name{width:110px;font-size:12px;font-weight:600;flex-shrink:0}
+.bar-wrap{flex:1;height:24px;background:var(--bg);border-radius:4px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;position:relative;transition:width 1s ease;min-width:2px}
+.bar-fill.hot{background:linear-gradient(90deg,var(--ac),var(--em))}
+.bar-fill.warm{background:linear-gradient(90deg,var(--ac),var(--cy))}
+.bar-fill.cool{background:linear-gradient(90deg,var(--srf),var(--ac))}
+.bar-fill.cold{background:var(--srf)}
+.bar-val{width:80px;text-align:right;font-size:12px;font-weight:700;flex-shrink:0}
+.bar-pct{width:56px;text-align:right;font-size:11px;flex-shrink:0;font-weight:600}
+.bar-pct.up{color:var(--gn)}.bar-pct.down{color:var(--rd)}.bar-pct.flat{color:var(--tx3)}
+
+/* ═══ DEAL SIZE DISTRIBUTION ═══ */
+.dist{display:flex;gap:4px;align-items:flex-end;height:120px;padding-top:8px}
+.dist-bar{flex:1;border-radius:4px 4px 0 0;position:relative;cursor:pointer;transition:all .3s;min-height:4px}
+.dist-bar:hover{opacity:.85}
+.dist-bar .tip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--bgc);border:1px solid var(--bdr2);border-radius:6px;padding:6px 10px;font-size:10px;font-weight:600;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none;margin-bottom:4px}
+.dist-bar:hover .tip{opacity:1}
+.dist-labels{display:flex;gap:4px;margin-top:6px}
+.dist-labels span{flex:1;text-align:center;font-size:9px;color:var(--tx3);letter-spacing:.3px}
+
+/* ═══ STATE MAP (GRID) ═══ */
+.state-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:4px}
+.state-cell{background:var(--bg);border:1px solid var(--bdr);border-radius:4px;padding:6px 4px;text-align:center;font-size:10px;font-weight:600;transition:all .2s;cursor:default;position:relative}
+.state-cell:hover{border-color:var(--bdr3);z-index:2}
+.state-cell .sn{color:var(--tx2);letter-spacing:.5px}.state-cell .sc{font-size:13px;font-weight:700;margin-top:1px}
+.state-cell.h5{background:rgba(99,91,255,.12);border-color:rgba(99,91,255,.2)}.state-cell.h5 .sc{color:var(--ac)}
+.state-cell.h4{background:rgba(0,212,170,.08);border-color:rgba(0,212,170,.12)}.state-cell.h4 .sc{color:var(--em)}
+.state-cell.h3{background:rgba(34,211,238,.06);border-color:rgba(34,211,238,.08)}.state-cell.h3 .sc{color:var(--cy)}
+.state-cell.h2{}.state-cell.h2 .sc{color:var(--tx2)}
+.state-cell.h1{}.state-cell.h1 .sc{color:var(--tx3)}
+
+/* ═══ FUNDER LEADERBOARD ═══ */
+.lb-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bdr)}
+.lb-row:last-child{border:none}
+.lb-rank{width:20px;font-size:12px;font-weight:700;color:var(--tx3);text-align:center;flex-shrink:0}
+.lb-row:nth-child(1) .lb-rank{color:var(--am)}
+.lb-row:nth-child(2) .lb-rank{color:var(--tx2)}
+.lb-row:nth-child(3) .lb-rank{color:var(--am);opacity:.6}
+.lb-name{flex:1;font-size:13px;font-weight:600}
+.lb-stat{font-size:12px;font-weight:700;color:var(--ac);width:60px;text-align:right}
+.lb-speed{display:inline-flex;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:600}
+.lb-speed.fast{background:var(--gnl);color:var(--gn)}.lb-speed.std{background:var(--aml);color:var(--am)}
+
+/* ═══ TRENDING ═══ */
+.trend-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bdr)}
+.trend-row:last-child{border:none}
+.trend-ic{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.trend-ic.up{background:var(--gnl)}.trend-ic.down{background:var(--rdl)}.trend-ic.new{background:var(--acl)}
+.trend-info{flex:1}.trend-info .tn{font-size:13px;font-weight:600}.trend-info .td{font-size:11px;color:var(--tx3);margin-top:1px}
+.trend-val{font-size:13px;font-weight:700;text-align:right}
+.trend-val.up{color:var(--gn)}.trend-val.down{color:var(--rd)}.trend-val.new{color:var(--ac)}
+
+/* ═══ FACTOR RATE TABLE ═══ */
+.ft-row{display:grid;grid-template-columns:1.2fr repeat(3,1fr);gap:0;font-size:12px}
+.ft-row.hd{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx3);padding-bottom:8px;border-bottom:1px solid var(--bdr);margin-bottom:4px}
+.ft-cell{padding:8px 0;border-bottom:1px solid var(--bdr)}.ft-row:last-child .ft-cell{border:none}
+.ft-cell:first-child{font-weight:600}
+.ft-cell.best{color:var(--gn);font-weight:700}
+.ft-cell.avg{color:var(--tx2)}.ft-cell.worst{color:var(--am)}
+
+/* ═══ FOOTER ═══ */
+footer{border-top:1px solid var(--bdr);padding:32px 40px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--tx3);margin-top:60px}
+.fl{display:flex;gap:24px}.fl a{color:var(--tx3);transition:color .25s}.fl a:hover{color:var(--tx)}
+
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.rv{animation:fu .6s ease both}
+
+@media(max-width:1000px){.nv{display:none}.grid{grid-template-columns:1fr}.grid.tri{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}footer{flex-direction:column;gap:12px;text-align:center}}
+@media(max-width:600px){.stats{grid-template-columns:1fr 1fr}.hdr-top{flex-direction:column;align-items:flex-start;gap:12px}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="privatecreditmca-landing.html" class="logo"><div class="mk"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="9" width="3" height="5" rx="1" fill="white"/><rect x="6.5" y="6" width="3" height="8" rx="1" fill="white"/><rect x="11" y="3" width="3" height="11" rx="1" fill="white"/></svg></div>PrivateCredit<span class="dim">MCA</span></a>
+  <div class="nv"><a href="privatecreditmca-landing.html">Home</a><a href="privatecreditmca-marketplace.html">Marketplace</a><a href="privatecreditmca-pipeline.html">Pipeline</a><a href="privatecreditmca-funders.html">Funders</a><a href="#" class="on">Heat Map</a></div>
+  <a href="privatecreditmca-submit.html" class="ncta"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>Go Live</a>
+</nav>
+
+<section class="hdr"><div class="c">
+  <div class="hdr-top rv">
+    <div>
+      <h1>🔥 Deal Heat Map <span class="pill"><span class="dot"></span>Live</span></h1>
+      <p>What's funding right now.</p>
+    </div>
+    <div class="hdr-period">
+      <button class="per" onclick="sP(this,'7d')">7 Days</button>
+      <button class="per on" onclick="sP(this,'30d')">30 Days</button>
+      <button class="per" onclick="sP(this,'90d')">90 Days</button>
+    </div>
+  </div>
+</div></section>
+
+<section style="padding-bottom:60px"><div class="c">
+
+  <!-- TOP STATS -->
+  <div class="stats rv" style="animation-delay:.06s">
+    <div class="st"><div class="sv ac">$2.8M</div><div class="sl">Funded This Month</div></div>
+    <div class="st"><div class="sv ac">87</div><div class="sl">Deals Closed</div></div>
+    <div class="st"><div class="sv ac">3.2</div><div class="sl">Avg Offers / Deal</div></div>
+    <div class="st"><div class="sv ac">1.34</div><div class="sl">Avg Factor Rate</div></div>
+    <div class="st"><div class="sv ac">$68K</div><div class="sl">Avg Deal Size</div></div>
+  </div>
+
+  <!-- ROW 1: Industry Volume + Deal Size Distribution -->
+  <div class="grid rv" style="animation-delay:.12s">
+    <div class="card">
+      <div class="ch"><span class="ic">📊</span> Funding by Industry</div>
+      <div class="bar-row"><span class="bar-name">Restaurant</span><div class="bar-wrap"><div class="bar-fill hot" style="width:85%"></div></div><span class="bar-val">$620K</span><span class="bar-pct up">↑ 23%</span></div>
+      <div class="bar-row"><span class="bar-name">Trucking</span><div class="bar-wrap"><div class="bar-fill hot" style="width:72%"></div></div><span class="bar-val">$510K</span><span class="bar-pct up">↑ 18%</span></div>
+      <div class="bar-row"><span class="bar-name">Construction</span><div class="bar-wrap"><div class="bar-fill warm" style="width:65%"></div></div><span class="bar-val">$445K</span><span class="bar-pct up">↑ 12%</span></div>
+      <div class="bar-row"><span class="bar-name">Auto Repair</span><div class="bar-wrap"><div class="bar-fill warm" style="width:52%"></div></div><span class="bar-val">$340K</span><span class="bar-pct up">↑ 8%</span></div>
+      <div class="bar-row"><span class="bar-name">Medical</span><div class="bar-wrap"><div class="bar-fill cool" style="width:44%"></div></div><span class="bar-val">$280K</span><span class="bar-pct flat">→ 0%</span></div>
+      <div class="bar-row"><span class="bar-name">Retail</span><div class="bar-wrap"><div class="bar-fill cold" style="width:35%"></div></div><span class="bar-val">$195K</span><span class="bar-pct down">↓ 5%</span></div>
+      <div class="bar-row"><span class="bar-name">Services</span><div class="bar-wrap"><div class="bar-fill cold" style="width:30%"></div></div><span class="bar-val">$180K</span><span class="bar-pct down">↓ 3%</span></div>
+      <div class="bar-row"><span class="bar-name">Hospitality</span><div class="bar-wrap"><div class="bar-fill cold" style="width:22%"></div></div><span class="bar-val">$110K</span><span class="bar-pct up">↑ 6%</span></div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ic">📐</span> Deal Size Distribution</div>
+      <div class="dist" id="distChart"></div>
+      <div class="dist-labels" id="distLabels"></div>
+      <div style="margin-top:20px;border-top:1px solid var(--bdr);padding-top:16px">
+        <div class="ch" style="font-size:13px;margin-bottom:12px"><span class="ic">💰</span> Factor Rates by Size</div>
+        <div class="ft-row hd"><div>Deal Size</div><div>Best</div><div>Average</div><div>Worst</div></div>
+        <div class="ft-row"><div class="ft-cell">$10K–$25K</div><div class="ft-cell best">1.28</div><div class="ft-cell avg">1.39</div><div class="ft-cell worst">1.52</div></div>
+        <div class="ft-row"><div class="ft-cell">$25K–$50K</div><div class="ft-cell best">1.26</div><div class="ft-cell avg">1.35</div><div class="ft-cell worst">1.46</div></div>
+        <div class="ft-row"><div class="ft-cell">$50K–$100K</div><div class="ft-cell best">1.24</div><div class="ft-cell avg">1.33</div><div class="ft-cell worst">1.42</div></div>
+        <div class="ft-row"><div class="ft-cell">$100K–$200K</div><div class="ft-cell best">1.22</div><div class="ft-cell avg">1.31</div><div class="ft-cell worst">1.38</div></div>
+        <div class="ft-row"><div class="ft-cell">$200K+</div><div class="ft-cell best">1.19</div><div class="ft-cell avg">1.28</div><div class="ft-cell worst">1.35</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2: State Heat + Funder Leaderboard -->
+  <div class="grid rv" style="animation-delay:.18s">
+    <div class="card">
+      <div class="ch"><span class="ic">🗺️</span> Deals by State</div>
+      <div class="state-grid" id="stateGrid"></div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ic">🏆</span> Most Active Funders</div>
+      <div>
+        <div class="lb-row"><span class="lb-rank">1</span><span class="lb-name">Credibly</span><span class="lb-speed fast">Fast</span><span class="lb-stat">24 deals</span></div>
+        <div class="lb-row"><span class="lb-rank">2</span><span class="lb-name">Forward Financing</span><span class="lb-speed fast">Fast</span><span class="lb-stat">21 deals</span></div>
+        <div class="lb-row"><span class="lb-rank">3</span><span class="lb-name">Rapid Finance</span><span class="lb-speed fast">Fast</span><span class="lb-stat">19 deals</span></div>
+        <div class="lb-row"><span class="lb-rank">4</span><span class="lb-name">Fora Financial</span><span class="lb-speed std">Standard</span><span class="lb-stat">16 deals</span></div>
+        <div class="lb-row"><span class="lb-rank">5</span><span class="lb-name">Libertas Funding</span><span class="lb-speed fast">Fast</span><span class="lb-stat">14 deals</span></div>
+        <div class="lb-row"><span class="lb-rank">6</span><span class="lb-name">National Funding</span><span class="lb-speed std">Standard</span><span class="lb-stat">12 deals</span></div>
+        <div class="lb-row"><span class="lb-rank">7</span><span class="lb-name">CAN Capital</span><span class="lb-speed std">Standard</span><span class="lb-stat">11 deals</span></div>
+        <div class="lb-row"><span class="lb-rank">8</span><span class="lb-name">OnDeck</span><span class="lb-speed fast">Fast</span><span class="lb-stat">9 deals</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 3: Trending + Approval Rates -->
+  <div class="grid rv" style="animation-delay:.24s">
+    <div class="card">
+      <div class="ch"><span class="ic">📈</span> Trending Now</div>
+      <div class="trend-row"><div class="trend-ic up">🔥</div><div class="trend-info"><div class="tn">Restaurant deals surging</div><div class="td">23% more volume vs last month</div></div><div class="trend-val up">↑ 23%</div></div>
+      <div class="trend-row"><div class="trend-ic up">🚛</div><div class="trend-info"><div class="tn">Trucking avg deal size up</div><div class="td">Now averaging $92K per deal</div></div><div class="trend-val up">↑ $12K</div></div>
+      <div class="trend-row"><div class="trend-ic new">⚡</div><div class="trend-info"><div class="tn">Faster first offers</div><div class="td">Average dropped from 3.1h to 2.4h</div></div><div class="trend-val new">2.4h</div></div>
+      <div class="trend-row"><div class="trend-ic up">📊</div><div class="trend-info"><div class="tn">More offers per deal</div><div class="td">Up from 2.8 to 3.2 avg offers</div></div><div class="trend-val up">↑ 14%</div></div>
+      <div class="trend-row"><div class="trend-ic down">🏪</div><div class="trend-info"><div class="tn">Retail slowing down</div><div class="td">Fewer deals, tighter approvals</div></div><div class="trend-val down">↓ 5%</div></div>
+      <div class="trend-row"><div class="trend-ic new">🆕</div><div class="trend-info"><div class="tn">3 new funders joined</div><div class="td">Expanded network this month</div></div><div class="trend-val new">+3</div></div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ic">✅</span> Approval Rates by Industry</div>
+      <div class="bar-row"><span class="bar-name">Trucking</span><div class="bar-wrap"><div class="bar-fill hot" style="width:82%"></div></div><span class="bar-val mono">82%</span><span class="bar-pct up">↑ 4%</span></div>
+      <div class="bar-row"><span class="bar-name">Construction</span><div class="bar-wrap"><div class="bar-fill hot" style="width:78%"></div></div><span class="bar-val mono">78%</span><span class="bar-pct up">↑ 2%</span></div>
+      <div class="bar-row"><span class="bar-name">Medical</span><div class="bar-wrap"><div class="bar-fill warm" style="width:75%"></div></div><span class="bar-val mono">75%</span><span class="bar-pct flat">→ 0%</span></div>
+      <div class="bar-row"><span class="bar-name">Restaurant</span><div class="bar-wrap"><div class="bar-fill warm" style="width:71%"></div></div><span class="bar-val mono">71%</span><span class="bar-pct up">↑ 5%</span></div>
+      <div class="bar-row"><span class="bar-name">Auto Repair</span><div class="bar-wrap"><div class="bar-fill cool" style="width:68%"></div></div><span class="bar-val mono">68%</span><span class="bar-pct up">↑ 1%</span></div>
+      <div class="bar-row"><span class="bar-name">Services</span><div class="bar-wrap"><div class="bar-fill cool" style="width:62%"></div></div><span class="bar-val mono">62%</span><span class="bar-pct down">↓ 3%</span></div>
+      <div class="bar-row"><span class="bar-name">Retail</span><div class="bar-wrap"><div class="bar-fill cold" style="width:55%"></div></div><span class="bar-val mono">55%</span><span class="bar-pct down">↓ 7%</span></div>
+      <div class="bar-row"><span class="bar-name">Hospitality</span><div class="bar-wrap"><div class="bar-fill cold" style="width:48%"></div></div><span class="bar-val mono">48%</span><span class="bar-pct down">↓ 2%</span></div>
+    </div>
+  </div>
+
+  <!-- ROW 4: Time to Fund + Best Products -->
+  <div class="grid rv" style="animation-delay:.3s">
+    <div class="card">
+      <div class="ch"><span class="ic">⏱️</span> Avg Time to First Offer</div>
+      <div class="bar-row"><span class="bar-name">Credibly</span><div class="bar-wrap"><div class="bar-fill hot" style="width:95%"></div></div><span class="bar-val mono">1.2h</span></div>
+      <div class="bar-row"><span class="bar-name">Rapid Finance</span><div class="bar-wrap"><div class="bar-fill hot" style="width:88%"></div></div><span class="bar-val mono">1.8h</span></div>
+      <div class="bar-row"><span class="bar-name">Forward Fin.</span><div class="bar-wrap"><div class="bar-fill warm" style="width:78%"></div></div><span class="bar-val mono">2.1h</span></div>
+      <div class="bar-row"><span class="bar-name">OnDeck</span><div class="bar-wrap"><div class="bar-fill warm" style="width:72%"></div></div><span class="bar-val mono">2.4h</span></div>
+      <div class="bar-row"><span class="bar-name">Libertas</span><div class="bar-wrap"><div class="bar-fill cool" style="width:60%"></div></div><span class="bar-val mono">3.6h</span></div>
+      <div class="bar-row"><span class="bar-name">Fora Financial</span><div class="bar-wrap"><div class="bar-fill cool" style="width:52%"></div></div><span class="bar-val mono">4.2h</span></div>
+      <div class="bar-row"><span class="bar-name">National</span><div class="bar-wrap"><div class="bar-fill cold" style="width:40%"></div></div><span class="bar-val mono">5.8h</span></div>
+      <div class="bar-row"><span class="bar-name">CAN Capital</span><div class="bar-wrap"><div class="bar-fill cold" style="width:35%"></div></div><span class="bar-val mono">6.4h</span></div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="ic">🏷️</span> Product Mix This Month</div>
+      <div class="bar-row"><span class="bar-name">MCA</span><div class="bar-wrap"><div class="bar-fill hot" style="width:68%"></div></div><span class="bar-val">59 deals</span><span class="bar-pct flat">68%</span></div>
+      <div class="bar-row"><span class="bar-name">Revenue Based</span><div class="bar-wrap"><div class="bar-fill warm" style="width:18%"></div></div><span class="bar-val">16 deals</span><span class="bar-pct flat">18%</span></div>
+      <div class="bar-row"><span class="bar-name">Term Loan</span><div class="bar-wrap"><div class="bar-fill cool" style="width:9%"></div></div><span class="bar-val">8 deals</span><span class="bar-pct flat">9%</span></div>
+      <div class="bar-row"><span class="bar-name">Line of Credit</span><div class="bar-wrap"><div class="bar-fill cold" style="width:5%"></div></div><span class="bar-val">4 deals</span><span class="bar-pct flat">5%</span></div>
+    </div>
+  </div>
+
+</div></section>
+
+<footer><div class="fl"><a href="privatecreditmca-marketplace.html">Marketplace</a><a href="privatecreditmca-funders.html">Funder Directory</a><a href="privatecreditmca-pipeline.html">Pipeline</a><a href="privatecreditmca-bankiq.html">AI BankIQ</a><a href="privatecreditmca-offerbattle.html">Offer Battle</a><a href="privatecreditmca-account.html">Account</a></div><p>© 2026 PrivateCreditMCA</p></footer>
+
+<script>
+// Period selector
+function sP(btn, period) {
+  document.querySelectorAll('.per').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+// Deal Size Distribution chart
+const sizes = [
+  {label:'$10-25K', count:14, pct:'16%'},
+  {label:'$25-50K', count:22, pct:'25%'},
+  {label:'$50-75K', count:19, pct:'22%'},
+  {label:'$75-100K', count:13, pct:'15%'},
+  {label:'$100-150K', count:9, pct:'10%'},
+  {label:'$150-200K', count:6, pct:'7%'},
+  {label:'$200K+', count:4, pct:'5%'}
+];
+const maxC = Math.max(...sizes.map(s=>s.count));
+document.getElementById('distChart').innerHTML = sizes.map((s,i) => {
+  const h = (s.count/maxC)*100;
+  const colors = ['var(--ac)','var(--ac)','var(--em)','var(--em)','var(--cy)','var(--cy)','var(--ac)'];
+  return `<div class="dist-bar" style="height:${h}%;background:${colors[i]};opacity:${0.5 + (s.count/maxC)*0.5}"><div class="tip">${s.count} deals · ${s.pct}</div></div>`;
+}).join('');
+document.getElementById('distLabels').innerHTML = sizes.map(s => `<span>${s.label}</span>`).join('');
+
+// State grid
+const states = [
+  {s:'TX',c:18},{s:'FL',c:14},{s:'CA',c:13},{s:'NY',c:11},{s:'NJ',c:8},
+  {s:'IL',c:7},{s:'GA',c:6},{s:'OH',c:5},{s:'PA',c:5},{s:'MA',c:4},
+  {s:'AZ',c:4},{s:'NC',c:3},{s:'VA',c:3},{s:'MD',c:3},{s:'CO',c:2},
+  {s:'TN',c:2},{s:'MI',c:2},{s:'WA',c:2},{s:'MN',c:1},{s:'NV',c:1},
+  {s:'CT',c:1},{s:'SC',c:1},{s:'OR',c:1},{s:'LA',c:1},{s:'IN',c:1}
+];
+document.getElementById('stateGrid').innerHTML = states.map(st => {
+  const tier = st.c >= 10 ? 'h5' : st.c >= 6 ? 'h4' : st.c >= 3 ? 'h3' : st.c >= 2 ? 'h2' : 'h1';
+  return `<div class="state-cell ${tier}"><div class="sn">${st.s}</div><div class="sc">${st.c}</div></div>`;
+}).join('');
+
+// Animate bars on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('vis');
+      const bars = e.target.querySelectorAll('.bar-fill');
+      bars.forEach((b, i) => {
+        const w = b.style.width;
+        b.style.width = '0%';
+        setTimeout(() => { b.style.width = w; }, i * 60);
+      });
+    }
+  });
+}, {threshold: .1});
+document.querySelectorAll('.rv').forEach(e => obs.observe(e));
+</script>
+</body></html>
