@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrivateCreditMCA — Pipeline</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAFBFD;--bgw:#fff;--bgd:#0A0F1E;--sf:#F1F4F9;--bdr:#E2E7F0;--bdr2:#C9D1DE;--bdrf:rgba(0,85,255,.35);--tx:#0A0F1E;--tx2:#3D4A5C;--tx3:#7C8BA1;--brand:#0055FF;--brandd:#003FCC;--brandl:#E8F0FF;--teal:#00BFA6;--teall:#E6FAF7;--gn:#00C853;--gnl:#E8F8EF;--rd:#E53935;--rdl:#FDE8E8;--am:#F59E0B;--aml:#FEF3C7;--vl:#7C3AED;--vll:#F1EAFE;--r:14px;--rs:8px;--sh:0 1px 3px rgba(10,15,30,.04),0 4px 14px rgba(10,15,30,.06);--shl:0 4px 12px rgba(10,15,30,.04),0 16px 48px rgba(10,15,30,.08)}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;display:flex;flex-direction:column}.mono{font-family:'IBM Plex Mono',monospace}a{text-decoration:none;color:inherit}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:18px;letter-spacing:-.3px}.logo .mark{width:28px;height:28px;border-radius:8px;background:var(--brand);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.logo .mark::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.2),transparent)}.logo .mark svg{width:16px;height:16px}.logo span.dim{color:var(--tx3);font-weight:600}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(250,251,253,.88);backdrop-filter:blur(16px) saturate(1.5);border-bottom:1px solid var(--bdr)}
+.nc{display:flex;gap:28px}.nc a{font-size:13px;font-weight:600;color:var(--tx3);padding:6px 0;border-bottom:2px solid transparent;transition:all .2s}.nc a:hover,.nc a.on{color:var(--tx);border-color:var(--brand)}
+.nr{display:flex;gap:12px}.nb{padding:8px 20px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;border:none;display:inline-flex;align-items:center;gap:6px;transition:all .2s}.nb.p{background:var(--brand);color:#fff}.nb.p:hover{background:var(--brandd)}.nb.s{background:transparent;color:var(--tx2);border:1.5px solid var(--bdr)}
+
+.top-bar{padding:68px 24px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.top-bar h1{font-size:24px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:12px}
+.stats-row{display:flex;gap:18px}.stat-pill{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--tx3)}.stat-pill .sv{font-weight:800;color:var(--brand)}
+
+.kanban-wrap{flex:1;overflow-x:auto;overflow-y:hidden;padding:12px 16px 16px}
+.kanban-wrap::-webkit-scrollbar{height:6px}.kanban-wrap::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:3px}
+.kanban{display:flex;gap:12px;height:calc(100vh - 130px);min-width:min-content}
+.col{width:260px;min-width:260px;background:var(--sf);border:1px solid var(--bdr);border-radius:var(--r);display:flex;flex-direction:column;overflow:hidden}
+.col-h{padding:14px 16px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;background:var(--bgw)}
+.col-h .cn{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.col-h .cc{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.col-h .cc.lead{background:var(--brandl);color:var(--brand)}.col-h .cc.docs{background:var(--vll);color:var(--vl)}.col-h .cc.uw{background:var(--aml);color:var(--am)}.col-h .cc.sub{background:var(--teall);color:var(--teal)}.col-h .cc.off{background:var(--gnl);color:var(--gn)}.col-h .cc.fund{background:var(--gnl);color:var(--gn)}
+.col-h .cv{font-size:12px;color:var(--tx3);font-weight:600}
+.col-b{flex:1;overflow-y:auto;padding:10px}.col-b::-webkit-scrollbar{width:4px}.col-b::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+
+.card{background:var(--bgw);border:1px solid var(--bdr);border-radius:10px;padding:16px;margin-bottom:8px;cursor:grab;transition:all .2s;position:relative}.card:hover{box-shadow:var(--sh);border-color:var(--bdr2)}
+.card:active{cursor:grabbing;box-shadow:var(--shl);transform:scale(1.02)}
+.card-biz{font-size:14px;font-weight:700;margin-bottom:3px}.card-meta{font-size:12px;color:var(--tx3);margin-bottom:8px}
+.card-amt{font-size:18px;font-weight:800;color:var(--brand);margin-bottom:10px}
+.card-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}.ct{padding:2px 8px;border-radius:5px;font-size:10px;font-weight:600}.ct.i{background:var(--brandl);color:var(--brand)}.ct.s{background:var(--vll);color:var(--vl)}.ct.r{background:var(--gnl);color:var(--gn)}
+.card-foot{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--sf);font-size:11px;color:var(--tx3)}
+.card-foot .offers{display:flex;align-items:center;gap:4px;font-weight:600}.card-foot .offers.has{color:var(--gn)}
+.card-foot .time{font-style:italic}
+.card-note{margin-top:8px;background:var(--sf);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--tx2);line-height:1.4;border-left:3px solid var(--brand)}
+
+@media(max-width:900px){.nc{display:none}.kanban{height:calc(100vh - 120px)}.col{width:220px;min-width:220px}}
+</style>
+</head>
+<body>
+<nav><a href="privatecreditmca-landing.html" class="logo"><div class="mark"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="9" width="3" height="5" rx="1" fill="white"/><rect x="6.5" y="6" width="3" height="8" rx="1" fill="white"/><rect x="11" y="3" width="3" height="11" rx="1" fill="white"/></svg></div>PrivateCredit<span class="dim">MCA</span></a><div class="nc"><a href="privatecreditmca-landing.html">Home</a><a href="privatecreditmca-marketplace.html">Marketplace</a><a href="privatecreditmca-account.html?view=profile">Dashboard</a><a href="privatecreditmca-funders.html">Funder Directory</a></div><div class="nr"><a href="privatecreditmca-account.html?view=login" class="nb s">Log In</a><a href="privatecreditmca-submit.html" class="nb p">+ Submit a Deal</a></div></nav>
+
+<div class="top-bar">
+  <h1>📋 Pipeline</h1>
+  <div class="stats-row"><div class="stat-pill"><span class="sv">24</span> deals</div><div class="stat-pill"><span class="sv">$1.4M</span> volume</div><div class="stat-pill"><span class="sv">75%</span> funding rate</div></div>
+</div>
+<div class="kanban-wrap"><div class="kanban" id="kanban"></div></div>
+<script>
+const cols=[
+{id:"lead",name:"Lead",cls:"lead",deals:[
+{biz:"Bella's Nail Studio",ind:"Services",st:"FL",amt:25000,time:"12m ago",risk:"72/B",offers:0},
+{biz:"FastTrack Courier",ind:"Trucking",st:"NJ",amt:60000,time:"28m ago",risk:"68/B",offers:0},
+{biz:"Oakwood Dental",ind:"Medical",st:"CA",amt:90000,time:"1h ago",risk:"—",offers:0}
+]},
+{id:"docs",name:"Docs Requested",cls:"docs",deals:[
+{biz:"Tony's Pizzeria",ind:"Restaurant",st:"NY",amt:45000,time:"2h ago",risk:"74/B",offers:0,note:"Missing Oct bank statement. Follow up sent."},
+{biz:"Greenline Landscaping",ind:"Services",st:"AZ",amt:35000,time:"3h ago",risk:"—",offers:0,docs:["Application","Voided Check"]}
+]},
+{id:"uw",name:"Underwriting",cls:"uw",deals:[
+{biz:"Harbor Fish Market",ind:"Restaurant",st:"MA",amt:50000,time:"38m ago",risk:"71/B",offers:0,note:"AI BankIQ processing. 4 months of statements uploaded."},
+{biz:"Bright Smile Dental",ind:"Medical",st:"CA",amt:75000,time:"1.5h ago",risk:"82/A",offers:0}
+]},
+{id:"sub",name:"Submitted",cls:"sub",deals:[
+{biz:"QuickFix Auto Repair",ind:"Auto Repair",st:"TX",amt:80000,time:"2m ago",risk:"78/B",offers:3},
+{biz:"Nonna's Trattoria",ind:"Restaurant",st:"NY",amt:65000,time:"8m ago",risk:"74/B",offers:2},
+{biz:"Peak Roofing Co",ind:"Construction",st:"FL",amt:110000,time:"14m ago",risk:"85/A",offers:2},
+{biz:"Sunrise Auto Body",ind:"Auto Repair",st:"GA",amt:45000,time:"1.5h ago",risk:"73/B",offers:2}
+]},
+{id:"off",name:"Offers",cls:"off",deals:[
+{biz:"Metro Logistics LLC",ind:"Trucking",st:"NJ",amt:180000,time:"35m ago",risk:"88/A",offers:4,note:"4 competing offers. Best: $175K @ 1.35 (National Funding)"},
+{biz:"Golden Dragon",ind:"Restaurant",st:"CA",amt:85000,time:"52m ago",risk:"80/A",offers:3,note:"3 offers. Rapid Finance reviewing."},
+{biz:"AllStar Retail",ind:"Retail",st:"TX",amt:95000,time:"2h ago",risk:"70/B",offers:2}
+]},
+{id:"fund",name:"Funded",cls:"fund",deals:[
+{biz:"TechServe IT",ind:"Services",st:"IL",amt:120000,time:"3h ago",risk:"91/A",offers:3,note:"Funded via Libertas — $120K @ 1.28"},
+{biz:"Metro Signs & Print",ind:"Retail",st:"OH",amt:55000,time:"Yesterday",risk:"76/B",offers:2,note:"Funded via Forward Financing — $52K @ 1.34"},
+{biz:"Pacific Plumbing",ind:"Construction",st:"CA",amt:68000,time:"2 days ago",risk:"79/B",offers:2}
+]}
+];
+
+function fmt(n){return n>=1000?'$'+(n/1000)+'K':'$'+n}
+
+function buildKanban(){
+const k=document.getElementById('kanban');
+k.innerHTML=cols.map(c=>{
+const total=c.deals.reduce((s,d)=>s+d.amt,0);
+return '<div class="col"><div class="col-h"><div class="cn"><span class="cc '+c.cls+'">'+c.deals.length+'</span>'+c.name+'</div><div class="cv mono">'+fmt(total)+'</div></div><div class="col-b">'+c.deals.map(d=>{
+let extra='';
+if(d.note)extra='<div class="card-note">'+d.note+'</div>';
+if(d.docs)extra='<div class="card-tags" style="margin-top:8px">'+d.docs.map(x=>'<span class="ct i">📎 '+x+'</span>').join('')+'</div>';
+return '<div class="card" draggable="true" ondragstart="ds(event)" ondragend="de(event)"><div class="card-biz">'+d.biz+'</div><div class="card-meta">'+d.ind+' · '+d.st+'</div><div class="card-amt">'+fmt(d.amt)+'</div><div class="card-tags"><span class="ct i">'+d.ind+'</span><span class="ct s">'+d.st+'</span>'+(d.risk!=='—'?'<span class="ct r">'+d.risk+'</span>':'')+'</div><div class="card-foot"><div class="offers '+(d.offers>0?'has':'')+'">'+( d.offers>0?'🟢 '+d.offers+' offer'+(d.offers>1?'s':''):'⏳ Waiting')+'</div><div class="time">'+d.time+'</div></div>'+extra+'</div>'
+}).join('')+'</div></div>'
+}).join('');
+document.querySelectorAll('.col-b').forEach(b=>{
+  b.addEventListener('dragover',e=>{e.preventDefault();b.style.background='var(--brandl)'});
+  b.addEventListener('dragleave',()=>{b.style.background=''});
+  b.addEventListener('drop',e=>{e.preventDefault();b.style.background='';if(window._drag){b.appendChild(window._drag);window._drag=null;updateCounts()}});
+});
+}
+
+function ds(e){window._drag=e.target;e.target.style.opacity='.5'}
+function de(e){e.target.style.opacity='1'}
+
+function updateCounts(){
+document.querySelectorAll('.col').forEach(col=>{
+  const cards=col.querySelectorAll('.card').length;
+  col.querySelector('.cc').textContent=cards;
+});
+}
+
+buildKanban();
+</script>
+</body></html>
