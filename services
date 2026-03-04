@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Services — PrivateCreditMCA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Sora:wght@300;400;500;600;700;800&family=Geist+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a10;--deep:#0a0f18;--sf:#0e1422;--el:#131b2e;--teal:#00d4c8;--t4:#00e8db;--cyan:#00c8ff;--grn:#00e676;--amb:#ffc446;--red:#ff5252;--pur:#b388ff;--t1:#f0f4fc;--t2:#c8d0e0;--t3:#8b97b0;--tx4:#586580;--tx5:#3a4560;--bd:rgba(255,255,255,.04);--bd2:rgba(255,255,255,.07);--bdt:rgba(0,212,200,.15);--r:16px;--r2:12px;--ex:cubic-bezier(.16,1,.3,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#00b0a6 var(--bg)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--t1);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(0,212,200,.3)}a{color:inherit;text-decoration:none}
+.grain{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:180px}
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.ao{position:absolute;border-radius:50%;filter:blur(120px)}
+.ao.a{width:800px;height:800px;background:radial-gradient(circle,rgba(0,212,200,.06),transparent 70%);top:-300px;right:-200px;animation:dr 25s ease-in-out infinite alternate}
+.ao.b{width:600px;height:600px;background:radial-gradient(circle,rgba(179,136,255,.04),transparent 70%);bottom:-200px;left:-100px;animation:dr 30s ease-in-out infinite alternate-reverse}
+@keyframes dr{0%{transform:translate(0,0)}100%{transform:translate(30px,20px)}}
+.nav{position:fixed;top:0;width:100%;z-index:1000;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,48px);background:rgba(6,10,16,.7);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--bd)}
+.nav-l{display:flex;align-items:center;gap:10px}
+.nav-m{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.nav-m::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.2))}
+.nav-m svg{position:relative;z-index:1}
+.nav-w{font-weight:700;font-size:15px;letter-spacing:-.4px}.nav-w em{font-style:normal;color:var(--t4)}
+.nav-pills{display:flex;gap:4px;background:var(--sf);border:1px solid var(--bd2);border-radius:100px;padding:3px}
+.np{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;color:var(--t3);transition:all .25s}
+.np:hover{color:var(--t1);background:rgba(255,255,255,.04)}
+.np.active{color:var(--t1);background:rgba(0,212,200,.1);border:1px solid var(--bdt)}
+.nav-r{display:flex;gap:8px}
+.nb{padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;border:1px solid var(--bd2);background:transparent;color:var(--t2);cursor:pointer;font-family:'Sora',sans-serif;transition:all .25s}
+.nb:hover{border-color:var(--bdt);color:var(--t4)}
+.nb-p{background:var(--teal);color:var(--bg);border-color:transparent}.nb-p:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,212,200,.3);color:var(--bg)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px;position:relative;z-index:1}
+.hero{text-align:center;padding:120px 18px 60px;position:relative;z-index:1}
+.hero-ey{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:inline-flex;align-items:center;gap:10px}
+.hero-ey::before,.hero-ey::after{content:'';width:24px;height:1px;background:var(--teal)}
+.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(38px,5.5vw,64px);font-weight:400;letter-spacing:-1.5px;line-height:1.05;max-width:700px;margin:0 auto}
+.hero h1 em{font-style:italic;color:var(--t4)}
+.hero p{font-size:15px;color:var(--t3);line-height:1.65;margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto}
+.hero-acts{display:flex;justify-content:center;gap:12px;margin-top:28px;flex-wrap:wrap}
+.bh{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:11px;font-size:14px;font-weight:600;transition:all .3s;font-family:'Sora',sans-serif;cursor:pointer;border:none}
+.bhp{background:var(--teal);color:var(--bg)}.bhp:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,212,200,.25)}
+.bhs{background:rgba(255,255,255,.04);color:var(--t2);border:1px solid var(--bd2)}.bhs:hover{border-color:var(--bdt);color:var(--t4)}
+.tier{padding:clamp(60px,8vw,100px) 0}
+.tier-hdr{margin-bottom:40px}
+.tier-tag{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:100px;margin-bottom:14px}
+.tier-tag::before{content:'';width:6px;height:6px;border-radius:50%}
+.tier-tag.t1{background:rgba(0,212,200,.06);border:1px solid var(--bdt);color:var(--t4)}.tier-tag.t1::before{background:var(--teal)}
+.tier-tag.t2{background:rgba(0,200,255,.06);border:1px solid rgba(0,200,255,.15);color:var(--cyan)}.tier-tag.t2::before{background:var(--cyan)}
+.tier-tag.t3{background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.15);color:var(--grn)}.tier-tag.t3::before{background:var(--grn)}
+.tier-tag.t4{background:rgba(179,136,255,.06);border:1px solid rgba(179,136,255,.15);color:var(--pur)}.tier-tag.t4::before{background:var(--pur)}
+.tier h2{font-family:'Instrument Serif',serif;font-size:clamp(28px,3.5vw,42px);font-weight:400;letter-spacing:-1px;line-height:1.1}
+.tier h2 em{font-style:italic;color:var(--t4)}
+.tier .tier-desc{font-size:14px;color:var(--tx4);margin-top:10px;max-width:500px;line-height:1.6}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.card{background:rgba(14,20,34,.75);border:1px solid var(--bd2);border-radius:var(--r);padding:0;position:relative;overflow:hidden;transition:all .4s var(--ex);backdrop-filter:blur(8px)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .3s}
+.card:hover{border-color:var(--bdt);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.card:hover::before{opacity:1}
+.card.c-teal::before{background:linear-gradient(90deg,var(--teal),var(--cyan))}
+.card.c-cyan::before{background:linear-gradient(90deg,var(--cyan),var(--pur))}
+.card.c-grn::before{background:linear-gradient(90deg,var(--grn),var(--teal))}
+.card.c-pur::before{background:linear-gradient(90deg,var(--pur),var(--cyan))}
+.card.c-amb::before{background:linear-gradient(90deg,var(--amb),#ff8a65)}
+.card-top{padding:24px 24px 0}
+.card-top .c-badge{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:100px;border:1px solid var(--bd2);color:var(--tx4);display:inline-block;margin-bottom:12px}
+.card-top .c-badge.pop{border-color:var(--bdt);color:var(--t4);background:rgba(0,212,200,.04)}
+.card-top .c-badge.ent{border-color:rgba(179,136,255,.2);color:var(--pur);background:rgba(179,136,255,.04)}
+.card-name{font-family:'Instrument Serif',serif;font-size:24px;letter-spacing:-.5px;line-height:1.15}
+.card-name em{font-style:italic;color:var(--t4)}
+.card-desc{font-size:12.5px;color:var(--tx4);line-height:1.55;margin-top:8px}
+.card-price{margin-top:14px;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.card-price .amt{font-family:'Geist Mono',monospace;font-size:28px;font-weight:800;letter-spacing:-1px;color:var(--t1)}
+.card-price .per{font-size:12px;color:var(--tx4);font-weight:600}
+.card-price .range{font-family:'Geist Mono',monospace;font-size:22px;font-weight:700;color:var(--t1);letter-spacing:-.5px}
+.card-body{padding:18px 24px 24px}
+.incl-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx4);margin-bottom:10px}
+.incl{display:flex;flex-wrap:wrap;gap:6px}
+.incl .tag{padding:5px 11px;border-radius:8px;border:1px solid var(--bd2);background:rgba(0,0,0,.1);font-size:11px;font-weight:600;color:var(--t3);transition:all .25s}
+.card:hover .incl .tag{border-color:rgba(255,255,255,.06)}
+.card-goal{margin-top:14px;padding:12px;border-radius:10px;background:rgba(0,212,200,.03);border:1px solid var(--bdt);font-size:11.5px;color:var(--t3);line-height:1.5}
+.card-goal b{color:var(--t4)}
+.card-cta{margin-top:14px}
+.card-cta a{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--t4);transition:gap .3s}
+.card-cta a:hover{gap:10px}
+.card.featured{border-color:var(--bdt);background:rgba(14,20,34,.9)}
+.card.featured::before{opacity:1}
+.card.featured::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at top left,rgba(0,212,200,.04),transparent 60%);pointer-events:none}
+.section-div{height:1px;background:linear-gradient(90deg,transparent,var(--bd2) 20%,var(--bd2) 80%,transparent)}
+.compare{margin-top:20px;overflow-x:auto;background:rgba(14,20,34,.6);border:1px solid var(--bd2);border-radius:var(--r);backdrop-filter:blur(8px)}
+.compare table{width:100%;border-collapse:collapse;min-width:700px}
+.compare th,.compare td{padding:12px 14px;border-bottom:1px solid var(--bd);text-align:left;font-size:12.5px}
+.compare th{color:var(--tx4);font-size:10px;letter-spacing:.5px;font-weight:700;text-transform:uppercase;background:rgba(0,0,0,.15)}
+.compare td:first-child{font-weight:700;font-size:13px}
+.compare .pc{font-family:'Geist Mono',monospace;font-weight:700;color:var(--t4)}
+.compare .ck{color:var(--grn)}
+.compare .da{color:var(--tx5)}
+.compare tr:hover td{background:rgba(0,212,200,.015)}
+.cta-sec{padding:clamp(80px,10vw,120px) 18px;text-align:center;position:relative;z-index:1}
+.cta-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,200,.07),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.cta-sec h2{font-family:'Instrument Serif',serif;font-size:clamp(32px,4.5vw,52px);font-weight:400;letter-spacing:-1.5px;line-height:1.05}
+.cta-sec h2 em{font-style:italic;color:var(--t4)}
+.cta-sec p{font-size:15px;color:var(--t3);margin-top:14px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.65}
+.btn-cta{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border-radius:12px;font-size:15px;font-weight:700;background:var(--teal);color:var(--bg);border:none;cursor:pointer;font-family:'Sora',sans-serif;transition:all .3s;margin-top:28px;box-shadow:0 4px 24px rgba(0,212,200,.2)}
+.btn-cta:hover{transform:translateY(-3px);box-shadow:0 16px 56px rgba(0,212,200,.3)}
+.cta-sub{margin-top:14px;font-size:12px;color:var(--tx4)}
+.foot{border-top:1px solid var(--bd);padding:36px clamp(16px,4vw,48px);position:relative;z-index:1}
+.foot-in{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+.foot-wm{font-weight:700;font-size:14px;letter-spacing:-.3px}.foot-wm em{font-style:normal;color:var(--t4)}
+.foot-cp{font-size:11px;color:var(--tx5)}
+.foot-lk{display:flex;gap:20px;list-style:none;flex-wrap:wrap}
+.foot-lk a{font-size:12px;color:var(--tx4);transition:color .2s}.foot-lk a:hover{color:var(--t4)}
+.sr{opacity:0;transform:translateY(24px);transition:all .7s var(--ex)}.sr.v{opacity:1;transform:translateY(0)}
+.srd1{transition-delay:.06s}.srd2{transition-delay:.12s}.srd3{transition-delay:.18s}
+@media(max-width:768px){.nav-pills{display:none}.cards{grid-template-columns:1fr}.foot-in{flex-direction:column;text-align:center}}
+@media(max-width:480px){.nb:not(.nb-p){display:none}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="ambient"><div class="ao a"></div><div class="ao b"></div></div>
+
+<nav class="nav">
+  <div class="nav-l"><a href="index.html" style="display:flex;align-items:center;gap:10px"><div class="nav-m"><svg width="14" height="14" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="nav-w">Private<em>Credit</em>MCA</div></a></div>
+  <div class="nav-pills"><a href="index.html" class="np">Home</a><a href="marketplace.html" class="np">Marketplace</a><a href="education.html" class="np">Academy</a><a href="services.html" class="np active">Services</a></div>
+  <div class="nav-r"><a href="index.html" class="nb">\u2190 Home</a><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="nb nb-p">Join Community</a></div>
+</nav>
+
+<section class="hero">
+  <div class="hero-ey">Services</div>
+  <h1>Everything you need to<br><em>launch, scale, and dominate</em> MCA</h1>
+  <p>From your first deal to a 10-broker operation. We build the infrastructure, systems, and teams that turn brokerages into machines.</p>
+  <div class="hero-acts"><a href="#launch" class="bh bhp">See Launch Programs \u2192</a><a href="#compare" class="bh bhs">Compare All 11 Services</a></div>
+</section>
+
+<div class="wrap">
+
+<!-- TIER 1: LAUNCH -->
+<div class="section-div"></div>
+<section class="tier" id="launch">
+  <div class="tier-hdr sr"><div class="tier-tag t1">Tier 1 &middot; Launch Programs</div><h2>Start your brokerage.<br><em>The right way.</em></h2><div class="tier-desc">Three paths to getting operational &mdash; from self-serve tools to a fully built brokerage delivered in 30 days.</div></div>
+  <div class="cards">
+    <div class="card c-teal sr srd1"><div class="card-top"><div class="c-badge pop">Most Popular</div><div class="card-name">BrokerOS <em>Lite</em></div><div class="card-desc">Full platform access for brokers who want to close deals immediately. Tools, training, and community &mdash; everything you need to start producing.</div><div class="card-price"><span class="amt">$249</span><span class="per">/ month</span></div></div><div class="card-body"><div class="incl-label">Everything included</div><div class="incl"><span class="tag">BrokerOS Platform</span><span class="tag">Deal Analyzer</span><span class="tag">Funder Directory</span><span class="tag">Marketplace Access</span><span class="tag">Training Library</span><span class="tag">Deal Templates</span><span class="tag">Merchant Scripts</span><span class="tag">Weekly Strategy Calls</span><span class="tag">Broker Community</span></div><div class="card-goal"><b>Goal:</b> Start closing deals fast. No setup required &mdash; log in and go.</div><div class="card-cta"><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Get started &rarr;</a></div></div></div>
+
+    <div class="card c-cyan sr srd2"><div class="card-top"><div class="c-badge">Self-Build</div><div class="card-name">Broker Business <em>DIY</em></div><div class="card-desc">The complete blueprint for building a brokerage from scratch. Every template, script, system, and playbook &mdash; delivered as a step-by-step program.</div><div class="card-price"><span class="range">$2,500 &ndash; $5,000</span></div></div><div class="card-body"><div class="incl-label">Everything included</div><div class="incl"><span class="tag">MCA Training Program</span><span class="tag">Sales Scripts</span><span class="tag">Deal Structuring Playbook</span><span class="tag">Lead Gen Blueprint</span><span class="tag">CRM Setup Guide</span><span class="tag">Merchant Onboarding</span><span class="tag">Website Templates</span><span class="tag">Proposal Templates</span><span class="tag">Email Templates</span><span class="tag">Funder Submission System</span></div><div class="card-goal"><b>Goal:</b> Launch a fully functional brokerage yourself, with professional-grade systems from day one.</div><div class="card-cta"><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Learn more &rarr;</a></div></div></div>
+
+    <div class="card c-pur featured sr srd3"><div class="card-top"><div class="c-badge ent">Done For You</div><div class="card-name">Brokerage <em>in a Box</em></div><div class="card-desc">We build your entire brokerage &mdash; website, brand, CRM, pipeline, scripts, funder relationships, and training. You launch in 30 days, fully operational.</div><div class="card-price"><span class="range">$10,000 &ndash; $25,000+</span></div></div><div class="card-body"><div class="incl-label">Infrastructure</div><div class="incl"><span class="tag">Custom Website</span><span class="tag">Funding Application</span><span class="tag">CRM + Pipeline</span><span class="tag">Automation Workflows</span></div><div class="incl-label" style="margin-top:12px">Branding</div><div class="incl"><span class="tag">Logo Design</span><span class="tag">Brand Identity</span><span class="tag">Marketing Assets</span><span class="tag">Merchant Pitch Deck</span></div><div class="incl-label" style="margin-top:12px">Sales + Funding</div><div class="incl"><span class="tag">Call Scripts</span><span class="tag">Pipeline Structure</span><span class="tag">Merchant Onboarding</span><span class="tag">Funder Introductions</span><span class="tag">Underwriting Guide</span><span class="tag">Deal Submission System</span></div><div class="incl-label" style="margin-top:12px">Support</div><div class="incl"><span class="tag">Launch Support</span><span class="tag">1-on-1 Training</span><span class="tag">Strategy Calls</span></div><div class="card-goal"><b>Goal:</b> Walk in with nothing. Walk out with a fully operational brokerage in 30 days.</div><div class="card-cta"><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Book a call &rarr;</a></div></div></div>
+  </div>
+</section>
+
+<!-- TIER 2: INFRASTRUCTURE -->
+<div class="section-div"></div>
+<section class="tier" id="infra">
+  <div class="tier-hdr sr"><div class="tier-tag t2">Tier 2 &middot; Infrastructure</div><h2>Build the <em>backbone</em><br>of your operation</h2><div class="tier-desc">Already have a brokerage? Upgrade individual systems &mdash; website, brand, CRM &mdash; to professional grade.</div></div>
+  <div class="cards">
+    <div class="card c-cyan sr srd1"><div class="card-top"><div class="card-name">Website <em>Design</em></div><div class="card-desc">Custom MCA brokerage websites built to convert merchants. Funding applications, lead capture, CRM integration, and SEO &mdash; all included.</div><div class="card-price"><span class="range">$2,000 &ndash; $10,000</span></div></div><div class="card-body"><div class="incl-label">Deliverables</div><div class="incl"><span class="tag">Merchant Funding Site</span><span class="tag">Funding Application</span><span class="tag">Lead Capture Forms</span><span class="tag">CRM Integration</span><span class="tag">SEO Structure</span></div><div class="card-cta"><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Get a quote &rarr;</a></div></div></div>
+
+    <div class="card c-teal sr srd2"><div class="card-top"><div class="card-name">Branding <em>Package</em></div><div class="card-desc">Professional brand identity that makes your brokerage look established from day one. Logo, collateral, pitch decks, and marketing assets.</div><div class="card-price"><span class="range">$500 &ndash; $3,000</span></div></div><div class="card-body"><div class="incl-label">Deliverables</div><div class="incl"><span class="tag">Logo Design</span><span class="tag">Brand Identity</span><span class="tag">Email Signatures</span><span class="tag">Marketing Graphics</span><span class="tag">Pitch Decks</span></div><div class="card-cta"><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Get a quote &rarr;</a></div></div></div>
+
+    <div class="card c-grn sr srd3"><div class="card-top"><div class="card-name">CRM + <em>Pipeline</em></div><div class="card-desc">Professional CRM configuration with deal pipelines, automation, lead tracking, and reporting. HubSpot, Close, or GoHighLevel.</div><div class="card-price"><span class="range">$1,000 &ndash; $4,000</span></div></div><div class="card-body"><div class="incl-label">Deliverables</div><div class="incl"><span class="tag">CRM Configuration</span><span class="tag">Deal Pipeline</span><span class="tag">Automation Workflows</span><span class="tag">Lead Tracking</span><span class="tag">Reporting Dashboards</span></div><div style="margin-top:10px;font-size:11px;color:var(--tx4)">Platforms: HubSpot &middot; Close &middot; GoHighLevel</div><div class="card-cta"><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Get a quote &rarr;</a></div></div></div>
+  </div>
+</section>
+
+<!-- TIER 3: GROWTH -->
+<div class="section-div"></div>
+<section class="tier" id="growth">
+  <div class="tier-hdr sr"><div class="tier-tag t3">Tier 3 &middot; Growth</div><h2>Scale what's <em>already working</em></h2><div class="tier-desc">You're closing deals. Now multiply it with lead funnels, recruiting systems, and automation that removes you from the bottleneck.</div></div>
+  <div class="cards">
+    <div class="card c-grn sr srd1"><div class="card-top"><div class="card-name">Lead Generation <em>Systems</em></div><div class="card-desc">Merchant lead funnels that deliver qualified deal flow consistently. Paid ads, landing pages, call tracking, lead routing, and CRM integration.</div><div class="card-price"><span class="range">$2,000 &ndash; $8,000</span><span class="per">setup</span></div><div style="font-size:11px;color:var(--tx4);margin-top:4px">+ $1,000 &ndash; $5,000/mo management</div></div><div class="card-body"><div class="incl-label">Deliverables</div><div class="incl"><span class="tag">Paid Ads Setup</span><span class="tag">Landing Pages</span><span class="tag">Call Tracking</span><span class="tag">Lead Routing</span><span class="tag">CRM Integration</span></div><div class="card-cta"><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Build my funnel &rarr;</a></div></div></div>
+
+    <div class="card c-teal sr srd2"><div class="card-top"><div class="card-name">Broker <em>Recruiting</em></div><div class="card-desc">Systems to attract, screen, onboard, and manage sales reps. Commission structures, training materials, and management tools included.</div><div class="card-price"><span class="range">$2,000 &ndash; $10,000</span></div></div><div class="card-body"><div class="incl-label">Deliverables</div><div class="incl"><span class="tag">Recruiting Funnels</span><span class="tag">Onboarding System</span><span class="tag">Training Structure</span><span class="tag">Commission Plans</span><span class="tag">Management Tools</span></div><div class="card-cta"><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Start recruiting &rarr;</a></div></div></div>
+
+    <div class="card c-amb sr srd3"><div class="card-top"><div class="card-name">Automation <em>Systems</em></div><div class="card-desc">Remove yourself from repetitive operations. Automate lead intake, document requests, deal routing, follow-ups, and merchant communication.</div><div class="card-price"><span class="range">$2,000 &ndash; $15,000</span></div></div><div class="card-body"><div class="incl-label">Deliverables</div><div class="incl"><span class="tag">Lead Intake Automation</span><span class="tag">Document Requests</span><span class="tag">Deal Routing</span><span class="tag">Follow-up Systems</span><span class="tag">Merchant Comms</span></div><div class="card-cta"><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Automate my ISO &rarr;</a></div></div></div>
+  </div>
+</section>
+
+<!-- TIER 4: ADVANCED -->
+<div class="section-div"></div>
+<section class="tier" id="advanced">
+  <div class="tier-hdr sr"><div class="tier-tag t4">Tier 4 &middot; Advanced</div><h2>Enterprise-grade <em>scaling</em></h2><div class="tier-desc">For established brokerages ready to build teams and optimize every lever. White-glove execution.</div></div>
+  <div class="cards">
+    <div class="card c-pur featured sr srd1"><div class="card-top"><div class="c-badge ent">White Glove</div><div class="card-name">Done-For-You <em>Recruiting</em></div><div class="card-desc">We recruit, screen, vet, onboard, and train a team of 10 brokers for your operation. Full management system included &mdash; commission structures, training materials, and ongoing support.</div><div class="card-price"><span class="range">$10,000 &ndash; $30,000+</span></div></div><div class="card-body"><div class="incl-label">Full service</div><div class="incl"><span class="tag">Recruiting Funnels</span><span class="tag">Broker Outreach</span><span class="tag">Screening &amp; Vetting</span><span class="tag">Onboarding System</span><span class="tag">Training Materials</span><span class="tag">Commission Structure</span><span class="tag">Management System</span></div><div class="card-goal"><b>Goal:</b> Walk away with a 10-broker sales team, fully trained and producing.</div><div class="card-cta"><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Book a call &rarr;</a></div></div></div>
+
+    <div class="card c-cyan sr srd2"><div class="card-top"><div class="c-badge">Strategic</div><div class="card-name">Brokerage <em>Audit + Consulting</em></div><div class="card-desc">We analyze your entire brokerage &mdash; pipeline, sales process, deal structuring, lead generation, CRM &mdash; and deliver a detailed roadmap to scale revenue.</div><div class="card-price"><span class="range">$1,000 &ndash; $5,000+</span></div></div><div class="card-body"><div class="incl-label">What you get</div><div class="incl"><span class="tag">Pipeline Audit</span><span class="tag">Sales Process Review</span><span class="tag">Deal Structuring Review</span><span class="tag">Lead Gen Analysis</span><span class="tag">CRM Optimization</span><span class="tag">Revenue Growth Strategy</span></div><div class="incl-label" style="margin-top:12px">Deliverables</div><div class="incl"><span class="tag">Detailed Audit Report</span><span class="tag">Strategy Session</span><span class="tag">Improvement Roadmap</span></div><div class="card-cta"><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Get audited &rarr;</a></div></div></div>
+  </div>
+</section>
+
+<!-- COMPARE TABLE -->
+<div class="section-div"></div>
+<section class="tier" id="compare">
+  <div class="tier-hdr sr"><div class="tier-tag t1">All 11 Services</div><h2>Compare <em>everything</em> at a glance</h2></div>
+  <div class="compare sr srd1">
+    <table>
+      <thead><tr><th>Service</th><th>Price</th><th>Type</th><th>Best For</th></tr></thead>
+      <tbody>
+        <tr><td>BrokerOS Lite</td><td class="pc">$249/mo</td><td>Platform</td><td>New brokers wanting tools + community</td></tr>
+        <tr><td>Broker Business DIY</td><td class="pc">$2.5K &ndash; $5K</td><td>Program</td><td>Self-starters building from scratch</td></tr>
+        <tr><td>Brokerage in a Box</td><td class="pc">$10K &ndash; $25K+</td><td>Done For You</td><td>Anyone who wants to launch in 30 days</td></tr>
+        <tr><td>Website Design</td><td class="pc">$2K &ndash; $10K</td><td>Build</td><td>Brokerages needing a merchant-facing site</td></tr>
+        <tr><td>Branding Package</td><td class="pc">$500 &ndash; $3K</td><td>Build</td><td>New or rebranding brokerages</td></tr>
+        <tr><td>CRM + Pipeline Setup</td><td class="pc">$1K &ndash; $4K</td><td>Build</td><td>Brokerages with no CRM or a messy one</td></tr>
+        <tr><td>Lead Generation Systems</td><td class="pc">$2K &ndash; $8K + mgmt</td><td>Growth</td><td>Brokerages needing consistent deal flow</td></tr>
+        <tr><td>Broker Recruiting Systems</td><td class="pc">$2K &ndash; $10K</td><td>Growth</td><td>ISOs ready to hire their first reps</td></tr>
+        <tr><td>Automation Systems</td><td class="pc">$2K &ndash; $15K</td><td>Growth</td><td>Busy brokerages drowning in manual work</td></tr>
+        <tr><td>Done-For-You Recruiting</td><td class="pc">$10K &ndash; $30K+</td><td>White Glove</td><td>ISOs scaling to 10+ brokers</td></tr>
+        <tr><td>Brokerage Audit + Consulting</td><td class="pc">$1K &ndash; $5K+</td><td>Strategic</td><td>Established shops wanting to optimize</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="cta-glow"></div>
+  <div class="sr">
+    <h2>Not sure where to start?<br><em>Let's figure it out.</em></h2>
+    <p>Tell us where you are and where you want to be. We'll recommend the right service &mdash; no pressure, no upsell.</p>
+    <a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="btn-cta">Talk to us &rarr;</a>
+    <div class="cta-sub">Free consultation &middot; No commitment &middot; Real answers</div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot-in">
+    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap"><div class="foot-wm">Private<em>Credit</em>MCA</div><div class="foot-cp">&copy; 2026 PrivateCreditMCA</div></div>
+    <ul class="foot-lk"><li><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Reddit</a></li><li><a href="index.html">Home</a></li><li><a href="marketplace.html">Marketplace</a></li><li><a href="deallab.html">Deal Lab</a></li><li><a href="funders.html">Funders</a></li><li><a href="education.html">Academy</a></li><li><a href="superbroker.html">Superbroker</a></li></ul>
+  </div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('v')})},{threshold:.1,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.sr').forEach(el=>obs.observe(el));
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}})});
+</script>
+</body>
+</html>
