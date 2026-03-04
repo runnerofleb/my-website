@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Broker Pipeline — PrivateCreditMCA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Sora:wght@300;400;500;600;700;800&family=Geist+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a10;--sf:#0e1422;--el:#131b2e;--teal:#00d4c8;--t4:#00e8db;--cyan:#00c8ff;--grn:#00e676;--amb:#ffc446;--red:#ff5252;--pur:#b388ff;--t1:#f0f4fc;--t2:#c8d0e0;--t3:#8b97b0;--tx4:#586580;--tx5:#3a4560;--bd:rgba(255,255,255,.04);--bd2:rgba(255,255,255,.07);--bdt:rgba(0,212,200,.15);--r:16px;--r2:12px;--ex:cubic-bezier(.16,1,.3,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{height:100%;scrollbar-width:thin;scrollbar-color:#00b0a6 var(--bg)}
+body{height:100%;font-family:'Sora',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow:hidden;display:flex;flex-direction:column}
+::selection{background:rgba(0,212,200,.3)}a{color:inherit;text-decoration:none}
+.grain{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:180px}
+
+.nav{flex-shrink:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,24px);background:rgba(6,10,16,.8);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--bd2);z-index:50}
+.nav-l{display:flex;align-items:center;gap:12px}
+.logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
+.logo::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.2))}
+.logo svg{position:relative;z-index:1}
+.nav-brand{font-weight:700;font-size:14px;letter-spacing:-.3px}.nav-brand em{font-style:normal;color:var(--t4)}
+.nav-sub{font-size:10px;color:var(--tx4);font-weight:600}
+.nav-pills{display:flex;gap:4px;background:var(--sf);border:1px solid var(--bd2);border-radius:100px;padding:3px}
+.nl{padding:6px 12px;border-radius:100px;font-size:11px;font-weight:500;color:var(--t3);transition:all .25s}
+.nl:hover{color:var(--t1)}.nl.active{color:var(--t1);background:rgba(0,212,200,.1);border:1px solid var(--bdt)}
+.nav-r{display:flex;gap:8px;align-items:center}
+.btn{padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;border:1px solid var(--bd2);background:var(--sf);color:var(--t2);cursor:pointer;font-family:'Sora',sans-serif;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--bdt);color:var(--t4);transform:translateY(-1px)}
+.btn-p{background:var(--teal);color:var(--bg);border-color:transparent}.btn-p:hover{box-shadow:0 6px 20px rgba(0,212,200,.25);color:var(--bg)}
+.btn-g{background:rgba(0,230,118,.06);border-color:rgba(0,230,118,.2);color:var(--grn)}
+.btn-d{background:rgba(255,82,82,.06);border-color:rgba(255,82,82,.2);color:var(--red)}
+.btn-sm{padding:6px 10px;font-size:11px;border-radius:8px}
+.inp{width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--bd2);background:rgba(0,0,0,.2);color:var(--t1);font-size:12px;font-family:'Sora',sans-serif;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--teal)}.inp::placeholder{color:rgba(139,151,176,.4)}
+select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23586580' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+textarea.inp{resize:vertical;min-height:60px;line-height:1.5}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:100px;border:1px solid var(--bd2);background:rgba(0,0,0,.12);font-size:9px;font-weight:700;white-space:nowrap;color:var(--t3)}
+.pill b{color:var(--t1)}.pill.tl{border-color:var(--bdt);background:rgba(0,212,200,.06);color:var(--t4)}.pill.gn{border-color:rgba(0,230,118,.2);background:rgba(0,230,118,.06);color:var(--grn)}.pill.wn{border-color:rgba(255,196,70,.2);background:rgba(255,196,70,.06);color:var(--amb)}.pill.rd{border-color:rgba(255,82,82,.2);background:rgba(255,82,82,.06);color:var(--red)}.pill.pr{border-color:rgba(179,136,255,.2);background:rgba(179,136,255,.06);color:var(--pur)}
+
+/* KPI STRIP */
+.kpi-strip{flex-shrink:0;display:flex;gap:1px;background:var(--bd2);border-bottom:1px solid var(--bd2)}
+.kpi{flex:1;background:var(--bg);padding:10px 14px;text-align:center}
+.kpi-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tx5)}
+.kpi-val{font-family:'Geist Mono',monospace;font-size:20px;font-weight:800;margin-top:2px}
+
+/* KANBAN */
+.kanban-wrap{flex:1;overflow-x:auto;overflow-y:hidden;padding:16px 12px}
+.kanban{display:flex;gap:10px;height:100%;min-width:min-content}
+.column{width:260px;flex-shrink:0;display:flex;flex-direction:column;background:rgba(14,20,34,.5);border:1px solid var(--bd2);border-radius:var(--r);overflow:hidden}
+.col-head{padding:12px 14px;border-bottom:1px solid var(--bd2);display:flex;align-items:center;justify-content:space-between}
+.col-title{font-size:12px;font-weight:700;letter-spacing:-.1px;display:flex;align-items:center;gap:8px}
+.col-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.col-count{font-family:'Geist Mono',monospace;font-size:11px;font-weight:800;color:var(--tx4);background:rgba(0,0,0,.15);padding:2px 7px;border-radius:6px}
+.col-body{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:8px;min-height:60px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.06) transparent}
+.col-body.drag-over{background:rgba(0,212,200,.03);border-radius:0 0 12px 12px}
+
+/* DEAL CARDS */
+.dc{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r2);padding:12px;cursor:grab;transition:all .25s;position:relative}
+.dc:hover{border-color:var(--bdt);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.dc:active{cursor:grabbing;opacity:.85;transform:scale(.97)}
+.dc.dragging{opacity:.4}
+.dc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px}
+.dc-biz{font-weight:700;font-size:12px;letter-spacing:-.1px;line-height:1.3}
+.dc-amount{font-family:'Geist Mono',monospace;font-size:13px;font-weight:800;color:var(--t4);white-space:nowrap}
+.dc-meta{font-size:10px;color:var(--tx4);margin-bottom:8px;line-height:1.4}
+.dc-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.dc-foot{display:flex;justify-content:space-between;align-items:center}
+.dc-foot .dc-date{font-size:9px;color:var(--tx5);font-family:'Geist Mono',monospace}
+.dc-score{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:10px;font-weight:800;border:2px solid}
+.dc-docs{display:flex;gap:3px;align-items:center}
+.dc-docs .dd-icon{width:16px;height:16px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px}
+
+/* ADD DEAL */
+.add-deal{border:1px dashed var(--bd2);border-radius:var(--r2);padding:10px;text-align:center;font-size:11px;color:var(--tx5);cursor:pointer;transition:all .2s}
+.add-deal:hover{border-color:var(--teal);color:var(--t4);background:rgba(0,212,200,.02)}
+
+/* MODAL */
+.backdrop{position:fixed;inset:0;background:rgba(6,10,16,.88);backdrop-filter:blur(10px);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;z-index:200;overflow-y:auto}
+.backdrop.show{display:flex}
+.modal{width:min(780px,100%);border-radius:var(--r);border:1px solid var(--bd2);background:var(--sf);box-shadow:0 40px 100px rgba(0,0,0,.6);animation:modalIn .3s var(--ex)}
+@keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.m-head{padding:20px 24px;border-bottom:1px solid var(--bd2);display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.m-title{font-family:'Instrument Serif',serif;font-size:22px;letter-spacing:-.5px}
+.m-title em{font-style:italic;color:var(--t4)}
+.m-sub{font-size:11px;color:var(--tx4);margin-top:4px}
+.m-head-r{display:flex;gap:6px;flex-wrap:wrap}
+.m-body{padding:20px 24px}
+.m-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tx4);margin-bottom:8px;margin-top:16px;display:flex;align-items:center;gap:8px}
+.m-label::after{content:'';flex:1;height:1px;background:var(--bd2)}
+.m-label:first-child{margin-top:0}
+
+/* DETAIL GRID */
+.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.detail{background:rgba(0,0,0,.1);border:1px solid var(--bd2);border-radius:10px;padding:10px}
+.detail .dk{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--tx5)}
+.detail .dv{font-family:'Geist Mono',monospace;font-size:14px;font-weight:700;margin-top:3px}
+
+/* DOCS LIST */
+.doc-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)}
+.doc-item:last-child{border:0}
+.doc-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
+.doc-name{font-size:12px;font-weight:600;flex:1}
+.doc-status{font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px}
+
+/* FUNDER RESPONSES */
+.fr-item{background:rgba(0,0,0,.08);border:1px solid var(--bd2);border-radius:10px;padding:12px;margin-bottom:8px}
+.fr-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.fr-name{font-weight:700;font-size:12px}
+.fr-body{font-size:11px;color:var(--t3);line-height:1.5}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:20px}
+.timeline::before{content:'';position:absolute;left:5px;top:8px;bottom:8px;width:1px;background:var(--bd2)}
+.tl-item{position:relative;padding:8px 0 8px 0;font-size:11px;color:var(--tx4);line-height:1.4}
+.tl-item::before{content:'';position:absolute;left:-19px;top:12px;width:8px;height:8px;border-radius:50%;background:var(--bd2)}
+.tl-item.done::before{background:var(--grn)}.tl-item.active::before{background:var(--teal);box-shadow:0 0 8px rgba(0,212,200,.3)}
+.tl-item b{color:var(--t2)}
+
+/* NOTES */
+.note-item{padding:8px 0;border-bottom:1px solid var(--bd);font-size:12px;color:var(--t3);line-height:1.5}
+.note-item:last-child{border:0}
+.note-item .ni-date{font-size:9px;color:var(--tx5);font-family:'Geist Mono',monospace;margin-bottom:2px}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(14,20,34,.96);border:1px solid var(--bdt);padding:10px 24px;border-radius:var(--r2);box-shadow:0 12px 40px rgba(0,0,0,.4);font-weight:700;font-size:12px;display:none;z-index:300;backdrop-filter:blur(16px);color:var(--t4)}
+.toast.show{display:block;animation:ti .25s var(--ex)}
+@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+@media(max-width:768px){.nav-pills{display:none}.kpi-strip{flex-wrap:wrap}.kpi{min-width:33%}.detail-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<nav class="nav">
+  <div class="nav-l"><a href="index.html" class="logo"><svg width="13" height="13" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div><div class="nav-brand">Private<em>Credit</em>MCA</div><div class="nav-sub">Broker Pipeline</div></div></div>
+  <div class="nav-pills"><a href="index.html" class="nl">Home</a><a href="marketplace.html" class="nl">Marketplace</a><a href="deallab.html" class="nl">Deal Lab</a><a href="funders.html" class="nl">Funders</a><a href="bankiq.html" class="nl">BankIQ</a><a href="pipeline.html" class="nl active">Pipeline</a></div>
+  <div class="nav-r"><button class="btn btn-p" id="btnAddDeal">+ New Deal</button></div>
+</nav>
+
+<div class="kpi-strip" id="kpis"></div>
+
+<div class="kanban-wrap"><div class="kanban" id="kanban"></div></div>
+
+<div class="backdrop" id="backdrop"><div class="modal"><div id="modalContent"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const toast=m=>{const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1400)};
+const money=n=>"$"+Math.round(n).toLocaleString();
+const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const LS="pcmca_pipeline_v1";
+
+const STAGES=[
+{id:"lead",label:"Lead",color:"var(--pur)",dot:"#b388ff"},
+{id:"docs",label:"Docs Requested",color:"var(--cyan)",dot:"#00c8ff"},
+{id:"underwriting",label:"Underwriting",color:"var(--amb)",dot:"#ffc446"},
+{id:"submitted",label:"Submitted",color:"var(--teal)",dot:"#00d4c8"},
+{id:"offers",label:"Offers",color:"var(--grn)",dot:"#00e676"},
+{id:"funded",label:"Funded",color:"var(--grn)",dot:"#00e676"}
+];
+
+const SEED=[
+{id:"d1",biz:"Tony's Pizzeria",industry:"Restaurant",state:"NY",amount:65000,revenue:92000,credit:640,tib:24,positions:1,score:72,stage:"offers",created:"2025-12-10",
+docs:[{name:"3mo Bank Statements",status:"received"},{name:"Application",status:"received"},{name:"Voided Check",status:"received"},{name:"Driver License",status:"received"}],
+funderResponses:[{funder:"Forward Financing",status:"offer",factor:1.38,term:120,note:"Approved. Ready to fund."},{funder:"Fora Financial",status:"offer",factor:1.42,term:100,note:"Counter offer — shorter term, higher factor."},{funder:"Credibly",status:"declined",factor:0,term:0,note:"Credit below threshold for this amount."}],
+notes:[{date:"2025-12-14",text:"Client comparing Forward vs Fora. Prefers longer term."},{date:"2025-12-12",text:"All docs received. Submitted to 3 funders."},{date:"2025-12-10",text:"New lead from referral. Restaurant in Queens, 2yr TIB."}],
+timeline:[{text:"Offers received from Forward + Fora",done:true},{text:"Submitted to 3 funders",done:true},{text:"All docs collected",done:true},{text:"Lead created",done:true}]},
+
+{id:"d2",biz:"Metro Construction LLC",industry:"Construction",state:"FL",amount:120000,revenue:185000,credit:710,tib:48,positions:0,score:88,stage:"submitted",created:"2025-12-12",
+docs:[{name:"6mo Bank Statements",status:"received"},{name:"Application",status:"received"},{name:"Voided Check",status:"received"},{name:"Tax Returns",status:"received"},{name:"P&L Statement",status:"pending"}],
+funderResponses:[{funder:"Rapid Finance",status:"reviewing",factor:0,term:0,note:"Under review. Requested additional P&L."}],
+notes:[{date:"2025-12-14",text:"Rapid Finance requested P&L. Client is pulling it from accountant."},{date:"2025-12-12",text:"Strong file. Submitted to Rapid Finance first — they handle larger construction deals."}],
+timeline:[{text:"Submitted to Rapid Finance",done:true},{text:"Docs collected (P&L pending)",done:true},{text:"Lead created",done:true}]},
+
+{id:"d3",biz:"Bright Smile Dental",industry:"Medical",state:"CA",amount:90000,revenue:140000,credit:720,tib:60,positions:0,score:93,stage:"underwriting",created:"2025-12-13",
+docs:[{name:"3mo Bank Statements",status:"received"},{name:"Application",status:"received"},{name:"Business License",status:"pending"}],
+funderResponses:[],
+notes:[{date:"2025-12-13",text:"Premium file. 5yr medical practice, zero positions, strong credit. Waiting on business license."}],
+timeline:[{text:"Underwriting in progress",done:false},{text:"Docs partially collected",done:true},{text:"Lead created",done:true}]},
+
+{id:"d4",biz:"FastFreight Trucking",industry:"Trucking",state:"TX",amount:45000,revenue:68000,credit:595,tib:14,positions:2,score:48,stage:"docs",created:"2025-12-14",
+docs:[{name:"3mo Bank Statements",status:"requested"},{name:"Application",status:"received"},{name:"Voided Check",status:"requested"}],
+funderResponses:[],
+notes:[{date:"2025-12-14",text:"New lead. 2 existing positions, lower credit. Need to see statements before deciding on funders."}],
+timeline:[{text:"Docs requested",done:false},{text:"Lead created",done:true}]},
+
+{id:"d5",biz:"Urban Threads Boutique",industry:"Retail",state:"NJ",amount:35000,revenue:52000,credit:660,tib:20,positions:1,score:67,stage:"lead",created:"2025-12-15",
+docs:[],funderResponses:[],
+notes:[{date:"2025-12-15",text:"Inbound from marketplace. Retail boutique, solid revenue for ask size."}],
+timeline:[{text:"Lead created",done:true}]},
+
+{id:"d6",biz:"CloudCart DTC",industry:"E-Commerce",state:"WA",amount:200000,revenue:310000,credit:700,tib:36,positions:0,score:86,stage:"lead",created:"2025-12-15",
+docs:[],funderResponses:[],
+notes:[{date:"2025-12-15",text:"High-value e-commerce brand. DTC Shopify store doing $310K/mo. Will need strong funder for this amount."}],
+timeline:[{text:"Lead created",done:true}]},
+
+{id:"d7",biz:"Joe's Auto Body",industry:"Auto Repair",state:"OH",amount:28000,revenue:41000,credit:610,tib:30,positions:1,score:61,stage:"funded",created:"2025-11-20",
+docs:[{name:"3mo Bank Statements",status:"received"},{name:"Application",status:"received"},{name:"Voided Check",status:"received"}],
+funderResponses:[{funder:"FundKite",status:"funded",factor:1.35,term:110,note:"Funded 11/28. Wire confirmed."}],
+notes:[{date:"2025-11-28",text:"FUNDED! FundKite wired $28K. Commission received."},{date:"2025-11-25",text:"FundKite approved. Client accepted."},{date:"2025-11-20",text:"Quick turnaround auto body deal."}],
+timeline:[{text:"Funded — wire confirmed",done:true},{text:"Client accepted FundKite offer",done:true},{text:"Submitted to FundKite",done:true},{text:"Docs collected",done:true},{text:"Lead created",done:true}]},
+
+{id:"d8",biz:"Sunrise Cafe",industry:"Restaurant",state:"IL",amount:30000,revenue:48000,credit:635,tib:22,positions:1,score:64,stage:"offers",created:"2025-12-08",
+docs:[{name:"3mo Bank Statements",status:"received"},{name:"Application",status:"received"},{name:"Voided Check",status:"received"}],
+funderResponses:[{funder:"Bitty Advance",status:"offer",factor:1.40,term:90,note:"Approved at $30K."}],
+notes:[{date:"2025-12-12",text:"Bitty came back with an offer. Factor is fair for the profile."},{date:"2025-12-08",text:"Small cafe deal. Straightforward file."}],
+timeline:[{text:"Offer from Bitty Advance",done:true},{text:"Submitted to Bitty",done:true},{text:"Docs collected",done:true},{text:"Lead created",done:true}]}
+];
+
+function loadDeals(){try{const d=localStorage.getItem(LS);return d?JSON.parse(d):null}catch{return null}}
+function saveDeals(){localStorage.setItem(LS,JSON.stringify(deals))}
+let deals=loadDeals()||JSON.parse(JSON.stringify(SEED));
+let dragId=null;
+
+function scoreColor(s){return s>=80?"var(--grn)":s>=65?"var(--teal)":s>=50?"var(--amb)":"var(--red)"}
+function scoreCls(s){return s>=80?"gn":s>=65?"tl":s>=50?"wn":"rd"}
+
+function renderKpis(){
+  const total=deals.length;
+  const inPipeline=deals.filter(d=>d.stage!=="funded").length;
+  const funded=deals.filter(d=>d.stage==="funded").length;
+  const totalVal=deals.reduce(function(a,d){return a+d.amount},0);
+  const avgScore=Math.round(deals.reduce(function(a,d){return a+d.score},0)/total)||0;
+  $("kpis").innerHTML='<div class="kpi"><div class="kpi-label">Total Deals</div><div class="kpi-val" style="color:var(--t4)">'+total+'</div></div><div class="kpi"><div class="kpi-label">In Pipeline</div><div class="kpi-val" style="color:var(--teal)">'+inPipeline+'</div></div><div class="kpi"><div class="kpi-label">Funded</div><div class="kpi-val" style="color:var(--grn)">'+funded+'</div></div><div class="kpi"><div class="kpi-label">Pipeline Value</div><div class="kpi-val">'+money(totalVal)+'</div></div><div class="kpi"><div class="kpi-label">Avg Score</div><div class="kpi-val" style="color:'+scoreColor(avgScore)+'">'+avgScore+'</div></div>';
+}
+
+function renderKanban(){
+  renderKpis();
+  var kb=$("kanban");kb.innerHTML="";
+  STAGES.forEach(function(stage){
+    var stageDeals=deals.filter(function(d){return d.stage===stage.id});
+    var col=document.createElement("div");col.className="column";col.dataset.stage=stage.id;
+    var headHtml='<div class="col-head"><div class="col-title"><div class="col-dot" style="background:'+stage.dot+'"></div>'+stage.label+'</div><div class="col-count">'+stageDeals.length+'</div></div>';
+    col.innerHTML=headHtml;
+
+    var body=document.createElement("div");body.className="col-body";body.dataset.stage=stage.id;
+    body.addEventListener("dragover",function(e){e.preventDefault();body.classList.add("drag-over")});
+    body.addEventListener("dragleave",function(){body.classList.remove("drag-over")});
+    body.addEventListener("drop",function(e){e.preventDefault();body.classList.remove("drag-over");if(dragId){moveDeal(dragId,stage.id)}});
+
+    stageDeals.forEach(function(d){
+      var card=document.createElement("div");card.className="dc";card.draggable=true;card.dataset.id=d.id;
+      card.addEventListener("dragstart",function(){dragId=d.id;card.classList.add("dragging")});
+      card.addEventListener("dragend",function(){dragId=null;card.classList.remove("dragging")});
+      card.addEventListener("click",function(e){if(!card.classList.contains("dragging"))openDeal(d.id)});
+
+      var docsCount=d.docs.length;var docsOk=d.docs.filter(function(x){return x.status==="received"}).length;
+      var frCount=d.funderResponses.length;
+      var offerCount=d.funderResponses.filter(function(x){return x.status==="offer"||x.status==="funded"}).length;
+
+      card.innerHTML='<div class="dc-head"><div class="dc-biz">'+esc(d.biz)+'</div><div class="dc-amount">'+money(d.amount)+'</div></div><div class="dc-meta">'+d.industry+' · '+d.state+' · '+money(d.revenue)+'/mo</div><div class="dc-tags"><span class="pill '+scoreCls(d.score)+'">Score '+d.score+'</span>'+(docsCount?'<span class="pill">Docs '+docsOk+'/'+docsCount+'</span>':'')+(frCount?'<span class="pill tl">'+offerCount+' offer'+(offerCount!==1?"s":"")+'</span>':'')+'</div><div class="dc-foot"><div class="dc-date">'+d.created+'</div><div class="dc-score" style="color:'+scoreColor(d.score)+';border-color:'+scoreColor(d.score)+'">'+d.score+'</div></div>';
+      body.appendChild(card);
+    });
+
+    if(stage.id==="lead"){
+      var addBtn=document.createElement("div");addBtn.className="add-deal";addBtn.textContent="+ Add Lead";
+      addBtn.addEventListener("click",function(){showAddForm()});body.appendChild(addBtn);
+    }
+    col.appendChild(body);kb.appendChild(col);
+  });
+}
+
+function moveDeal(dealId,newStage){
+  var d=deals.find(function(x){return x.id===dealId});
+  if(!d||d.stage===newStage)return;
+  d.stage=newStage;
+  d.timeline.unshift({text:"Moved to "+STAGES.find(function(s){return s.id===newStage}).label,done:true});
+  saveDeals();renderKanban();toast("Moved to "+STAGES.find(function(s){return s.id===newStage}).label);
+}
+
+function openDeal(dealId){
+  var d=deals.find(function(x){return x.id===dealId});if(!d)return;
+  $("backdrop").classList.add("show");document.body.style.overflow="hidden";
+
+  var stageInfo=STAGES.find(function(s){return s.id===d.stage});
+  var docsOk=d.docs.filter(function(x){return x.status==="received"}).length;
+
+  var html='<div class="m-head"><div><div class="m-title">'+esc(d.biz)+' — <em>'+money(d.amount)+'</em></div><div class="m-sub">'+d.industry+' · '+d.state+' · '+money(d.revenue)+'/mo · Credit '+d.credit+' · '+d.tib+'mo TIB · '+d.positions+' pos</div></div><div class="m-head-r"><select class="inp" id="mStage" style="width:auto;min-width:140px">';
+  STAGES.forEach(function(s){html+='<option value="'+s.id+'"'+(s.id===d.stage?' selected':'')+'>'+s.label+'</option>'});
+  html+='</select><button class="btn btn-d btn-sm" id="mDelete">Delete</button><button class="btn btn-sm" id="mClose">Close</button></div></div>';
+
+  html+='<div class="m-body">';
+
+  // Details
+  html+='<div class="m-label">Deal Details</div><div class="detail-grid"><div class="detail"><div class="dk">Amount</div><div class="dv" style="color:var(--t4)">'+money(d.amount)+'</div></div><div class="detail"><div class="dk">Revenue</div><div class="dv">'+money(d.revenue)+'</div></div><div class="detail"><div class="dk">Credit</div><div class="dv">'+d.credit+'</div></div><div class="detail"><div class="dk">Score</div><div class="dv" style="color:'+scoreColor(d.score)+'">'+d.score+'</div></div><div class="detail"><div class="dk">TIB</div><div class="dv">'+d.tib+'mo</div></div><div class="detail"><div class="dk">Positions</div><div class="dv">'+(d.positions===0?'Clean':d.positions)+'</div></div><div class="detail"><div class="dk">Stage</div><div class="dv">'+stageInfo.label+'</div></div><div class="detail"><div class="dk">Created</div><div class="dv" style="font-size:11px">'+d.created+'</div></div></div>';
+
+  // Docs
+  html+='<div class="m-label">Documents ('+docsOk+'/'+d.docs.length+')</div>';
+  if(d.docs.length){
+    d.docs.forEach(function(doc){
+      var isOk=doc.status==="received";
+      html+='<div class="doc-item"><div class="doc-icon" style="background:'+(isOk?'rgba(0,230,118,.08)':'rgba(255,196,70,.08)')+'"><span style="color:'+(isOk?'var(--grn)':'var(--amb)')+'">'+(isOk?'✓':'…')+'</span></div><div class="doc-name">'+esc(doc.name)+'</div><span class="doc-status pill '+(isOk?'gn':'wn')+'">'+(isOk?'Received':'Pending')+'</span></div>';
+    });
+  }else{html+='<div style="font-size:11px;color:var(--tx5);padding:8px 0">No documents yet.</div>'}
+
+  // Funder Responses
+  html+='<div class="m-label">Funder Responses ('+d.funderResponses.length+')</div>';
+  if(d.funderResponses.length){
+    d.funderResponses.forEach(function(fr){
+      var statusCls=fr.status==="offer"?"gn":fr.status==="funded"?"gn":fr.status==="declined"?"rd":"tl";
+      var statusLabel=fr.status==="offer"?"Offer":fr.status==="funded"?"Funded":fr.status==="declined"?"Declined":"Reviewing";
+      html+='<div class="fr-item"><div class="fr-head"><div class="fr-name">'+esc(fr.funder)+'</div><span class="pill '+statusCls+'">'+statusLabel+'</span></div>'+(fr.factor?'<div style="font-family:Geist Mono,monospace;font-size:11px;color:var(--t4);margin-bottom:4px">Factor '+fr.factor.toFixed(2)+' · '+fr.term+' days</div>':'')+'<div class="fr-body">'+esc(fr.note)+'</div></div>';
+    });
+  }else{html+='<div style="font-size:11px;color:var(--tx5);padding:8px 0">No funder responses yet.</div>'}
+
+  // Timeline
+  html+='<div class="m-label">Timeline</div><div class="timeline">';
+  d.timeline.forEach(function(t,i){
+    html+='<div class="tl-item '+(i===0?"active":"done")+'"><b>'+esc(t.text)+'</b></div>';
+  });
+  html+='</div>';
+
+  // Notes
+  html+='<div class="m-label">Notes</div>';
+  d.notes.forEach(function(n){html+='<div class="note-item"><div class="ni-date">'+n.date+'</div>'+esc(n.text)+'</div>'});
+  html+='<div style="display:flex;gap:8px;margin-top:10px"><input class="inp" id="mNote" placeholder="Add a note…" style="flex:1"><button class="btn btn-sm btn-p" id="mAddNote">Add</button></div>';
+
+  html+='</div>';
+  $("modalContent").innerHTML=html;
+
+  // Wire
+  $("mClose").onclick=closeModal;
+  $("mDelete").onclick=function(){deals=deals.filter(function(x){return x.id!==d.id});saveDeals();closeModal();renderKanban();toast("Deal deleted")};
+  $("mStage").onchange=function(){moveDeal(d.id,this.value);closeModal();openDeal(d.id)};
+  $("mAddNote").onclick=function(){var text=$("mNote").value.trim();if(!text)return;d.notes.unshift({date:new Date().toISOString().slice(0,10),text:text});saveDeals();closeModal();openDeal(d.id);toast("Note added")};
+  $("mNote").addEventListener("keydown",function(e){if(e.key==="Enter"){$("mAddNote").click()}});
+}
+
+function closeModal(){$("backdrop").classList.remove("show");document.body.style.overflow=""}
+
+function showAddForm(){
+  $("backdrop").classList.add("show");document.body.style.overflow="hidden";
+  $("modalContent").innerHTML='<div class="m-head"><div><div class="m-title">New <em>Lead</em></div><div class="m-sub">Add a deal to your pipeline.</div></div><div class="m-head-r"><button class="btn btn-sm" id="mClose">Close</button></div></div><div class="m-body"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label style="font-size:10px;font-weight:700;color:var(--tx4);display:block;margin-bottom:4px">BUSINESS NAME *</label><input class="inp" id="fBiz" placeholder="Merchant name"></div><div><label style="font-size:10px;font-weight:700;color:var(--tx4);display:block;margin-bottom:4px">INDUSTRY</label><select class="inp" id="fInd"><option>Restaurant</option><option>Retail</option><option>Construction</option><option>Trucking</option><option>Services</option><option>Medical</option><option>Auto Repair</option><option>E-Commerce</option></select></div><div><label style="font-size:10px;font-weight:700;color:var(--tx4);display:block;margin-bottom:4px">STATE</label><input class="inp" id="fState" placeholder="NY" maxlength="2"></div><div><label style="font-size:10px;font-weight:700;color:var(--tx4);display:block;margin-bottom:4px">AMOUNT NEEDED *</label><input class="inp" id="fAmt" type="number" placeholder="50000"></div><div><label style="font-size:10px;font-weight:700;color:var(--tx4);display:block;margin-bottom:4px">MONTHLY REVENUE</label><input class="inp" id="fRev" type="number" placeholder="85000"></div><div><label style="font-size:10px;font-weight:700;color:var(--tx4);display:block;margin-bottom:4px">CREDIT SCORE</label><input class="inp" id="fCredit" type="number" placeholder="650"></div><div><label style="font-size:10px;font-weight:700;color:var(--tx4);display:block;margin-bottom:4px">TIB (MONTHS)</label><input class="inp" id="fTib" type="number" placeholder="24"></div><div><label style="font-size:10px;font-weight:700;color:var(--tx4);display:block;margin-bottom:4px">POSITIONS</label><select class="inp" id="fPos"><option value="0">0 — Clean</option><option value="1">1</option><option value="2">2</option><option value="3">3+</option></select></div></div><div style="margin-top:12px"><label style="font-size:10px;font-weight:700;color:var(--tx4);display:block;margin-bottom:4px">NOTES</label><textarea class="inp" id="fNotes" placeholder="Initial notes about this lead…"></textarea></div><div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end"><button class="btn btn-p" id="fSave">Add to Pipeline</button></div></div>';
+  $("mClose").onclick=closeModal;
+  $("fSave").onclick=function(){
+    var biz=$("fBiz").value.trim();var amt=+$("fAmt").value;
+    if(!biz){$("fBiz").style.borderColor="var(--red)";$("fBiz").focus();return}
+    if(!amt){$("fAmt").style.borderColor="var(--red)";$("fAmt").focus();return}
+    var rev=+$("fRev").value||0,cr=+$("fCredit").value||0,tb=+$("fTib").value||0,ps=+$("fPos").value||0;
+    var sc=50;if(cr>=700)sc+=18;else if(cr>=660)sc+=12;else if(cr>=620)sc+=6;else if(cr>0)sc-=10;if(rev>=100000)sc+=14;else if(rev>=60000)sc+=8;else if(rev>=30000)sc+=3;if(tb>=36)sc+=10;else if(tb>=24)sc+=6;else if(tb>=12)sc+=2;if(ps===0)sc+=8;else if(ps>=2)sc-=10;sc=Math.max(1,Math.min(99,sc));
+    var newDeal={id:"d"+Date.now(),biz:biz,industry:$("fInd").value,state:($("fState").value||"").toUpperCase().slice(0,2),amount:amt,revenue:rev,credit:cr,tib:tb,positions:ps,score:sc,stage:"lead",created:new Date().toISOString().slice(0,10),docs:[],funderResponses:[],notes:[],timeline:[{text:"Lead created",done:true}]};
+    var noteText=$("fNotes").value.trim();if(noteText)newDeal.notes.push({date:newDeal.created,text:noteText});
+    deals.unshift(newDeal);saveDeals();closeModal();renderKanban();toast("Deal added — Score "+sc);
+  };
+}
+
+$("btnAddDeal").onclick=showAddForm;
+$("backdrop").onclick=function(e){if(e.target.id==="backdrop")closeModal()};
+renderKanban();
+</script>
+</body>
+</html>
