@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Offer Battle — Competitive Funding | PrivateCreditMCA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Sora:wght@300;400;500;600;700;800&family=Geist+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a10;--sf:#0e1422;--el:#131b2e;--teal:#00d4c8;--t4:#00e8db;--cyan:#00c8ff;--grn:#00e676;--amb:#ffc446;--red:#ff5252;--pur:#b388ff;--gold:#ffd700;--t1:#f0f4fc;--t2:#c8d0e0;--t3:#8b97b0;--tx4:#586580;--tx5:#3a4560;--bd:rgba(255,255,255,.04);--bd2:rgba(255,255,255,.07);--bdt:rgba(0,212,200,.15);--r:16px;--r2:12px;--ex:cubic-bezier(.16,1,.3,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#00b0a6 var(--bg)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:rgba(0,212,200,.3)}a{color:inherit;text-decoration:none}
+.grain{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:180px}
+
+.nav{position:sticky;top:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,32px);background:rgba(6,10,16,.8);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--bd2)}
+.nav-l{display:flex;align-items:center;gap:12px}
+.logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
+.logo::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.2))}
+.logo svg{position:relative;z-index:1}
+.nav-brand{font-weight:700;font-size:14px;letter-spacing:-.3px}.nav-brand em{font-style:normal;color:var(--t4)}
+.nav-sub{font-size:10px;color:var(--tx4);font-weight:600}
+.nav-pills{display:flex;gap:4px;background:var(--sf);border:1px solid var(--bd2);border-radius:100px;padding:3px}
+.nl{padding:6px 12px;border-radius:100px;font-size:11px;font-weight:500;color:var(--t3);transition:all .25s}
+.nl:hover{color:var(--t1)}.nl.active{color:var(--t1);background:rgba(0,212,200,.1);border:1px solid var(--bdt)}
+.nav-r{display:flex;gap:8px;align-items:center}
+.btn{padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;border:1px solid var(--bd2);background:var(--sf);color:var(--t2);cursor:pointer;font-family:'Sora',sans-serif;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--bdt);color:var(--t4);transform:translateY(-1px)}
+.btn-p{background:var(--teal);color:var(--bg);border-color:transparent}.btn-p:hover{box-shadow:0 6px 20px rgba(0,212,200,.25);color:var(--bg)}
+.btn-g{background:rgba(0,230,118,.06);border-color:rgba(0,230,118,.2);color:var(--grn)}.btn-g:hover{border-color:rgba(0,230,118,.4)}
+.btn-d{background:rgba(255,82,82,.06);border-color:rgba(255,82,82,.2);color:var(--red)}
+.btn-gold{background:rgba(255,215,0,.06);border-color:rgba(255,215,0,.2);color:var(--gold)}.btn-gold:hover{border-color:rgba(255,215,0,.4)}
+.btn-sm{padding:6px 10px;font-size:11px;border-radius:8px}
+.inp{width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--bd2);background:rgba(0,0,0,.2);color:var(--t1);font-size:12px;font-family:'Sora',sans-serif;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--teal)}.inp::placeholder{color:rgba(139,151,176,.4)}
+select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23586580' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:100px;border:1px solid var(--bd2);background:rgba(0,0,0,.12);font-size:9px;font-weight:700;white-space:nowrap;color:var(--t3)}
+.pill.tl{border-color:var(--bdt);background:rgba(0,212,200,.06);color:var(--t4)}.pill.gn{border-color:rgba(0,230,118,.2);background:rgba(0,230,118,.06);color:var(--grn)}.pill.wn{border-color:rgba(255,196,70,.2);background:rgba(255,196,70,.06);color:var(--amb)}.pill.rd{border-color:rgba(255,82,82,.2);background:rgba(255,82,82,.06);color:var(--red)}.pill.gold{border-color:rgba(255,215,0,.25);background:rgba(255,215,0,.06);color:var(--gold)}
+
+.content{max-width:1200px;margin:0 auto;padding:24px clamp(16px,3vw,32px)}
+.hero{text-align:center;margin-bottom:28px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,82,82,.06);border:1px solid rgba(255,82,82,.15);border-radius:100px;padding:6px 16px 6px 8px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:16px}
+.hero-badge .bolt{width:24px;height:24px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px}
+.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(32px,5vw,48px);letter-spacing:-1.5px;line-height:1.05;margin-bottom:12px}
+.hero h1 em{font-style:italic;color:var(--red)}
+.hero p{font-size:14px;color:var(--tx4);line-height:1.65;max-width:560px;margin:0 auto}
+
+/* KPI ROW */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px}
+.kpi{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r2);padding:14px;text-align:center}
+.kpi-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tx5)}
+.kpi-val{font-family:'Geist Mono',monospace;font-size:22px;font-weight:800;margin-top:2px}
+
+/* TABS */
+.tab-bar{display:flex;gap:4px;background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r2);padding:4px;margin-bottom:20px;justify-content:center}
+.tab{padding:10px 20px;border-radius:10px;border:none;background:transparent;color:var(--tx4);font-weight:700;font-size:12px;cursor:pointer;font-family:'Sora',sans-serif;transition:all .2s}
+.tab:hover{color:var(--t1)}.tab.active{color:var(--t1);background:rgba(255,82,82,.1)}
+
+/* DEAL ARENA CARDS */
+.arena-grid{display:flex;flex-direction:column;gap:16px}
+.arena-card{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);overflow:hidden;transition:all .3s}
+.arena-card:hover{border-color:var(--bdt)}
+.arena-card.accepted{border-color:rgba(0,230,118,.25)}
+
+.ac-head{padding:18px 20px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--bd2)}
+.ac-biz{font-weight:800;font-size:16px;letter-spacing:-.2px}
+.ac-meta{font-size:11px;color:var(--tx4);margin-top:4px;line-height:1.4}
+.ac-pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.ac-right{text-align:right}
+.ac-amount{font-family:'Geist Mono',monospace;font-size:22px;font-weight:800;color:var(--t4)}
+.ac-status-label{font-size:10px;color:var(--tx4);margin-top:2px}
+
+/* OFFER TABLE */
+.offer-table{width:100%;border-collapse:collapse}
+.offer-table th{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tx5);padding:10px 16px;text-align:left;border-bottom:1px solid var(--bd2);background:rgba(0,0,0,.08)}
+.offer-table th:last-child{text-align:right}
+.offer-table td{padding:12px 16px;border-bottom:1px solid var(--bd);font-size:12px;vertical-align:middle}
+.offer-table tr:last-child td{border:0}
+.offer-table tr{transition:all .2s}
+.offer-table tr:hover{background:rgba(0,212,200,.015)}
+.offer-table tr.best{background:rgba(0,230,118,.03)}
+.offer-table tr.accepted-row{background:rgba(0,230,118,.06)}
+
+.of-funder{display:flex;align-items:center;gap:10px}
+.of-avatar{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Geist Mono',monospace;font-size:10px;font-weight:800;color:#fff}
+.of-name{font-weight:700;font-size:12px}
+.of-note{font-size:10px;color:var(--tx4);margin-top:2px;max-width:200px}
+.of-mono{font-family:'Geist Mono',monospace;font-weight:700}
+.of-actions{display:flex;gap:5px;justify-content:flex-end}
+
+.best-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:100px;background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.15);color:var(--grn);font-size:9px;font-weight:700}
+.crown-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:100px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.15);color:var(--gold);font-size:9px;font-weight:700}
+
+/* ARENA TIMER */
+.timer{display:flex;align-items:center;gap:8px;padding:12px 20px;border-top:1px solid var(--bd2);background:rgba(0,0,0,.06)}
+.timer-dot{width:8px;height:8px;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.timer-text{font-size:11px;color:var(--tx4)}
+.timer-text b{color:var(--t1)}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:40px;color:var(--tx5)}
+
+/* HISTORY */
+.hist-row{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r2);margin-bottom:8px;transition:all .2s;cursor:pointer}
+.hist-row:hover{border-color:var(--bdt)}
+.hist-biz{font-weight:700;font-size:13px;flex:1}
+.hist-meta{font-size:10px;color:var(--tx4)}
+.hist-winner{font-size:11px;font-weight:700;color:var(--grn);text-align:right}
+
+/* MODAL */
+.backdrop{position:fixed;inset:0;background:rgba(6,10,16,.88);backdrop-filter:blur(10px);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;z-index:200;overflow-y:auto}
+.backdrop.show{display:flex}
+.modal{width:min(900px,100%);border-radius:var(--r);border:1px solid var(--bd2);background:var(--sf);box-shadow:0 40px 100px rgba(0,0,0,.6);animation:modalIn .3s var(--ex)}
+@keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.m-head{padding:20px 24px;border-bottom:1px solid var(--bd2);display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.m-title{font-family:'Instrument Serif',serif;font-size:22px;letter-spacing:-.5px}
+.m-title em{font-style:italic;color:var(--t4)}
+.m-body{padding:20px 24px}
+.m-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tx4);margin-bottom:8px;margin-top:16px;display:flex;align-items:center;gap:8px}
+.m-label::after{content:'';flex:1;height:1px;background:var(--bd2)}
+.m-label:first-child{margin-top:0}
+
+/* COMPARISON */
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:16px}
+.cmp-card{background:rgba(0,0,0,.08);border:1px solid var(--bd2);border-radius:var(--r2);padding:14px;text-align:center;transition:all .3s;cursor:pointer;position:relative}
+.cmp-card:hover{border-color:var(--bdt)}
+.cmp-card.winner{border-color:rgba(0,230,118,.3);background:rgba(0,230,118,.04)}
+.cmp-card.winner::before{content:'WINNER';position:absolute;top:8px;right:8px;font-size:8px;font-weight:800;letter-spacing:1px;color:var(--grn);background:rgba(0,230,118,.08);padding:2px 6px;border-radius:100px}
+.cmp-name{font-weight:700;font-size:13px;margin-bottom:8px}
+.cmp-row{display:flex;justify-content:space-between;padding:4px 0;font-size:11px}
+.cmp-row .ck{color:var(--tx4)}.cmp-row .cv{font-family:'Geist Mono',monospace;font-weight:700}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(14,20,34,.96);border:1px solid var(--bdt);padding:10px 24px;border-radius:var(--r2);box-shadow:0 12px 40px rgba(0,0,0,.4);font-weight:700;font-size:12px;display:none;z-index:300;backdrop-filter:blur(16px);color:var(--t4)}
+.toast.show{display:block;animation:ti .25s var(--ex)}
+@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+@media(max-width:768px){.nav-pills{display:none}.kpi-row{grid-template-columns:repeat(3,1fr)}.offer-table{font-size:11px}.offer-table th,.offer-table td{padding:8px 10px}.compare-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<nav class="nav">
+  <div class="nav-l"><a href="index.html" class="logo"><svg width="13" height="13" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div><div class="nav-brand">Private<em>Credit</em>MCA</div><div class="nav-sub">Offer Battle</div></div></div>
+  <div class="nav-pills"><a href="index.html" class="nl">Home</a><a href="marketplace.html" class="nl">Marketplace</a><a href="deallab.html" class="nl">Deal Lab</a><a href="funders.html" class="nl">Funders</a><a href="pipeline.html" class="nl">Pipeline</a><a href="offerbattle.html" class="nl active">Offer Battle</a></div>
+  <div class="nav-r"><a href="pipeline.html" class="btn">Pipeline CRM</a><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="btn btn-p">Join Community</a></div>
+</nav>
+
+<div class="content">
+  <div class="hero">
+    <div class="hero-badge"><span class="bolt"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Competitive Funding</div>
+    <h1>Funders compete.<br>Brokers <em>win.</em></h1>
+    <p>Submit a deal to the arena. Funders bid with live offers — amount, factor, term, daily payment. Compare side-by-side. Accept the best. This is how funding should work.</p>
+  </div>
+
+  <div class="kpi-row" id="kpis"></div>
+
+  <div class="tab-bar">
+    <button class="tab active" data-tab="live">Live Battles</button>
+    <button class="tab" data-tab="completed">Completed</button>
+  </div>
+
+  <div id="liveView"><div class="arena-grid" id="liveGrid"></div></div>
+  <div id="completedView" style="display:none"><div id="completedGrid"></div></div>
+</div>
+
+<div class="backdrop" id="backdrop"><div class="modal"><div id="modalContent"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+var $=function(id){return document.getElementById(id)};
+var toast=function(m){var t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},1400)};
+var money=function(n){return"$"+Math.round(n).toLocaleString()};
+var esc=function(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")};
+var LS="pcmca_offerbattle_v1";
+var COLORS=["#2563eb","#059669","#dc2626","#7c3aed","#0891b2","#ea580c","#d946ef","#0d9488","#e11d48","#4f46e5","#16a34a","#be185d"];
+
+function initials(name){return name.split(" ").map(function(w){return w[0]}).join("").slice(0,2).toUpperCase()}
+function avatarColor(name){var h=0;for(var i=0;i<name.length;i++)h=((h<<5)-h)+name.charCodeAt(i);return COLORS[Math.abs(h)%COLORS.length]}
+function scoreCls(s){return s>=80?"gn":s>=65?"tl":s>=50?"wn":"rd"}
+function timeAgo(dateStr){var d=new Date(dateStr);var now=new Date();var diff=Math.floor((now-d)/3600000);if(diff<1)return"Just now";if(diff<24)return diff+"h ago";return Math.floor(diff/24)+"d ago"}
+
+var SEED=[
+{id:"b1",biz:"Tony's Pizzeria",industry:"Restaurant",state:"NY",amount:65000,revenue:92000,credit:640,score:72,status:"live",created:"2025-12-14T10:30:00",expires:"23h 14m",
+offers:[
+{funder:"Forward Financing",amount:60000,factor:1.37,term:120,speed:"Fast",note:"Approved. Standard terms for restaurant.",accepted:false},
+{funder:"Fora Financial",amount:62000,factor:1.39,term:110,speed:"Standard",note:"Strong offer. Flexible on holdback.",accepted:false},
+{funder:"Credibly",amount:58000,factor:1.35,term:130,speed:"Standard",note:"Longer term available. Competitive rate.",accepted:false},
+{funder:"Everest Business Funding",amount:65000,factor:1.42,term:100,speed:"Fast",note:"Full amount approved. Shorter term.",accepted:false}
+]},
+
+{id:"b2",biz:"Metro Construction LLC",industry:"Construction",state:"FL",amount:120000,revenue:185000,credit:710,score:88,status:"live",created:"2025-12-13T14:00:00",expires:"11h 45m",
+offers:[
+{funder:"Rapid Finance",amount:115000,factor:1.32,term:150,speed:"Standard",note:"Strong file. Premium terms offered.",accepted:false},
+{funder:"CAN Capital",amount:110000,factor:1.34,term:140,speed:"Standard",note:"Approved with standard construction underwriting.",accepted:false},
+{funder:"Libertas Funding",amount:120000,factor:1.36,term:130,speed:"Fast",note:"Full amount. Fast close available.",accepted:false}
+]},
+
+{id:"b3",biz:"Bright Smile Dental",industry:"Medical",state:"CA",amount:90000,revenue:140000,credit:720,score:93,status:"live",created:"2025-12-14T08:00:00",expires:"36h 00m",
+offers:[
+{funder:"OnDeck",amount:85000,factor:1.28,term:160,speed:"Standard",note:"Exceptional rate for strong medical file.",accepted:false},
+{funder:"Mulligan Funding",amount:90000,factor:1.31,term:140,speed:"Fast",note:"Full amount. Medical specialist terms.",accepted:false}
+]},
+
+{id:"b4",biz:"QuickServ Auto",industry:"Auto Repair",state:"TX",amount:40000,revenue:58000,credit:615,score:58,status:"completed",created:"2025-12-08T12:00:00",expires:"Closed",
+offers:[
+{funder:"FundKite",amount:38000,factor:1.38,term:100,speed:"Fast",note:"Approved. Standard subprime terms.",accepted:true},
+{funder:"Bitty Advance",amount:35000,factor:1.40,term:90,speed:"Fast",note:"Smaller approval. Quick funding.",accepted:false},
+{funder:"Pearl Capital",amount:40000,factor:1.44,term:110,speed:"Standard",note:"Full amount but higher factor.",accepted:false}
+]},
+
+{id:"b5",biz:"Harbor Seafood Grill",industry:"Restaurant",state:"MA",amount:55000,revenue:78000,credit:650,score:70,status:"completed",created:"2025-12-05T09:00:00",expires:"Closed",
+offers:[
+{funder:"Forward Financing",amount:52000,factor:1.36,term:120,speed:"Fast",note:"Strong restaurant deal. Fast close.",accepted:true},
+{funder:"Fora Financial",amount:55000,factor:1.39,term:110,speed:"Standard",note:"Full amount approved.",accepted:false}
+]},
+
+{id:"b6",biz:"CloudCart DTC",industry:"E-Commerce",state:"WA",amount:200000,revenue:310000,credit:700,score:86,status:"live",created:"2025-12-14T16:00:00",expires:"47h 30m",
+offers:[
+{funder:"Rapid Finance",amount:180000,factor:1.30,term:160,speed:"Standard",note:"Large deal. Premium e-commerce terms. Partial approval.",accepted:false}
+]}
+];
+
+function loadData(){try{var d=localStorage.getItem(LS);return d?JSON.parse(d):null}catch(e){return null}}
+function saveData(){localStorage.setItem(LS,JSON.stringify(battles))}
+var battles=loadData()||JSON.parse(JSON.stringify(SEED));
+
+function bestOffer(offers){
+  if(!offers.length)return null;
+  var best=null;var bestScore=-1;
+  offers.forEach(function(o){
+    var daily=Math.round((o.amount*o.factor)/o.term);
+    var sc=o.amount/1000-o.factor*40-daily/100+(o.speed==="Fast"?2:0);
+    if(sc>bestScore){bestScore=sc;best=o}
+  });return best
+}
+
+function renderKpis(){
+  var live=battles.filter(function(b){return b.status==="live"}).length;
+  var completed=battles.filter(function(b){return b.status==="completed"}).length;
+  var totalOffers=battles.reduce(function(a,b){return a+b.offers.length},0);
+  var totalVal=battles.reduce(function(a,b){return a+b.amount},0);
+  var avgOffers=battles.length?Math.round(totalOffers/battles.length*10)/10:0;
+  $("kpis").innerHTML='<div class="kpi"><div class="kpi-label">Live Battles</div><div class="kpi-val" style="color:var(--red)">'+live+'</div></div><div class="kpi"><div class="kpi-label">Completed</div><div class="kpi-val" style="color:var(--grn)">'+completed+'</div></div><div class="kpi"><div class="kpi-label">Total Offers</div><div class="kpi-val" style="color:var(--t4)">'+totalOffers+'</div></div><div class="kpi"><div class="kpi-label">Arena Value</div><div class="kpi-val">'+money(totalVal)+'</div></div><div class="kpi"><div class="kpi-label">Avg Offers/Deal</div><div class="kpi-val">'+avgOffers+'</div></div>';
+}
+
+function renderLive(){
+  renderKpis();
+  var live=battles.filter(function(b){return b.status==="live"});
+  var grid=$("liveGrid");
+  if(!live.length){grid.innerHTML='<div class="empty-state"><p style="font-family:Instrument Serif,serif;font-size:22px;color:var(--t3)">No live battles</p><p style="margin-top:6px;font-size:12px">Submit a deal to start the bidding.</p></div>';return}
+  grid.innerHTML="";
+  live.forEach(function(b){
+    var best=bestOffer(b.offers);
+    var card=document.createElement("div");card.className="arena-card";
+    var headHtml='<div class="ac-head"><div><div class="ac-biz">'+esc(b.biz)+'</div><div class="ac-meta">'+b.industry+' · '+b.state+' · '+money(b.revenue)+'/mo · Credit '+b.credit+'</div><div class="ac-pills"><span class="pill '+scoreCls(b.score)+'">Score '+b.score+'</span><span class="pill">'+b.offers.length+' offer'+(b.offers.length!==1?"s":"")+'</span></div></div><div class="ac-right"><div class="ac-amount">'+money(b.amount)+'</div><div class="ac-status-label">requested</div></div></div>';
+
+    var tableHtml='<table class="offer-table"><thead><tr><th>Funder</th><th>Amount</th><th>Factor</th><th>Term</th><th>Daily</th><th>Speed</th><th style="text-align:right">Actions</th></tr></thead><tbody>';
+    b.offers.forEach(function(o){
+      var daily=Math.round((o.amount*o.factor)/o.term);
+      var isBest=best&&o.funder===best.funder;
+      var rowCls=isBest?"best":"";
+      var col=avatarColor(o.funder);
+      tableHtml+='<tr class="'+rowCls+'"><td><div class="of-funder"><div class="of-avatar" style="background:'+col+'">'+initials(o.funder)+'</div><div><div class="of-name">'+esc(o.funder)+(isBest?' <span class="best-badge">Best Value</span>':'')+'</div><div class="of-note">'+esc(o.note)+'</div></div></div></td><td class="of-mono" style="color:var(--t4)">'+money(o.amount)+'</td><td class="of-mono">'+o.factor.toFixed(2)+'</td><td class="of-mono">'+o.term+'d</td><td class="of-mono">'+money(daily)+'</td><td><span class="pill '+(o.speed==="Fast"?"gn":"tl")+'">'+o.speed+'</span></td><td><div class="of-actions"><button class="btn btn-g btn-sm accept-btn" data-bid="'+b.id+'" data-funder="'+esc(o.funder)+'">Accept</button></div></td></tr>';
+    });
+    tableHtml+='</tbody></table>';
+
+    var timerHtml='<div class="timer"><div class="timer-dot" style="background:var(--red)"></div><div class="timer-text">Arena closes in <b>'+b.expires+'</b> · '+b.offers.length+' funder'+(b.offers.length!==1?"s":"")+' bidding</div><button class="btn btn-sm compare-btn" data-bid="'+b.id+'" style="margin-left:auto">Compare Offers</button></div>';
+
+    card.innerHTML=headHtml+tableHtml+timerHtml;
+    grid.appendChild(card);
+  });
+
+  document.querySelectorAll(".accept-btn").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      var bid=btn.dataset.bid;var funder=btn.dataset.funder;
+      acceptOffer(bid,funder);
+    });
+  });
+  document.querySelectorAll(".compare-btn").forEach(function(btn){
+    btn.addEventListener("click",function(){openCompare(btn.dataset.bid)});
+  });
+}
+
+function renderCompleted(){
+  renderKpis();
+  var completed=battles.filter(function(b){return b.status==="completed"});
+  var grid=$("completedGrid");
+  if(!completed.length){grid.innerHTML='<div class="empty-state"><p style="font-family:Instrument Serif,serif;font-size:22px;color:var(--t3)">No completed battles yet</p></div>';return}
+  grid.innerHTML="";
+  completed.forEach(function(b){
+    var winner=b.offers.find(function(o){return o.accepted});
+    var row=document.createElement("div");row.className="hist-row";
+    row.innerHTML='<div><div class="hist-biz">'+esc(b.biz)+'</div><div class="hist-meta">'+b.industry+' · '+b.state+' · '+money(b.amount)+' requested · '+b.offers.length+' offers</div></div><div style="flex:1"></div>'+(winner?'<div class="hist-winner">'+esc(winner.funder)+' — '+money(winner.amount)+' @ '+winner.factor.toFixed(2)+'x</div>':'<div style="font-size:11px;color:var(--tx5)">No winner</div>');
+    row.addEventListener("click",function(){openCompare(b.id)});
+    grid.appendChild(row);
+  });
+}
+
+function acceptOffer(battleId,funderName){
+  var b=battles.find(function(x){return x.id===battleId});if(!b)return;
+  b.offers.forEach(function(o){o.accepted=(o.funder===funderName)});
+  b.status="completed";b.expires="Closed";
+  saveData();renderLive();renderCompleted();
+  toast("Accepted offer from "+funderName);
+}
+
+function openCompare(battleId){
+  var b=battles.find(function(x){return x.id===battleId});if(!b)return;
+  $("backdrop").classList.add("show");document.body.style.overflow="hidden";
+  var best=bestOffer(b.offers);
+  var html='<div class="m-head"><div><div class="m-title">'+esc(b.biz)+' — <em>Offer Comparison</em></div><div style="font-size:11px;color:var(--tx4);margin-top:4px">'+b.industry+' · '+b.state+' · '+money(b.amount)+' requested · '+b.offers.length+' offers</div></div><button class="btn btn-sm" id="mClose">Close</button></div>';
+  html+='<div class="m-body"><div class="m-label">Side-by-Side Comparison</div><div class="compare-grid">';
+  b.offers.forEach(function(o){
+    var daily=Math.round((o.amount*o.factor)/o.term);
+    var payback=Math.round(o.amount*o.factor);
+    var isBest=best&&o.funder===best.funder;
+    var isWinner=o.accepted;
+    html+='<div class="cmp-card'+(isWinner?" winner":"")+'"><div class="of-avatar" style="background:'+avatarColor(o.funder)+';width:36px;height:36px;border-radius:10px;margin:0 auto 8px;font-family:Geist Mono,monospace;font-size:12px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">'+initials(o.funder)+'</div><div class="cmp-name">'+esc(o.funder)+'</div>'+(isBest&&!isWinner?'<div style="margin-bottom:6px"><span class="best-badge">Best Value</span></div>':'')+'<div class="cmp-row"><span class="ck">Amount</span><span class="cv" style="color:var(--t4)">'+money(o.amount)+'</span></div><div class="cmp-row"><span class="ck">Factor</span><span class="cv">'+o.factor.toFixed(2)+'</span></div><div class="cmp-row"><span class="ck">Term</span><span class="cv">'+o.term+'d</span></div><div class="cmp-row"><span class="ck">Daily</span><span class="cv">'+money(daily)+'</span></div><div class="cmp-row"><span class="ck">Payback</span><span class="cv">'+money(payback)+'</span></div><div class="cmp-row"><span class="ck">Speed</span><span class="cv">'+o.speed+'</span></div><div style="font-size:10px;color:var(--tx4);margin-top:8px;line-height:1.4">'+esc(o.note)+'</div></div>';
+  });
+  html+='</div>';
+
+  // Ranking
+  var ranked=b.offers.slice().sort(function(a,bb){
+    var da=Math.round((a.amount*a.factor)/a.term);var db=Math.round((bb.amount*bb.factor)/bb.term);
+    return(a.factor-bb.factor)||( da-db);
+  });
+  html+='<div class="m-label">Ranking</div><table class="offer-table"><thead><tr><th>#</th><th>Funder</th><th>Factor</th><th>Daily</th><th>Amount</th><th style="text-align:right">Verdict</th></tr></thead><tbody>';
+  ranked.forEach(function(o,i){
+    var daily=Math.round((o.amount*o.factor)/o.term);
+    html+='<tr'+(o.accepted?' class="accepted-row"':'')+'><td class="of-mono" style="color:'+(i===0?'var(--gold)':i===1?'var(--t3)':'var(--tx4)')+'">'+( i+1)+'</td><td class="of-name">'+esc(o.funder)+'</td><td class="of-mono">'+o.factor.toFixed(2)+'</td><td class="of-mono">'+money(daily)+'</td><td class="of-mono" style="color:var(--t4)">'+money(o.amount)+'</td><td style="text-align:right">'+(o.accepted?'<span class="crown-badge">Accepted</span>':i===0?'<span class="best-badge">Best Rate</span>':'')+'</td></tr>';
+  });
+  html+='</tbody></table></div>';
+
+  $("modalContent").innerHTML=html;
+  $("mClose").onclick=function(){$("backdrop").classList.remove("show");document.body.style.overflow=""};
+}
+
+// TABS
+document.querySelectorAll(".tab").forEach(function(t){
+  t.addEventListener("click",function(){
+    document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active")});
+    t.classList.add("active");
+    var v=t.dataset.tab;
+    $("liveView").style.display=v==="live"?"block":"none";
+    $("completedView").style.display=v==="completed"?"block":"none";
+    if(v==="completed")renderCompleted();
+  });
+});
+
+$("backdrop").addEventListener("click",function(e){if(e.target.id==="backdrop"){$("backdrop").classList.remove("show");document.body.style.overflow=""}});
+
+renderLive();renderCompleted();
+</script>
+</body>
+</html>
