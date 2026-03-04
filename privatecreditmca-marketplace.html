@@ -4,1127 +4,167 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PrivateCreditMCA — Live Marketplace</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #07080A;
-  --bg-card: #0D0F13;
-  --bg-card-hover: #12151B;
-  --bg-surface: #10131A;
-  --border: rgba(255,255,255,0.06);
-  --border-bright: rgba(255,255,255,0.12);
-  --border-focus: rgba(0,232,123,0.4);
-  --text: #EAEDF3;
-  --text-dim: #6B7280;
-  --text-mid: #9CA3AF;
-  --accent: #00E87B;
-  --accent-dim: rgba(0,232,123,0.10);
-  --accent-glow: rgba(0,232,123,0.25);
-  --red: #FF4D4D;
-  --red-dim: rgba(255,77,77,0.10);
-  --amber: #FFAA2C;
-  --amber-dim: rgba(255,170,44,0.10);
-  --blue: #3B82F6;
-  --blue-dim: rgba(59,130,246,0.10);
-  --purple: #A855F7;
-  --purple-dim: rgba(168,85,247,0.10);
-  --radius: 14px;
-  --radius-sm: 8px;
-  --sidebar-w: 280px;
-}
+:root{--bg:#fff;--bg2:#F7F9FC;--bdr:#E5E9F0;--bdr2:#CBD2DE;--bdr-f:rgba(8,145,178,.4);--tx:#0B1A2E;--tx2:#4A5568;--tx3:#8896A6;--nvy:#0B3D6B;--bl:#1565C0;--tl:#0891B2;--cy:#06B6D4;--gn:#16A34A;--gn-l:#ECFDF5;--rd:#DC2626;--rd-l:#FEF2F2;--am:#D97706;--am-l:#FFFBEB;--bl-l:#EFF6FF;--tl-l:#ECFEFF;--pr:#7C3AED;--pr-l:#F5F3FF;--gr:linear-gradient(135deg,#0B3D6B,#1565C0,#0891B2);--r:12px;--rs:8px;--sh:0 4px 16px rgba(11,26,46,.08);--shl:0 12px 40px rgba(11,26,46,.12);--sw:272px}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--tx);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}.mono{font-family:'JetBrains Mono',monospace}a{text-decoration:none;color:inherit}
 
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'Outfit', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-  min-height: 100vh;
-}
-.mono { font-family: 'JetBrains Mono', monospace; }
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr)}
+nav .logo img{height:32px}
+.nc{display:flex;gap:28px}.nc a{font-size:13px;font-weight:600;color:var(--tx3);border-bottom:2px solid transparent;padding:6px 0;transition:all .2s}.nc a.on,.nc a:hover{color:var(--tx);border-color:var(--tl)}
+.nr{display:flex;gap:12px}.nb{padding:8px 20px;border-radius:100px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s;border:none;display:inline-block}.nb.p{background:var(--gr);color:#fff}.nb.p:hover{box-shadow:0 4px 20px rgba(11,61,107,.25)}.nb.s{background:transparent;color:var(--tx2);border:1.5px solid var(--bdr)}
 
-body::before {
-  content: '';
-  position: fixed; top: -50%; left: -50%;
-  width: 200%; height: 200%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none; z-index: 9999;
-}
+.app{display:flex;padding-top:56px;min-height:100vh}
+.side{width:var(--sw);min-width:var(--sw);border-right:1px solid var(--bdr);padding:24px 20px;position:fixed;top:56px;bottom:0;left:0;overflow-y:auto;background:var(--bg)}.side::-webkit-scrollbar{width:4px}.side::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:4px}
+.ss{margin-bottom:24px}.sl{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--tx3);margin-bottom:10px}
+.si{width:100%;padding:10px 14px;border-radius:var(--rs);background:var(--bg2);border:1px solid var(--bdr);color:var(--tx);font-family:inherit;font-size:13px;outline:none}.si::placeholder{color:var(--tx3)}.si:focus{border-color:var(--bdr-f)}
+.cg{display:flex;flex-wrap:wrap;gap:6px}.ch{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;border:1px solid var(--bdr);background:transparent;color:var(--tx3);cursor:pointer;font-family:inherit;transition:all .2s}.ch:hover{border-color:var(--bdr2)}.ch.on{border-color:var(--tl);color:var(--tl);background:var(--tl-l)}
+.sr{margin-top:8px}.sr input[type=range]{width:100%;-webkit-appearance:none;background:transparent;margin:8px 0}.sr input[type=range]::-webkit-slider-track{height:4px;border-radius:2px;background:var(--bdr)}.sr input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--tl);margin-top:-6px;cursor:pointer}
+.srl{display:flex;justify-content:space-between;font-size:12px;color:var(--tx3);margin-top:4px}.srl .v{color:var(--tl);font-weight:600}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.sb{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--rs);padding:14px;text-align:center}.sb .n{font-size:22px;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.sb .l{font-size:10px;color:var(--tx3);margin-top:2px}
 
-/* ─── TOP NAV ─────────────────────────── */
-.topnav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  height: 60px; display: flex; align-items: center; justify-content: space-between;
-  padding: 0 24px;
-  background: rgba(7,8,10,0.85); backdrop-filter: blur(24px);
-  border-bottom: 1px solid var(--border);
-}
-.topnav-logo {
-  font-weight: 800; font-size: 17px; display: flex; align-items: center; gap: 10px;
-  text-decoration: none; color: var(--text);
-}
-.topnav-logo .dot {
-  width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
-  box-shadow: 0 0 12px var(--accent-glow);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%,100%{opacity:1;transform:scale(1)}
-  50%{opacity:.5;transform:scale(.8)}
-}
-.topnav-center {
-  display: flex; align-items: center; gap: 28px;
-}
-.topnav-center a {
-  font-size: 13px; font-weight: 500; color: var(--text-dim);
-  text-decoration: none; padding: 6px 0;
-  border-bottom: 2px solid transparent; transition: all 0.2s;
-}
-.topnav-center a.active,
-.topnav-center a:hover { color: var(--text); border-color: var(--accent); }
-.topnav-right { display: flex; align-items: center; gap: 16px; }
-.topnav-btn {
-  background: var(--accent); color: var(--bg); border: none;
-  padding: 8px 20px; border-radius: 100px; font-weight: 700;
-  font-size: 13px; cursor: pointer; font-family: inherit; transition: all 0.2s;
-}
-.topnav-btn:hover { box-shadow: 0 4px 20px var(--accent-glow); transform: translateY(-1px); }
-.topnav-btn.secondary {
-  background: transparent; color: var(--text-mid);
-  border: 1px solid var(--border-bright);
-}
-.topnav-btn.secondary:hover { border-color: var(--text-mid); color: var(--text); }
+.main{flex:1;margin-left:var(--sw);padding:24px}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.mh h1{font-size:24px;font-weight:800;display:flex;align-items:center;gap:12px}
+.lb{display:inline-flex;align-items:center;gap:6px;background:var(--rd-l);border:1px solid rgba(220,38,38,.15);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;color:var(--rd);text-transform:uppercase;letter-spacing:1.5px}.lb .bk{width:6px;height:6px;border-radius:50%;background:var(--rd);animation:p 1s infinite}
+@keyframes p{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.sbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:13px}.sbar .c{color:var(--tx3)}.sbar .c strong{color:var(--tx2)}
+.ssel{background:var(--bg);border:1px solid var(--bdr);color:var(--tx2);padding:6px 12px;border-radius:var(--rs);font-family:inherit;font-size:12px;cursor:pointer;outline:none}
 
-/* ─── LAYOUT ──────────────────────────── */
-.app { display: flex; padding-top: 60px; min-height: 100vh; }
+.dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.dc{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;cursor:pointer;transition:all .3s}.dc:hover{border-color:var(--bdr2);transform:translateY(-3px);box-shadow:var(--shl)}
+.dt{display:flex;justify-content:space-between;margin-bottom:14px}
+.ds{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px}.ds.live{color:var(--rd)}.ds.live .dot{width:6px;height:6px;border-radius:50%;background:var(--rd);animation:p 1s infinite}.ds.new{color:var(--bl)}.ds.funded{color:var(--gn)}.ds.reviewing{color:var(--am)}
+.dtm{font-size:11px;color:var(--tx3)}
+.dbz{font-size:18px;font-weight:700;margin-bottom:4px}
+.dts{display:flex;gap:6px;margin-bottom:12px}.tg{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600}.tg.i{border:1px solid rgba(21,101,192,.15);color:var(--bl);background:var(--bl-l)}.tg.s{border:1px solid rgba(124,58,237,.15);color:var(--pr);background:var(--pr-l)}
+.rr{display:flex;align-items:center;gap:8px;margin-bottom:12px}.rs{display:inline-flex;align-items:center;justify-content:center;width:36px;height:22px;border-radius:4px;font-size:11px;font-weight:700}.rs.a{background:var(--gn-l);color:var(--gn)}.rs.b{background:var(--tl-l);color:var(--tl)}.rs.c{background:var(--am-l);color:var(--am)}.rt{flex:1;height:4px;border-radius:2px;background:var(--bdr)}.rf{height:100%;border-radius:2px}.rf.h{background:var(--gn)}.rf.m{background:var(--am)}.rf.lo{background:var(--rd)}
+.df{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.dfi{background:var(--bg2);border-radius:var(--rs);padding:10px 12px}.dfi .fl{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;font-weight:600}.dfi .fv{font-size:18px;font-weight:800;margin-top:2px}.dfi .fv.ac{color:var(--tl)}
+.dbot{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--bdr)}.doc{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}.doc .cn{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--tl-l);color:var(--tl);font-size:12px;font-weight:700}
+.dvb{font-size:12px;font-weight:700;color:var(--tl);background:none;border:none;cursor:pointer;font-family:inherit}
 
-/* ─── LEFT SIDEBAR ────────────────────── */
-.sidebar {
-  width: var(--sidebar-w); min-width: var(--sidebar-w);
-  border-right: 1px solid var(--border);
-  padding: 24px 20px;
-  position: fixed; top: 60px; bottom: 0; left: 0;
-  overflow-y: auto;
-  background: var(--bg);
-}
-.sidebar::-webkit-scrollbar { width: 4px; }
-.sidebar::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
+/* MODAL */
+.mo{position:fixed;inset:0;z-index:500;background:rgba(11,26,46,.25);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:24px}.mo.open{display:flex}
+.md{background:var(--bg);border:1px solid var(--bdr);border-radius:18px;width:100%;max-width:860px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:var(--shl)}
+.mx{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:var(--bg2);border:1px solid var(--bdr);color:var(--tx3);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}.mx:hover{color:var(--tx)}
+.mh2{padding:36px 36px 0}.mst{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--rd);margin-bottom:10px}.mst .dot{width:6px;height:6px;border-radius:50%;background:var(--rd);animation:p 1s infinite}
+.mbz{font-size:28px;font-weight:800;margin-bottom:6px}.mts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.mfg{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}.mf{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--rs);padding:16px;text-align:center}.mf .l{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;font-weight:600}.mf .v{font-size:22px;font-weight:800;margin-top:4px}.mf .v.ac{color:var(--tl)}
+.mai{margin:0 36px 28px;background:var(--tl-l);border:1px solid rgba(8,145,178,.12);border-radius:var(--r);padding:24px}
+.mai-l{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tl);margin-bottom:14px}
+.mai-g{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.mai-i .al{font-size:12px;color:var(--tx3)}.mai-i .av{font-size:18px;font-weight:700}.mai-i .av.g{color:var(--gn)}.mai-i .av.w{color:var(--am)}
+.mof{margin:0 36px 28px}.mof-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.mof-h h3{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+.ocb{display:inline-flex;padding:2px 10px;border-radius:100px;background:var(--tl-l);color:var(--tl);font-size:12px;font-weight:700}
+.ot{width:100%;border-collapse:collapse}.ot th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--tx3);padding:10px 14px;border-bottom:1px solid var(--bdr)}.ot td{padding:14px;border-bottom:1px solid var(--bdr);font-size:14px}.ot tr:last-child td{border-bottom:none}.ot tr:hover td{background:var(--bg2)}
+.ofn{font-weight:600}.oam{font-weight:700}
+.obg{display:inline-flex;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700}.obg.ac{background:var(--gn-l);color:var(--gn)}.obg.rv{background:var(--am-l);color:var(--am)}
+.oac{background:var(--gr);color:#fff;border:none;padding:6px 16px;border-radius:100px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit}
+.mtl{margin:0 36px 36px}.mtl h3{font-size:17px;font-weight:700;margin-bottom:14px}.tll{position:relative;padding-left:24px}.tll::before{content:'';position:absolute;left:5px;top:4px;bottom:4px;width:2px;background:var(--bdr)}
+.tli{position:relative;padding:0 0 18px 16px;font-size:13px}.tli:last-child{padding-bottom:0}.tli::before{content:'';position:absolute;left:-22px;top:5px;width:8px;height:8px;border-radius:50%;background:var(--tl);border:2px solid var(--bg)}
+.tli .tt{font-size:11px;color:var(--tx3)}.tli .te{color:var(--tx2)}.tli .te strong{color:var(--tx)}
 
-.sidebar-section { margin-bottom: 28px; }
-.sidebar-label {
-  font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
-  text-transform: uppercase; color: var(--text-dim); margin-bottom: 12px;
-}
-.filter-search {
-  width: 100%; padding: 10px 14px; border-radius: var(--radius-sm);
-  background: var(--bg-card); border: 1px solid var(--border);
-  color: var(--text); font-family: inherit; font-size: 13px;
-  outline: none; transition: border 0.2s;
-}
-.filter-search::placeholder { color: var(--text-dim); }
-.filter-search:focus { border-color: var(--border-focus); }
-
-.filter-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.filter-chip {
-  padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 600;
-  border: 1px solid var(--border); background: transparent;
-  color: var(--text-dim); cursor: pointer; font-family: inherit;
-  transition: all 0.2s;
-}
-.filter-chip:hover { border-color: var(--border-bright); color: var(--text-mid); }
-.filter-chip.active {
-  border-color: var(--accent); color: var(--accent);
-  background: var(--accent-dim);
-}
-
-.filter-range { margin-top: 8px; }
-.filter-range input[type="range"] {
-  width: 100%; -webkit-appearance: none; background: transparent; margin: 8px 0;
-}
-.filter-range input[type="range"]::-webkit-slider-track {
-  height: 4px; border-radius: 2px; background: var(--border-bright);
-}
-.filter-range input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
-  background: var(--accent); margin-top: -6px; cursor: pointer;
-  box-shadow: 0 0 8px var(--accent-glow);
-}
-.filter-range-label {
-  display: flex; justify-content: space-between; font-size: 12px;
-  color: var(--text-dim); margin-top: 4px;
-}
-.filter-range-label .val { color: var(--accent); font-weight: 600; }
-
-.sidebar-stat-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-}
-.sidebar-stat {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 14px; text-align: center;
-}
-.sidebar-stat .num {
-  font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
-  background: linear-gradient(135deg, var(--accent), #00C9FF);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.sidebar-stat .lbl { font-size: 10px; color: var(--text-dim); margin-top: 2px; font-weight: 500; }
-
-/* ─── MAIN CONTENT ────────────────────── */
-.main {
-  flex: 1; margin-left: var(--sidebar-w);
-  padding: 24px;
-}
-
-/* ─── TOP BAR ─────────────────────────── */
-.marketplace-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 24px;
-}
-.marketplace-header h1 {
-  font-size: 24px; font-weight: 800; letter-spacing: -0.5px;
-  display: flex; align-items: center; gap: 12px;
-}
-.marketplace-header h1 .live-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: var(--red-dim); border: 1px solid rgba(255,77,77,0.2);
-  padding: 4px 12px; border-radius: 100px;
-  font-size: 11px; font-weight: 700; color: var(--red);
-  text-transform: uppercase; letter-spacing: 1.5px;
-}
-.live-badge .blink {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--red);
-  animation: pulse 1s infinite;
-}
-.view-toggle { display: flex; gap: 4px; }
-.view-btn {
-  width: 36px; height: 36px; border-radius: var(--radius-sm);
-  border: 1px solid var(--border); background: transparent;
-  color: var(--text-dim); cursor: pointer; font-size: 16px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
-}
-.view-btn.active, .view-btn:hover {
-  border-color: var(--border-bright); color: var(--text); background: var(--bg-card);
-}
-
-/* ─── SORT / COUNT BAR ────────────────── */
-.sort-bar {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 20px; font-size: 13px;
-}
-.sort-bar .count { color: var(--text-dim); }
-.sort-bar .count strong { color: var(--text-mid); }
-.sort-select {
-  background: var(--bg-card); border: 1px solid var(--border);
-  color: var(--text-mid); padding: 6px 12px; border-radius: var(--radius-sm);
-  font-family: inherit; font-size: 12px; cursor: pointer; outline: none;
-}
-
-/* ─── DEAL GRID ───────────────────────── */
-.deal-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 16px;
-}
-
-/* ─── DEAL CARD ───────────────────────── */
-.deal-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-  cursor: pointer;
-  transition: all 0.3s;
-  position: relative; overflow: hidden;
-}
-.deal-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--accent), transparent);
-  opacity: 0; transition: opacity 0.3s;
-}
-.deal-card:hover {
-  border-color: var(--border-bright); transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-}
-.deal-card:hover::before { opacity: 1; }
-
-.deal-card-top { display: flex; justify-content: space-between; align-items: start; margin-bottom: 14px; }
-.deal-status {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 10px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 1.5px;
-}
-.deal-status.live { color: var(--red); }
-.deal-status.live .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse 1s infinite; }
-.deal-status.new { color: var(--blue); }
-.deal-status.funded { color: var(--accent); }
-.deal-status.reviewing { color: var(--amber); }
-.deal-time { font-size: 11px; color: var(--text-dim); }
-
-.deal-biz { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-.deal-meta-row {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-.deal-tag {
-  display: inline-flex; padding: 3px 10px; border-radius: 100px;
-  font-size: 11px; font-weight: 600; border: 1px solid var(--border);
-  color: var(--text-dim);
-}
-.deal-tag.industry { border-color: rgba(59,130,246,0.2); color: var(--blue); background: var(--blue-dim); }
-.deal-tag.state { border-color: rgba(168,85,247,0.2); color: var(--purple); background: var(--purple-dim); }
-
-.deal-financials {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-  margin-bottom: 16px;
-}
-.deal-fin-block {
-  background: rgba(255,255,255,0.02);
-  border-radius: var(--radius-sm); padding: 10px 12px;
-}
-.deal-fin-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-.deal-fin-val { font-size: 18px; font-weight: 800; margin-top: 2px; letter-spacing: -0.3px; }
-.deal-fin-val.accent { color: var(--accent); }
-
-.deal-offers-bar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding-top: 14px; border-top: 1px solid var(--border);
-}
-.deal-offer-count {
-  font-size: 13px; font-weight: 600;
-  display: flex; align-items: center; gap: 6px;
-}
-.deal-offer-count .cnt {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--accent-dim); color: var(--accent);
-  font-size: 12px; font-weight: 700;
-}
-.deal-view-btn {
-  font-size: 12px; font-weight: 700; color: var(--accent);
-  background: none; border: none; cursor: pointer; font-family: inherit;
-  display: flex; align-items: center; gap: 4px;
-  transition: gap 0.2s;
-}
-.deal-view-btn:hover { gap: 8px; }
-
-/* ─── AI RISK RIBBON ──────────────────── */
-.risk-ribbon {
-  display: flex; align-items: center; gap: 8px;
-  margin-bottom: 14px;
-}
-.risk-score {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 36px; height: 22px; border-radius: 4px;
-  font-size: 11px; font-weight: 700;
-}
-.risk-score.a { background: var(--accent-dim); color: var(--accent); }
-.risk-score.b { background: var(--accent-dim); color: var(--accent); }
-.risk-score.c { background: var(--amber-dim); color: var(--amber); }
-.risk-score.d { background: var(--red-dim); color: var(--red); }
-.risk-bar-track { flex: 1; height: 4px; border-radius: 2px; background: var(--border-bright); }
-.risk-bar-fill { height: 100%; border-radius: 2px; }
-.risk-bar-fill.high { background: var(--accent); }
-.risk-bar-fill.med { background: var(--amber); }
-.risk-bar-fill.low { background: var(--red); }
-
-/* ─── MODAL OVERLAY ───────────────────── */
-.modal-overlay {
-  position: fixed; inset: 0; z-index: 500;
-  background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
-  display: none; align-items: center; justify-content: center;
-  padding: 24px;
-}
-.modal-overlay.open { display: flex; }
-
-.modal {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-bright);
-  border-radius: 18px;
-  width: 100%; max-width: 860px; max-height: 90vh;
-  overflow-y: auto; position: relative;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.6);
-}
-.modal::-webkit-scrollbar { width: 6px; }
-.modal::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
-
-.modal-close {
-  position: absolute; top: 20px; right: 20px;
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--bg-card); border: 1px solid var(--border);
-  color: var(--text-mid); font-size: 18px;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s; z-index: 2;
-}
-.modal-close:hover { border-color: var(--text-dim); color: var(--text); }
-
-.modal-hero {
-  padding: 40px 40px 0;
-}
-.modal-status {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 1.5px; color: var(--red); margin-bottom: 12px;
-}
-.modal-status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse 1s infinite; }
-.modal-biz { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
-.modal-meta-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
-
-.modal-fin-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
-  margin-bottom: 32px;
-}
-.modal-fin-block {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 16px; text-align: center;
-}
-.modal-fin-block .lbl { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-.modal-fin-block .val { font-size: 22px; font-weight: 800; margin-top: 4px; letter-spacing: -0.3px; }
-.modal-fin-block .val.accent { color: var(--accent); }
-
-/* ─── AI ANALYSIS CARD ────────────────── */
-.modal-ai {
-  margin: 0 40px 32px;
-  background: linear-gradient(135deg, rgba(0,232,123,0.04), rgba(0,201,255,0.02));
-  border: 1px solid rgba(0,232,123,0.15);
-  border-radius: var(--radius); padding: 28px;
-}
-.modal-ai-label {
-  font-size: 11px; font-weight: 700; letter-spacing: 2px;
-  text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
-  display: flex; align-items: center; gap: 8px;
-}
-.modal-ai-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
-}
-.modal-ai-item .ai-lbl { font-size: 12px; color: var(--text-dim); margin-bottom: 2px; }
-.modal-ai-item .ai-val { font-size: 18px; font-weight: 700; }
-.modal-ai-item .ai-val.good { color: var(--accent); }
-.modal-ai-item .ai-val.warn { color: var(--amber); }
-
-/* ─── OFFERS TABLE ────────────────────── */
-.modal-offers {
-  margin: 0 40px 32px;
-}
-.modal-offers-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 16px;
-}
-.modal-offers-header h3 {
-  font-size: 17px; font-weight: 700;
-  display: flex; align-items: center; gap: 8px;
-}
-.offer-count-badge {
-  display: inline-flex; align-items: center; justify-content: center;
-  padding: 2px 10px; border-radius: 100px;
-  background: var(--accent-dim); color: var(--accent);
-  font-size: 12px; font-weight: 700;
-}
-
-.offer-table { width: 100%; border-collapse: collapse; }
-.offer-table th {
-  text-align: left; font-size: 10px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 1.5px;
-  color: var(--text-dim); padding: 10px 14px;
-  border-bottom: 1px solid var(--border);
-}
-.offer-table td {
-  padding: 14px; border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-.offer-table tr:last-child td { border-bottom: none; }
-.offer-table tr:hover td { background: rgba(255,255,255,0.01); }
-.offer-funder { font-weight: 600; }
-.offer-amount { font-weight: 700; }
-.offer-factor { color: var(--text-mid); }
-.offer-status-badge {
-  display: inline-flex; padding: 4px 12px; border-radius: 100px;
-  font-size: 11px; font-weight: 700;
-}
-.offer-status-badge.active { background: var(--accent-dim); color: var(--accent); }
-.offer-status-badge.reviewing { background: var(--amber-dim); color: var(--amber); }
-.offer-status-badge.declined { background: var(--red-dim); color: var(--red); }
-.offer-accept-btn {
-  background: var(--accent); color: var(--bg); border: none;
-  padding: 6px 16px; border-radius: 100px; font-weight: 700;
-  font-size: 12px; cursor: pointer; font-family: inherit;
-  transition: all 0.2s;
-}
-.offer-accept-btn:hover { box-shadow: 0 4px 16px var(--accent-glow); }
-
-/* ─── DEAL TIMELINE ───────────────────── */
-.modal-timeline {
-  margin: 0 40px 40px;
-}
-.modal-timeline h3 { font-size: 17px; font-weight: 700; margin-bottom: 16px; }
-.timeline-list { position: relative; padding-left: 24px; }
-.timeline-list::before {
-  content: ''; position: absolute; left: 5px; top: 4px; bottom: 4px;
-  width: 2px; background: var(--border-bright);
-}
-.timeline-item {
-  position: relative; padding: 0 0 20px 16px; font-size: 13px;
-}
-.timeline-item:last-child { padding-bottom: 0; }
-.timeline-item::before {
-  content: ''; position: absolute; left: -22px; top: 5px;
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--accent); border: 2px solid var(--bg-surface);
-}
-.timeline-item .tl-time { font-size: 11px; color: var(--text-dim); margin-bottom: 2px; }
-.timeline-item .tl-event { color: var(--text-mid); }
-.timeline-item .tl-event strong { color: var(--text); }
-
-/* ─── ACTIVITY FEED (RIGHT) ───────────── */
-.activity-pulse {
-  position: fixed; top: 80px; right: 24px; width: 260px;
-  z-index: 50;
-}
-.activity-card {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 16px;
-  animation: slideIn 0.4s ease both;
-  margin-bottom: 8px;
-}
-@keyframes slideIn {
-  from { opacity:0; transform:translateX(20px); }
-  to { opacity:1; transform:translateX(0); }
-}
-.activity-card .act-header {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 10px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 1.5px; color: var(--accent); margin-bottom: 8px;
-}
-.activity-card .act-header .blink {
-  width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
-  animation: pulse 1.5s infinite;
-}
-.activity-card .act-text { font-size: 13px; color: var(--text-mid); line-height: 1.4; }
-.activity-card .act-text strong { color: var(--text); }
-.activity-card .act-time { font-size: 11px; color: var(--text-dim); margin-top: 6px; }
-
-/* ─── RESPONSIVE ──────────────────────── */
-@media (max-width: 1100px) {
-  .activity-pulse { display: none; }
-}
-@media (max-width: 900px) {
-  .sidebar { display: none; }
-  .main { margin-left: 0; }
-  .modal-fin-grid, .modal-ai-grid { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 600px) {
-  .deal-grid { grid-template-columns: 1fr; }
-  .modal-hero, .modal-ai, .modal-offers, .modal-timeline { padding-left: 20px; padding-right: 20px; margin-left: 0; margin-right: 0; }
-}
-
-/* ─── FADE IN ─────────────────────────── */
-.fade-in { animation: fadeUp 0.5s ease both; }
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(16px); }
-  to { opacity:1; transform:translateY(0); }
-}
+/* ACTIVITY */
+.ap{position:fixed;top:76px;right:24px;width:260px;z-index:50}
+.ac{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;animation:si .4s ease both;margin-bottom:8px;box-shadow:var(--sh)}
+@keyframes si{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.ac .ah{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--tl);margin-bottom:6px}.ac .ah .bk{width:5px;height:5px;border-radius:50%;background:var(--tl);animation:p 1.5s infinite}
+.ac .at{font-size:13px;color:var(--tx2);line-height:1.4}.ac .at strong{color:var(--tx)}.ac .atm{font-size:11px;color:var(--tx3);margin-top:4px}
+@media(max-width:1100px){.ap{display:none}}@media(max-width:900px){.side{display:none}.main{margin-left:0}.mfg,.mai-g{grid-template-columns:1fr 1fr}.nc{display:none}}@media(max-width:600px){.dg{grid-template-columns:1fr}}
+.fi{animation:fu .5s ease both}@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
-
-<!-- ═══════ TOP NAV ═══════ -->
-<nav class="topnav">
-  <a href="privatecreditmca-landing.html" class="topnav-logo">
-    <span class="dot"></span>
-    PrivateCreditMCA
-  </a>
-  <div class="topnav-center">
-    <a href="privatecreditmca-landing.html">Home</a>
-    <a href="#" class="active">Marketplace</a>
-    <a href="#">Pipeline</a>
-    <a href="#">Funder Directory</a>
-    <a href="#">Academy</a>
-  </div>
-  <div class="topnav-right">
-    <a href="privatecreditmca-account.html?view=login" class="topnav-btn secondary" style="text-decoration:none">Log In</a>
-    <a href="privatecreditmca-submit.html" class="topnav-btn" style="text-decoration:none">+ Submit a Deal</a>
-  </div>
+<nav>
+  <a href="privatecreditmca-landing.html" class="logo"><img src="logo.jpeg" alt="PrivateCreditMCA"></a>
+  <div class="nc"><a href="privatecreditmca-landing.html">Home</a><a href="#" class="on">Marketplace</a><a href="privatecreditmca-account.html?view=profile">Dashboard</a><a href="#">Funder Directory</a></div>
+  <div class="nr"><a href="privatecreditmca-account.html?view=login" class="nb s">Log In</a><a href="privatecreditmca-submit.html" class="nb p">+ Submit a Deal</a></div>
 </nav>
-
-<!-- ═══════ APP LAYOUT ═══════ -->
 <div class="app">
-
-  <!-- ─── SIDEBAR ─── -->
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-label">Marketplace Stats</div>
-      <div class="sidebar-stat-grid">
-        <div class="sidebar-stat"><div class="num" id="stat-deals">136</div><div class="lbl">Active Deals</div></div>
-        <div class="sidebar-stat"><div class="num">$9.9M</div><div class="lbl">Pipeline</div></div>
-        <div class="sidebar-stat"><div class="num">50+</div><div class="lbl">Funders</div></div>
-        <div class="sidebar-stat"><div class="num">4.2h</div><div class="lbl">Avg. 1st Offer</div></div>
-      </div>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Search</div>
-      <input type="text" class="filter-search" placeholder="Search deals..." id="searchInput" oninput="filterDeals()">
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Industry</div>
-      <div class="filter-chips" id="industryFilters">
-        <button class="filter-chip active" onclick="toggleFilter(this,'industry')" data-val="all">All</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'industry')" data-val="Restaurant">Restaurant</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'industry')" data-val="Auto Repair">Auto</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'industry')" data-val="Construction">Construction</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'industry')" data-val="Retail">Retail</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'industry')" data-val="Medical">Medical</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'industry')" data-val="Trucking">Trucking</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'industry')" data-val="Services">Services</button>
-      </div>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Status</div>
-      <div class="filter-chips" id="statusFilters">
-        <button class="filter-chip active" onclick="toggleFilter(this,'status')" data-val="all">All</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'status')" data-val="live">Live</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'status')" data-val="new">New</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'status')" data-val="reviewing">Reviewing</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'status')" data-val="funded">Funded</button>
-      </div>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Funding Amount</div>
-      <div class="filter-range">
-        <input type="range" min="10" max="500" value="500" id="amountRange" oninput="updateRange()">
-        <div class="filter-range-label">
-          <span>$10K</span>
-          <span class="val" id="rangeVal">$500K</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Risk Grade</div>
-      <div class="filter-chips" id="riskFilters">
-        <button class="filter-chip active" onclick="toggleFilter(this,'risk')" data-val="all">All</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'risk')" data-val="A">A</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'risk')" data-val="B">B</button>
-        <button class="filter-chip" onclick="toggleFilter(this,'risk')" data-val="C">C</button>
-      </div>
-    </div>
+  <aside class="side">
+    <div class="ss"><div class="sl">Marketplace Stats</div><div class="sg"><div class="sb"><div class="n" id="sd">136</div><div class="l">Active Deals</div></div><div class="sb"><div class="n">$9.9M</div><div class="l">Pipeline</div></div><div class="sb"><div class="n">50+</div><div class="l">Funders</div></div><div class="sb"><div class="n">4.2h</div><div class="l">Avg 1st Offer</div></div></div></div>
+    <div class="ss"><div class="sl">Search</div><input class="si" placeholder="Search deals..." id="sI" oninput="fD()"></div>
+    <div class="ss"><div class="sl">Industry</div><div class="cg"><button class="ch on" onclick="tf(this,'i')" data-v="all">All</button><button class="ch" onclick="tf(this,'i')" data-v="Restaurant">Restaurant</button><button class="ch" onclick="tf(this,'i')" data-v="Auto Repair">Auto</button><button class="ch" onclick="tf(this,'i')" data-v="Construction">Construction</button><button class="ch" onclick="tf(this,'i')" data-v="Retail">Retail</button><button class="ch" onclick="tf(this,'i')" data-v="Medical">Medical</button><button class="ch" onclick="tf(this,'i')" data-v="Trucking">Trucking</button><button class="ch" onclick="tf(this,'i')" data-v="Services">Services</button></div></div>
+    <div class="ss"><div class="sl">Status</div><div class="cg"><button class="ch on" onclick="tf(this,'s')" data-v="all">All</button><button class="ch" onclick="tf(this,'s')" data-v="live">Live</button><button class="ch" onclick="tf(this,'s')" data-v="new">New</button><button class="ch" onclick="tf(this,'s')" data-v="reviewing">Reviewing</button><button class="ch" onclick="tf(this,'s')" data-v="funded">Funded</button></div></div>
+    <div class="ss"><div class="sl">Funding Amount</div><div class="sr"><input type="range" min="10" max="500" value="500" id="aR" oninput="uR()"><div class="srl"><span>$10K</span><span class="v" id="rV">$500K</span></div></div></div>
+    <div class="ss"><div class="sl">Risk Grade</div><div class="cg"><button class="ch on" onclick="tf(this,'r')" data-v="all">All</button><button class="ch" onclick="tf(this,'r')" data-v="A">A</button><button class="ch" onclick="tf(this,'r')" data-v="B">B</button><button class="ch" onclick="tf(this,'r')" data-v="C">C</button></div></div>
   </aside>
-
-  <!-- ─── MAIN ─── -->
   <main class="main">
-    <div class="marketplace-header fade-in">
-      <h1>
-        Live Marketplace
-        <span class="live-badge"><span class="blink"></span> Live</span>
-      </h1>
-      <div class="view-toggle">
-        <button class="view-btn active" title="Grid">⊞</button>
-        <button class="view-btn" title="List">☰</button>
-      </div>
-    </div>
-
-    <div class="sort-bar fade-in" style="animation-delay:0.08s">
-      <div class="count">Showing <strong id="dealCount">12</strong> deals</div>
-      <select class="sort-select" id="sortSelect" onchange="filterDeals()">
-        <option value="newest">Newest First</option>
-        <option value="amount-high">Highest Amount</option>
-        <option value="amount-low">Lowest Amount</option>
-        <option value="offers">Most Offers</option>
-        <option value="risk">Best Risk Score</option>
-      </select>
-    </div>
-
-    <div class="deal-grid" id="dealGrid">
-      <!-- JS populated -->
-    </div>
+    <div class="mh fi"><h1>Live Marketplace <span class="lb"><span class="bk"></span>Live</span></h1></div>
+    <div class="sbar fi" style="animation-delay:.06s"><div class="c">Showing <strong id="dC">12</strong> deals</div><select class="ssel" id="sS" onchange="fD()"><option value="newest">Newest</option><option value="amount-high">Highest Amount</option><option value="amount-low">Lowest Amount</option><option value="offers">Most Offers</option><option value="risk">Best Risk</option></select></div>
+    <div class="dg" id="dG"></div>
   </main>
 </div>
-
-<!-- ═══════ DEAL DETAIL MODAL ═══════ -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal" id="modalContent" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeModalForce()">✕</button>
-    <div id="modalBody"></div>
-  </div>
-</div>
-
-<!-- ═══════ ACTIVITY PULSE ═══════ -->
-<div class="activity-pulse" id="activityPulse"></div>
-
+<div class="mo" id="mO" onclick="cM(event)"><div class="md" onclick="event.stopPropagation()"><button class="mx" onclick="cMF()">✕</button><div id="mB"></div></div></div>
+<div class="ap" id="aP"></div>
 <script>
-// ═══════════════════════════════════════════
-// DEAL DATA
-// ═══════════════════════════════════════════
-const deals = [
-  {
-    id:1, biz:"QuickFix Auto Repair", industry:"Auto Repair", state:"TX", monthlyRev:74000,
-    requested:80000, status:"live", time:"2m ago", riskGrade:"B", riskScore:78,
-    offers:[
-      {funder:"Apex Funding",amount:60000,factor:1.37,status:"active"},
-      {funder:"Capital Group",amount:58000,factor:1.35,status:"active"},
-      {funder:"Atlas Capital",amount:62000,factor:1.40,status:"active"}
-    ],
-    ai:{revenue:"$74K",nsf:2,riskScore:"78/B",approvalRange:"$45K–$62K"},
-    timeline:[
-      {time:"2m ago",event:"<strong>Atlas Capital</strong> submitted offer: $62K @ 1.40"},
-      {time:"18m ago",event:"<strong>Capital Group</strong> submitted offer: $58K @ 1.35"},
-      {time:"34m ago",event:"<strong>Apex Funding</strong> submitted offer: $60K @ 1.37"},
-      {time:"1h ago",event:"Deal posted to marketplace"},
-      {time:"1h ago",event:"AI analysis complete — Risk Score: 78/B"},
-      {time:"1.1h ago",event:"Documents uploaded"}
-    ]
-  },
-  {
-    id:2, biz:"Nonna's Trattoria", industry:"Restaurant", state:"NY", monthlyRev:70000,
-    requested:65000, status:"live", time:"8m ago", riskGrade:"B", riskScore:74,
-    offers:[
-      {funder:"Forward Financing",amount:52000,factor:1.36,status:"active"},
-      {funder:"BridgeCap",amount:55000,factor:1.38,status:"active"}
-    ],
-    ai:{revenue:"$70K",nsf:3,riskScore:"74/B",approvalRange:"$40K–$55K"},
-    timeline:[
-      {time:"8m ago",event:"<strong>BridgeCap</strong> submitted offer: $55K @ 1.38"},
-      {time:"42m ago",event:"<strong>Forward Financing</strong> submitted offer: $52K @ 1.36"},
-      {time:"1.5h ago",event:"Deal posted to marketplace"},
-      {time:"1.5h ago",event:"AI analysis complete — Risk Score: 74/B"},
-      {time:"1.6h ago",event:"Documents uploaded"}
-    ]
-  },
-  {
-    id:3, biz:"Peak Roofing Co", industry:"Construction", state:"FL", monthlyRev:128000,
-    requested:110000, status:"live", time:"14m ago", riskGrade:"A", riskScore:85,
-    offers:[
-      {funder:"Rapid Finance",amount:105000,factor:1.32,status:"active"},
-      {funder:"Libertas Funding",amount:110000,factor:1.36,status:"reviewing"}
-    ],
-    ai:{revenue:"$128K",nsf:0,riskScore:"85/A",approvalRange:"$80K–$110K"},
-    timeline:[
-      {time:"14m ago",event:"<strong>Libertas Funding</strong> reviewing deal"},
-      {time:"28m ago",event:"<strong>Rapid Finance</strong> submitted offer: $105K @ 1.32"},
-      {time:"55m ago",event:"Deal posted to marketplace"},
-      {time:"55m ago",event:"AI analysis complete — Risk Score: 85/A"},
-      {time:"1h ago",event:"Documents uploaded"}
-    ]
-  },
-  {
-    id:4, biz:"Bright Smile Dental", industry:"Medical", state:"CA", monthlyRev:95000,
-    requested:75000, status:"new", time:"22m ago", riskGrade:"A", riskScore:82,
-    offers:[],
-    ai:{revenue:"$95K",nsf:1,riskScore:"82/A",approvalRange:"$55K–$75K"},
-    timeline:[
-      {time:"22m ago",event:"Deal posted to marketplace"},
-      {time:"22m ago",event:"AI analysis complete — Risk Score: 82/A"},
-      {time:"25m ago",event:"Documents uploaded"}
-    ]
-  },
-  {
-    id:5, biz:"Metro Logistics LLC", industry:"Trucking", state:"NJ", monthlyRev:210000,
-    requested:180000, status:"live", time:"35m ago", riskGrade:"A", riskScore:88,
-    offers:[
-      {funder:"Credibly",amount:160000,factor:1.29,status:"active"},
-      {funder:"Fora Financial",amount:170000,factor:1.33,status:"active"},
-      {funder:"Rapid Finance",amount:165000,factor:1.31,status:"active"},
-      {funder:"National Funding",amount:175000,factor:1.35,status:"reviewing"}
-    ],
-    ai:{revenue:"$210K",nsf:0,riskScore:"88/A",approvalRange:"$130K–$180K"},
-    timeline:[
-      {time:"35m ago",event:"<strong>National Funding</strong> reviewing deal"},
-      {time:"50m ago",event:"<strong>Rapid Finance</strong> submitted offer: $165K @ 1.31"},
-      {time:"1.2h ago",event:"<strong>Fora Financial</strong> submitted offer: $170K @ 1.33"},
-      {time:"1.8h ago",event:"<strong>Credibly</strong> submitted offer: $160K @ 1.29"},
-      {time:"2.5h ago",event:"Deal posted to marketplace"}
-    ]
-  },
-  {
-    id:6, biz:"Casa Verde Landscaping", industry:"Services", state:"AZ", monthlyRev:42000,
-    requested:35000, status:"reviewing", time:"1h ago", riskGrade:"C", riskScore:58,
-    offers:[
-      {funder:"BridgeCap",amount:22000,factor:1.45,status:"active"}
-    ],
-    ai:{revenue:"$42K",nsf:6,riskScore:"58/C",approvalRange:"$18K–$28K"},
-    timeline:[
-      {time:"1h ago",event:"<strong>BridgeCap</strong> submitted offer: $22K @ 1.45"},
-      {time:"2h ago",event:"Deal posted to marketplace"},
-      {time:"2h ago",event:"AI analysis complete — Risk Score: 58/C"},
-      {time:"2.1h ago",event:"Documents uploaded"}
-    ]
-  },
-  {
-    id:7, biz:"TechServe IT Solutions", industry:"Services", state:"IL", monthlyRev:155000,
-    requested:120000, status:"funded", time:"3h ago", riskGrade:"A", riskScore:91,
-    offers:[
-      {funder:"Libertas Funding",amount:120000,factor:1.28,status:"active"},
-      {funder:"Forward Financing",amount:115000,factor:1.30,status:"declined"},
-      {funder:"Apex Funding",amount:110000,factor:1.32,status:"declined"}
-    ],
-    ai:{revenue:"$155K",nsf:0,riskScore:"91/A",approvalRange:"$95K–$125K"},
-    timeline:[
-      {time:"3h ago",event:"Deal <strong>funded</strong> — Libertas Funding $120K @ 1.28"},
-      {time:"4h ago",event:"<strong>Libertas Funding</strong> submitted offer: $120K @ 1.28"},
-      {time:"4.5h ago",event:"<strong>Apex Funding</strong> submitted offer: $110K @ 1.32"},
-      {time:"5h ago",event:"Deal posted to marketplace"}
-    ]
-  },
-  {
-    id:8, biz:"Harbor Fish Market", industry:"Restaurant", state:"MA", monthlyRev:62000,
-    requested:50000, status:"new", time:"38m ago", riskGrade:"B", riskScore:71,
-    offers:[],
-    ai:{revenue:"$62K",nsf:4,riskScore:"71/B",approvalRange:"$30K–$45K"},
-    timeline:[
-      {time:"38m ago",event:"Deal posted to marketplace"},
-      {time:"38m ago",event:"AI analysis complete — Risk Score: 71/B"},
-      {time:"42m ago",event:"Documents uploaded"}
-    ]
-  },
-  {
-    id:9, biz:"Sunrise Auto Body", industry:"Auto Repair", state:"GA", monthlyRev:58000,
-    requested:45000, status:"live", time:"1.5h ago", riskGrade:"B", riskScore:73,
-    offers:[
-      {funder:"Credibly",amount:38000,factor:1.38,status:"active"},
-      {funder:"Capital Group",amount:40000,factor:1.41,status:"active"}
-    ],
-    ai:{revenue:"$58K",nsf:3,riskScore:"73/B",approvalRange:"$30K–$42K"},
-    timeline:[
-      {time:"1.5h ago",event:"<strong>Capital Group</strong> submitted offer: $40K @ 1.41"},
-      {time:"2h ago",event:"<strong>Credibly</strong> submitted offer: $38K @ 1.38"},
-      {time:"3h ago",event:"Deal posted to marketplace"}
-    ]
-  },
-  {
-    id:10, biz:"Prestige Plumbing", industry:"Construction", state:"OH", monthlyRev:87000,
-    requested:70000, status:"live", time:"45m ago", riskGrade:"B", riskScore:76,
-    offers:[
-      {funder:"Fora Financial",amount:62000,factor:1.36,status:"active"}
-    ],
-    ai:{revenue:"$87K",nsf:2,riskScore:"76/B",approvalRange:"$50K–$68K"},
-    timeline:[
-      {time:"45m ago",event:"<strong>Fora Financial</strong> submitted offer: $62K @ 1.36"},
-      {time:"1.5h ago",event:"Deal posted to marketplace"},
-      {time:"1.5h ago",event:"AI analysis complete — Risk Score: 76/B"}
-    ]
-  },
-  {
-    id:11, biz:"Golden Dragon Restaurant", industry:"Restaurant", state:"CA", monthlyRev:92000,
-    requested:85000, status:"live", time:"52m ago", riskGrade:"A", riskScore:80,
-    offers:[
-      {funder:"Forward Financing",amount:72000,factor:1.34,status:"active"},
-      {funder:"National Funding",amount:78000,factor:1.37,status:"active"},
-      {funder:"Rapid Finance",amount:75000,factor:1.33,status:"reviewing"}
-    ],
-    ai:{revenue:"$92K",nsf:1,riskScore:"80/A",approvalRange:"$60K–$82K"},
-    timeline:[
-      {time:"52m ago",event:"<strong>Rapid Finance</strong> reviewing deal"},
-      {time:"1.1h ago",event:"<strong>National Funding</strong> submitted offer: $78K @ 1.37"},
-      {time:"1.5h ago",event:"<strong>Forward Financing</strong> submitted offer: $72K @ 1.34"},
-      {time:"2h ago",event:"Deal posted to marketplace"}
-    ]
-  },
-  {
-    id:12, biz:"AllStar Retail Group", industry:"Retail", state:"TX", monthlyRev:115000,
-    requested:95000, status:"reviewing", time:"2h ago", riskGrade:"B", riskScore:70,
-    offers:[
-      {funder:"Apex Funding",amount:80000,factor:1.42,status:"active"},
-      {funder:"BridgeCap",amount:75000,factor:1.39,status:"active"}
-    ],
-    ai:{revenue:"$115K",nsf:5,riskScore:"70/B",approvalRange:"$60K–$85K"},
-    timeline:[
-      {time:"2h ago",event:"<strong>BridgeCap</strong> submitted offer: $75K @ 1.39"},
-      {time:"2.5h ago",event:"<strong>Apex Funding</strong> submitted offer: $80K @ 1.42"},
-      {time:"3h ago",event:"Deal posted to marketplace"}
-    ]
-  }
+const D=[
+{id:1,biz:"QuickFix Auto Repair",ind:"Auto Repair",st:"TX",rev:74000,req:80000,status:"live",time:"2m ago",rg:"B",rs:78,offers:[{f:"Apex Funding",a:60000,fc:1.37,s:"active"},{f:"Capital Group",a:58000,fc:1.35,s:"active"},{f:"Atlas Capital",a:62000,fc:1.40,s:"active"}],ai:{rev:"$74K",nsf:2,rs:"78/B",ar:"$45K–$62K"},tl:[{t:"2m ago",e:"<strong>Atlas Capital</strong> submitted offer: $62K @ 1.40"},{t:"18m ago",e:"<strong>Capital Group</strong> submitted offer"},{t:"34m ago",e:"<strong>Apex Funding</strong> submitted offer"},{t:"1h ago",e:"Deal posted to marketplace"}]},
+{id:2,biz:"Nonna's Trattoria",ind:"Restaurant",st:"NY",rev:70000,req:65000,status:"live",time:"8m ago",rg:"B",rs:74,offers:[{f:"Forward Financing",a:52000,fc:1.36,s:"active"},{f:"BridgeCap",a:55000,fc:1.38,s:"active"}],ai:{rev:"$70K",nsf:3,rs:"74/B",ar:"$40K–$55K"},tl:[{t:"8m ago",e:"<strong>BridgeCap</strong> submitted offer"},{t:"42m ago",e:"<strong>Forward Financing</strong> submitted offer"}]},
+{id:3,biz:"Peak Roofing Co",ind:"Construction",st:"FL",rev:128000,req:110000,status:"live",time:"14m ago",rg:"A",rs:85,offers:[{f:"Rapid Finance",a:105000,fc:1.32,s:"active"},{f:"Libertas Funding",a:110000,fc:1.36,s:"reviewing"}],ai:{rev:"$128K",nsf:0,rs:"85/A",ar:"$80K–$110K"},tl:[{t:"14m ago",e:"<strong>Libertas Funding</strong> reviewing"},{t:"28m ago",e:"<strong>Rapid Finance</strong> submitted offer"}]},
+{id:4,biz:"Bright Smile Dental",ind:"Medical",st:"CA",rev:95000,req:75000,status:"new",time:"22m ago",rg:"A",rs:82,offers:[],ai:{rev:"$95K",nsf:1,rs:"82/A",ar:"$55K–$75K"},tl:[{t:"22m ago",e:"Deal posted to marketplace"}]},
+{id:5,biz:"Metro Logistics LLC",ind:"Trucking",st:"NJ",rev:210000,req:180000,status:"live",time:"35m ago",rg:"A",rs:88,offers:[{f:"Credibly",a:160000,fc:1.29,s:"active"},{f:"Fora Financial",a:170000,fc:1.33,s:"active"},{f:"Rapid Finance",a:165000,fc:1.31,s:"active"},{f:"National Funding",a:175000,fc:1.35,s:"reviewing"}],ai:{rev:"$210K",nsf:0,rs:"88/A",ar:"$130K–$180K"},tl:[{t:"35m ago",e:"<strong>National Funding</strong> reviewing"},{t:"50m ago",e:"<strong>Rapid Finance</strong> submitted offer"}]},
+{id:6,biz:"Casa Verde Landscaping",ind:"Services",st:"AZ",rev:42000,req:35000,status:"reviewing",time:"1h ago",rg:"C",rs:58,offers:[{f:"BridgeCap",a:22000,fc:1.45,s:"active"}],ai:{rev:"$42K",nsf:6,rs:"58/C",ar:"$18K–$28K"},tl:[{t:"1h ago",e:"<strong>BridgeCap</strong> submitted offer"}]},
+{id:7,biz:"TechServe IT Solutions",ind:"Services",st:"IL",rev:155000,req:120000,status:"funded",time:"3h ago",rg:"A",rs:91,offers:[{f:"Libertas Funding",a:120000,fc:1.28,s:"active"},{f:"Forward Financing",a:115000,fc:1.30,s:"active"}],ai:{rev:"$155K",nsf:0,rs:"91/A",ar:"$95K–$125K"},tl:[{t:"3h ago",e:"Deal <strong>funded</strong> — Libertas $120K @ 1.28"}]},
+{id:8,biz:"Harbor Fish Market",ind:"Restaurant",st:"MA",rev:62000,req:50000,status:"new",time:"38m ago",rg:"B",rs:71,offers:[],ai:{rev:"$62K",nsf:4,rs:"71/B",ar:"$30K–$45K"},tl:[{t:"38m ago",e:"Deal posted to marketplace"}]},
+{id:9,biz:"Sunrise Auto Body",ind:"Auto Repair",st:"GA",rev:58000,req:45000,status:"live",time:"1.5h ago",rg:"B",rs:73,offers:[{f:"Credibly",a:38000,fc:1.38,s:"active"},{f:"Capital Group",a:40000,fc:1.41,s:"active"}],ai:{rev:"$58K",nsf:3,rs:"73/B",ar:"$30K–$42K"},tl:[{t:"1.5h ago",e:"<strong>Capital Group</strong> submitted offer"}]},
+{id:10,biz:"Prestige Plumbing",ind:"Construction",st:"OH",rev:87000,req:70000,status:"live",time:"45m ago",rg:"B",rs:76,offers:[{f:"Fora Financial",a:62000,fc:1.36,s:"active"}],ai:{rev:"$87K",nsf:2,rs:"76/B",ar:"$50K–$68K"},tl:[{t:"45m ago",e:"<strong>Fora Financial</strong> submitted offer"}]},
+{id:11,biz:"Golden Dragon Restaurant",ind:"Restaurant",st:"CA",rev:92000,req:85000,status:"live",time:"52m ago",rg:"A",rs:80,offers:[{f:"Forward Financing",a:72000,fc:1.34,s:"active"},{f:"National Funding",a:78000,fc:1.37,s:"active"},{f:"Rapid Finance",a:75000,fc:1.33,s:"reviewing"}],ai:{rev:"$92K",nsf:1,rs:"80/A",ar:"$60K–$82K"},tl:[{t:"52m ago",e:"<strong>Rapid Finance</strong> reviewing"}]},
+{id:12,biz:"AllStar Retail Group",ind:"Retail",st:"TX",rev:115000,req:95000,status:"reviewing",time:"2h ago",rg:"B",rs:70,offers:[{f:"Apex Funding",a:80000,fc:1.42,s:"active"},{f:"BridgeCap",a:75000,fc:1.39,s:"active"}],ai:{rev:"$115K",nsf:5,rs:"70/B",ar:"$60K–$85K"},tl:[{t:"2h ago",e:"<strong>BridgeCap</strong> submitted offer"}]}
 ];
 
-// ═══════════════════════════════════════════
-// FILTERS STATE
-// ═══════════════════════════════════════════
-let filters = { industry: 'all', status: 'all', risk: 'all' };
+let fl={i:'all',s:'all',r:'all'};
+function tf(b,t){b.parentElement.querySelectorAll('.ch').forEach(c=>c.classList.remove('on'));b.classList.add('on');fl[t]=b.dataset.v;fD()}
+function uR(){document.getElementById('rV').textContent='$'+document.getElementById('aR').value+'K';fD()}
+function fm(n){return n>=1000?'$'+(n/1000).toFixed(0)+'K':'$'+n}
 
-function toggleFilter(btn, type) {
-  const parent = btn.parentElement;
-  parent.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  btn.classList.add('active');
-  filters[type] = btn.dataset.val;
-  filterDeals();
-}
-
-function updateRange() {
-  const v = document.getElementById('amountRange').value;
-  document.getElementById('rangeVal').textContent = '$' + v + 'K';
-  filterDeals();
-}
-
-function filterDeals() {
-  const search = document.getElementById('searchInput').value.toLowerCase();
-  const maxAmount = parseInt(document.getElementById('amountRange').value) * 1000;
-  const sort = document.getElementById('sortSelect').value;
-
-  let filtered = deals.filter(d => {
-    if (filters.industry !== 'all' && d.industry !== filters.industry) return false;
-    if (filters.status !== 'all' && d.status !== filters.status) return false;
-    if (filters.risk !== 'all' && d.riskGrade !== filters.risk) return false;
-    if (d.requested > maxAmount) return false;
-    if (search && !d.biz.toLowerCase().includes(search) && !d.industry.toLowerCase().includes(search) && !d.state.toLowerCase().includes(search)) return false;
-    return true;
+function fD(){
+  const q=document.getElementById('sI').value.toLowerCase(),mx=parseInt(document.getElementById('aR').value)*1000,so=document.getElementById('sS').value;
+  let r=D.filter(d=>{
+    if(fl.i!=='all'&&d.ind!==fl.i)return false;if(fl.s!=='all'&&d.status!==fl.s)return false;if(fl.r!=='all'&&d.rg!==fl.r)return false;
+    if(d.req>mx)return false;if(q&&!d.biz.toLowerCase().includes(q)&&!d.ind.toLowerCase().includes(q)&&!d.st.toLowerCase().includes(q))return false;return true;
   });
-
-  // Sort
-  if (sort === 'newest') { /* default order */ }
-  else if (sort === 'amount-high') filtered.sort((a,b) => b.requested - a.requested);
-  else if (sort === 'amount-low') filtered.sort((a,b) => a.requested - b.requested);
-  else if (sort === 'offers') filtered.sort((a,b) => b.offers.length - a.offers.length);
-  else if (sort === 'risk') filtered.sort((a,b) => b.riskScore - a.riskScore);
-
-  renderDeals(filtered);
+  if(so==='amount-high')r.sort((a,b)=>b.req-a.req);else if(so==='amount-low')r.sort((a,b)=>a.req-b.req);else if(so==='offers')r.sort((a,b)=>b.offers.length-a.offers.length);else if(so==='risk')r.sort((a,b)=>b.rs-a.rs);
+  rD(r);
 }
 
-// ═══════════════════════════════════════════
-// RENDER DEALS
-// ═══════════════════════════════════════════
-function fmt(n) { return n >= 1000 ? '$' + (n/1000).toFixed(0) + 'K' : '$' + n; }
-
-function renderDeals(list) {
-  const grid = document.getElementById('dealGrid');
-  document.getElementById('dealCount').textContent = list.length;
-
-  grid.innerHTML = list.map((d, i) => {
-    const riskClass = d.riskGrade === 'A' ? 'a' : d.riskGrade === 'B' ? 'b' : d.riskGrade === 'C' ? 'c' : 'd';
-    const barClass = d.riskScore >= 75 ? 'high' : d.riskScore >= 60 ? 'med' : 'low';
-    const statusClass = d.status;
-    const statusLabel = d.status.charAt(0).toUpperCase() + d.status.slice(1);
-
-    return `
-    <div class="deal-card fade-in" style="animation-delay:${i * 0.05}s" onclick="openDeal(${d.id})">
-      <div class="deal-card-top">
-        <div class="deal-status ${statusClass}">
-          ${d.status === 'live' ? '<span class="dot"></span>' : ''}
-          ${statusLabel}
-        </div>
-        <div class="deal-time mono">${d.time}</div>
-      </div>
-      <div class="deal-biz">${d.biz}</div>
-      <div class="deal-meta-row">
-        <span class="deal-tag industry">${d.industry}</span>
-        <span class="deal-tag state">${d.state}</span>
-      </div>
-      <div class="risk-ribbon">
-        <span class="risk-score ${riskClass}">${d.riskGrade}</span>
-        <div class="risk-bar-track"><div class="risk-bar-fill ${barClass}" style="width:${d.riskScore}%"></div></div>
-        <span class="mono" style="font-size:11px;color:var(--text-dim)">${d.riskScore}</span>
-      </div>
-      <div class="deal-financials">
-        <div class="deal-fin-block">
-          <div class="deal-fin-label">Requested</div>
-          <div class="deal-fin-val">${fmt(d.requested)}</div>
-        </div>
-        <div class="deal-fin-block">
-          <div class="deal-fin-label">Monthly Rev</div>
-          <div class="deal-fin-val accent">${fmt(d.monthlyRev)}/mo</div>
-        </div>
-      </div>
-      <div class="deal-offers-bar">
-        <div class="deal-offer-count">
-          <span class="cnt">${d.offers.length}</span>
-          ${d.offers.length === 1 ? 'offer' : 'offers'}
-        </div>
-        <button class="deal-view-btn">View Deal →</button>
-      </div>
+function rD(list){
+  document.getElementById('dC').textContent=list.length;
+  document.getElementById('dG').innerHTML=list.map((d,i)=>{
+    const rc=d.rg==='A'?'a':d.rg==='B'?'b':'c',bc=d.rs>=75?'h':d.rs>=60?'m':'lo',sl=d.status[0].toUpperCase()+d.status.slice(1);
+    return `<div class="dc fi" style="animation-delay:${i*.04}s" onclick="oD(${d.id})">
+      <div class="dt"><div class="ds ${d.status}">${d.status==='live'?'<span class="dot"></span>':''}${sl}</div><div class="dtm mono">${d.time}</div></div>
+      <div class="dbz">${d.biz}</div><div class="dts"><span class="tg i">${d.ind}</span><span class="tg s">${d.st}</span></div>
+      <div class="rr"><span class="rs ${rc}">${d.rg}</span><div class="rt"><div class="rf ${bc}" style="width:${d.rs}%"></div></div><span class="mono" style="font-size:11px;color:var(--tx3)">${d.rs}</span></div>
+      <div class="df"><div class="dfi"><div class="fl">Requested</div><div class="fv">${fm(d.req)}</div></div><div class="dfi"><div class="fl">Monthly Rev</div><div class="fv ac">${fm(d.rev)}/mo</div></div></div>
+      <div class="dbot"><div class="doc"><span class="cn">${d.offers.length}</span>${d.offers.length===1?'offer':'offers'}</div><button class="dvb">View Deal →</button></div>
     </div>`;
   }).join('');
 }
 
-// ═══════════════════════════════════════════
-// MODAL
-// ═══════════════════════════════════════════
-function openDeal(id) {
-  const d = deals.find(x => x.id === id);
-  if (!d) return;
+function oD(id){
+  const d=D.find(x=>x.id===id);if(!d)return;
+  const oH=d.offers.length>0?`<div class="mof"><div class="mof-h"><h3>Competing Offers <span class="ocb">${d.offers.length}</span></h3></div>
+    <table class="ot"><thead><tr><th>Funder</th><th>Amount</th><th>Factor</th><th>Cost</th><th>Status</th><th></th></tr></thead><tbody>
+    ${d.offers.map(o=>`<tr><td class="ofn">${o.f}</td><td class="oam mono">${fm(o.a)}</td><td class="mono" style="color:var(--tx2)">${o.fc.toFixed(2)}</td><td class="mono" style="color:var(--tx3)">${fm(Math.round(o.a*o.fc))}</td><td><span class="obg ${o.s==='active'?'ac':'rv'}">${o.s[0].toUpperCase()+o.s.slice(1)}</span></td><td>${o.s==='active'?'<button class="oac" onclick="aO(event)">Accept</button>':''}</td></tr>`).join('')}
+    </tbody></table></div>`:`<div class="mof" style="text-align:center;padding:40px"><div style="font-size:40px;margin-bottom:12px">⏳</div><div style="font-size:16px;font-weight:600;margin-bottom:6px">Waiting for Offers</div><div style="font-size:14px;color:var(--tx3)">Funders are reviewing. Offers typically appear within 4 hours.</div></div>`;
 
-  const riskClass = d.riskGrade === 'A' ? 'a' : d.riskGrade === 'B' ? 'b' : 'c';
-  const statusClass = d.status;
-
-  const offersHTML = d.offers.length > 0 ? `
-    <div class="modal-offers">
-      <div class="modal-offers-header">
-        <h3>Competing Offers <span class="offer-count-badge">${d.offers.length}</span></h3>
-      </div>
-      <table class="offer-table">
-        <thead>
-          <tr>
-            <th>Funder</th>
-            <th>Amount</th>
-            <th>Factor</th>
-            <th>Cost</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          ${d.offers.map(o => `
-          <tr>
-            <td class="offer-funder">${o.funder}</td>
-            <td class="offer-amount mono">${fmt(o.amount)}</td>
-            <td class="offer-factor mono">${o.factor.toFixed(2)}</td>
-            <td class="mono" style="color:var(--text-dim)">${fmt(Math.round(o.amount * o.factor))}</td>
-            <td><span class="offer-status-badge ${o.status}">${o.status.charAt(0).toUpperCase() + o.status.slice(1)}</span></td>
-            <td>${o.status === 'active' ? '<button class="offer-accept-btn" onclick="acceptOffer(event)">Accept</button>' : ''}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-  ` : `
-    <div class="modal-offers" style="text-align:center;padding:40px;">
-      <div style="font-size:40px;margin-bottom:12px">⏳</div>
-      <div style="font-size:16px;font-weight:600;margin-bottom:6px">Waiting for Offers</div>
-      <div style="font-size:14px;color:var(--text-dim)">Funders are reviewing this deal. Offers typically appear within 4 hours.</div>
-    </div>
-  `;
-
-  document.getElementById('modalBody').innerHTML = `
-    <div class="modal-hero">
-      <div class="modal-status ${statusClass}">
-        ${d.status === 'live' ? '<span class="dot"></span>' : ''}
-        ${d.status.toUpperCase()} · ${d.time}
-      </div>
-      <div class="modal-biz">${d.biz}</div>
-      <div class="modal-meta-tags">
-        <span class="deal-tag industry">${d.industry}</span>
-        <span class="deal-tag state">${d.state}</span>
-        <span class="risk-score ${riskClass}" style="font-size:12px">${d.riskGrade} · ${d.riskScore}</span>
-      </div>
-      <div class="modal-fin-grid">
-        <div class="modal-fin-block">
-          <div class="lbl">Requested</div>
-          <div class="val">${fmt(d.requested)}</div>
-        </div>
-        <div class="modal-fin-block">
-          <div class="lbl">Monthly Rev</div>
-          <div class="val accent">${fmt(d.monthlyRev)}</div>
-        </div>
-        <div class="modal-fin-block">
-          <div class="lbl">Offers</div>
-          <div class="val">${d.offers.length}</div>
-        </div>
-        <div class="modal-fin-block">
-          <div class="lbl">Best Factor</div>
-          <div class="val accent">${d.offers.length > 0 ? Math.min(...d.offers.filter(o=>o.status==='active').map(o=>o.factor)).toFixed(2) : '—'}</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal-ai">
-      <div class="modal-ai-label">🧠 AI BankIQ Analysis</div>
-      <div class="modal-ai-grid">
-        <div class="modal-ai-item">
-          <div class="ai-lbl">Monthly Revenue</div>
-          <div class="ai-val">${d.ai.revenue}</div>
-        </div>
-        <div class="modal-ai-item">
-          <div class="ai-lbl">NSF Count</div>
-          <div class="ai-val ${d.ai.nsf <= 2 ? 'good' : 'warn'}">${d.ai.nsf}</div>
-        </div>
-        <div class="modal-ai-item">
-          <div class="ai-lbl">Risk Score</div>
-          <div class="ai-val good">${d.ai.riskScore}</div>
-        </div>
-        <div class="modal-ai-item">
-          <div class="ai-lbl">Approval Range</div>
-          <div class="ai-val">${d.ai.approvalRange}</div>
-        </div>
-      </div>
-    </div>
-
-    ${offersHTML}
-
-    <div class="modal-timeline">
-      <h3>Deal Timeline</h3>
-      <div class="timeline-list">
-        ${d.timeline.map(t => `
-        <div class="timeline-item">
-          <div class="tl-time mono">${t.time}</div>
-          <div class="tl-event">${t.event}</div>
-        </div>`).join('')}
-      </div>
-    </div>
-  `;
-
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.getElementById('mB').innerHTML=`
+    <div class="mh2"><div class="mst ${d.status}">${d.status==='live'?'<span class="dot"></span>':''}${d.status.toUpperCase()} · ${d.time}</div>
+    <div class="mbz">${d.biz}</div><div class="mts"><span class="tg i">${d.ind}</span><span class="tg s">${d.st}</span><span class="rs ${d.rg==='A'?'a':'b'}" style="font-size:12px">${d.rg} · ${d.rs}</span></div>
+    <div class="mfg"><div class="mf"><div class="l">Requested</div><div class="v">${fm(d.req)}</div></div><div class="mf"><div class="l">Monthly Rev</div><div class="v ac">${fm(d.rev)}</div></div><div class="mf"><div class="l">Offers</div><div class="v">${d.offers.length}</div></div><div class="mf"><div class="l">Best Factor</div><div class="v ac">${d.offers.length>0?Math.min(...d.offers.filter(o=>o.s==='active').map(o=>o.fc)).toFixed(2):'—'}</div></div></div></div>
+    <div class="mai"><div class="mai-l">🧠 AI BankIQ Analysis</div><div class="mai-g"><div class="mai-i"><div class="al">Monthly Revenue</div><div class="av">${d.ai.rev}</div></div><div class="mai-i"><div class="al">NSF Count</div><div class="av ${d.ai.nsf<=2?'g':'w'}">${d.ai.nsf}</div></div><div class="mai-i"><div class="al">Risk Score</div><div class="av g">${d.ai.rs}</div></div><div class="mai-i"><div class="al">Approval Range</div><div class="av">${d.ai.ar}</div></div></div></div>
+    ${oH}
+    <div class="mtl"><h3>Deal Timeline</h3><div class="tll">${d.tl.map(t=>`<div class="tli"><div class="tt mono">${t.t}</div><div class="te">${t.e}</div></div>`).join('')}</div></div>`;
+  document.getElementById('mO').classList.add('open');document.body.style.overflow='hidden';
 }
+function cM(e){if(e.target===document.getElementById('mO'))cMF()}
+function cMF(){document.getElementById('mO').classList.remove('open');document.body.style.overflow=''}
+function aO(e){e.stopPropagation();const b=e.target;b.textContent='Accepted ✓';b.style.pointerEvents='none';b.closest('tr').style.background='var(--gn-l)'}
 
-function closeModal(e) {
-  if (e.target === document.getElementById('modalOverlay')) closeModalForce();
-}
-function closeModalForce() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function acceptOffer(e) {
-  e.stopPropagation();
-  const btn = e.target;
-  btn.textContent = 'Accepted ✓';
-  btn.style.background = 'var(--accent)';
-  btn.style.pointerEvents = 'none';
-  btn.closest('tr').style.background = 'var(--accent-dim)';
-}
-
-// Submit a Deal now links to privatecreditmca-submit.html
-
-// ═══════════════════════════════════════════
-// LIVE ACTIVITY FEED
-// ═══════════════════════════════════════════
-const activityMessages = [
-  {text:'<strong>Apex Funding</strong> submitted an offer on <strong>QuickFix Auto</strong>'},
-  {text:'New deal posted: <strong>Bright Smile Dental</strong> — $75K requested'},
-  {text:'<strong>Forward Financing</strong> is reviewing <strong>Golden Dragon Restaurant</strong>'},
-  {text:'<strong>Credibly</strong> submitted an offer on <strong>Metro Logistics</strong>'},
-  {text:'Deal <strong>funded</strong>: TechServe IT Solutions — $120K @ 1.28'},
-  {text:'<strong>National Funding</strong> submitted an offer on <strong>AllStar Retail</strong>'},
-  {text:'New deal posted: <strong>Harbor Fish Market</strong> — $50K requested'},
-  {text:'<strong>Rapid Finance</strong> submitted an offer on <strong>Peak Roofing</strong>'},
-  {text:'<strong>BridgeCap</strong> is reviewing <strong>Casa Verde Landscaping</strong>'},
-  {text:'<strong>Fora Financial</strong> submitted an offer on <strong>Prestige Plumbing</strong>'},
-];
-let actIdx = 0;
-function showActivity() {
-  const container = document.getElementById('activityPulse');
-  const msg = activityMessages[actIdx % activityMessages.length];
-  actIdx++;
-
-  const card = document.createElement('div');
-  card.className = 'activity-card';
-  card.innerHTML = `
-    <div class="act-header"><span class="blink"></span> Activity</div>
-    <div class="act-text">${msg.text}</div>
-    <div class="act-time mono">Just now</div>
-  `;
-  container.prepend(card);
-
-  // Keep max 3
-  while (container.children.length > 3) {
-    container.lastChild.remove();
-  }
-
-  // Update deal count randomly
-  const statEl = document.getElementById('stat-deals');
-  const current = parseInt(statEl.textContent);
-  statEl.textContent = current + (Math.random() > 0.5 ? 1 : 0);
-}
-
-// Start activity feed
-setTimeout(() => showActivity(), 3000);
-setInterval(() => showActivity(), 8000);
-
-// ═══════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════
-renderDeals(deals);
+const msgs=[{t:'<strong>Apex Funding</strong> submitted an offer on <strong>QuickFix Auto</strong>'},{t:'New deal: <strong>Bright Smile Dental</strong> — $75K'},{t:'<strong>Forward Financing</strong> reviewing <strong>Golden Dragon</strong>'},{t:'<strong>Credibly</strong> submitted offer on <strong>Metro Logistics</strong>'},{t:'Deal <strong>funded</strong>: TechServe IT — $120K @ 1.28'},{t:'<strong>National Funding</strong> offer on <strong>AllStar Retail</strong>'},{t:'<strong>Rapid Finance</strong> offer on <strong>Peak Roofing</strong>'}];
+let ai=0;
+function sA(){const c=document.getElementById('aP'),m=msgs[ai++%msgs.length],d=document.createElement('div');d.className='ac';d.innerHTML=`<div class="ah"><span class="bk"></span>Activity</div><div class="at">${m.t}</div><div class="atm mono">Just now</div>`;c.prepend(d);while(c.children.length>3)c.lastChild.remove();const s=document.getElementById('sd');s.textContent=parseInt(s.textContent)+(Math.random()>.5?1:0)}
+setTimeout(()=>sA(),3000);setInterval(()=>sA(),8000);
+rD(D);
 </script>
 </body>
 </html>
