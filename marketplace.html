@@ -1,1272 +1,366 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BrokerOS • Marketplace</title>
-  <style>
-    :root{
-      --bg:#060913;
-      --panel:#0b1020;
-      --panel2:#0a0f1d;
-      --border:#1b2747;
-      --text:#eaf1ff;
-      --muted:#a7b4cc;
-      --muted2:#7d8aa3;
-      --accent:#7dd3fc;
-      --good:#22c55e;
-      --warn:#f59e0b;
-      --bad:#ef4444;
-      --vio:#a78bfa;
-      --shadow:0 16px 40px rgba(0,0,0,.38);
-      --r:16px;
-      --r2:12px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-    }
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: var(--sans);
-      color: var(--text);
-      background:
-        radial-gradient(900px 520px at 18% 10%, rgba(125,211,252,.12), transparent 55%),
-        radial-gradient(900px 520px at 82% 12%, rgba(34,197,94,.10), transparent 55%),
-        var(--bg);
-    }
-    a{ color:var(--accent); text-decoration:none; }
-    a:hover{ text-decoration:underline; }
+<title>BrokerOS Marketplace</title>
 
-    /* App shell */
-    .app{
-      display:grid;
-      grid-template-columns: 270px 1fr 330px;
-      grid-template-rows: 64px 1fr;
-      grid-template-areas:
-        "sidebar topbar right"
-        "sidebar main   right";
-      min-height:100vh;
-    }
-    @media (max-width: 1100px){
-      .app{
-        grid-template-columns: 1fr;
-        grid-template-rows: 64px auto auto;
-        grid-template-areas:
-          "topbar"
-          "main"
-          "right";
-      }
-      .sidebar{ display:none; }
-    }
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    .topbar{
-      grid-area: topbar;
-      position: sticky; top:0; z-index: 50;
-      background: rgba(6,9,19,.72);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(27,39,71,.7);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding: 12px 14px;
-    }
+<style>
 
-    .sidebar{
-      grid-area: sidebar;
-      position: sticky; top:0;
-      height: 100vh;
-      border-right: 1px solid rgba(27,39,71,.7);
-      background: rgba(6,9,19,.55);
-      backdrop-filter: blur(10px);
-      padding: 14px;
-      display:flex;
-      flex-direction:column;
-      gap: 12px;
-    }
+body{
+font-family:Inter, Arial;
+margin:0;
+background:#0f172a;
+color:white;
+}
 
-    .right{
-      grid-area: right;
-      border-left: 1px solid rgba(27,39,71,.7);
-      background: rgba(6,9,19,.35);
-      padding: 14px;
-      display:flex;
-      flex-direction:column;
-      gap: 12px;
-    }
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 30px;
+background:#020617;
+border-bottom:1px solid #1e293b;
+}
 
-    .main{
-      grid-area: main;
-      padding: 14px;
-    }
+.logo{
+font-size:22px;
+font-weight:800;
+background:linear-gradient(90deg,#22c55e,#38bdf8);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
 
-    /* Brand */
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      min-width: 210px;
-    }
-    .logo{
-      width:34px; height:34px; border-radius: 12px;
-      background: linear-gradient(135deg, rgba(125,211,252,.95), rgba(34,197,94,.75));
-      box-shadow: 0 10px 30px rgba(125,211,252,.15);
-    }
-    .brand .title{ font-weight: 950; letter-spacing:-.2px; }
-    .brand .sub{ font-size:12px; color: var(--muted); font-weight: 700; margin-top:2px; }
+nav a{
+margin:0 10px;
+color:#94a3b8;
+text-decoration:none;
+font-weight:600;
+}
 
-    /* Controls */
-    .search{
-      flex: 1;
-      display:flex; gap:10px; align-items:center;
-      max-width: 720px;
-    }
-    .input{
-      width:100%;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(36,50,88,.95);
-      background: rgba(8,12,24,.75);
-      color: var(--text);
-      outline:none;
-    }
-    .input::placeholder{ color: rgba(167,180,204,.65); }
-    select.input{ appearance:none; }
+nav a:hover{
+color:white;
+}
 
-    .btn{
-      border: 1px solid rgba(27,39,71,.95);
-      background: rgba(11,16,32,.85);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-weight: 900;
-      cursor:pointer;
-      transition: transform .08s ease, border-color .15s ease;
-      white-space: nowrap;
-    }
-    .btn:hover{ transform: translateY(-1px); border-color: rgba(125,211,252,.30); }
-    .btn.primary{ background: rgba(34,197,94,.16); border-color: rgba(34,197,94,.35); }
-    .btn.primary:hover{ border-color: rgba(34,197,94,.55); }
-    .btn.danger{ background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.35); }
-    .btn.small{ padding:8px 10px; border-radius: 10px; font-size: 13px; }
+.container{
+padding:30px;
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:25px;
+}
 
-    .roleToggle{
-      display:flex; align-items:center; gap:6px;
-      background: rgba(11,16,32,.80);
-      border:1px solid rgba(27,39,71,.95);
-      border-radius: 14px;
-      padding: 6px;
-    }
-    .roleToggle button{
-      border:0; background:transparent; color:var(--muted);
-      padding:8px 10px; border-radius: 10px;
-      font-weight: 950; cursor:pointer;
-    }
-    .roleToggle button.active{
-      background: rgba(125,211,252,.16);
-      box-shadow: inset 0 0 0 1px rgba(125,211,252,.22);
-      color: var(--text);
-    }
+.panel{
+background:#020617;
+padding:20px;
+border-radius:12px;
+border:1px solid #1e293b;
+}
 
-    /* Sidebar nav */
-    .navGroup{ display:flex; flex-direction:column; gap:8px; }
-    .navItem{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(27,39,71,.85);
-      background: rgba(11,16,32,.55);
-      color: var(--muted);
-      font-weight: 850;
-    }
-    .navItem:hover{ border-color: rgba(125,211,252,.22); color: var(--text); }
-    .navItem.active{
-      background: rgba(125,211,252,.14);
-      border-color: rgba(125,211,252,.26);
-      color: var(--text);
-    }
-    .navItem .tag{
-      font-family: var(--mono);
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(36,50,88,.95);
-      background: rgba(8,12,24,.55);
-      color: var(--muted);
-    }
+table{
+width:100%;
+border-collapse:collapse;
+}
 
-    .panel{
-      background: rgba(11,16,32,.80);
-      border: 1px solid rgba(27,39,71,.90);
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .panelHeader{
-      padding: 12px 12px 10px;
-      border-bottom: 1px solid rgba(27,39,71,.75);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      background: rgba(10,15,29,.55);
-    }
-    .panelTitle{
-      font-weight: 950;
-      letter-spacing:-.2px;
-    }
-    .panelSub{
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 3px;
-      font-weight: 700;
-    }
+th,td{
+padding:12px;
+border-bottom:1px solid #1e293b;
+}
 
-    .toolbar{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items:center;
-    }
+th{
+color:#64748b;
+font-size:12px;
+text-transform:uppercase;
+}
 
-    /* Table */
-    .tableWrap{ overflow:auto; }
-    table{
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 920px;
-      font-size: 14px;
-    }
-    th, td{
-      padding: 12px 12px;
-      border-bottom: 1px solid rgba(27,39,71,.60);
-      vertical-align: middle;
-    }
-    th{
-      text-align:left;
-      color: var(--muted);
-      font-size: 12px;
-      letter-spacing: .3px;
-      font-weight: 900;
-      text-transform: uppercase;
-      background: rgba(8,12,24,.35);
-      position: sticky;
-      top: 0;
-      z-index: 2;
-    }
-    tr:hover td{
-      background: rgba(125,211,252,.05);
-      cursor: pointer;
-    }
+tr:hover{
+background:#020617;
+cursor:pointer;
+}
 
-    .mono{ font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.badge{
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:700;
+}
 
-    .pill{
-      display:inline-flex; align-items:center; gap:6px;
-      padding: 5px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(36,50,88,.95);
-      background: rgba(8,12,24,.40);
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-    .pill strong{ color: var(--text); }
-    .status.available{ border-color: rgba(34,197,94,.40); color: rgba(34,197,94,.95); background: rgba(34,197,94,.08); }
-    .status.requested{ border-color: rgba(245,158,11,.45); color: rgba(245,158,11,.95); background: rgba(245,158,11,.08); }
-    .status.review{ border-color: rgba(96,165,250,.45); color: rgba(96,165,250,.95); background: rgba(96,165,250,.08); }
-    .status.offer{ border-color: rgba(167,139,250,.55); color: rgba(167,139,250,.98); background: rgba(167,139,250,.08); }
-    .status.funded{ border-color: rgba(34,197,94,.55); color: rgba(34,197,94,.98); background: rgba(34,197,94,.10); }
-    .status.dead{ border-color: rgba(239,68,68,.55); color: rgba(239,68,68,.98); background: rgba(239,68,68,.08); }
-    .score{ border-color: rgba(125,211,252,.25); color: var(--text); background: rgba(125,211,252,.10); }
+.score{
+background:#0369a1;
+}
 
-    /* Right rail */
-    .kpis{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .kpi{
-      background: rgba(11,16,32,.80);
-      border: 1px solid rgba(27,39,71,.90);
-      border-radius: var(--r);
-      padding: 12px;
-    }
-    .kpi .label{ color: var(--muted); font-size: 12px; font-weight: 800; }
-    .kpi .value{ margin-top:6px; font-weight: 950; font-size: 18px; }
+.available{
+background:#22c55e;
+}
 
-    .activity{
-      background: rgba(11,16,32,.80);
-      border: 1px solid rgba(27,39,71,.90);
-      border-radius: var(--r);
-      overflow:hidden;
-    }
-    .activityHeader{
-      padding: 12px;
-      border-bottom: 1px solid rgba(27,39,71,.75);
-      background: rgba(10,15,29,.55);
-      font-weight: 950;
-    }
-    .activityList{
-      padding: 10px 12px 12px;
-      display:grid;
-      gap: 10px;
-      max-height: 420px;
-      overflow:auto;
-    }
-    .event{
-      border: 1px solid rgba(27,39,71,.85);
-      background: rgba(8,12,24,.40);
-      border-radius: 14px;
-      padding: 10px;
-    }
-    .event .t{ font-weight: 950; }
-    .event .s{ color: var(--muted); font-size: 12px; margin-top:4px; }
+.requested{
+background:#f59e0b;
+}
 
-    /* Modal */
-    .backdrop{
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,.58);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 16px;
-      z-index: 200;
-    }
-    .backdrop.show{ display:flex; }
+.funded{
+background:#10b981;
+}
 
-    .modal{
-      width: min(1100px, 100%);
-      max-height: 92vh;
-      overflow:auto;
-      border-radius: 18px;
-      border: 1px solid rgba(27,39,71,.95);
-      background: rgba(11,16,32,.96);
-      box-shadow: var(--shadow);
-    }
-    .modalHeader{
-      position: sticky; top: 0;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(27,39,71,.75);
-      background: rgba(11,16,32,.96);
-      z-index: 2;
-    }
-    .modalTitle{ font-weight: 950; }
-    .modalSub{ color: var(--muted); font-size: 12px; margin-top:3px; font-weight: 700; }
+button{
+background:linear-gradient(90deg,#22c55e,#16a34a);
+border:none;
+padding:10px 15px;
+border-radius:8px;
+font-weight:700;
+cursor:pointer;
+color:white;
+}
 
-    .modalBody{
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 12px;
-      padding: 12px 14px 14px;
-    }
-    @media (max-width: 1100px){
-      .modalBody{ grid-template-columns: 1fr; }
-    }
-    .thread{
-      background: rgba(8,12,24,.42);
-      border: 1px solid rgba(27,39,71,.85);
-      border-radius: var(--r);
-      padding: 12px;
-      min-height: 260px;
-      display:grid;
-      gap: 10px;
-    }
-    .msg{
-      background: rgba(11,16,32,.80);
-      border: 1px solid rgba(27,39,71,.85);
-      border-radius: 14px;
-      padding: 10px;
-    }
-    .msg .meta{
-      display:flex; justify-content:space-between; gap:10px;
-      color: var(--muted); font-size: 12px;
-    }
-    .msg .who{ color: var(--text); font-weight: 950; }
-    .msg .text{ margin-top:6px; line-height:1.35; }
+button:hover{
+opacity:.9;
+}
 
-    .composer{
-      display:grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      margin-top: 10px;
-    }
+.activity{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
 
-    .facts{
-      background: rgba(8,12,24,.42);
-      border: 1px solid rgba(27,39,71,.85);
-      border-radius: var(--r);
-      padding: 12px;
-      display:grid;
-      gap: 10px;
-    }
-    .factGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .fact{
-      background: rgba(11,16,32,.80);
-      border: 1px solid rgba(27,39,71,.85);
-      border-radius: 14px;
-      padding: 10px;
-    }
-    .fact .k{ color: var(--muted); font-size: 12px; font-weight: 800; }
-    .fact .v{ margin-top:6px; font-weight: 950; }
+.activity-item{
+background:#0f172a;
+padding:10px;
+border-radius:8px;
+font-size:14px;
+}
 
-    .divider{ height:1px; background: rgba(27,39,71,.75); margin: 6px 0; }
+.stats{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-bottom:15px;
+}
 
-    /* Toast */
-    .toast{
-      position: fixed;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(11,16,32,.96);
-      border: 1px solid rgba(27,39,71,.95);
-      padding: 10px 12px;
-      border-radius: 14px;
-      box-shadow: var(--shadow);
-      font-weight: 950;
-      display:none;
-      z-index: 300;
-    }
-    .toast.show{ display:block; }
-  </style>
+.stat{
+background:#0f172a;
+padding:12px;
+border-radius:8px;
+text-align:center;
+}
+
+.stat-number{
+font-size:20px;
+font-weight:800;
+}
+
+</style>
+
 </head>
 
 <body>
-  <div class="app">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="logo"></div>
-        <div>
-          <div class="title">BrokerOS</div>
-          <div class="sub">Terminal Marketplace</div>
-        </div>
-      </div>
 
-      <div class="navGroup">
-        <a class="navItem active" href="marketplace.html">
-          Marketplace <span class="tag">LIVE</span>
-        </a>
-        <a class="navItem" href="analyzer.html">
-          Deal Lab <span class="tag">BETA</span>
-        </a>
-        <a class="navItem" href="funders.html">
-          Funders <span class="tag">DIR</span>
-        </a>
-        <a class="navItem" href="leaderboard.html">
-          Leaderboard <span class="tag">REP</span>
-        </a>
-        <a class="navItem" href="superbroker.html">
-          SuperBroker <span class="tag">OPS</span>
-        </a>
-        <a class="navItem" href="index.html">
-          Home <span class="tag">HQ</span>
-        </a>
-      </div>
+<header>
 
-      <div class="panel" style="padding:12px;">
-        <div style="font-weight:950;">Rules of the board</div>
-        <div class="panelSub" style="margin-top:6px;">
-          No PII on deal cards. Use Deal Room for next steps. V1 persists locally.
-        </div>
-      </div>
+<div class="logo">BrokerOS</div>
 
-      <div class="panel" style="padding:12px;">
-        <div style="font-weight:950;">Next upgrades</div>
-        <div class="panelSub" style="margin-top:6px;">
-          Accounts • real messaging • attachments • verification badges • funder matching.
-        </div>
-      </div>
-    </aside>
+<nav>
+<a href="index.html">Home</a>
+<a href="marketplace.html">Marketplace</a>
+<a href="analyzer.html">Deal Lab</a>
+<a href="funders.html">Funders</a>
+<a href="leaderboard.html">Leaderboard</a>
+</nav>
 
-    <!-- Top bar -->
-    <header class="topbar">
-      <div class="brand" style="min-width:auto;">
-        <div style="display:flex; flex-direction:column;">
-          <div style="font-weight:950; letter-spacing:-.2px;">Marketplace</div>
-          <div class="panelSub" style="margin:0;">Deals • Workflow • Deal Rooms</div>
-        </div>
-      </div>
+<button onclick="postDeal()">Post Deal</button>
 
-      <div class="search">
-        <input id="q" class="input" placeholder="Search deals (industry, notes, state)…" />
-        <select id="status" class="input" style="max-width:170px;">
-          <option value="">All statuses</option>
-          <option value="available">Available</option>
-          <option value="requested">Requested</option>
-          <option value="review">In Review</option>
-          <option value="offer">Offer Sent</option>
-          <option value="funded">Funded</option>
-          <option value="dead">Dead</option>
-        </select>
-        <select id="industry" class="input" style="max-width:170px;">
-          <option value="">All industries</option>
-          <option value="restaurant">Restaurant</option>
-          <option value="retail">Retail</option>
-          <option value="construction">Construction</option>
-          <option value="trucking">Trucking</option>
-          <option value="services">Services</option>
-        </select>
-        <select id="sort" class="input" style="max-width:170px;">
-          <option value="newest">Sort: Newest</option>
-          <option value="score">Sort: Score</option>
-          <option value="amount">Sort: Amount</option>
-          <option value="revenue">Sort: Revenue</option>
-        </select>
-      </div>
+</header>
 
-      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
-        <div class="roleToggle" title="Switch perspective">
-          <button id="roleBroker">Broker</button>
-          <button id="roleFunder">Funder</button>
-          <button id="roleBoth" class="active">Both</button>
-        </div>
-        <button class="btn primary" id="btnPost">Post Deal</button>
-        <button class="btn" id="btnReset" title="Reset local demo data">Reset</button>
-      </div>
-    </header>
+<div class="container">
 
-    <!-- Main -->
-    <main class="main">
-      <div class="panel">
-        <div class="panelHeader">
-          <div>
-            <div class="panelTitle">Deal Board</div>
-            <div class="panelSub">Click any row to open the Deal Room. “Request” creates workflow + thread.</div>
-          </div>
-          <div class="toolbar">
-            <span class="pill score" id="countPill">—</span>
-          </div>
-        </div>
+<div class="panel">
 
-        <div class="tableWrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Deal</th>
-                <th>Rev / mo</th>
-                <th>Credit</th>
-                <th>TIB</th>
-                <th>Pos</th>
-                <th>Score</th>
-                <th>Status</th>
-                <th>Requests</th>
-                <th class="mono">ID</th>
-              </tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </main>
+<h2>Marketplace Deals</h2>
 
-    <!-- Right rail -->
-    <aside class="right">
-      <div class="kpis">
-        <div class="kpi">
-          <div class="label">Active</div>
-          <div class="value" id="kActive">—</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Requested</div>
-          <div class="value" id="kRequested">—</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Offer stage</div>
-          <div class="value" id="kOffer">—</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Funded</div>
-          <div class="value" id="kFunded">—</div>
-        </div>
-      </div>
+<table>
 
-      <div class="activity">
-        <div class="activityHeader">Activity</div>
-        <div class="activityList" id="activity"></div>
-      </div>
+<thead>
 
-      <div class="panel" style="padding:12px;">
-        <div style="font-weight:950;">Market Pulse (demo)</div>
-        <div class="panelSub" style="margin-top:6px;">
-          As deals move through workflow, funders trust the feed and brokers stay in the tool.
-        </div>
-        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
-          <span class="pill"><strong>Avg Score</strong> <span id="avgScore">—</span></span>
-          <span class="pill"><strong>Top Industry</strong> <span id="topInd">—</span></span>
-        </div>
-      </div>
-    </aside>
-  </div>
+<tr>
 
-  <!-- Deal Room Modal -->
-  <div class="backdrop" id="backdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Deal Room">
-      <div class="modalHeader">
-        <div>
-          <div class="modalTitle" id="mTitle">Deal Room</div>
-          <div class="modalSub" id="mSub">—</div>
-        </div>
-        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-          <span class="pill status" id="mStatus">Status</span>
-          <span class="pill score" id="mScore">Score</span>
-          <button class="btn small" id="btnClose">Close</button>
-        </div>
-      </div>
+<th>Industry</th>
+<th>Revenue</th>
+<th>Credit</th>
+<th>Amount</th>
+<th>Score</th>
+<th>Status</th>
 
-      <div class="modalBody">
-        <div>
-          <div class="thread" id="thread"></div>
-          <div class="composer">
-            <input id="msg" class="input" placeholder="Message… (Ask for docs, clarify positions, send terms, etc.)" />
-            <button class="btn primary" id="btnSend">Send</button>
-          </div>
-          <div class="panelSub" style="margin-top:8px;">
-            Tip: The workflow actions on the right make this feel like a real marketplace.
-          </div>
-        </div>
+</tr>
 
-        <div class="facts">
-          <div class="factGrid" id="facts"></div>
-          <div class="divider"></div>
-          <div id="actions"></div>
-          <div class="divider"></div>
-          <div class="panelSub">
-            V1 is local-only. V2 adds accounts + attachments + verification.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+</thead>
 
-  <div class="toast" id="toast"></div>
+<tbody id="dealTable"></tbody>
+
+</table>
+
+</div>
+
+<div>
+
+<div class="panel">
+
+<h3>Market Stats</h3>
+
+<div class="stats">
+
+<div class="stat">
+<div class="stat-number" id="activeDeals">0</div>
+Active Deals
+</div>
+
+<div class="stat">
+<div class="stat-number" id="fundedDeals">0</div>
+Funded
+</div>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<h3>Activity Feed</h3>
+
+<div class="activity" id="activity"></div>
+
+</div>
+
+</div>
+
+</div>
 
 <script>
-/* =========
-   Data + Storage
-   ========= */
-const STORAGE_KEY = "brokeros_terminal_marketplace_v1";
-const ROLE_KEY = "brokeros_terminal_role";
-const DEFAULT_ROLE = "both"; // broker|funder|both
 
-const STATUS = {
-  available: "Available",
-  requested: "Requested",
-  review: "In Review",
-  offer: "Offer Sent",
-  funded: "Funded",
-  dead: "Dead"
-};
+let deals = JSON.parse(localStorage.getItem("brokerDeals")||"[]")
 
-function uid(){ return "d_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16); }
-function nowISO(){ return new Date().toISOString(); }
-function fmtMoney(n){ if (n == null || isNaN(n)) return "—"; return "$" + Math.round(n).toLocaleString(); }
-function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
-function titleCase(s){ if(!s) return "—"; return s.charAt(0).toUpperCase() + s.slice(1); }
-function escapeHtml(s){
-  return String(s)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-function toast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"), 1300);
+if(deals.length==0){
+
+deals=[
+
+{industry:"Restaurant",revenue:95000,credit:620,amount:45000,score:78,status:"available"},
+
+{industry:"Retail",revenue:120000,credit:650,amount:60000,score:85,status:"available"},
+
+{industry:"Construction",revenue:80000,credit:600,amount:40000,score:70,status:"requested"},
+
+{industry:"Trucking",revenue:70000,credit:590,amount:35000,score:64,status:"available"}
+
+]
+
 }
 
-/* Transparent V1 scoring (tune later with real outcomes) */
-function scoreDeal(d){
-  let score = 50;
-  const flags = [];
+function save(){
 
-  const credit = Number(d.credit || 0);
-  const rev = Number(d.revenue || 0);
-  const tib = Number(d.tib || 0);
-  const pos = Number(d.positions || 0);
-  const amt = Number(d.amount || 0);
+localStorage.setItem("brokerDeals",JSON.stringify(deals))
 
-  if (credit >= 700) score += 24;
-  else if (credit >= 660) score += 18;
-  else if (credit >= 620) score += 12;
-  else if (credit >= 580) score += 5;
-  else { score -= 14; flags.push("Low credit"); }
-
-  if (rev >= 150000) score += 22;
-  else if (rev >= 100000) score += 16;
-  else if (rev >= 60000) score += 10;
-  else if (rev >= 30000) score += 4;
-  else { score -= 12; flags.push("Low revenue"); }
-
-  if (tib >= 36) score += 14;
-  else if (tib >= 24) score += 10;
-  else if (tib >= 12) score += 6;
-  else { score -= 10; flags.push("Short TIB"); }
-
-  if (pos === 0) score += 12;
-  else if (pos === 1) score += 4;
-  else if (pos === 2) score -= 6;
-  else { score -= 16; flags.push("Heavy stacking"); }
-
-  if (rev > 0 && amt > 0){
-    const ratio = amt / rev;
-    if (ratio <= 0.35) score += 10;
-    else if (ratio <= 0.55) score += 4;
-    else if (ratio <= 0.75) score -= 6;
-    else { score -= 14; flags.push("High request vs rev"); }
-  }
-
-  const ind = (d.industry || "").toLowerCase();
-  if (["restaurant","retail","services","construction"].includes(ind)) score += 2;
-  if (["trucking"].includes(ind)) score -= 2;
-
-  score = clamp(score, 1, 99);
-  let grade = "D", likelihood = "Low";
-  if (score >= 85){ grade="A"; likelihood="High"; }
-  else if (score >= 72){ grade="B"; likelihood="Moderate"; }
-  else if (score >= 58){ grade="C"; likelihood="Medium-Low"; }
-
-  const suggestedMax = rev ? Math.round(rev * (pos >= 2 ? 0.35 : 0.55)) : null;
-  return { score, grade, likelihood, flags, suggestedMax };
-}
-
-function enrichDeal(d){
-  return { ...d, metrics: scoreDeal(d) };
-}
-
-function defaultState(){
-  const seed = [
-    {
-      id: uid(), createdAt: nowISO(),
-      industry: "restaurant", state:"NY",
-      revenue: 95000, credit: 620, tib: 18, positions: 1, amount: 45000,
-      notes: "Clean 1st. Wants speed. Stable deposits. No recent dips reported.",
-      status: "available",
-      requestedBy: [],
-      offer: null,
-      thread: [{ at: nowISO(), who:"System", text:"Deal posted. Keep PII off the card. Use Deal Room for questions + workflow." }]
-    },
-    {
-      id: uid(), createdAt: nowISO(),
-      industry: "retail", state:"NJ",
-      revenue: 120000, credit: 660, tib: 30, positions: 0, amount: 60000,
-      notes: "Seasonal lift expected. Strong revenue. Prefers 1st position.",
-      status: "available",
-      requestedBy: [],
-      offer: null,
-      thread: [{ at: nowISO(), who:"System", text:"Funders can request the deal and ask for docs. Advance status as it progresses." }]
-    },
-    {
-      id: uid(), createdAt: nowISO(),
-      industry: "construction", state:"FL",
-      revenue: 80000, credit: 605, tib: 14, positions: 2, amount: 40000,
-      notes: "2 positions existing. Needs restructure or careful sizing.",
-      status: "available",
-      requestedBy: [],
-      offer: null,
-      thread: [{ at: nowISO(), who:"System", text:"Potential stacking risk. Ask about positions and recent NSFs." }]
-    },
-    {
-      id: uid(), createdAt: nowISO(),
-      industry: "trucking", state:"TX",
-      revenue: 70000, credit: 590, tib: 10, positions: 3, amount: 35000,
-      notes: "Choppy month. High urgency. Likely needs docs and conservative sizing.",
-      status: "available",
-      requestedBy: [],
-      offer: null,
-      thread: [{ at: nowISO(), who:"System", text:"High urgency + heavy stacking. Consider smaller offer or Needs Info." }]
-    }
-  ];
-
-  return {
-    deals: seed.map(enrichDeal),
-    my: { broker: { posted: [] }, funder: { requested: [] } },
-    events: [
-      { at: nowISO(), title: "Market open", subtitle: "Deal board initialized." }
-    ]
-  };
-}
-
-function loadState(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return defaultState();
-    const st = JSON.parse(raw);
-    st.deals = (st.deals || []).map(enrichDeal);
-    st.my = st.my || { broker:{posted:[]}, funder:{requested:[]} };
-    st.my.broker = st.my.broker || { posted: [] };
-    st.my.funder = st.my.funder || { requested: [] };
-    st.events = st.events || [];
-    return st;
-  } catch {
-    return defaultState();
-  }
-}
-function saveState(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-let state = loadState();
-let role = (localStorage.getItem(ROLE_KEY) || DEFAULT_ROLE);
-let selectedId = null;
-
-/* =========
-   UI helpers
-   ========= */
-function setRole(r){
-  role = r;
-  localStorage.setItem(ROLE_KEY, role);
-  document.getElementById("roleBroker").classList.toggle("active", role==="broker");
-  document.getElementById("roleFunder").classList.toggle("active", role==="funder");
-  document.getElementById("roleBoth").classList.toggle("active", role==="both");
-  render();
-}
-function statusPill(s){
-  return `<span class="pill status ${s}">${STATUS[s] || "—"}</span>`;
-}
-function scorePill(m){
-  return `<span class="pill score" title="Grade ${m.grade} • Likelihood: ${m.likelihood}">Score <strong>${m.score}</strong></span>`;
-}
-
-function applyFilters(list){
-  const q = (document.getElementById("q").value || "").toLowerCase().trim();
-  const s = document.getElementById("status").value;
-  const ind = document.getElementById("industry").value;
-  const sort = document.getElementById("sort").value;
-
-  let out = list.slice();
-
-  if (q){
-    out = out.filter(d => (`${d.industry} ${d.notes||""} ${d.state||""}`).toLowerCase().includes(q));
-  }
-  if (s) out = out.filter(d => d.status === s);
-  if (ind) out = out.filter(d => (d.industry||"").toLowerCase() === ind);
-
-  out.sort((a,b)=>{
-    if (sort === "score") return (b.metrics?.score||0) - (a.metrics?.score||0);
-    if (sort === "amount") return (b.amount||0) - (a.amount||0);
-    if (sort === "revenue") return (b.revenue||0) - (a.revenue||0);
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
-
-  return out;
-}
-
-function kpis(){
-  const deals = state.deals || [];
-  const active = deals.filter(d => !["funded","dead"].includes(d.status)).length;
-  const requested = deals.filter(d => d.status === "requested").length;
-  const offer = deals.filter(d => d.status === "offer").length;
-  const funded = deals.filter(d => d.status === "funded").length;
-
-  document.getElementById("kActive").textContent = active;
-  document.getElementById("kRequested").textContent = requested;
-  document.getElementById("kOffer").textContent = offer;
-  document.getElementById("kFunded").textContent = funded;
-
-  const avg = deals.length ? Math.round(deals.reduce((a,d)=>a+(d.metrics?.score||0),0)/deals.length) : 0;
-  document.getElementById("avgScore").textContent = avg || "—";
-
-  const counts = {};
-  deals.forEach(d=>{
-    const k=(d.industry||"").toLowerCase();
-    counts[k] = (counts[k]||0) + 1;
-  });
-  const top = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]?.[0];
-  document.getElementById("topInd").textContent = top ? titleCase(top) : "—";
-}
-
-function renderActivity(){
-  const box = document.getElementById("activity");
-  box.innerHTML = "";
-  const events = (state.events || []).slice(-20).reverse();
-  if (!events.length){
-    box.innerHTML = `<div class="event"><div class="t">No activity yet</div><div class="s">Request a deal or send an offer.</div></div>`;
-    return;
-  }
-  events.forEach(e=>{
-    const el = document.createElement("div");
-    el.className = "event";
-    el.innerHTML = `
-      <div class="t">${escapeHtml(e.title)}</div>
-      <div class="s">${escapeHtml(e.subtitle)} • ${new Date(e.at).toLocaleString()}</div>
-    `;
-    box.appendChild(el);
-  });
-}
-
-function logEvent(title, subtitle){
-  state.events = state.events || [];
-  state.events.push({ at: nowISO(), title, subtitle });
-  saveState();
-  renderActivity();
-}
-
-function renderTable(){
-  const tbody = document.getElementById("tbody");
-  tbody.innerHTML = "";
-
-  const list = applyFilters(state.deals || []);
-  document.getElementById("countPill").innerHTML = `Showing <strong>${list.length}</strong> deals`;
-
-  list.forEach(d=>{
-    const tr = document.createElement("tr");
-    const req = (d.requestedBy || []).length;
-
-    tr.innerHTML = `
-      <td>
-        <div style="display:flex; flex-direction:column; gap:4px;">
-          <div style="font-weight:950;">${titleCase(d.industry)} • ${fmtMoney(d.amount)}</div>
-          <div class="mono">${escapeHtml(d.notes || "—")}</div>
-        </div>
-      </td>
-      <td>${fmtMoney(d.revenue)}</td>
-      <td>${d.credit ?? "—"}</td>
-      <td>${(d.tib ?? "—")} mo</td>
-      <td>${d.positions ?? "—"}</td>
-      <td>${scorePill(d.metrics)}</td>
-      <td>${statusPill(d.status)}</td>
-      <td>${req}</td>
-      <td class="mono">${escapeHtml(d.id.slice(-8))}</td>
-    `;
-
-    tr.addEventListener("click", ()=>openRoom(d.id));
-    tbody.appendChild(tr);
-  });
-
-  if (!list.length){
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="9" class="mono" style="padding:16px; color: var(--muted);">No deals match your filters.</td>`;
-    tbody.appendChild(tr);
-  }
 }
 
 function render(){
-  kpis();
-  renderActivity();
-  renderTable();
+
+let table=document.getElementById("dealTable")
+
+table.innerHTML=""
+
+let funded=0
+
+deals.forEach((d,i)=>{
+
+if(d.status=="funded")funded++
+
+table.innerHTML+=`
+
+<tr onclick="openDeal(${i})">
+
+<td>${d.industry}</td>
+
+<td>$${d.revenue.toLocaleString()}</td>
+
+<td>${d.credit}</td>
+
+<td>$${d.amount.toLocaleString()}</td>
+
+<td><span class="badge score">${d.score}</span></td>
+
+<td><span class="badge ${d.status}">${d.status}</span></td>
+
+</tr>
+
+`
+
+})
+
+document.getElementById("activeDeals").innerText=deals.length
+document.getElementById("fundedDeals").innerText=funded
+
 }
 
-/* =========
-   Deal Room
-   ========= */
-function openRoom(id){
-  selectedId = id;
-  document.getElementById("backdrop").classList.add("show");
-  document.getElementById("backdrop").setAttribute("aria-hidden","false");
-  renderRoom();
-}
-function closeRoom(){
-  selectedId = null;
-  document.getElementById("backdrop").classList.remove("show");
-  document.getElementById("backdrop").setAttribute("aria-hidden","true");
-}
-
-function renderRoom(){
-  const d = state.deals.find(x=>x.id===selectedId);
-  if (!d) return;
-
-  document.getElementById("mTitle").textContent = `${titleCase(d.industry)} Deal • ${fmtMoney(d.amount)}`;
-  document.getElementById("mSub").textContent = `Rev ${fmtMoney(d.revenue)}/mo • Credit ${d.credit ?? "—"} • ${STATUS[d.status]}`;
-
-  const ms = document.getElementById("mStatus");
-  ms.className = `pill status ${d.status}`;
-  ms.textContent = STATUS[d.status] || "Status";
-
-  const msc = document.getElementById("mScore");
-  msc.textContent = `Score ${d.metrics.score} • Grade ${d.metrics.grade}`;
-  msc.title = `Likelihood: ${d.metrics.likelihood}`;
-
-  // facts
-  const facts = [
-    ["Monthly Revenue", `${fmtMoney(d.revenue)}`],
-    ["Funding Requested", `${fmtMoney(d.amount)}`],
-    ["Credit Score", `${d.credit ?? "—"}`],
-    ["Time in Business", `${(d.tib ?? "—")} months`],
-    ["Positions", `${d.positions ?? "—"}`],
-    ["State", `${d.state || "—"}`],
-    ["Suggested Max", `${d.metrics.suggestedMax ? fmtMoney(d.metrics.suggestedMax) : "—"}`],
-    ["Requests", `${(d.requestedBy||[]).length}`]
-  ];
-  const fg = document.getElementById("facts");
-  fg.innerHTML = "";
-  facts.forEach(([k,v])=>{
-    const el = document.createElement("div");
-    el.className = "fact";
-    el.innerHTML = `<div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(String(v))}</div>`;
-    fg.appendChild(el);
-  });
-
-  // thread
-  const thread = document.getElementById("thread");
-  thread.innerHTML = "";
-  (d.thread || []).slice(-60).forEach(m=>{
-    const el = document.createElement("div");
-    el.className = "msg";
-    el.innerHTML = `
-      <div class="meta">
-        <div class="who">${escapeHtml(m.who)}</div>
-        <div>${new Date(m.at).toLocaleString()}</div>
-      </div>
-      <div class="text">${escapeHtml(m.text)}</div>
-    `;
-    thread.appendChild(el);
-  });
-  thread.scrollTop = thread.scrollHeight;
-
-  // actions (role aware)
-  document.getElementById("actions").innerHTML = actionsHtml(d);
-  wireActions();
-}
-
-function actionsHtml(d){
-  const reqCount = (d.requestedBy || []).length;
-
-  const funderActions = `
-    <div style="font-weight:950;">Funder actions</div>
-    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
-      ${d.status === "available" ? `<button class="btn primary small" data-act="request">Request Deal</button>` : ``}
-      ${(d.status === "requested" || d.status === "review") ? `<button class="btn primary small" data-act="offer">Send Offer</button>` : ``}
-      <button class="btn small" data-act="ask">Ask Question</button>
-    </div>
-  `;
-
-  const brokerActions = `
-    <div style="font-weight:950; margin-top:12px;">Broker actions</div>
-    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
-      <button class="btn small" data-act="advance">Advance Status</button>
-      <button class="btn primary small" data-act="funded">Mark Funded</button>
-      <button class="btn danger small" data-act="dead">Mark Dead</button>
-    </div>
-  `;
-
-  const info = `
-    <div class="panelSub" style="margin-top:10px;">
-      Requests: <b>${reqCount}</b> • Status: <b>${STATUS[d.status]}</b>
-    </div>
-  `;
-
-  if (role === "broker") return brokerActions + info;
-  if (role === "funder") return funderActions + info;
-  return funderActions + brokerActions + info;
-}
-
-function wireActions(){
-  const root = document.getElementById("actions");
-  const d = state.deals.find(x=>x.id===selectedId);
-  if (!d) return;
-
-  const get = (k)=>root.querySelector(`[data-act="${k}"]`);
-
-  const requestBtn = get("request");
-  if (requestBtn) requestBtn.onclick = ()=>requestDeal(d.id);
-
-  const offerBtn = get("offer");
-  if (offerBtn) offerBtn.onclick = ()=>sendOffer(d.id);
-
-  const askBtn = get("ask");
-  if (askBtn) askBtn.onclick = ()=>{
-    addMsg(d.id, role === "broker" ? "Broker" : role === "funder" ? "Funder" : "You",
-      "Quick question: can you confirm positions, last 60-day NSFs, and any recent revenue dips?"
-    );
-    toast("Question added");
-    renderRoom();
-  };
-
-  const advBtn = get("advance");
-  if (advBtn) advBtn.onclick = ()=>advanceStatus(d.id);
-
-  const fundedBtn = get("funded");
-  if (fundedBtn) fundedBtn.onclick = ()=>markFunded(d.id);
-
-  const deadBtn = get("dead");
-  if (deadBtn) deadBtn.onclick = ()=>markDead(d.id);
-}
-
-function addMsg(id, who, text){
-  const d = state.deals.find(x=>x.id===id);
-  if (!d) return;
-  d.thread = d.thread || [];
-  d.thread.push({ at: nowISO(), who, text });
-  saveState();
-}
-
-function requestDeal(id){
-  const d = state.deals.find(x=>x.id===id);
-  if (!d) return;
-
-  d.requestedBy = d.requestedBy || [];
-  if (!d.requestedBy.includes("funder_demo")) d.requestedBy.push("funder_demo");
-
-  if (d.status === "available") d.status = "requested";
-
-  addMsg(id, "Funder", "Requested deal. Please share docs and clarify positions/NSFs.");
-  logEvent("Deal requested", `${titleCase(d.industry)} • ${fmtMoney(d.amount)} • score ${d.metrics.score}`);
-
-  saveState();
-  toast("Requested");
-  render();
-  renderRoom();
-}
-
-function sendOffer(id){
-  const d = state.deals.find(x=>x.id===id);
-  if (!d) return;
-
-  d.status = "offer";
-  d.offer = d.offer || { amount: d.amount, factor: 1.39, termDays: 120 };
-
-  addMsg(id, "Funder", `Offer sent: ${fmtMoney(d.offer.amount)} • factor ${d.offer.factor} • ${d.offer.termDays} days`);
-  logEvent("Offer sent", `${titleCase(d.industry)} • ${fmtMoney(d.amount)} • factor ${d.offer.factor}`);
-
-  saveState();
-  toast("Offer sent");
-  render();
-  renderRoom();
-}
-
-function advanceStatus(id){
-  const d = state.deals.find(x=>x.id===id);
-  if (!d) return;
-
-  const path = ["available","requested","review","offer","funded"];
-  const idx = path.indexOf(d.status);
-
-  if (idx === -1 || d.status === "funded" || d.status === "dead") return;
-
-  if (d.status === "available" && (!d.requestedBy || d.requestedBy.length === 0)){
-    toast("No requests yet");
-    return;
-  }
-
-  d.status = path[idx+1] || d.status;
-  addMsg(id, "System", `Status moved to: ${STATUS[d.status]}`);
-  logEvent("Status updated", `${titleCase(d.industry)} → ${STATUS[d.status]}`);
-
-  saveState();
-  toast("Advanced");
-  render();
-  renderRoom();
-}
-
-function markFunded(id){
-  const d = state.deals.find(x=>x.id===id);
-  if (!d) return;
-  d.status = "funded";
-  addMsg(id, "System", "Deal marked Funded ✅");
-  logEvent("Deal funded", `${titleCase(d.industry)} • ${fmtMoney(d.amount)} • score ${d.metrics.score}`);
-  saveState();
-  toast("Funded");
-  render();
-  renderRoom();
-}
-function markDead(id){
-  const d = state.deals.find(x=>x.id===id);
-  if (!d) return;
-  d.status = "dead";
-  addMsg(id, "System", "Deal marked Dead ❌");
-  logEvent("Deal closed", `${titleCase(d.industry)} • marked dead`);
-  saveState();
-  toast("Dead");
-  render();
-  renderRoom();
-}
-
-/* =========
-   Posting (simple prompt-based V1)
-   ========= */
 function postDeal(){
-  const industry = prompt("Industry (restaurant/retail/construction/trucking/services):", "restaurant");
-  if (!industry) return;
 
-  const revenue = Number(prompt("Monthly revenue (number):", "85000") || 0);
-  const credit = Number(prompt("Credit score:", "620") || 0);
-  const tib = Number(prompt("Time in business (months):", "18") || 0);
-  const positions = Number(prompt("Positions (0,1,2,3+):", "1") || 0);
-  const amount = Number(prompt("Funding requested:", "45000") || 0);
-  const stateCode = (prompt("State (2 letters, optional):", "NY") || "").toUpperCase().slice(0,2);
-  const notes = prompt("Notes (no PII):", "Clean file. Wants speed.") || "";
+let industry=prompt("Industry")
+let revenue=parseInt(prompt("Monthly Revenue"))
+let credit=parseInt(prompt("Credit Score"))
+let amount=parseInt(prompt("Funding Requested"))
 
-  if (!revenue || !credit || !amount){
-    toast("Need revenue, credit, amount");
-    return;
-  }
+let score=Math.floor(Math.random()*30)+60
 
-  const d = enrichDeal({
-    id: uid(),
-    createdAt: nowISO(),
-    industry: industry.toLowerCase(),
-    state: stateCode,
-    revenue, credit, tib, positions, amount,
-    notes,
-    status: "available",
-    requestedBy: [],
-    offer: null,
-    thread: [{ at: nowISO(), who:"System", text:"Deal posted. Keep PII off the card. Use Deal Room for docs + next steps." }]
-  });
+deals.unshift({industry,revenue,credit,amount,score,status:"available"})
 
-  state.deals.unshift(d);
-  logEvent("Deal posted", `${titleCase(d.industry)} • ${fmtMoney(d.amount)} • score ${d.metrics.score}`);
-  saveState();
-  toast("Posted");
-  render();
+save()
+
+render()
+
+addActivity("New deal posted")
+
 }
 
-function resetDemo(){
-  localStorage.removeItem(STORAGE_KEY);
-  state = loadState();
-  toast("Reset");
-  render();
+function openDeal(i){
+
+let action=prompt("Type REQUEST, FUND, or CANCEL")
+
+if(action=="REQUEST"){
+
+deals[i].status="requested"
+
+addActivity("Deal requested")
+
 }
 
-/* =========
-   Wire UI
-   ========= */
-["q","status","industry","sort"].forEach(id=>{
-  document.getElementById(id).addEventListener("input", render);
-  document.getElementById(id).addEventListener("change", render);
-});
+if(action=="FUND"){
 
-document.getElementById("btnPost").addEventListener("click", postDeal);
-document.getElementById("btnReset").addEventListener("click", resetDemo);
+deals[i].status="funded"
 
-document.getElementById("roleBroker").addEventListener("click", ()=>setRole("broker"));
-document.getElementById("roleFunder").addEventListener("click", ()=>setRole("funder"));
-document.getElementById("roleBoth").addEventListener("click", ()=>setRole("both"));
+addActivity("Deal funded")
 
-document.getElementById("btnClose").addEventListener("click", closeRoom);
-document.getElementById("backdrop").addEventListener("click", (e)=>{ if (e.target.id === "backdrop") closeRoom(); });
+}
 
-document.getElementById("btnSend").addEventListener("click", ()=>{
-  const text = (document.getElementById("msg").value || "").trim();
-  if (!text || !selectedId) return;
+save()
 
-  const who = role === "broker" ? "Broker" : role === "funder" ? "Funder" : "You";
-  addMsg(selectedId, who, text);
-  document.getElementById("msg").value = "";
-  saveState();
-  renderRoom();
-});
-document.getElementById("msg").addEventListener("keydown", (e)=>{
-  if (e.key === "Enter") document.getElementById("btnSend").click();
-});
+render()
 
-// init role buttons
-setRole(role);
-render();
+}
+
+function addActivity(text){
+
+let box=document.getElementById("activity")
+
+let div=document.createElement("div")
+
+div.className="activity-item"
+
+div.innerText=text
+
+box.prepend(div)
+
+}
+
+render()
+
 </script>
+
 </body>
+
 </html>
