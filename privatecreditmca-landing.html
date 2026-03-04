@@ -188,12 +188,67 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;ali
 .stat-l{font-size:14px;color:rgba(255,255,255,.35);margin-top:4px;font-weight:500}
 
 /* ═══ TOOLS ═══ */
-.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
-.tool-card{background:var(--bg-w);border:1px solid var(--border);border-radius:var(--r);padding:24px;transition:all .3s}
-.tool-card:hover{box-shadow:var(--sh);transform:translateY(-3px)}
-.tool-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
-.tool-icon.blue{background:var(--brand-l)}.tool-icon.teal{background:var(--teal-l)}.tool-icon.violet{background:var(--violet-l)}.tool-icon.amber{background:var(--amber-l)}.tool-icon.green{background:var(--green-l)}.tool-icon.red{background:var(--red-l)}
-.tool-card h3{font-size:15px;font-weight:700;margin-bottom:5px}.tool-card p{font-size:13px;color:var(--tx2);line-height:1.5}
+.tools-sec{padding:100px 0}
+.tools-tiers{margin-top:48px;display:flex;flex-direction:column;gap:48px}
+.tier{position:relative}
+.tier-label{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.tier-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.tier-label.core{color:var(--brand)}.tier-label.intel{color:var(--teal)}.tier-label.grow{color:var(--violet)}
+
+/* Bento grid */
+.bento{display:grid;gap:14px}
+.bento.core-g{grid-template-columns:1fr 1fr;grid-template-rows:auto auto}
+.bento.intel-g{grid-template-columns:1fr 1fr 1fr}
+.bento.grow-g{grid-template-columns:1fr 1fr 1fr}
+
+.bcard{background:var(--bg-w);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all .4s;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.bcard:hover{box-shadow:var(--sh-l);transform:translateY(-5px);border-color:var(--border-h)}
+.bcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .3s}
+.bcard:hover::before{opacity:1}
+.bcard.blue-top::before{background:linear-gradient(90deg,var(--brand),var(--teal))}
+.bcard.teal-top::before{background:linear-gradient(90deg,var(--teal),var(--green))}
+.bcard.violet-top::before{background:linear-gradient(90deg,var(--violet),var(--brand))}
+.bcard.amber-top::before{background:linear-gradient(90deg,var(--amber),var(--red))}
+.bcard.green-top::before{background:linear-gradient(90deg,var(--green),var(--teal))}
+
+.bcard.featured{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+.bcard.featured .bc-left{display:flex;flex-direction:column}
+.bcard.featured .bc-right{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden}
+.bcard.featured .bc-right::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brand),var(--teal))}
+
+.bc-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px;flex-shrink:0}
+.bc-icon.blue{background:var(--brand-l)}.bc-icon.teal{background:var(--teal-l)}.bc-icon.violet{background:var(--violet-l)}.bc-icon.amber{background:var(--amber-l)}.bc-icon.green{background:var(--green-l)}.bc-icon.red{background:var(--red-l)}
+
+.bcard h3{font-size:18px;font-weight:800;margin-bottom:6px;letter-spacing:-.3px}
+.bcard .bd{font-size:14px;color:var(--tx2);line-height:1.6;margin-bottom:16px;flex:1}
+.bcard .blink{font-size:13px;font-weight:700;color:var(--brand);display:inline-flex;align-items:center;gap:5px;transition:gap .2s}
+.bcard:hover .blink{gap:8px}
+
+/* Mini previews inside featured cards */
+.mini-row{display:flex;justify-content:space-between;padding:7px 0;font-size:12px;border-bottom:1px solid var(--border)}.mini-row:last-child{border:none}
+.mini-row .ml{color:var(--tx3)}.mini-row .mv{font-weight:600}.mini-row .mv.gd{color:var(--green)}.mini-row .mv.wn{color:var(--amber)}
+.mini-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brand);margin-bottom:10px}
+.mini-score{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;border:3px solid var(--brand);font-size:16px;font-weight:900;color:var(--brand);margin-bottom:8px}
+.mini-badge{display:inline-flex;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;margin:2px}
+.mini-badge.g{background:var(--green-l);color:var(--green)}.mini-badge.b{background:var(--brand-l);color:var(--brand)}.mini-badge.a{background:var(--amber-l);color:var(--amber)}
+
+/* Offer mini comparison */
+.mini-offers{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mini-offer{background:var(--bg-w);border:1px solid var(--border);border-radius:var(--rs);padding:10px;text-align:center;font-size:11px}
+.mini-offer .mof{font-weight:700;font-size:13px;color:var(--brand)}.mini-offer .mol{color:var(--tx3);margin-top:2px}
+
+/* Pipeline mini kanban */
+.mini-kanban{display:flex;gap:6px;overflow:hidden}
+.mini-col{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:6px;min-width:0}
+.mini-col-h{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tx3);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-dot{width:100%;height:5px;border-radius:3px;margin-bottom:3px}
+.mini-dot.b{background:var(--brand-l)}.mini-dot.g{background:var(--green-l)}.mini-dot.a{background:var(--amber-l)}.mini-dot.t{background:var(--teal-l)}.mini-dot.v{background:var(--violet-l)}
+
+@media(max-width:1000px){
+.bento.core-g,.bento.intel-g,.bento.grow-g{grid-template-columns:1fr}
+.bcard.featured{grid-template-columns:1fr}
+.bcard.featured .bc-right{margin-top:16px}
+}
 
 /* ═══ FINAL CTA ═══ */
 .final{text-align:center;padding:120px 0;position:relative}
@@ -210,7 +265,7 @@ footer{border-top:1px solid var(--border);padding:36px 32px;display:flex;justify
 /* ═══ REVEAL ═══ */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}.reveal.vis{opacity:1;transform:translateY(0)}
 
-@media(max-width:1000px){.hero-inner{grid-template-columns:1fr}.hero-card{max-width:480px;margin-top:40px}.mkp-grid,.prot-grid,.tools-grid{grid-template-columns:1fr}.tf-grid{grid-template-columns:1fr;gap:16px}.tf-arrow{padding:0;transform:rotate(90deg)}.steps-grid{grid-template-columns:1fr 1fr;gap:24px}.steps-grid::before{display:none}.paths-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}.nav-links{display:none}footer{flex-direction:column;gap:16px;text-align:center}}
+@media(max-width:1000px){.hero-inner{grid-template-columns:1fr}.hero-card{max-width:480px;margin-top:40px}.mkp-grid,.prot-grid{grid-template-columns:1fr}.tf-grid{grid-template-columns:1fr;gap:16px}.tf-arrow{padding:0;transform:rotate(90deg)}.steps-grid{grid-template-columns:1fr 1fr;gap:24px}.steps-grid::before{display:none}.paths-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}.nav-links{display:none}footer{flex-direction:column;gap:16px;text-align:center}.bento.core-g,.bento.intel-g,.bento.grow-g{grid-template-columns:1fr}.bcard.featured{grid-template-columns:1fr}}
 @media(max-width:600px){.stats-grid,.steps-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -223,7 +278,8 @@ footer{border-top:1px solid var(--border);padding:36px 32px;display:flex;justify
   </a>
   <div class="nav-links">
     <a href="privatecreditmca-marketplace.html">Marketplace</a>
-    <a href="#how">How It Works</a>
+    <a href="privatecreditmca-pipeline.html">Pipeline</a>
+    <a href="privatecreditmca-funders.html">Funders</a>
     <a href="#tools">Tools</a>
     <a href="privatecreditmca-account.html">Sign Up</a>
   </div>
@@ -330,18 +386,97 @@ footer{border-top:1px solid var(--border);padding:36px 32px;display:flex;justify
   <div class="stat"><div class="stat-v">4.2h</div><div class="stat-l">Avg. First Offer</div></div>
 </div></div></section>
 
-<section class="sec" id="tools"><div class="container">
-  <div class="reveal" style="text-align:center"><div class="sec-label">Platform Tools</div><div class="sec-title">Built to Move Deals,<br>Not Manage Busywork</div></div>
-  <div class="tools-grid reveal" style="transition-delay:.1s">
-    <div class="tool-card"><div class="tool-icon blue">📦</div><h3>Universal Deal Packet</h3><p>Upload documents once. The platform creates a single, clean file every funder accepts — no reformatting for each submission.</p></div>
-    <div class="tool-card"><div class="tool-icon teal">🧠</div><h3>AI BankIQ</h3><p>Instant bank statement analysis. Revenue, NSF count, daily balance trends, existing MCA detection, and a risk score — in seconds.</p></div>
-    <div class="tool-card"><div class="tool-icon violet">⚔️</div><h3>Offer Battle</h3><p>When multiple funders bid, offers appear side by side. Amount, factor, total cost, funder name. You compare and choose.</p></div>
-    <div class="tool-card"><div class="tool-icon blue">📈</div><h3>Pipeline CRM</h3><p>Every deal from lead to funded, tracked in one place. No spreadsheets. No lost deals. Know where everything stands.</p></div>
-    <div class="tool-card"><div class="tool-icon amber">🧪</div><h3>Deal Lab</h3><p>Model different deal structures before you submit. Test amounts, estimate approvals, see which scenarios work for the merchant.</p></div>
-    <div class="tool-card"><div class="tool-icon red">🔥</div><h3>Deal Heat Map</h3><p>See which industries are hot, where funders are most active, and what deal sizes are getting funded fastest right now.</p></div>
-    <div class="tool-card"><div class="tool-icon green">📖</div><h3>Funder Directory</h3><p>50+ funders with their actual policies, preferences, and AI-matched fit scores. Stop guessing who funds what.</p></div>
-    <div class="tool-card"><div class="tool-icon teal">⭐</div><h3>Trust & Reputation</h3><p>Verified broker profiles with funding rate, close time, and funder ratings. Your track record works for you.</p></div>
-    <div class="tool-card"><div class="tool-icon violet">🎓</div><h3>MCA Academy</h3><p>Training modules on underwriting, sales scripts, deal structuring, and funder matching. Level up at your own pace.</p></div>
+<section class="tools-sec" id="tools"><div class="container">
+  <div class="reveal" style="text-align:center"><div class="sec-label">Platform</div><div class="sec-title">Built to Move Deals,<br>Not Manage Busywork</div><div class="sec-desc" style="margin:0 auto">Nine tools. Three layers. Every one exists to get your deal from uploaded to funded faster.</div></div>
+
+  <div class="tools-tiers reveal" style="transition-delay:.1s">
+
+    <!-- ═══ TIER 1: CORE ═══ -->
+    <div class="tier"><div class="tier-label core">Core Platform — How Deals Move</div>
+    <div class="bento core-g">
+
+      <!-- FEATURED: Universal Deal Packet -->
+      <a href="privatecreditmca-submit.html" class="bcard featured blue-top" style="text-decoration:none;color:inherit">
+        <div class="bc-left"><div class="bc-icon blue">📦</div><h3>Universal Deal Packet</h3><div class="bd">Every funder has a different submission format. You used to reformat the same deal 10 times. Now you upload once — bank statements, application, ID — and the platform builds a single clean file that every funder accepts. One upload. Every funder. Done.</div><span class="blink">Try it — Submit a Deal →</span></div>
+        <div class="bc-right"><div class="mini-label">Deal Packet Preview</div><div class="mini-row"><span class="ml">📊 Bank Statements</span><span class="mv gd">4 months ✓</span></div><div class="mini-row"><span class="ml">📝 Application</span><span class="mv gd">Signed ✓</span></div><div class="mini-row"><span class="ml">🪪 Owner ID</span><span class="mv gd">Verified ✓</span></div><div class="mini-row"><span class="ml">📋 Deal Summary</span><span class="mv gd">Auto-generated ✓</span></div><div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--tx3);text-align:center">Accepted by all 50+ funders</div></div>
+      </a>
+
+      <!-- FEATURED: Offer Battle -->
+      <a href="privatecreditmca-offerbattle.html" class="bcard featured blue-top" style="text-decoration:none;color:inherit">
+        <div class="bc-left"><div class="bc-icon violet">⚔️</div><h3>Offer Battle</h3><div class="bd">This is the part that changes everything. When multiple funders want the same deal, their offers appear side by side — amount, factor rate, total cost, daily payment. No calling around. No comparing PDFs. You see every option in one view and pick the winner.</div><span class="blink">See a live example →</span></div>
+        <div class="bc-right"><div class="mini-label">⚔️ Competing Offers — Metro Logistics $180K</div><div class="mini-offers"><div class="mini-offer"><div class="mof">$160K</div><div class="mol">Credibly · 1.29</div></div><div class="mini-offer"><div class="mof">$165K</div><div class="mol">Rapid · 1.31</div></div><div class="mini-offer"><div class="mof">$170K</div><div class="mol">Fora · 1.33</div></div><div class="mini-offer" style="border-color:rgba(0,200,83,.2)"><div class="mof" style="color:var(--green)">$175K</div><div class="mol">National · 1.35</div></div></div></div>
+      </a>
+
+      <!-- Pipeline CRM -->
+      <a href="privatecreditmca-pipeline.html" class="bcard blue-top" style="text-decoration:none;color:inherit">
+        <div class="bc-icon blue">📈</div><h3>Pipeline CRM</h3><div class="bd">Every deal from first call to funded, tracked on a drag-and-drop kanban board. Six stages. Real-time offer counts. No spreadsheets. No lost deals. You always know exactly where every deal stands.</div>
+        <div class="mini-kanban" style="margin-bottom:12px"><div class="mini-col"><div class="mini-col-h">Lead</div><div class="mini-dot b"></div><div class="mini-dot b"></div><div class="mini-dot b"></div></div><div class="mini-col"><div class="mini-col-h">Docs</div><div class="mini-dot v"></div><div class="mini-dot v"></div></div><div class="mini-col"><div class="mini-col-h">UW</div><div class="mini-dot a"></div><div class="mini-dot a"></div></div><div class="mini-col"><div class="mini-col-h">Live</div><div class="mini-dot t"></div><div class="mini-dot t"></div><div class="mini-dot t"></div><div class="mini-dot t"></div></div><div class="mini-col"><div class="mini-col-h">Offers</div><div class="mini-dot g"></div><div class="mini-dot g"></div><div class="mini-dot g"></div></div><div class="mini-col"><div class="mini-col-h">Funded</div><div class="mini-dot g"></div><div class="mini-dot g"></div><div class="mini-dot g"></div></div></div>
+        <span class="blink">Open Pipeline →</span>
+      </a>
+
+      <!-- Funder Directory -->
+      <a href="privatecreditmca-funders.html" class="bcard green-top" style="text-decoration:none;color:inherit">
+        <div class="bc-icon green">📖</div><h3>Funder Directory</h3><div class="bd">16 funders (and growing) with their real policies — deal ranges, product types, stacking rules, speed ratings, and AI-matched fit scores. Stop guessing who funds what. Know before you submit. Filter by MCA, term, LOC, prime, subprime, or fast-only.</div>
+        <div style="margin-bottom:12px"><span class="mini-badge b">MCA</span><span class="mini-badge g">TERM</span><span class="mini-badge a">LOC</span><span class="mini-badge g">PRIME</span><span class="mini-badge a">SUBPRIME</span><span class="mini-badge b">⚡ FAST</span></div>
+        <span class="blink">Browse Funders →</span>
+      </a>
+
+    </div></div>
+
+    <!-- ═══ TIER 2: INTELLIGENCE ═══ -->
+    <div class="tier"><div class="tier-label intel">Intelligence Layer — Know Before You Submit</div>
+    <div class="bento intel-g">
+
+      <!-- AI BankIQ -->
+      <a href="privatecreditmca-bankiq.html" class="bcard teal-top" style="text-decoration:none;color:inherit">
+        <div class="bc-icon teal">🧠</div><h3>AI BankIQ</h3><div class="bd">Upload bank statements. In seconds — not hours — you get monthly revenue, NSF count, daily balance trends, existing MCA detection, and a risk score with approval range. You know the deal's strength before any funder does.</div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:12px;margin-bottom:12px"><div class="mini-label">Sample Analysis</div><div class="mini-row"><span class="ml">Revenue</span><span class="mv gd">$74K/mo</span></div><div class="mini-row"><span class="ml">NSFs</span><span class="mv wn">2</span></div><div class="mini-row"><span class="ml">Risk Score</span><span class="mv gd">78/B</span></div><div class="mini-row"><span class="ml">Approval</span><span class="mv">$45K–$62K</span></div></div>
+        <span class="blink">Try AI BankIQ →</span>
+      </a>
+
+      <!-- Deal Lab -->
+      <div class="bcard amber-top">
+        <div class="bc-icon amber">🧪</div><h3>Deal Lab</h3><div class="bd">Before you submit, model it. Test different funding amounts, estimate factor rates, simulate daily payment burden, and see which structures funders are most likely to approve. Stop guessing. Run the numbers first.</div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:12px;margin-bottom:12px"><div class="mini-label">Simulation</div><div class="mini-row"><span class="ml">Amount</span><span class="mv">$80K</span></div><div class="mini-row"><span class="ml">Est. Factor</span><span class="mv">1.35</span></div><div class="mini-row"><span class="ml">Daily Payment</span><span class="mv wn">$600</span></div><div class="mini-row"><span class="ml">Payment Burden</span><span class="mv gd">17.8%</span></div></div>
+        <span class="blink" style="color:var(--tx3)">Coming soon</span>
+      </div>
+
+      <!-- Deal Heat Map -->
+      <div class="bcard amber-top">
+        <div class="bc-icon red">🔥</div><h3>Deal Heat Map</h3><div class="bd">See what's funding right now. Which industries are hot. What deal sizes are moving fastest. Where funders are most active. Use live marketplace data to position your next deal where the money is flowing.</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"><span class="mini-badge g">Restaurant ↑ 23%</span><span class="mini-badge g">Trucking ↑ 18%</span><span class="mini-badge b">Construction ↑ 12%</span><span class="mini-badge a">Retail ↓ 5%</span></div>
+        <span class="blink" style="color:var(--tx3)">Coming soon</span>
+      </div>
+
+    </div></div>
+
+    <!-- ═══ TIER 3: GROWTH ═══ -->
+    <div class="tier"><div class="tier-label grow">Growth Tools — Build Your Business</div>
+    <div class="bento grow-g">
+
+      <!-- Trust & Reputation -->
+      <div class="bcard violet-top">
+        <div class="bc-icon violet">⭐</div><h3>Trust & Reputation</h3><div class="bd">Your verified broker profile shows your funding rate, average close time, deal volume, and funder ratings. The better your track record, the more funders trust your submissions. Performance data that works for you.</div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><div class="mini-score">92</div><div style="font-size:12px"><div style="font-weight:700">Reputation Score</div><div style="color:var(--tx3)">75% funding rate · 4.8 rating</div></div></div>
+        <span class="blink" style="color:var(--tx3)">Coming soon</span>
+      </div>
+
+      <!-- MCA Academy -->
+      <div class="bcard violet-top">
+        <div class="bc-icon violet">🎓</div><h3>MCA Academy</h3><div class="bd">Training modules on underwriting fundamentals, sales scripts that actually close, deal structuring for complex files, and funder matching strategies. Whether you're new or experienced — level up at your own pace.</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"><span class="mini-badge b">Underwriting 101</span><span class="mini-badge g">Sales Scripts</span><span class="mini-badge a">Stacking Strategy</span></div>
+        <span class="blink" style="color:var(--tx3)">Coming soon</span>
+      </div>
+
+      <!-- Superbroker -->
+      <div class="bcard violet-top">
+        <div class="bc-icon teal">🎯</div><h3>Superbroker Network</h3><div class="bd">Complex deal? Tough file? Hand it to a senior broker who's seen it all. They structure it, place it with the right funders, and get it funded — while you keep the full commission. Expert backup when you need it.</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"><span class="mini-badge g">Stacking Expert</span><span class="mini-badge b">High NSF Specialist</span><span class="mini-badge a">New Business Files</span></div>
+        <span class="blink">Talk to a Superbroker →</span>
+      </div>
+
+    </div></div>
+
   </div>
 </div></section>
 
@@ -362,7 +497,7 @@ footer{border-top:1px solid var(--border);padding:36px 32px;display:flex;justify
   </div>
 </section>
 
-<footer><div class="footer-links"><a href="privatecreditmca-marketplace.html">Marketplace</a><a href="#">For Funders</a><a href="#">Superbrokers</a><a href="#">Academy</a><a href="#">Privacy</a><a href="#">Terms</a></div><p>© 2026 PrivateCreditMCA</p></footer>
+<footer><div class="footer-links"><a href="privatecreditmca-marketplace.html">Marketplace</a><a href="privatecreditmca-funders.html">Funder Directory</a><a href="privatecreditmca-pipeline.html">Pipeline</a><a href="privatecreditmca-bankiq.html">AI BankIQ</a><a href="privatecreditmca-offerbattle.html">Offer Battle</a><a href="privatecreditmca-account.html">Account</a></div><p>© 2026 PrivateCreditMCA</p></footer>
 
 <script>
 const o=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')})},{threshold:.08});
