@@ -100,7 +100,7 @@ a{color:inherit;text-decoration:none}
 .srd1{transition-delay:.08s}.srd2{transition-delay:.16s}.srd3{transition-delay:.24s}.srd4{transition-delay:.32s}.srd5{transition-delay:.4s}.srd6{transition-delay:.48s}
 
 /* TOOLS SHOWCASE */
-.tools{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .tool{background:var(--surface);border:1px solid var(--bd2);border-radius:var(--r2);padding:32px 24px;position:relative;overflow:hidden;transition:all .45s var(--eq);cursor:pointer;display:flex;flex-direction:column}
 .tool::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .3s}
 .tool:hover{border-color:var(--bdt);transform:translateY(-6px);box-shadow:0 24px 64px rgba(0,0,0,.35)}
@@ -115,6 +115,8 @@ a{color:inherit;text-decoration:none}
 .tool.t2::before{background:linear-gradient(90deg,var(--amber),#ff8a65)}
 .tool.t3::before{background:linear-gradient(90deg,var(--purple),var(--cyan))}
 .tool.t4::before{background:linear-gradient(90deg,var(--green),var(--teal))}
+.tool.t5::before{background:linear-gradient(90deg,var(--cyan),var(--green))}
+.tool.t6::before{background:linear-gradient(90deg,var(--amber),var(--teal))}
 
 /* BENTO */
 #who{background:var(--deep)}
@@ -203,7 +205,7 @@ a{color:inherit;text-decoration:none}
     <a href="#who" class="np">Who It's For</a>
     <a href="#tools" class="np">Tools</a>
     <a href="education.html" class="np">Academy</a>
-    <a href="#features" class="np">Features</a>
+    <a href="marketplace.html" class="np">Marketplace</a><a href="services.html" class="np">Services</a><a href="#features" class="np">Features</a>
   </div>
   <div class="nav-r">
     <a href="education.html" class="nb">🎮 Academy</a>
@@ -222,6 +224,7 @@ a{color:inherit;text-decoration:none}
     <div class="hero-acts">
       <a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="bh bhp">Join r/PrivateCreditMCA <span class="arr">→</span></a>
       <a href="education.html" class="bh bhs">🎮 Enter the Academy</a>
+      <a href="services.html" class="bh bhs">View Services</a>
     </div>
     <div class="ticker-wrap">
       <div class="ticker">
@@ -244,11 +247,11 @@ a{color:inherit;text-decoration:none}
   <div class="sec-in">
     <div class="sec-hdr sr"><div class="sec-tag">Who It's For</div><h2 class="sec-h2">Built for the people<br>who <em>close deals</em> daily</h2><p class="sec-desc">Whether you're originating, funding, operating, or servicing — this is your room.</p></div>
     <div class="bento">
-      <div class="bc bb sr srd1"><div class="ci">🤝</div><div class="cc"><h3>Brokers & ISOs</h3><p>Compare funders, share deal structures, and uncover new revenue streams from people who've been in the trenches. The largest broker network in MCA.</p><div class="ct"><span class="dot"></span> 200+ Active Members</div></div></div>
-      <div class="bc bf sr srd2"><div class="ci">🏦</div><div class="cc"><h3>Funders</h3><p>Connect with quality deal flow and benchmark your offers against the market.</p><div class="ct"><span class="dot"></span> Deal Flow</div></div></div>
-      <div class="bc bo sr srd3"><div class="ci">⚙️</div><div class="cc"><h3>Operators</h3><p>Optimize your CRM, commission structures, and tech stack like the top shops.</p><div class="ct"><span class="dot"></span> Playbooks</div></div></div>
-      <div class="bc bs sr srd4"><div class="ci">🛠️</div><div class="cc"><h3>Service Providers</h3><p>Position your product where the attention is.</p></div></div>
-      <div class="bc bg sr srd5"><div class="ci">📈</div><div class="cc"><h3>Growth-Stage Brokerages</h3><p>From first deal to first million — step-by-step frameworks without the 12-month learning curve.</p><div class="ct"><span class="dot"></span> Fastest Growing</div></div></div>
+      <div class="bc bb sr srd1"><div class="ci"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal4)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><div class="cc"><h3>Brokers & ISOs</h3><p>Compare funders, share deal structures, and uncover new revenue streams from people who've been in the trenches. The largest broker network in MCA.</p><div class="ct"><span class="dot"></span> 200+ Active Members</div></div></div>
+      <div class="bc bf sr srd2"><div class="ci"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="18" height="11" rx="1"/><path d="M12 2L2 10h20L12 2z"/><path d="M7 14v4M12 14v4M17 14v4"/></svg></div><div class="cc"><h3>Funders</h3><p>Connect with quality deal flow and benchmark your offers against the market.</p><div class="ct"><span class="dot"></span> Deal Flow</div></div></div>
+      <div class="bc bo sr srd3"><div class="ci"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div><div class="cc"><h3>Operators</h3><p>Optimize your CRM, commission structures, and tech stack like the top shops.</p><div class="ct"><span class="dot"></span> Playbooks</div></div></div>
+      <div class="bc bs sr srd4"><div class="ci"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div><div class="cc"><h3>Service Providers</h3><p>Position your product where the attention is.</p></div></div>
+      <div class="bc bg sr srd5"><div class="ci"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><div class="cc"><h3>Growth-Stage Brokerages</h3><p>From first deal to first million — step-by-step frameworks without the 12-month learning curve.</p><div class="ct"><span class="dot"></span> Fastest Growing</div></div></div>
     </div>
   </div>
 </section>
@@ -262,6 +265,8 @@ a{color:inherit;text-decoration:none}
       <a href="funders.html" class="tool t2 sr srd2"><span class="t-icon">🏦</span><div class="t-name">Funder Directory</div><div class="t-desc">16 funders with fit scoring, deep profiles, editable notebooks, compare mode. Import deals from Deal Lab for instant matching.</div><div class="t-link">Browse Funders <span>→</span></div></a>
       <a href="education.html" class="tool t3 sr srd3"><span class="t-icon">🎮</span><div class="t-name">Broker Academy</div><div class="t-desc">40 RPG quiz questions, 10 branching objection handler scenarios, commission calculator, career roadmap. Unified XP system.</div><div class="t-link">Enter Academy <span>→</span></div></a>
       <a href="superbroker.html" class="tool t4 sr srd4"><span class="t-icon">⚡</span><div class="t-name">Superbroker</div><div class="t-desc">Submit your deal directly. Upload bank statements, voided check, and deal details. Matched with 50+ funder relationships.</div><div class="t-link">Submit a Deal <span>→</span></div></a>
+      <a href="marketplace.html" class="tool t5 sr srd5"><span class="t-icon">🏪</span><div class="t-name">Marketplace</div><div class="t-desc">Live deal board with scoring, workflow states, deal rooms, messaging threads, and role-based actions for brokers and funders.</div><div class="t-link">Open Marketplace <span>→</span></div></a>
+      <a href="services.html" class="tool t6 sr srd6"><span class="t-icon">🏗️</span><div class="t-name">Services</div><div class="t-desc">11 services from $249/mo platform access to $25K done-for-you brokerage launches. Infrastructure, growth, and recruiting.</div><div class="t-link">View Services <span>→</span></div></a>
     </div>
   </div>
 </section>
@@ -321,7 +326,7 @@ a{color:inherit;text-decoration:none}
 <footer class="foot">
   <div class="foot-in">
     <div class="foot-l"><div class="foot-wm">Private<em>Credit</em>MCA</div><div class="foot-cp">© 2026 PrivateCreditMCA</div></div>
-    <ul class="foot-lk"><li><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Reddit</a></li><li><a href="deallab.html">Deal Lab</a></li><li><a href="funders.html">Funders</a></li><li><a href="education.html">Academy</a></li><li><a href="superbroker.html">Superbroker</a></li></ul>
+    <ul class="foot-lk"><li><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Reddit</a></li><li><a href="deallab.html">Deal Lab</a></li><li><a href="funders.html">Funders</a></li><li><a href="education.html">Academy</a></li><li><a href="marketplace.html">Marketplace</a></li><li><a href="superbroker.html">Superbroker</a></li><li><a href="services.html">Services</a></li></ul>
   </div>
 </footer>
 
