@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrivateCreditMCA — Funder Directory</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAFBFD;--bgw:#fff;--bgd:#0A0F1E;--sf:#F1F4F9;--bdr:#E2E7F0;--bdr2:#C9D1DE;--bdrf:rgba(0,85,255,.35);--tx:#0A0F1E;--tx2:#3D4A5C;--tx3:#7C8BA1;--brand:#0055FF;--brandd:#003FCC;--brandl:#E8F0FF;--teal:#00BFA6;--teall:#E6FAF7;--gn:#00C853;--gnl:#E8F8EF;--rd:#E53935;--rdl:#FDE8E8;--am:#F59E0B;--aml:#FEF3C7;--vl:#7C3AED;--vll:#F1EAFE;--r:14px;--rs:8px;--sh:0 1px 3px rgba(10,15,30,.04),0 4px 14px rgba(10,15,30,.06);--shl:0 4px 12px rgba(10,15,30,.04),0 16px 48px rgba(10,15,30,.08)}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}.mono{font-family:'IBM Plex Mono',monospace}a{text-decoration:none;color:inherit}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:18px;letter-spacing:-.3px}.logo .mark{width:28px;height:28px;border-radius:8px;background:var(--brand);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.logo .mark::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.2),transparent)}.logo .mark svg{width:16px;height:16px}.logo span.dim{color:var(--tx3);font-weight:600}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(250,251,253,.88);backdrop-filter:blur(16px) saturate(1.5);border-bottom:1px solid var(--bdr)}
+.nc{display:flex;gap:28px}.nc a{font-size:13px;font-weight:600;color:var(--tx3);padding:6px 0;border-bottom:2px solid transparent;transition:all .2s}.nc a:hover,.nc a.on{color:var(--tx);border-color:var(--brand)}
+.nr{display:flex;gap:12px}.nb{padding:8px 20px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;border:none;display:inline-flex;align-items:center;gap:6px;transition:all .2s}.nb.p{background:var(--brand);color:#fff}.nb.p:hover{background:var(--brandd)}.nb.s{background:transparent;color:var(--tx2);border:1.5px solid var(--bdr)}
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.page{max-width:1180px;margin:0 auto;padding:88px 32px 60px}
+.page-h{margin-bottom:32px}.page-label{font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--brand);margin-bottom:8px}
+.page-h h1{font-size:36px;font-weight:900;letter-spacing:-1.5px;margin-bottom:6px}.page-h p{font-size:17px;color:var(--tx2);max-width:520px;line-height:1.5}
+
+.bar{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+.bar .si{flex:1;min-width:200px;padding:11px 16px;border-radius:10px;background:var(--bgw);border:1px solid var(--bdr);color:var(--tx);font-family:inherit;font-size:14px;outline:none}.si:focus{border-color:var(--bdrf)}.si::placeholder{color:var(--tx3)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;border:1px solid var(--bdr);background:transparent;color:var(--tx3);cursor:pointer;font-family:inherit;transition:all .2s}.chip:hover{border-color:var(--bdr2)}.chip.on{border-color:var(--brand);color:var(--brand);background:var(--brandl)}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.stat-box{background:var(--bgw);border:1px solid var(--bdr);border-radius:var(--r);padding:18px;text-align:center}.stat-box .sn{font-size:28px;font-weight:900;color:var(--brand)}.stat-box .sl{font-size:11px;color:var(--tx3);margin-top:2px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
+.fc{background:var(--bgw);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;transition:all .35s;position:relative;overflow:hidden;animation:fu .5s ease both}
+.fc:hover{border-color:var(--bdr2);box-shadow:var(--shl);transform:translateY(-4px)}.fc:hover::before{opacity:1}
+.fc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--brand),var(--teal));opacity:0;transition:opacity .3s}
+.fc-top{display:flex;justify-content:space-between;align-items:start;margin-bottom:14px}
+.fc-name{font-size:18px;font-weight:700}.fc-url{font-size:12px;color:var(--tx3);margin-top:2px}
+.fc-score{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0}
+.fc-score.elite{background:var(--gnl);color:var(--gn);border:2px solid rgba(0,200,83,.2)}
+.fc-score.strong{background:var(--gnl);color:var(--gn);border:2px solid rgba(0,200,83,.15)}
+.fc-score.workable{background:var(--aml);color:var(--am);border:2px solid rgba(245,158,11,.15)}
+.fc-score.risky{background:var(--rdl);color:var(--rd);border:2px solid rgba(229,57,53,.15)}
+.fc-score.none{background:var(--sf);color:var(--tx3);border:2px solid var(--bdr)}
+.fc-vibe{font-size:13px;color:var(--tx2);line-height:1.5;margin-bottom:14px}
+.fc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.tag{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600}
+.tag.mca{background:var(--brandl);color:var(--brand)}.tag.term{background:var(--teall);color:var(--teal)}.tag.loc{background:var(--vll);color:var(--vl)}.tag.prime{background:var(--gnl);color:var(--gn)}.tag.subprime{background:var(--aml);color:var(--am)}
+.fc-meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding-top:14px;border-top:1px solid var(--sf)}
+.fc-m{text-align:center}.fc-m .ml{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;font-weight:600}.fc-m .mv{font-size:14px;font-weight:700;margin-top:2px}
+.fc-m .mv.fast{color:var(--gn)}.fc-m .mv.strict{color:var(--am)}
+
+.empty{text-align:center;padding:80px 20px;color:var(--tx3)}.empty .ei{font-size:48px;margin-bottom:14px}.empty h3{font-size:18px;font-weight:700;color:var(--tx2);margin-bottom:6px}.empty p{font-size:14px}
+
+@media(max-width:900px){.nc{display:none}.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}}
+@media(max-width:600px){.stats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav><a href="privatecreditmca-landing.html" class="logo"><div class="mark"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="9" width="3" height="5" rx="1" fill="white"/><rect x="6.5" y="6" width="3" height="8" rx="1" fill="white"/><rect x="11" y="3" width="3" height="11" rx="1" fill="white"/></svg></div>PrivateCredit<span class="dim">MCA</span></a><div class="nc"><a href="privatecreditmca-landing.html">Home</a><a href="privatecreditmca-marketplace.html">Marketplace</a><a href="privatecreditmca-account.html?view=profile">Dashboard</a><a href="#" class="on">Funder Directory</a></div><div class="nr"><a href="privatecreditmca-account.html?view=login" class="nb s">Log In</a><a href="privatecreditmca-submit.html" class="nb p">+ Submit a Deal</a></div></nav>
+
+<div class="page">
+  <div class="page-h"><div class="page-label">Funder Directory</div><h1>Stop Guessing Who Funds What</h1><p>16 funders with real policies, deal ranges, and AI-matched fit scores. Know before you submit.</p></div>
+  <div class="stats"><div class="stat-box"><div class="sn">16</div><div class="sl">Active Funders</div></div><div class="stat-box"><div class="sn">$5K–$1M</div><div class="sl">Deal Range</div></div><div class="stat-box"><div class="sn">6</div><div class="sl">Fast Funders</div></div><div class="stat-box"><div class="sn">AI</div><div class="sl">Fit Scoring</div></div></div>
+  <div class="bar"><input class="si" placeholder="Search funders..." id="sI" oninput="render()"><div class="chips"><button class="chip on" onclick="filt(this,'all')">All</button><button class="chip" onclick="filt(this,'mca')">MCA</button><button class="chip" onclick="filt(this,'term')">Term</button><button class="chip" onclick="filt(this,'loc')">LOC</button><button class="chip" onclick="filt(this,'prime')">Prime</button><button class="chip" onclick="filt(this,'subprime')">Subprime</button><button class="chip" onclick="filt(this,'fast')">⚡ Fast</button></div></div>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+const F=[
+{id:"forward",name:"Forward Financing",dom:"forwardfinancing.com",speed:"fast",stack:"strict",tags:["mca","term","prime"],range:[10000,300000],vibe:"Fast, broker-friendly working capital for mainstream files."},
+{id:"credibly",name:"Credibly",dom:"credibly.com",speed:"standard",stack:"flex",tags:["term","loc","prime"],range:[10000,400000],vibe:"Multiple products. Great for structured placements."},
+{id:"fora",name:"Fora Financial",dom:"forafinancial.com",speed:"fast",stack:"flex",tags:["mca","term","prime"],range:[10000,500000],vibe:"Momentum lender. Speed + flexibility when you need it."},
+{id:"rapid",name:"Rapid Finance",dom:"rapidfinance.com",speed:"standard",stack:"strict",tags:["term","loc","prime"],range:[10000,1000000],vibe:"Conservative. Stronger files + structured packages."},
+{id:"fundkite",name:"FundKite",dom:"fundkite.com",speed:"fast",stack:"flex",tags:["mca","subprime"],range:[5000,250000],vibe:"Good for tighter credit bands. Be smart on structure."},
+{id:"cancapital",name:"CAN Capital",dom:"cancapital.com",speed:"standard",stack:"strict",tags:["term","prime"],range:[10000,500000],vibe:"Clean, stable deals score best. Consistency wins."},
+{id:"everest",name:"Everest Business Funding",dom:"everestbf.com",speed:"fast",stack:"flex",tags:["mca","term","subprime"],range:[10000,400000],vibe:"Speed-first. Works for aggressive matching sets."},
+{id:"pearl",name:"Pearl Capital",dom:"pearlcapital.com",speed:"standard",stack:"flex",tags:["mca","subprime"],range:[10000,600000],vibe:"ISO-style posture. Good for earlier-stage files."},
+{id:"ondeck",name:"OnDeck",dom:"ondeck.com",speed:"standard",stack:"strict",tags:["term","loc","prime"],range:[5000,250000],vibe:"Brand lender. Cleaner packages, better outcomes."},
+{id:"mulligan",name:"Mulligan Funding",dom:"mulliganfunding.com",speed:"fast",stack:"flex",tags:["term","prime"],range:[10000,500000],vibe:"Broad utility for mid-range placements. Good tempo."},
+{id:"iou",name:"IOU Financial",dom:"ioufinancial.com",speed:"standard",stack:"strict",tags:["term","prime"],range:[10000,350000],vibe:"Bank-like posture. Better for stable metrics."},
+{id:"bitty",name:"Bitty Advance",dom:"bittyadvance.com",speed:"fast",stack:"flex",tags:["mca","subprime"],range:[5000,150000],vibe:"Small deals + speed. Keep structure realistic."},
+{id:"lcf",name:"LCF Group",dom:"thelcfgroup.com",speed:"standard",stack:"flex",tags:["loc","term"],range:[10000,300000],vibe:"LOC + structured options. Confirm program fit."},
+{id:"kalamata",name:"Kalamata Capital",dom:"kalamatacapitalgroup.com",speed:"standard",stack:"flex",tags:["mca","term"],range:[10000,350000],vibe:"Flexible mid-tier as part of a matching set."},
+{id:"lendini",name:"Lendini",dom:"lendini.com",speed:"standard",stack:"flex",tags:["mca"],range:[10000,250000],vibe:"Revenue-based posture. Better with stable deposits."},
+{id:"libertas",name:"Libertas Funding",dom:"libertasfunding.com",speed:"fast",stack:"flex",tags:["mca","term","prime"],range:[10000,500000],vibe:"Fast-moving. Great for tempo on bigger working capital."}
+];
+let curF='all';
+function filt(b,v){b.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));b.classList.add('on');curF=v;render()}
+function fmt(n){return n>=1000000?'$'+(n/1000000)+'M':n>=1000?'$'+(n/1000)+'K':'$'+n}
+function render(){
+  const q=document.getElementById('sI').value.toLowerCase();
+  let list=F.filter(f=>{
+    if(curF!=='all'){if(curF==='fast'){if(f.speed!=='fast')return false}else{if(!f.tags.includes(curF))return false}}
+    if(q&&!f.name.toLowerCase().includes(q)&&!f.tags.join(' ').includes(q))return false;
+    return true;
+  });
+  const g=document.getElementById('grid');
+  if(!list.length){g.innerHTML='<div class="empty"><div class="ei">🔍</div><h3>No funders match</h3><p>Try adjusting your filters or search.</p></div>';return}
+  g.innerHTML=list.map((f,i)=>{
+    const sc=60+Math.floor(Math.random()*35);
+    const scCls=sc>=85?'elite':sc>=70?'strong':sc>=58?'workable':'risky';
+    return '<div class="fc" style="animation-delay:'+(i*.04)+'s"><div class="fc-top"><div><div class="fc-name">'+f.name+'</div><div class="fc-url mono">'+f.dom+'</div></div><div class="fc-score '+scCls+'">'+sc+'</div></div><div class="fc-vibe">'+f.vibe+'</div><div class="fc-tags">'+f.tags.map(t=>'<span class="tag '+t+'">'+t.toUpperCase()+'</span>').join('')+'</div><div class="fc-meta"><div class="fc-m"><div class="ml">Range</div><div class="mv">'+fmt(f.range[0])+'–'+fmt(f.range[1])+'</div></div><div class="fc-m"><div class="ml">Speed</div><div class="mv '+(f.speed==='fast'?'fast':'')+'">'+f.speed[0].toUpperCase()+f.speed.slice(1)+'</div></div><div class="fc-m"><div class="ml">Stacking</div><div class="mv '+(f.stack==='strict'?'strict':'')+'">'+f.stack[0].toUpperCase()+f.stack.slice(1)+'</div></div></div></div>'
+  }).join('');
+}
+render();
+</script>
+</body></html>
