@@ -125,14 +125,14 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--t1);overflow
 <nav class="nav">
   <div class="nav-l"><a href="index.html" style="display:flex;align-items:center;gap:10px"><div class="nav-m"><svg width="14" height="14" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="nav-w">Private<em>Credit</em>MCA</div></a></div>
   <div class="nav-pills"><a href="index.html" class="np">Home</a><a href="marketplace.html" class="np">Marketplace</a><a href="education.html" class="np">Academy</a><a href="services.html" class="np active">Services</a></div>
-  <div class="nav-r"><a href="index.html" class="nb">\u2190 Home</a><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="nb nb-p">Join Community</a></div>
+  <div class="nav-r"><a href="index.html" class="nb">← Home</a><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="nb nb-p">Join Community</a></div>
 </nav>
 
 <section class="hero">
   <div class="hero-ey">Services</div>
   <h1>Everything you need to<br><em>launch, scale, and dominate</em> MCA</h1>
   <p>From your first deal to a 10-broker operation. We build the infrastructure, systems, and teams that turn brokerages into machines.</p>
-  <div class="hero-acts"><a href="#launch" class="bh bhp">See Launch Programs \u2192</a><a href="#compare" class="bh bhs">Compare All 11 Services</a></div>
+  <div class="hero-acts"><a href="#launch" class="bh bhp">See Launch Programs →</a><a href="#compare" class="bh bhs">Compare All 11 Services</a></div>
 </section>
 
 <div class="wrap">
