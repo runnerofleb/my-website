@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrivateCreditMCA — Submit a Deal</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07080A;
+  --bg-card: #0D0F13;
+  --bg-card-hover: #12151B;
+  --bg-surface: #10131A;
+  --border: rgba(255,255,255,0.06);
+  --border-bright: rgba(255,255,255,0.12);
+  --border-focus: rgba(0,232,123,0.4);
+  --text: #EAEDF3;
+  --text-dim: #6B7280;
+  --text-mid: #9CA3AF;
+  --accent: #00E87B;
+  --accent-dim: rgba(0,232,123,0.10);
+  --accent-glow: rgba(0,232,123,0.25);
+  --red: #FF4D4D;
+  --red-dim: rgba(255,77,77,0.10);
+  --amber: #FFAA2C;
+  --amber-dim: rgba(255,170,44,0.10);
+  --blue: #3B82F6;
+  --blue-dim: rgba(59,130,246,0.10);
+  --purple: #A855F7;
+  --purple-dim: rgba(168,85,247,0.10);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+.mono{font-family:'JetBrains Mono',monospace}
+a{text-decoration:none;color:inherit}
+
+body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+
+/* ─── NAV ─── */
+.topnav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(7,8,10,0.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.topnav-logo{font-weight:800;font-size:17px;display:flex;align-items:center;gap:10px;color:var(--text)}
+.topnav-logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent-glow);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.topnav-center{display:flex;align-items:center;gap:28px}
+.topnav-center a{font-size:13px;font-weight:500;color:var(--text-dim);padding:6px 0;border-bottom:2px solid transparent;transition:all 0.2s}
+.topnav-center a.active,.topnav-center a:hover{color:var(--text);border-color:var(--accent)}
+.topnav-right{display:flex;align-items:center;gap:12px}
+.topnav-btn{background:var(--accent);color:var(--bg);border:none;padding:8px 20px;border-radius:100px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.2s}
+.topnav-btn:hover{box-shadow:0 4px 20px var(--accent-glow);transform:translateY(-1px)}
+.topnav-btn.secondary{background:transparent;color:var(--text-mid);border:1px solid var(--border-bright)}
+
+/* ─── WIZARD LAYOUT ─── */
+.wizard-wrapper{max-width:900px;margin:0 auto;padding:100px 24px 80px}
+
+/* ─── STEP PROGRESS BAR ─── */
+.step-progress{display:flex;align-items:center;margin-bottom:48px;position:relative}
+.step-progress::before{content:'';position:absolute;top:20px;left:40px;right:40px;height:2px;background:var(--border-bright)}
+.step-progress-fill{position:absolute;top:20px;left:40px;height:2px;background:var(--accent);transition:width 0.6s ease;width:0%}
+.step-dot-wrapper{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;z-index:2}
+.step-dot{width:40px;height:40px;border-radius:50%;border:2px solid var(--border-bright);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--text-dim);transition:all 0.4s}
+.step-dot.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);box-shadow:0 0 20px var(--accent-glow)}
+.step-dot.done{border-color:var(--accent);background:var(--accent);color:var(--bg)}
+.step-dot-label{font-size:12px;font-weight:600;color:var(--text-dim);margin-top:10px;transition:color 0.3s;white-space:nowrap}
+.step-dot-wrapper.active .step-dot-label,.step-dot-wrapper.done .step-dot-label{color:var(--text-mid)}
+
+/* ─── STEP PANELS ─── */
+.step-panel{display:none;animation:fadeUp 0.5s ease both}
+.step-panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.step-title{font-size:32px;font-weight:900;letter-spacing:-1px;margin-bottom:8px}
+.step-desc{font-size:16px;color:var(--text-mid);margin-bottom:36px;line-height:1.5}
+
+/* ─── UPLOAD ZONE ─── */
+.upload-zone{border:2px dashed var(--border-bright);border-radius:var(--radius);padding:60px 40px;text-align:center;transition:all 0.3s;cursor:pointer;position:relative;overflow:hidden}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--accent);background:var(--accent-dim)}
+.upload-zone .uz-icon{font-size:48px;margin-bottom:16px;display:block}
+.upload-zone .uz-title{font-size:18px;font-weight:700;margin-bottom:6px}
+.upload-zone .uz-sub{font-size:14px;color:var(--text-dim)}
+.upload-zone .uz-btn{display:inline-block;margin-top:20px;padding:10px 28px;border-radius:100px;background:var(--accent);color:var(--bg);font-weight:700;font-size:14px;cursor:pointer;transition:all 0.2s}
+.upload-zone .uz-btn:hover{box-shadow:0 4px 20px var(--accent-glow)}
+.upload-zone input{display:none}
+
+.upload-types{display:flex;justify-content:center;gap:24px;margin-top:24px}
+.upload-type{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-dim)}
+.upload-type .ut-icon{font-size:16px}
+
+/* ─── FILE LIST ─── */
+.file-list{margin-top:24px;display:flex;flex-direction:column;gap:8px}
+.file-item{display:flex;align-items:center;gap:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;animation:fadeUp 0.3s ease both}
+.file-icon{font-size:24px}
+.file-info{flex:1}
+.file-name{font-size:14px;font-weight:600}
+.file-size{font-size:12px;color:var(--text-dim)}
+.file-status{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600}
+.file-status.uploaded{color:var(--accent)}
+.file-status.processing{color:var(--amber)}
+.file-remove{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all 0.2s}
+.file-remove:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+
+/* ─── REQUIRED DOCS CHECKLIST ─── */
+.doc-checklist{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:28px}
+.doc-check{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;display:flex;align-items:center;gap:12px;transition:all 0.3s}
+.doc-check.complete{border-color:rgba(0,232,123,0.2);background:var(--accent-dim)}
+.doc-check-icon{width:28px;height:28px;border-radius:50%;border:2px solid var(--border-bright);display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent;transition:all 0.3s;flex-shrink:0}
+.doc-check.complete .doc-check-icon{border-color:var(--accent);background:var(--accent);color:var(--bg)}
+.doc-check-text .dc-title{font-size:13px;font-weight:600}
+.doc-check-text .dc-sub{font-size:11px;color:var(--text-dim)}
+.doc-check.complete .dc-title{color:var(--accent)}
+
+/* ─── MERCHANT INFO FORM ─── */
+.merchant-form{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.merchant-form .full{grid-column:1/-1}
+.form-group{display:flex;flex-direction:column}
+.form-label{font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:8px}
+.form-input{width:100%;padding:13px 16px;border-radius:var(--radius-sm);background:var(--bg-card);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:border 0.2s}
+.form-input::placeholder{color:var(--text-dim)}
+.form-input:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(0,232,123,0.08)}
+select.form-input{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+select.form-input option{background:var(--bg-card);color:var(--text)}
+.form-hint{font-size:11px;color:var(--text-dim);margin-top:4px;display:flex;align-items:center;gap:4px}
+.form-hint .lock{color:var(--accent)}
+
+/* ─── AI ANALYSIS ─── */
+.ai-analysis-screen{text-align:center;padding:40px 0}
+.ai-scanner{position:relative;width:320px;margin:0 auto 40px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;overflow:hidden}
+.ai-scanner::after{content:'';position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);top:0;animation:scanLine 2s ease-in-out infinite}
+@keyframes scanLine{0%{top:0}50%{top:100%}100%{top:0}}
+.ai-scanner .scanner-icon{font-size:56px;margin-bottom:16px;display:block}
+.ai-scanner .scanner-title{font-size:16px;font-weight:700;margin-bottom:8px}
+.ai-scanner .scanner-sub{font-size:13px;color:var(--text-dim)}
+
+.ai-progress{margin:32px auto;max-width:400px}
+.ai-progress-bar{height:6px;border-radius:3px;background:var(--border-bright);overflow:hidden}
+.ai-progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),#00C9FF);width:0%;transition:width 0.3s ease}
+.ai-progress-text{display:flex;justify-content:space-between;font-size:12px;color:var(--text-dim);margin-top:8px}
+
+.ai-steps-feed{max-width:400px;margin:0 auto;text-align:left}
+.ai-step-item{display:flex;align-items:center;gap:12px;padding:8px 0;font-size:14px;color:var(--text-dim);opacity:0;animation:fadeUp 0.4s ease forwards}
+.ai-step-item .asi-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.ai-step-item.done .asi-icon{background:var(--accent-dim);color:var(--accent)}
+.ai-step-item.done{color:var(--text-mid)}
+.ai-step-item.active .asi-icon{background:var(--amber-dim);color:var(--amber);animation:spin 1s linear infinite}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.ai-step-item.active{color:var(--text)}
+.ai-step-item.pending .asi-icon{background:rgba(255,255,255,0.05);color:var(--text-dim)}
+
+/* ─── AI RESULTS ─── */
+.ai-results{display:none;animation:fadeUp 0.6s ease both}
+.ai-results.show{display:block}
+
+.ai-result-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.ai-result-header .arh-left h2{font-size:24px;font-weight:800;letter-spacing:-0.5px}
+.ai-result-header .arh-left p{font-size:14px;color:var(--text-dim);margin-top:4px}
+.ai-score-big{width:100px;height:100px;border-radius:50%;border:3px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 30px var(--accent-glow)}
+.ai-score-big .num{font-size:36px;font-weight:900;color:var(--accent);line-height:1}
+.ai-score-big .grade{font-size:13px;font-weight:700;color:var(--text-mid)}
+
+.ai-result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.ai-result-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center}
+.ai-result-block .arb-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);margin-bottom:6px}
+.ai-result-block .arb-val{font-size:24px;font-weight:800;letter-spacing:-0.3px}
+.ai-result-block .arb-val.good{color:var(--accent)}
+.ai-result-block .arb-val.warn{color:var(--amber)}
+.ai-result-block .arb-val.bad{color:var(--red)}
+
+.ai-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.ai-detail-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+.ai-detail-card h4{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ai-detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.ai-detail-row:last-child{border:none}
+.ai-detail-row .label{color:var(--text-dim)}
+.ai-detail-row .val{font-weight:600}
+.ai-detail-row .val.good{color:var(--accent)}
+.ai-detail-row .val.warn{color:var(--amber)}
+.ai-detail-row .val.bad{color:var(--red)}
+
+.ai-flags{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:28px}
+.ai-flags h4{font-size:14px;font-weight:700;margin-bottom:14px}
+.ai-flag{display:flex;align-items:start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.ai-flag:last-child{border:none}
+.ai-flag .flag-icon{margin-top:2px}
+.ai-flag .flag-text{color:var(--text-mid);line-height:1.4}
+.ai-flag .flag-text strong{color:var(--text)}
+
+/* ─── DEAL PREVIEW ─── */
+.deal-preview{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin-bottom:24px}
+.dp-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:24px}
+.dp-biz{font-size:24px;font-weight:800;letter-spacing:-0.5px}
+.dp-meta{display:flex;gap:8px;margin-top:6px}
+.dp-tag{display:inline-flex;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:600}
+.dp-tag.industry{border:1px solid rgba(59,130,246,0.2);color:var(--blue);background:var(--blue-dim)}
+.dp-tag.state{border:1px solid rgba(168,85,247,0.2);color:var(--purple);background:var(--purple-dim)}
+.dp-tag.risk{border:1px solid rgba(0,232,123,0.2);color:var(--accent);background:var(--accent-dim)}
+.dp-score{text-align:right}
+.dp-edit-btn{padding:6px 16px;border-radius:100px;border:1px solid var(--border-bright);background:transparent;color:var(--text-mid);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s}
+.dp-edit-btn:hover{border-color:var(--text-dim);color:var(--text)}
+
+.dp-fin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.dp-fin{background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);padding:16px;text-align:center}
+.dp-fin .dpf-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim)}
+.dp-fin .dpf-val{font-size:22px;font-weight:800;margin-top:4px}
+.dp-fin .dpf-val.accent{color:var(--accent)}
+
+.dp-docs{display:flex;gap:10px;flex-wrap:wrap}
+.dp-doc{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 16px;font-size:13px}
+.dp-doc .dd-icon{font-size:18px}
+.dp-doc .dd-name{font-weight:500;color:var(--text-mid)}
+
+/* ─── SUBMIT OPTIONS ─── */
+.submit-options{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.submit-option{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;cursor:pointer;transition:all 0.3s;position:relative}
+.submit-option:hover{border-color:var(--border-bright)}
+.submit-option.selected{border-color:var(--accent);background:var(--accent-dim)}
+.submit-option.selected::after{content:'✓';position:absolute;top:16px;right:16px;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.submit-option h3{font-size:17px;font-weight:700;margin-bottom:6px}
+.submit-option p{font-size:13px;color:var(--text-dim);line-height:1.4;margin-bottom:14px}
+.submit-option .so-features{display:flex;flex-direction:column;gap:6px}
+.submit-option .so-feat{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-mid)}
+.submit-option .so-feat .check{color:var(--accent);font-weight:700}
+
+.privacy-notice{display:flex;align-items:start;gap:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:28px}
+.privacy-notice .pn-icon{font-size:24px;flex-shrink:0}
+.privacy-notice .pn-text{font-size:13px;color:var(--text-mid);line-height:1.5}
+.privacy-notice .pn-text strong{color:var(--text)}
+
+/* ─── WIZARD NAV BUTTONS ─── */
+.wizard-nav{display:flex;justify-content:space-between;align-items:center;margin-top:40px;padding-top:28px;border-top:1px solid var(--border)}
+.wiz-btn{padding:14px 32px;border-radius:100px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;transition:all 0.25s;border:none}
+.wiz-btn.primary{background:var(--accent);color:var(--bg);box-shadow:0 0 30px var(--accent-glow)}
+.wiz-btn.primary:hover{transform:translateY(-2px);box-shadow:0 8px 40px var(--accent-glow)}
+.wiz-btn.primary:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none}
+.wiz-btn.secondary{background:transparent;color:var(--text-mid);border:1px solid var(--border-bright)}
+.wiz-btn.secondary:hover{border-color:var(--text-dim);color:var(--text)}
+.wiz-btn.ghost{background:none;border:none;color:var(--text-dim);font-size:14px}
+.wiz-btn.ghost:hover{color:var(--text-mid)}
+
+/* ─── SUCCESS SCREEN ─── */
+.success-screen{display:none;text-align:center;padding:80px 0;animation:fadeUp 0.6s ease both}
+.success-screen.show{display:block}
+.success-burst{width:120px;height:120px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:56px;color:var(--bg);margin:0 auto 32px;box-shadow:0 0 80px var(--accent-glow);animation:scaleBurst 0.5s ease both}
+@keyframes scaleBurst{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.success-screen h2{font-size:36px;font-weight:900;letter-spacing:-1px;margin-bottom:10px}
+.success-screen .ss-sub{font-size:18px;color:var(--text-mid);margin-bottom:12px}
+.success-screen .ss-detail{font-size:14px;color:var(--text-dim);margin-bottom:40px;line-height:1.6}
+.success-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* ─── LIVE INDICATOR ─── */
+.live-indicator{display:inline-flex;align-items:center;gap:8px;background:var(--red-dim);border:1px solid rgba(255,77,77,0.2);border-radius:100px;padding:6px 16px;font-size:12px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+.live-indicator .blink{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1s infinite}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .topnav-center{display:none}
+  .ai-result-grid,.dp-fin-grid{grid-template-columns:1fr 1fr}
+  .ai-detail-grid{grid-template-columns:1fr}
+  .merchant-form{grid-template-columns:1fr}
+  .submit-options{grid-template-columns:1fr}
+  .doc-checklist{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .step-dot-label{font-size:10px}
+  .ai-result-grid,.dp-fin-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ NAV ═══════ -->
+<nav class="topnav">
+  <a href="privatecreditmca-landing.html" class="topnav-logo">
+    <span class="dot"></span>
+    PrivateCreditMCA
+  </a>
+  <div class="topnav-center">
+    <a href="privatecreditmca-landing.html">Home</a>
+    <a href="privatecreditmca-marketplace.html">Marketplace</a>
+    <a href="privatecreditmca-account.html?view=profile">My Dashboard</a>
+    <a href="#">Funder Directory</a>
+  </div>
+  <div class="topnav-right">
+    <a href="privatecreditmca-account.html?view=login" class="topnav-btn secondary" style="text-decoration:none">Log In</a>
+    <a href="privatecreditmca-account.html" class="topnav-btn" style="text-decoration:none">Create Account</a>
+  </div>
+</nav>
+
+<!-- ═══════ WIZARD ═══════ -->
+<div class="wizard-wrapper">
+
+  <!-- ─── PROGRESS BAR ─── -->
+  <div class="step-progress" id="stepProgress">
+    <div class="step-progress-fill" id="progressFill"></div>
+    <div class="step-dot-wrapper active" data-step="1">
+      <div class="step-dot active">1</div>
+      <div class="step-dot-label">Upload</div>
+    </div>
+    <div class="step-dot-wrapper" data-step="2">
+      <div class="step-dot">2</div>
+      <div class="step-dot-label">Merchant Info</div>
+    </div>
+    <div class="step-dot-wrapper" data-step="3">
+      <div class="step-dot">3</div>
+      <div class="step-dot-label">AI Analysis</div>
+    </div>
+    <div class="step-dot-wrapper" data-step="4">
+      <div class="step-dot">4</div>
+      <div class="step-dot-label">Review & Submit</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- STEP 1: UPLOAD DOCUMENTS            -->
+  <!-- ═══════════════════════════════════ -->
+  <div class="step-panel active" id="step1">
+    <div class="step-title">Upload Deal Documents</div>
+    <div class="step-desc">Drop your bank statements, application, and any supporting docs. We'll build a Universal Deal Packet that every funder accepts.</div>
+
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+      <input type="file" id="fileInput" multiple accept=".pdf,.csv,.xlsx,.png,.jpg" onchange="handleFiles(this.files)">
+      <span class="uz-icon">📄</span>
+      <div class="uz-title">Drag & drop files here</div>
+      <div class="uz-sub">or click to browse your computer</div>
+      <div class="uz-btn">Choose Files</div>
+    </div>
+
+    <div class="upload-types">
+      <div class="upload-type"><span class="ut-icon">📊</span> Bank Statements (PDF)</div>
+      <div class="upload-type"><span class="ut-icon">📝</span> Application</div>
+      <div class="upload-type"><span class="ut-icon">🪪</span> ID / Voided Check</div>
+    </div>
+
+    <div class="file-list" id="fileList"></div>
+
+    <div class="doc-checklist" id="docChecklist">
+      <div class="doc-check" id="dc-bank">
+        <div class="doc-check-icon">✓</div>
+        <div class="doc-check-text">
+          <div class="dc-title">Bank Statements</div>
+          <div class="dc-sub">Last 3–6 months</div>
+        </div>
+      </div>
+      <div class="doc-check" id="dc-app">
+        <div class="doc-check-icon">✓</div>
+        <div class="doc-check-text">
+          <div class="dc-title">Application</div>
+          <div class="dc-sub">Signed MCA application</div>
+        </div>
+      </div>
+      <div class="doc-check" id="dc-id">
+        <div class="doc-check-icon">✓</div>
+        <div class="doc-check-text">
+          <div class="dc-title">ID / Voided Check</div>
+          <div class="dc-sub">Owner identification</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-nav">
+      <a href="privatecreditmca-marketplace.html" class="wiz-btn ghost">← Back to Marketplace</a>
+      <button class="wiz-btn primary" id="step1Next" onclick="goStep(2)" disabled>Continue →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- STEP 2: MERCHANT INFO               -->
+  <!-- ═══════════════════════════════════ -->
+  <div class="step-panel" id="step2">
+    <div class="step-title">Merchant Information</div>
+    <div class="step-desc">Tell us about the business. Contact info stays private until an offer is accepted.</div>
+
+    <div class="merchant-form">
+      <div class="form-group full">
+        <label class="form-label">Business Legal Name</label>
+        <input type="text" class="form-input" placeholder="e.g. QuickFix Auto Repair LLC" id="bizName">
+      </div>
+      <div class="form-group">
+        <label class="form-label">DBA (if different)</label>
+        <input type="text" class="form-input" placeholder="e.g. QuickFix Auto" id="bizDba">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Industry</label>
+        <select class="form-input" id="bizIndustry">
+          <option value="">Select industry...</option>
+          <option value="Restaurant">Restaurant</option>
+          <option value="Auto Repair">Auto Repair</option>
+          <option value="Construction">Construction</option>
+          <option value="Retail">Retail</option>
+          <option value="Medical">Medical</option>
+          <option value="Trucking">Trucking</option>
+          <option value="Services">Services</option>
+          <option value="Manufacturing">Manufacturing</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">State</label>
+        <select class="form-input" id="bizState">
+          <option value="">Select state...</option>
+          <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Years in Business</label>
+        <input type="number" class="form-input" placeholder="e.g. 4" id="bizYears">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Requested Funding Amount</label>
+        <input type="text" class="form-input" placeholder="e.g. $80,000" id="bizAmount">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Use of Funds</label>
+        <select class="form-input" id="bizUse">
+          <option value="">Select purpose...</option>
+          <option>Working Capital</option>
+          <option>Equipment Purchase</option>
+          <option>Expansion</option>
+          <option>Inventory</option>
+          <option>Payroll</option>
+          <option>Marketing</option>
+          <option>Debt Consolidation</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-group full" style="margin-top:12px;padding-top:20px;border-top:1px solid var(--border)">
+        <label class="form-label" style="display:flex;align-items:center;gap:8px">🔒 Owner Contact <span style="font-size:11px;color:var(--accent);font-weight:500">(Hidden from funders until offer accepted)</span></label>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Owner Name</label>
+        <input type="text" class="form-input" placeholder="John Smith" id="ownerName">
+        <div class="form-hint"><span class="lock">🔒</span> Hidden until accepted</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Owner Phone</label>
+        <input type="tel" class="form-input" placeholder="(555) 000-0000" id="ownerPhone">
+        <div class="form-hint"><span class="lock">🔒</span> Hidden until accepted</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Owner Email</label>
+        <input type="email" class="form-input" placeholder="owner@business.com" id="ownerEmail">
+        <div class="form-hint"><span class="lock">🔒</span> Hidden until accepted</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Owner SSN (last 4)</label>
+        <input type="text" class="form-input" placeholder="••••" maxlength="4" id="ownerSSN">
+        <div class="form-hint"><span class="lock">🔒</span> Encrypted & hidden</div>
+      </div>
+    </div>
+
+    <div class="wizard-nav">
+      <button class="wiz-btn secondary" onclick="goStep(1)">← Back</button>
+      <button class="wiz-btn primary" onclick="goStep(3)">Run AI Analysis →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- STEP 3: AI ANALYSIS                 -->
+  <!-- ═══════════════════════════════════ -->
+  <div class="step-panel" id="step3">
+    <div class="step-title">AI BankIQ Analysis</div>
+    <div class="step-desc">Our AI is analyzing the bank statements and generating an underwriting summary.</div>
+
+    <!-- Scanning animation -->
+    <div id="aiScanning">
+      <div class="ai-analysis-screen">
+        <div class="ai-scanner">
+          <span class="scanner-icon">🧠</span>
+          <div class="scanner-title">Analyzing Deal...</div>
+          <div class="scanner-sub">Processing bank statements & merchant data</div>
+        </div>
+
+        <div class="ai-progress">
+          <div class="ai-progress-bar"><div class="ai-progress-fill" id="aiProgressFill"></div></div>
+          <div class="ai-progress-text"><span id="aiProgressLabel">Starting analysis...</span><span id="aiProgressPct" class="mono">0%</span></div>
+        </div>
+
+        <div class="ai-steps-feed" id="aiStepsFeed"></div>
+      </div>
+    </div>
+
+    <!-- Results (hidden until analysis complete) -->
+    <div class="ai-results" id="aiResults">
+      <div class="ai-result-header">
+        <div class="arh-left">
+          <h2>Analysis Complete</h2>
+          <p>AI BankIQ has reviewed 4 months of bank statements</p>
+        </div>
+        <div class="ai-score-big">
+          <span class="num">78</span>
+          <span class="grade">Grade B</span>
+        </div>
+      </div>
+
+      <div class="ai-result-grid">
+        <div class="ai-result-block">
+          <div class="arb-label">Monthly Revenue</div>
+          <div class="arb-val good">$74K</div>
+        </div>
+        <div class="ai-result-block">
+          <div class="arb-label">NSF Count</div>
+          <div class="arb-val warn">2</div>
+        </div>
+        <div class="ai-result-block">
+          <div class="arb-label">Approval Range</div>
+          <div class="arb-val">$45K–$62K</div>
+        </div>
+        <div class="ai-result-block">
+          <div class="arb-label">Neg. Balance Days</div>
+          <div class="arb-val good">0</div>
+        </div>
+      </div>
+
+      <div class="ai-detail-grid">
+        <div class="ai-detail-card">
+          <h4>📊 Revenue Breakdown</h4>
+          <div class="ai-detail-row"><span class="label">Month 1</span><span class="val">$71,240</span></div>
+          <div class="ai-detail-row"><span class="label">Month 2</span><span class="val">$76,890</span></div>
+          <div class="ai-detail-row"><span class="label">Month 3</span><span class="val">$72,410</span></div>
+          <div class="ai-detail-row"><span class="label">Month 4</span><span class="val">$75,660</span></div>
+          <div class="ai-detail-row"><span class="label">Average</span><span class="val good" style="font-size:15px">$74,050</span></div>
+          <div class="ai-detail-row"><span class="label">Trend</span><span class="val good">Stable ↑</span></div>
+        </div>
+        <div class="ai-detail-card">
+          <h4>🏦 Banking Health</h4>
+          <div class="ai-detail-row"><span class="label">Avg. Daily Balance</span><span class="val good">$18,420</span></div>
+          <div class="ai-detail-row"><span class="label">Lowest Balance</span><span class="val warn">$2,140</span></div>
+          <div class="ai-detail-row"><span class="label">NSF / Overdrafts</span><span class="val warn">2</span></div>
+          <div class="ai-detail-row"><span class="label">Neg. Balance Days</span><span class="val good">0</span></div>
+          <div class="ai-detail-row"><span class="label">Deposits / Month</span><span class="val">142 avg</span></div>
+          <div class="ai-detail-row"><span class="label">Existing MCAs</span><span class="val warn">1 detected</span></div>
+        </div>
+      </div>
+
+      <div class="ai-flags">
+        <h4>⚡ AI Insights & Flags</h4>
+        <div class="ai-flag"><span class="flag-icon" style="color:var(--accent)">✓</span><span class="flag-text"><strong>Strong revenue consistency</strong> — less than 8% variance across months, well above threshold for stable businesses.</span></div>
+        <div class="ai-flag"><span class="flag-icon" style="color:var(--amber)">⚠</span><span class="flag-text"><strong>Existing MCA detected</strong> — one active position found with estimated daily debit of $420. Funders may stack or require payoff.</span></div>
+        <div class="ai-flag"><span class="flag-icon" style="color:var(--accent)">✓</span><span class="flag-text"><strong>Zero negative balance days</strong> — indicates disciplined cash flow management even with existing obligations.</span></div>
+        <div class="ai-flag"><span class="flag-icon" style="color:var(--amber)">⚠</span><span class="flag-text"><strong>2 NSFs in month 3</strong> — minor flag, likely one-time. Most funders allow up to 3 per month.</span></div>
+      </div>
+
+      <div class="wizard-nav">
+        <button class="wiz-btn secondary" onclick="goStep(2)">← Edit Info</button>
+        <button class="wiz-btn primary" onclick="goStep(4)">Review & Submit →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- STEP 4: REVIEW & SUBMIT             -->
+  <!-- ═══════════════════════════════════ -->
+  <div class="step-panel" id="step4">
+    <div class="step-title">Review & Submit</div>
+    <div class="step-desc">Confirm your deal details and choose how to submit.</div>
+
+    <div class="deal-preview">
+      <div class="dp-header">
+        <div>
+          <div class="dp-biz" id="previewBiz">QuickFix Auto Repair LLC</div>
+          <div class="dp-meta">
+            <span class="dp-tag industry" id="previewIndustry">Auto Repair</span>
+            <span class="dp-tag state" id="previewState">TX</span>
+            <span class="dp-tag risk">Risk: 78/B</span>
+          </div>
+        </div>
+        <button class="dp-edit-btn" onclick="goStep(2)">Edit Details</button>
+      </div>
+
+      <div class="dp-fin-grid">
+        <div class="dp-fin"><div class="dpf-label">Requested</div><div class="dpf-val" id="previewAmount">$80,000</div></div>
+        <div class="dp-fin"><div class="dpf-label">Monthly Rev</div><div class="dpf-val accent">$74,050</div></div>
+        <div class="dp-fin"><div class="dpf-label">AI Risk Score</div><div class="dpf-val accent">78 / B</div></div>
+        <div class="dp-fin"><div class="dpf-label">Approval Range</div><div class="dpf-val">$45K–$62K</div></div>
+      </div>
+
+      <div style="font-size:13px;font-weight:600;color:var(--text-dim);margin-bottom:10px">ATTACHED DOCUMENTS</div>
+      <div class="dp-docs" id="previewDocs">
+        <div class="dp-doc"><span class="dd-icon">📊</span><span class="dd-name">bank_statements_oct_jan.pdf</span></div>
+        <div class="dp-doc"><span class="dd-icon">📝</span><span class="dd-name">mca_application_signed.pdf</span></div>
+        <div class="dp-doc"><span class="dd-icon">🪪</span><span class="dd-name">drivers_license.jpg</span></div>
+      </div>
+    </div>
+
+    <div style="font-size:17px;font-weight:700;margin-bottom:16px">Choose Submission Path</div>
+
+    <div class="submit-options">
+      <div class="submit-option selected" id="optMarketplace" onclick="selectOption('marketplace')">
+        <h3>🚀 Live Marketplace</h3>
+        <p>Your deal goes live immediately. 50+ funders see it and compete.</p>
+        <div class="so-features">
+          <div class="so-feat"><span class="check">✓</span> Access to all funders</div>
+          <div class="so-feat"><span class="check">✓</span> Competing offers in hours</div>
+          <div class="so-feat"><span class="check">✓</span> Side-by-side comparison</div>
+          <div class="so-feat"><span class="check">✓</span> Full control of your deal</div>
+        </div>
+      </div>
+      <div class="submit-option" id="optSuperbroker" onclick="selectOption('superbroker')">
+        <h3>🎯 Superbroker</h3>
+        <p>A senior broker reviews your file, structures it, and places it strategically.</p>
+        <div class="so-features">
+          <div class="so-feat"><span class="check">✓</span> Expert deal structuring</div>
+          <div class="so-feat"><span class="check">✓</span> Higher approval odds</div>
+          <div class="so-feat"><span class="check">✓</span> Support for tough files</div>
+          <div class="so-feat"><span class="check">✓</span> Hands-on guidance</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="privacy-notice">
+      <div class="pn-icon">🔒</div>
+      <div class="pn-text">
+        <strong>Your merchant's contact information stays private.</strong> Funders will see the business name, industry, financials, and AI analysis — but phone numbers, email addresses, and SSN are hidden until you accept an offer. No merchant poaching. No data forwarding. Your deal stays yours.
+      </div>
+    </div>
+
+    <div class="wizard-nav">
+      <button class="wiz-btn secondary" onclick="goStep(3)">← Back</button>
+      <button class="wiz-btn primary" onclick="submitDeal()" id="submitBtn">Submit to Marketplace →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- SUCCESS SCREEN                      -->
+  <!-- ═══════════════════════════════════ -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-burst">🚀</div>
+    <div class="live-indicator"><span class="blink"></span> Your deal is live</div>
+    <h2>Deal Submitted!</h2>
+    <div class="ss-sub">Your deal is now visible to 50+ funders in the live marketplace.</div>
+    <div class="ss-detail">
+      Funders are reviewing your file right now. Most deals receive<br>
+      their first offer within <strong style="color:var(--accent)">4.2 hours</strong>. We'll notify you instantly when offers come in.
+    </div>
+    <div class="success-actions">
+      <a href="privatecreditmca-marketplace.html"><button class="wiz-btn primary">View in Marketplace →</button></a>
+      <a href="privatecreditmca-account.html?view=profile"><button class="wiz-btn secondary">Go to Dashboard</button></a>
+      <button class="wiz-btn ghost" onclick="resetWizard()">Submit Another Deal</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// WIZARD STATE
+// ═══════════════════════════════════════════
+let currentStep = 1;
+let uploadedFiles = [];
+let submitPath = 'marketplace';
+
+// ═══════════════════════════════════════════
+// STEP NAVIGATION
+// ═══════════════════════════════════════════
+function goStep(n) {
+  // Hide all
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+
+  // Show target
+  const panel = document.getElementById('step' + n);
+  if (panel) {
+    panel.classList.remove('active');
+    void panel.offsetWidth; // force reflow
+    panel.classList.add('active');
+  }
+
+  // Update progress dots
+  document.querySelectorAll('.step-dot-wrapper').forEach(w => {
+    const s = parseInt(w.dataset.step);
+    w.classList.remove('active', 'done');
+    w.querySelector('.step-dot').classList.remove('active', 'done');
+    if (s < n) {
+      w.classList.add('done');
+      w.querySelector('.step-dot').classList.add('done');
+      w.querySelector('.step-dot').textContent = '✓';
+    } else if (s === n) {
+      w.classList.add('active');
+      w.querySelector('.step-dot').classList.add('active');
+      w.querySelector('.step-dot').textContent = s;
+    } else {
+      w.querySelector('.step-dot').textContent = s;
+    }
+  });
+
+  // Progress bar fill
+  const pct = ((n - 1) / 3) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  currentStep = n;
+
+  // If step 3, run AI analysis
+  if (n === 3) runAIAnalysis();
+
+  // If step 4, populate preview
+  if (n === 4) populatePreview();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════
+// FILE UPLOAD
+// ═══════════════════════════════════════════
+const uploadZone = document.getElementById('uploadZone');
+
+uploadZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  uploadZone.classList.add('dragover');
+});
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+uploadZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  uploadZone.classList.remove('dragover');
+  handleFiles(e.dataTransfer.files);
+});
+
+function handleFiles(files) {
+  const fakeTypes = [
+    { name: 'bank_statements_oct.pdf', size: '2.4 MB', type: 'bank', icon: '📊' },
+    { name: 'bank_statements_nov.pdf', size: '2.1 MB', type: 'bank', icon: '📊' },
+    { name: 'bank_statements_dec.pdf', size: '2.6 MB', type: 'bank', icon: '📊' },
+    { name: 'bank_statements_jan.pdf', size: '2.3 MB', type: 'bank', icon: '📊' },
+    { name: 'mca_application_signed.pdf', size: '890 KB', type: 'app', icon: '📝' },
+    { name: 'drivers_license.jpg', size: '1.1 MB', type: 'id', icon: '🪪' },
+    { name: 'voided_check.pdf', size: '340 KB', type: 'id', icon: '🪪' },
+  ];
+
+  // Add files from the fake set that haven't been added yet
+  const remaining = fakeTypes.filter(f => !uploadedFiles.find(u => u.name === f.name));
+  const toAdd = remaining.slice(0, Math.max(files.length, 2));
+
+  toAdd.forEach((f, i) => {
+    setTimeout(() => {
+      uploadedFiles.push(f);
+      renderFiles();
+      updateChecklist();
+    }, i * 300);
+  });
+}
+
+function renderFiles() {
+  const list = document.getElementById('fileList');
+  list.innerHTML = uploadedFiles.map((f, i) => `
+    <div class="file-item" style="animation-delay:${i * 0.05}s">
+      <div class="file-icon">${f.icon}</div>
+      <div class="file-info">
+        <div class="file-name">${f.name}</div>
+        <div class="file-size">${f.size}</div>
+      </div>
+      <div class="file-status uploaded">✓ Uploaded</div>
+      <button class="file-remove" onclick="removeFile(${i})">✕</button>
+    </div>
+  `).join('');
+
+  // Enable next button if we have files
+  document.getElementById('step1Next').disabled = uploadedFiles.length === 0;
+}
+
+function removeFile(i) {
+  uploadedFiles.splice(i, 1);
+  renderFiles();
+  updateChecklist();
+}
+
+function updateChecklist() {
+  const hasBank = uploadedFiles.some(f => f.type === 'bank');
+  const hasApp = uploadedFiles.some(f => f.type === 'app');
+  const hasId = uploadedFiles.some(f => f.type === 'id');
+
+  document.getElementById('dc-bank').classList.toggle('complete', hasBank);
+  document.getElementById('dc-app').classList.toggle('complete', hasApp);
+  document.getElementById('dc-id').classList.toggle('complete', hasId);
+}
+
+// ═══════════════════════════════════════════
+// AI ANALYSIS ANIMATION
+// ═══════════════════════════════════════════
+function runAIAnalysis() {
+  const scanning = document.getElementById('aiScanning');
+  const results = document.getElementById('aiResults');
+  scanning.style.display = 'block';
+  results.classList.remove('show');
+
+  const steps = [
+    { text: 'Reading bank statement PDFs...', delay: 0 },
+    { text: 'Extracting deposit & withdrawal data...', delay: 800 },
+    { text: 'Calculating monthly revenue averages...', delay: 1800 },
+    { text: 'Checking for NSFs & overdrafts...', delay: 2800 },
+    { text: 'Detecting existing MCA positions...', delay: 3600 },
+    { text: 'Analyzing daily balance trends...', delay: 4400 },
+    { text: 'Computing risk score & approval range...', delay: 5200 },
+    { text: 'Generating underwriting summary...', delay: 6000 },
+  ];
+
+  const feed = document.getElementById('aiStepsFeed');
+  feed.innerHTML = '';
+
+  let progress = 0;
+  const progressFill = document.getElementById('aiProgressFill');
+  const progressLabel = document.getElementById('aiProgressLabel');
+  const progressPct = document.getElementById('aiProgressPct');
+
+  steps.forEach((s, i) => {
+    setTimeout(() => {
+      // Update previous step to done
+      const prev = feed.querySelector('.ai-step-item.active');
+      if (prev) {
+        prev.classList.remove('active');
+        prev.classList.add('done');
+        prev.querySelector('.asi-icon').textContent = '✓';
+      }
+
+      // Add new step
+      const item = document.createElement('div');
+      item.className = 'ai-step-item active';
+      item.style.animationDelay = '0s';
+      item.innerHTML = `<div class="asi-icon">↻</div><span>${s.text}</span>`;
+      feed.appendChild(item);
+
+      // Update progress
+      progress = Math.round(((i + 1) / steps.length) * 100);
+      progressFill.style.width = progress + '%';
+      progressLabel.textContent = s.text;
+      progressPct.textContent = progress + '%';
+    }, s.delay);
+  });
+
+  // Complete
+  setTimeout(() => {
+    const prev = feed.querySelector('.ai-step-item.active');
+    if (prev) {
+      prev.classList.remove('active');
+      prev.classList.add('done');
+      prev.querySelector('.asi-icon').textContent = '✓';
+    }
+    progressFill.style.width = '100%';
+    progressPct.textContent = '100%';
+    progressLabel.textContent = 'Analysis complete!';
+  }, 6800);
+
+  // Show results
+  setTimeout(() => {
+    scanning.style.display = 'none';
+    results.classList.add('show');
+  }, 7600);
+}
+
+// ═══════════════════════════════════════════
+// DEAL PREVIEW
+// ═══════════════════════════════════════════
+function populatePreview() {
+  const biz = document.getElementById('bizName').value || 'QuickFix Auto Repair LLC';
+  const industry = document.getElementById('bizIndustry').value || 'Auto Repair';
+  const state = document.getElementById('bizState').value || 'TX';
+  const amount = document.getElementById('bizAmount').value || '$80,000';
+
+  document.getElementById('previewBiz').textContent = biz;
+  document.getElementById('previewIndustry').textContent = industry;
+  document.getElementById('previewState').textContent = state;
+  document.getElementById('previewAmount').textContent = amount;
+
+  // Update docs list
+  if (uploadedFiles.length > 0) {
+    document.getElementById('previewDocs').innerHTML = uploadedFiles.map(f =>
+      `<div class="dp-doc"><span class="dd-icon">${f.icon}</span><span class="dd-name">${f.name}</span></div>`
+    ).join('');
+  }
+}
+
+// ═══════════════════════════════════════════
+// SUBMIT OPTIONS
+// ═══════════════════════════════════════════
+function selectOption(opt) {
+  submitPath = opt;
+  document.getElementById('optMarketplace').classList.toggle('selected', opt === 'marketplace');
+  document.getElementById('optSuperbroker').classList.toggle('selected', opt === 'superbroker');
+  document.getElementById('submitBtn').textContent = opt === 'marketplace'
+    ? 'Submit to Marketplace →'
+    : 'Submit to Superbroker →';
+}
+
+// ═══════════════════════════════════════════
+// SUBMIT DEAL
+// ═══════════════════════════════════════════
+function submitDeal() {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  setTimeout(() => {
+    // Hide wizard, show success
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('stepProgress').style.display = 'none';
+    document.getElementById('successScreen').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 1500);
+}
+
+// ═══════════════════════════════════════════
+// RESET
+// ═══════════════════════════════════════════
+function resetWizard() {
+  uploadedFiles = [];
+  document.getElementById('successScreen').classList.remove('show');
+  document.getElementById('stepProgress').style.display = 'flex';
+  document.getElementById('fileList').innerHTML = '';
+  document.getElementById('step1Next').disabled = true;
+  document.querySelectorAll('.doc-check').forEach(d => d.classList.remove('complete'));
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('submitBtn').textContent = 'Submit to Marketplace →';
+  goStep(1);
+}
+</script>
+</body>
+</html>
