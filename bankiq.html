@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Bank Statement Intelligence — PrivateCreditMCA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Sora:wght@300;400;500;600;700;800&family=Geist+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a10;--deep:#0a0f18;--sf:#0e1422;--el:#131b2e;--teal:#00d4c8;--t4:#00e8db;--cyan:#00c8ff;--grn:#00e676;--amb:#ffc446;--red:#ff5252;--pur:#b388ff;--t1:#f0f4fc;--t2:#c8d0e0;--t3:#8b97b0;--tx4:#586580;--tx5:#3a4560;--bd:rgba(255,255,255,.04);--bd2:rgba(255,255,255,.07);--bdt:rgba(0,212,200,.15);--r:16px;--r2:12px;--ex:cubic-bezier(.16,1,.3,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#00b0a6 var(--bg)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:rgba(0,212,200,.3)}a{color:inherit;text-decoration:none}
+.grain{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:180px}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,32px);background:rgba(6,10,16,.8);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--bd2)}
+.nav-l{display:flex;align-items:center;gap:12px}
+.logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
+.logo::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.2))}
+.logo svg{position:relative;z-index:1}
+.nav-brand{font-weight:700;font-size:14px;letter-spacing:-.3px}.nav-brand em{font-style:normal;color:var(--t4)}
+.nav-sub{font-size:10px;color:var(--tx4);font-weight:600}
+.nav-pills{display:flex;gap:4px;background:var(--sf);border:1px solid var(--bd2);border-radius:100px;padding:3px}
+.nl{padding:6px 12px;border-radius:100px;font-size:11px;font-weight:500;color:var(--t3);transition:all .25s}
+.nl:hover{color:var(--t1)}.nl.active{color:var(--t1);background:rgba(0,212,200,.1);border:1px solid var(--bdt)}
+.nav-r{display:flex;gap:8px;align-items:center}
+.btn{padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;border:1px solid var(--bd2);background:var(--sf);color:var(--t2);cursor:pointer;font-family:'Sora',sans-serif;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--bdt);color:var(--t4);transform:translateY(-1px)}
+.btn-p{background:var(--teal);color:var(--bg);border-color:transparent}.btn-p:hover{box-shadow:0 6px 20px rgba(0,212,200,.25);color:var(--bg)}
+.btn-g{background:rgba(0,230,118,.06);border-color:rgba(0,230,118,.2);color:var(--grn)}.btn-g:hover{border-color:rgba(0,230,118,.4)}
+.btn-d{background:rgba(255,82,82,.06);border-color:rgba(255,82,82,.2);color:var(--red)}.btn-d:hover{border-color:rgba(255,82,82,.4)}
+.btn-sm{padding:6px 10px;font-size:11px;border-radius:8px}
+.inp{width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--bd2);background:rgba(0,0,0,.2);color:var(--t1);font-size:12px;font-family:'Sora',sans-serif;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--teal)}.inp::placeholder{color:rgba(139,151,176,.4)}
+select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23586580' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:100px;border:1px solid var(--bd2);background:rgba(0,0,0,.12);font-size:10px;font-weight:700;white-space:nowrap;color:var(--t3)}
+.pill b{color:var(--t1)}.pill.tl{border-color:var(--bdt);background:rgba(0,212,200,.06);color:var(--t4)}.pill.gn{border-color:rgba(0,230,118,.2);background:rgba(0,230,118,.06);color:var(--grn)}.pill.wn{border-color:rgba(255,196,70,.2);background:rgba(255,196,70,.06);color:var(--amb)}.pill.rd{border-color:rgba(255,82,82,.2);background:rgba(255,82,82,.06);color:var(--red)}
+
+/* CONTENT */
+.content{max-width:1100px;margin:0 auto;padding:24px clamp(16px,3vw,32px)}
+.hero{text-align:center;margin-bottom:32px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,212,200,.06);border:1px solid var(--bdt);border-radius:100px;padding:6px 16px 6px 8px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t4);margin-bottom:16px}
+.hero-badge .bolt{width:24px;height:24px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;color:var(--bg)}
+.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(32px,5vw,48px);letter-spacing:-1.5px;line-height:1.05;margin-bottom:12px}
+.hero h1 em{font-style:italic;color:var(--t4)}
+.hero p{font-size:14px;color:var(--tx4);line-height:1.65;max-width:560px;margin:0 auto}
+
+/* UPLOAD AREA */
+.upload-section{margin-bottom:32px}
+.upload-zone{border:2px dashed var(--bd2);border-radius:var(--r);padding:48px 24px;text-align:center;cursor:pointer;transition:all .3s;position:relative;background:rgba(0,0,0,.06)}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--teal);background:rgba(0,212,200,.02)}
+.upload-zone.dragover{transform:scale(1.005)}
+.uz-icon{margin-bottom:14px;color:var(--tx4);transition:all .3s}
+.upload-zone:hover .uz-icon{color:var(--t4);transform:translateY(-3px)}
+.uz-title{font-size:16px;font-weight:700;color:var(--t2);margin-bottom:4px}.uz-title span{color:var(--t4)}
+.uz-sub{font-size:12px;color:var(--tx5)}
+.uz-formats{display:flex;gap:6px;justify-content:center;margin-top:12px}
+.uz-fmt{font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;background:rgba(0,0,0,.15);border:1px solid var(--bd2);color:var(--tx4);font-family:'Geist Mono',monospace}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+
+.file-bar{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.file-chip{display:flex;align-items:center;gap:8px;background:var(--sf);border:1px solid var(--bd2);border-radius:10px;padding:8px 12px;animation:fadeUp .25s var(--ex)}
+.file-chip .fc-name{font-size:11px;font-weight:600;color:var(--t2);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-chip .fc-size{font-size:10px;color:var(--tx4);font-family:'Geist Mono',monospace}
+.file-chip .fc-rm{width:20px;height:20px;border-radius:5px;background:rgba(255,82,82,.08);border:none;color:var(--red);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.analyze-bar{display:flex;gap:10px;align-items:center;margin-top:16px;justify-content:center}
+
+/* PROCESSING */
+.processing{display:none;text-align:center;padding:60px 20px}
+.processing.show{display:block}
+.proc-spinner{width:48px;height:48px;border:3px solid var(--bd2);border-top-color:var(--teal);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.proc-title{font-family:'Instrument Serif',serif;font-size:22px;margin-bottom:8px}
+.proc-steps{max-width:360px;margin:0 auto;text-align:left}
+.proc-step{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:12px;color:var(--tx4);transition:all .4s}
+.proc-step.active{color:var(--t4)}
+.proc-step.done{color:var(--grn)}
+.proc-dot{width:8px;height:8px;border-radius:50%;background:var(--bd2);flex-shrink:0;transition:all .3s}
+.proc-step.active .proc-dot{background:var(--teal);box-shadow:0 0 10px rgba(0,212,200,.3)}
+.proc-step.done .proc-dot{background:var(--grn)}
+
+/* RESULTS */
+.results{display:none}
+.results.show{display:block;animation:resultsIn .6s var(--ex)}
+@keyframes resultsIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* SCORE HERO */
+.score-hero{display:flex;gap:24px;align-items:center;padding:24px;background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);margin-bottom:20px;position:relative;overflow:hidden}
+.score-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.score-hero.grade-a::before{background:linear-gradient(90deg,var(--grn),var(--teal))}.score-hero.grade-b::before{background:linear-gradient(90deg,var(--teal),var(--cyan))}.score-hero.grade-c::before{background:linear-gradient(90deg,var(--amb),var(--amb))}.score-hero.grade-d::before{background:linear-gradient(90deg,var(--red),var(--amb))}
+.score-ring{position:relative;display:inline-block;flex-shrink:0}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring circle{fill:none;stroke-linecap:round}
+.score-ring .bg{stroke:rgba(255,255,255,.06)}
+.score-ring .fg{transition:stroke-dashoffset .8s var(--ex)}
+.score-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-num .sn{font-family:'Geist Mono',monospace;font-weight:800;line-height:1}
+.score-num .sg{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--tx4);margin-top:2px}
+.score-info{flex:1}
+.score-info .si-title{font-family:'Instrument Serif',serif;font-size:24px;letter-spacing:-.5px}
+.score-info .si-title span{color:var(--t4)}
+.score-info .si-sub{font-size:12px;color:var(--tx4);margin-top:4px;line-height:1.5}
+.score-info .si-verdict{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+
+/* RECOMMENDATION BOX */
+.rec-box{background:rgba(0,212,200,.04);border:1px solid var(--bdt);border-radius:var(--r);padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;gap:20px}
+.rec-box .rec-icon{width:48px;height:48px;border-radius:12px;background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rec-box .rec-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tx4)}
+.rec-box .rec-range{font-family:'Instrument Serif',serif;font-size:32px;letter-spacing:-1px;color:var(--t4);margin-top:2px}
+.rec-box .rec-note{font-size:11px;color:var(--tx4);margin-top:4px}
+
+/* METRICS GRID */
+.m-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tx4);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.m-label::after{content:'';flex:1;height:1px;background:var(--bd2)}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.metric{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r2);padding:14px 16px;position:relative;overflow:hidden;transition:all .3s}
+.metric:hover{border-color:var(--bdt)}
+.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .3s}
+.metric:hover::before{opacity:1}
+.metric.good::before{background:var(--grn)}.metric.warn::before{background:var(--amb)}.metric.bad::before{background:var(--red)}.metric.neutral::before{background:var(--cyan)}
+.metric .mk{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tx5)}
+.metric .mv{font-family:'Geist Mono',monospace;font-size:22px;font-weight:800;letter-spacing:-.5px;margin-top:4px}
+.metric .mv.good{color:var(--grn)}.metric .mv.warn{color:var(--amb)}.metric .mv.bad{color:var(--red)}.metric .mv.teal{color:var(--t4)}
+.metric .mh{font-size:10px;color:var(--tx5);margin-top:4px}
+
+/* MONTHLY BREAKDOWN */
+.monthly-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.month-card{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r2);padding:14px;transition:all .3s}
+.month-card:hover{border-color:var(--bdt)}
+.month-card .mc-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tx4);margin-bottom:8px}
+.month-card .mc-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--bd)}
+.month-card .mc-row:last-child{border:0}
+.month-card .mc-k{font-size:11px;color:var(--tx4)}
+.month-card .mc-v{font-family:'Geist Mono',monospace;font-size:12px;font-weight:700}
+
+/* REVENUE CHART */
+.chart-section{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);padding:20px;margin-bottom:20px}
+.chart-title{font-size:13px;font-weight:700;margin-bottom:14px}
+.chart{display:flex;align-items:flex-end;gap:6px;height:120px;padding:0 4px}
+.chart-bar{flex:1;border-radius:6px 6px 0 0;transition:all .6s var(--ex);position:relative;cursor:pointer;min-width:20px}
+.chart-bar:hover{opacity:.85}
+.chart-bar .cb-label{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--tx5);font-weight:600;white-space:nowrap}
+.chart-bar .cb-val{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:9px;font-family:'Geist Mono',monospace;font-weight:700;color:var(--t3);white-space:nowrap}
+
+/* FLAGS */
+.flags-section{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--r);padding:20px;margin-bottom:20px}
+.flag-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.flag-item:last-child{border:0}
+.flag-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px}
+.flag-icon.good{background:rgba(0,230,118,.08);color:var(--grn)}
+.flag-icon.warn{background:rgba(255,196,70,.08);color:var(--amb)}
+.flag-icon.bad{background:rgba(255,82,82,.08);color:var(--red)}
+.flag-text{font-size:12px;color:var(--t3);line-height:1.5}
+.flag-text b{color:var(--t1)}
+
+/* ACTIONS BAR */
+.actions-bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:24px;padding-top:20px;border-top:1px solid var(--bd2)}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(14,20,34,.96);border:1px solid var(--bdt);padding:10px 24px;border-radius:var(--r2);box-shadow:0 12px 40px rgba(0,0,0,.4);font-weight:700;font-size:12px;display:none;z-index:300;backdrop-filter:blur(16px);color:var(--t4)}
+.toast.show{display:block;animation:ti .25s var(--ex)}
+@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+@media(max-width:768px){.nav-pills{display:none}.metrics-grid{grid-template-columns:1fr 1fr}.monthly-grid{grid-template-columns:1fr}.score-hero{flex-direction:column;text-align:center}.rec-box{flex-direction:column;text-align:center}}
+@media(max-width:480px){.metrics-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<nav class="nav">
+  <div class="nav-l"><a href="index.html" class="logo"><svg width="13" height="13" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><div><div class="nav-brand">Private<em>Credit</em>MCA</div><div class="nav-sub">AI Bank Statement Intelligence</div></div></div>
+  <div class="nav-pills"><a href="index.html" class="nl">Home</a><a href="marketplace.html" class="nl">Marketplace</a><a href="deallab.html" class="nl">Deal Lab</a><a href="funders.html" class="nl">Funders</a><a href="bankiq.html" class="nl active">BankIQ</a><a href="services.html" class="nl">Services</a></div>
+  <div class="nav-r"><a href="deallab.html" class="btn">Deal Lab</a><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="btn btn-p">Join Community</a></div>
+</nav>
+
+<div class="content">
+  <div class="hero">
+    <div class="hero-badge"><span class="bolt"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> AI-Powered</div>
+    <h1>Bank Statement<br><em>Intelligence</em></h1>
+    <p>Upload bank statements. Get instant AI underwriting — revenue analysis, risk scoring, NSF detection, balance trends, and a recommended approval range. In seconds, not hours.</p>
+  </div>
+
+  <!-- UPLOAD -->
+  <div class="upload-section" id="uploadSection">
+    <div class="upload-zone" id="uploadZone">
+      <div class="uz-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      <div class="uz-title">Drop bank statements here or <span>click to browse</span></div>
+      <div class="uz-sub">Upload 1–6 months of statements for the most accurate analysis</div>
+      <div class="uz-formats"><span class="uz-fmt">PDF</span><span class="uz-fmt">JPG</span><span class="uz-fmt">PNG</span></div>
+      <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png">
+    </div>
+    <div class="file-bar" id="fileBar"></div>
+    <div class="analyze-bar" id="analyzeBar" style="display:none">
+      <button class="btn btn-p" id="btnAnalyze" style="padding:12px 28px;font-size:14px">Analyze Statements</button>
+      <button class="btn btn-d btn-sm" id="btnClear">Clear Files</button>
+    </div>
+  </div>
+
+  <!-- PROCESSING -->
+  <div class="processing" id="processing">
+    <div class="proc-spinner"></div>
+    <div class="proc-title">Analyzing statements…</div>
+    <div class="proc-steps">
+      <div class="proc-step" id="ps1"><div class="proc-dot"></div>Extracting transaction data</div>
+      <div class="proc-step" id="ps2"><div class="proc-dot"></div>Calculating monthly revenue</div>
+      <div class="proc-step" id="ps3"><div class="proc-dot"></div>Detecting NSFs and negative days</div>
+      <div class="proc-step" id="ps4"><div class="proc-dot"></div>Analyzing deposit patterns</div>
+      <div class="proc-step" id="ps5"><div class="proc-dot"></div>Computing risk score</div>
+      <div class="proc-step" id="ps6"><div class="proc-dot"></div>Generating underwriting summary</div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+    <!-- Score Hero -->
+    <div class="score-hero" id="scoreHero"></div>
+    <!-- Recommendation -->
+    <div class="rec-box" id="recBox"></div>
+    <!-- Extracted Metrics -->
+    <div class="m-label">Extracted Metrics</div>
+    <div class="metrics-grid" id="metricsGrid"></div>
+    <!-- Monthly Breakdown -->
+    <div class="m-label">Monthly Breakdown</div>
+    <div class="monthly-grid" id="monthlyGrid"></div>
+    <!-- Revenue Chart -->
+    <div class="chart-section">
+      <div class="chart-title">Deposit Trend (3 Months)</div>
+      <div class="chart" id="chart" style="margin-bottom:24px"></div>
+    </div>
+    <!-- Flags -->
+    <div class="flags-section">
+      <div class="chart-title">Underwriting Flags</div>
+      <div id="flagsBody"></div>
+    </div>
+    <!-- Actions -->
+    <div class="actions-bar">
+      <button class="btn btn-p" id="btnExportLab">Export to Deal Lab</button>
+      <button class="btn btn-g" id="btnExportMarket">Post to Marketplace</button>
+      <button class="btn" id="btnNewAnalysis">New Analysis</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const toast=m=>{const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1500)};
+const money=n=>"$"+Math.round(n).toLocaleString();
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+let files=[];
+
+// UPLOAD
+const zone=$("uploadZone"),fi=$("fileInput");
+zone.addEventListener("dragover",e=>{e.preventDefault();zone.classList.add("dragover")});
+zone.addEventListener("dragleave",()=>zone.classList.remove("dragover"));
+zone.addEventListener("drop",e=>{e.preventDefault();zone.classList.remove("dragover");addFiles(e.dataTransfer.files)});
+fi.addEventListener("change",e=>addFiles(e.target.files));
+
+function addFiles(fl){
+  Array.from(fl).forEach(f=>{if(f.size>15*1024*1024){toast("File too large: "+f.name);return}if(files.length>=6){toast("Max 6 files");return}files.push(f)});
+  renderFiles()
+}
+function renderFiles(){
+  const bar=$("fileBar");
+  bar.innerHTML=files.map((f,i)=>{
+    const sz=f.size>1048576?(f.size/1048576).toFixed(1)+" MB":(f.size/1024).toFixed(0)+" KB";
+    return`<div class="file-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="fc-name">${f.name}</span><span class="fc-size">${sz}</span><button class="fc-rm" data-i="${i}">×</button></div>`
+  }).join("");
+  bar.querySelectorAll(".fc-rm").forEach(b=>b.onclick=()=>{files.splice(+b.dataset.i,1);renderFiles()});
+  $("analyzeBar").style.display=files.length?"flex":"none"
+}
+
+$("btnClear").onclick=()=>{files=[];renderFiles();toast("Cleared")};
+$("btnAnalyze").onclick=()=>runAnalysis();
+$("btnNewAnalysis").onclick=()=>{files=[];renderFiles();$("results").classList.remove("show");$("uploadSection").style.display="block";$("processing").classList.remove("show");toast("Ready for new analysis")};
+
+// SIMULATED ANALYSIS
+function generateData(fileCount){
+  const base=55000+Math.random()*120000;
+  const volatility=5+Math.random()*20;
+  const nsf=Math.random()>.65?Math.floor(Math.random()*5):0;
+  const negDays=nsf>0?Math.floor(Math.random()*8):Math.random()>.8?Math.floor(Math.random()*3):0;
+  const months=Math.max(fileCount,3);
+  const monthly=[];
+  for(let i=0;i<months;i++){
+    const rev=base*(1+(Math.random()-.5)*(volatility/100)*2);
+    const deps=Math.floor(18+Math.random()*14);
+    const avgBal=rev*.4+Math.random()*rev*.3;
+    const lowBal=avgBal*(0.05+Math.random()*.15);
+    monthly.push({month:["Jan","Feb","Mar","Apr","May","Jun"][i]||"Mo"+(i+1),revenue:Math.round(rev),deposits:deps,avgBalance:Math.round(avgBal),lowBalance:Math.round(lowBal),nsf:i===0?nsf:Math.random()>.85?1:0,negDays:i===0?negDays:Math.random()>.9?Math.floor(Math.random()*2):0})
+  }
+  const avgRev=Math.round(monthly.reduce((a,m)=>a+m.revenue,0)/monthly.length);
+  const totalDeps=monthly.reduce((a,m)=>a+m.deposits,0);
+  const totalNsf=monthly.reduce((a,m)=>a+m.nsf,0);
+  const totalNeg=monthly.reduce((a,m)=>a+m.negDays,0);
+  const avgBal=Math.round(monthly.reduce((a,m)=>a+m.avgBalance,0)/monthly.length);
+  const depFreq=Math.round(totalDeps/monthly.length);
+  const revs=monthly.map(m=>m.revenue);
+  const revStd=Math.sqrt(revs.reduce((a,r)=>a+(r-avgRev)**2,0)/revs.length);
+  const volPct=Math.round((revStd/avgRev)*100);
+  const trend=monthly.length>=2?(monthly[monthly.length-1].revenue-monthly[0].revenue)/monthly[0].revenue*100:0;
+
+  // Risk score
+  let score=50;
+  if(avgRev>=120000)score+=20;else if(avgRev>=80000)score+=14;else if(avgRev>=50000)score+=8;else score-=5;
+  if(totalNsf===0)score+=15;else if(totalNsf<=2)score+=5;else if(totalNsf<=4)score-=8;else score-=18;
+  if(totalNeg===0)score+=10;else if(totalNeg<=3)score+=2;else if(totalNeg<=6)score-=6;else score-=14;
+  if(volPct<=8)score+=8;else if(volPct<=15)score+=2;else if(volPct<=25)score-=4;else score-=10;
+  if(depFreq>=25)score+=6;else if(depFreq>=18)score+=2;else score-=4;
+  if(trend>5)score+=4;else if(trend<-10)score-=6;
+  score=clamp(Math.round(score),1,99);
+  let grade="D";if(score>=80)grade="A";else if(score>=65)grade="B";else if(score>=50)grade="C";
+
+  const maxApproval=Math.round(avgRev*(score>=70?.85:score>=50?.65:.45)/1000)*1000;
+  const minApproval=Math.round(maxApproval*.7/1000)*1000;
+
+  return{avgRev,totalDeps,totalNsf,totalNeg,avgBal,depFreq,volPct,trend:Math.round(trend),score,grade,minApproval,maxApproval,monthly,months}
+}
+
+async function runAnalysis(){
+  $("uploadSection").style.display="none";
+  $("processing").classList.add("show");
+  const steps=["ps1","ps2","ps3","ps4","ps5","ps6"];
+  for(let i=0;i<steps.length;i++){
+    await new Promise(r=>setTimeout(r,400+Math.random()*300));
+    if(i>0)$(steps[i-1]).classList.remove("active");$(steps[i-1]||"").classList?.add?.("done");
+    $(steps[i]).classList.add("active");
+  }
+  await new Promise(r=>setTimeout(r,500));
+  $(steps[5]).classList.remove("active");$(steps[5]).classList.add("done");
+  await new Promise(r=>setTimeout(r,300));
+  $("processing").classList.remove("show");
+  renderResults(generateData(files.length));
+}
+
+function scoreRing(score,grade,size=96){
+  const r=(size-10)/2,circ=2*Math.PI*r,offset=circ-(score/100)*circ;
+  let color="var(--red)";if(score>=80)color="var(--grn)";else if(score>=65)color="var(--teal)";else if(score>=50)color="var(--amb)";
+  return`<div class="score-ring" style="width:${size}px;height:${size}px"><svg width="${size}" height="${size}"><circle class="bg" cx="${size/2}" cy="${size/2}" r="${r}" stroke-width="5"/><circle class="fg" cx="${size/2}" cy="${size/2}" r="${r}" stroke="${color}" stroke-width="5" stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/></svg><div class="score-num"><div class="sn" style="font-size:${size>80?28:18}px">${score}</div><div class="sg">${grade}</div></div></div>`
+}
+
+function renderResults(d){
+  $("results").classList.add("show");
+
+  // Score hero
+  let label="High Risk";if(d.score>=80)label="Strong File";else if(d.score>=65)label="Solid File";else if(d.score>=50)label="Workable";
+  const sh=$("scoreHero");
+  sh.className=`score-hero grade-${d.grade.toLowerCase()}`;
+  sh.innerHTML=`${scoreRing(d.score,d.grade)}<div class="score-info"><div class="si-title">Risk Score: <span>${d.score}</span>/99 — ${label}</div><div class="si-sub">Based on ${d.months} months of bank statement analysis — ${money(d.avgRev)}/mo average revenue with ${d.totalNsf} NSF${d.totalNsf!==1?"s":""} and ${d.totalNeg} negative day${d.totalNeg!==1?"s":""}.</div><div class="si-verdict"><span class="pill ${d.score>=65?"gn":"wn"}">${label}</span><span class="pill">${d.months} months analyzed</span><span class="pill tl">AI Confidence: ${d.months>=3?"High":"Medium"}</span></div></div>`;
+
+  // Recommendation
+  $("recBox").innerHTML=`<div class="rec-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--grn)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="rec-label">Recommended Approval Range</div><div class="rec-range">${money(d.minApproval)} – ${money(d.maxApproval)}</div><div class="rec-note">Based on revenue capacity, risk factors, and deposit consistency. ${d.score>=70?"Strong candidate for competitive terms.":"Consider conservative sizing and shorter terms."}</div></div>`;
+
+  // Metrics
+  const mClass=(good,warn)=>(v)=>v<=good?"good":v<=warn?"warn":"bad";
+  const nsfClass=mClass(0,2);const negClass=mClass(0,4);const volClass=mClass(10,20);
+  $("metricsGrid").innerHTML=`
+    <div class="metric good"><div class="mk">Avg Monthly Revenue</div><div class="mv teal">${money(d.avgRev)}</div><div class="mh">Across ${d.months} months</div></div>
+    <div class="metric neutral"><div class="mk">Total Deposits</div><div class="mv teal">${d.totalDeps}</div><div class="mh">${d.depFreq}/mo frequency</div></div>
+    <div class="metric ${nsfClass(d.totalNsf)}"><div class="mk">NSF Count</div><div class="mv ${nsfClass(d.totalNsf)}">${d.totalNsf}</div><div class="mh">${d.totalNsf===0?"Clean — zero NSFs":"Across all months"}</div></div>
+    <div class="metric ${negClass(d.totalNeg)}"><div class="mk">Negative Days</div><div class="mv ${negClass(d.totalNeg)}">${d.totalNeg}</div><div class="mh">${d.totalNeg===0?"No negative balance days":"Days below $0"}</div></div>
+    <div class="metric ${volClass(d.volPct)}"><div class="mk">Revenue Volatility</div><div class="mv ${volClass(d.volPct)}">${d.volPct}%</div><div class="mh">${d.volPct<=10?"Very stable":"Month-to-month variance"}</div></div>
+    <div class="metric neutral"><div class="mk">Avg Daily Balance</div><div class="mv teal">${money(d.avgBal)}</div><div class="mh">Operating buffer</div></div>
+    <div class="metric ${d.trend>=0?"good":"warn"}"><div class="mk">Revenue Trend</div><div class="mv ${d.trend>=0?"good":"warn"}">${d.trend>=0?"+":""}${d.trend}%</div><div class="mh">${d.trend>=0?"Growing":"Declining"} over period</div></div>
+    <div class="metric neutral"><div class="mk">Deposit Frequency</div><div class="mv teal">${d.depFreq}/mo</div><div class="mh">${d.depFreq>=25?"High frequency":"Average frequency"}</div></div>`;
+
+  // Monthly
+  $("monthlyGrid").innerHTML=d.monthly.map(m=>`<div class="month-card"><div class="mc-label">${m.month}</div><div class="mc-row"><span class="mc-k">Revenue</span><span class="mc-v">${money(m.revenue)}</span></div><div class="mc-row"><span class="mc-k">Deposits</span><span class="mc-v">${m.deposits}</span></div><div class="mc-row"><span class="mc-k">Avg Balance</span><span class="mc-v">${money(m.avgBalance)}</span></div><div class="mc-row"><span class="mc-k">Low Balance</span><span class="mc-v">${money(m.lowBalance)}</span></div><div class="mc-row"><span class="mc-k">NSFs</span><span class="mc-v" style="color:${m.nsf>0?"var(--red)":"var(--grn)"}">${m.nsf}</span></div><div class="mc-row"><span class="mc-k">Neg Days</span><span class="mc-v" style="color:${m.negDays>0?"var(--amb)":"var(--grn)"}">${m.negDays}</span></div></div>`).join("");
+
+  // Chart
+  const maxRev=Math.max(...d.monthly.map(m=>m.revenue));
+  $("chart").innerHTML=d.monthly.map(m=>{
+    const pct=Math.round((m.revenue/maxRev)*100);
+    const color=m.revenue>=d.avgRev?"rgba(0,212,200,.7)":"rgba(255,196,70,.5)";
+    return`<div class="chart-bar" style="height:${pct}%;background:${color}"><span class="cb-val">${money(m.revenue)}</span><span class="cb-label">${m.month}</span></div>`
+  }).join("");
+
+  // Flags
+  const flags=[];
+  if(d.totalNsf===0)flags.push({t:"good",text:"<b>Zero NSFs</b> across all months — clean banking history"});
+  else if(d.totalNsf<=2)flags.push({t:"warn",text:`<b>${d.totalNsf} NSFs</b> detected — minor concern, funders will ask`});
+  else flags.push({t:"bad",text:`<b>${d.totalNsf} NSFs</b> detected — significant risk factor for most funders`});
+  if(d.totalNeg===0)flags.push({t:"good",text:"<b>No negative balance days</b> — merchant manages cash well"});
+  else if(d.totalNeg<=3)flags.push({t:"warn",text:`<b>${d.totalNeg} negative days</b> — occasional cash shortfall`});
+  else flags.push({t:"bad",text:`<b>${d.totalNeg} negative days</b> — frequent cash management issues`});
+  if(d.volPct<=10)flags.push({t:"good",text:`<b>${d.volPct}% volatility</b> — very consistent revenue`});
+  else if(d.volPct<=20)flags.push({t:"warn",text:`<b>${d.volPct}% volatility</b> — moderate revenue swings`});
+  else flags.push({t:"bad",text:`<b>${d.volPct}% volatility</b> — high revenue inconsistency`});
+  if(d.trend>=5)flags.push({t:"good",text:`<b>Revenue growing ${d.trend}%</b> — positive trajectory`});
+  else if(d.trend<=-10)flags.push({t:"bad",text:`<b>Revenue declining ${d.trend}%</b> — downward trend`});
+  if(d.depFreq>=25)flags.push({t:"good",text:`<b>${d.depFreq} deposits/mo</b> — high transaction volume`});
+  else if(d.depFreq<18)flags.push({t:"warn",text:`<b>${d.depFreq} deposits/mo</b> — low deposit frequency`});
+  if(d.avgRev>=100000)flags.push({t:"good",text:`<b>${money(d.avgRev)}/mo</b> — strong revenue for most funder criteria`});
+  $("flagsBody").innerHTML=flags.map(f=>`<div class="flag-item"><div class="flag-icon ${f.t}">${f.t==="good"?"↑":f.t==="warn"?"→":"↓"}</div><div class="flag-text">${f.text}</div></div>`).join("");
+
+  // Export
+  $("btnExportLab").onclick=()=>{
+    const labData={industry:"",revenue:d.avgRev,credit:0,tib:0,positions:0,amount:d.maxApproval,factor:1.35,term:120,holdback:12};
+    localStorage.setItem("brokeros_deal_lab_v1",JSON.stringify(labData));
+    toast("Exported to Deal Lab — open Deal Lab to see it");
+  };
+  $("btnExportMarket").onclick=()=>{
+    toast("Coming soon — Marketplace integration in V2");
+  };
+}
+</script>
+</body>
+</html>
