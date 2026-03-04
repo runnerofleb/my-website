@@ -105,8 +105,8 @@ a{color:inherit;text-decoration:none}
 .tool::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .3s}
 .tool:hover{border-color:var(--bdt);transform:translateY(-6px);box-shadow:0 24px 64px rgba(0,0,0,.35)}
 .tool:hover::before{opacity:1}
-.tool .t-icon{font-size:36px;margin-bottom:16px;display:block;transition:transform .4s var(--ex)}
-.tool:hover .t-icon{transform:scale(1.15) rotate(-5deg)}
+.tool .t-icon{margin-bottom:16px;display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:12px;background:var(--elevated);border:1px solid var(--bd2);transition:all .4s var(--ex)}
+.tool:hover .t-icon{transform:scale(1.1);border-color:var(--bdt)}
 .tool .t-name{font-size:18px;font-weight:700;letter-spacing:-.3px;margin-bottom:8px}
 .tool .t-desc{font-size:12.5px;color:var(--t4);line-height:1.55;margin-bottom:18px;flex:1}
 .tool .t-link{font-size:12px;font-weight:700;color:var(--teal4);display:flex;align-items:center;gap:6px;transition:gap .3s}
@@ -224,17 +224,16 @@ a{color:inherit;text-decoration:none}
 
 <!-- NAV -->
 <nav class="nav" id="nav">
-  <div class="nav-l"><div class="nav-m"><svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="nav-wm">Private<em>Credit</em>MCA</div></div>
+  <div class="nav-l"><a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none"><div class="nav-m"><svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="nav-wm">Private<em>Credit</em>MCA</div></a></div>
   <div class="nav-pills">
     <a href="#who" class="np">Who It's For</a>
     <a href="#tools" class="np">Tools</a>
     <a href="#intel" class="np">The Signal</a>
-    <a href="education.html" class="np">Academy</a>
-    <a href="marketplace.html" class="np">Marketplace</a><a href="services.html" class="np">Services</a><a href="signal.html" class="np">The Signal</a><a href="#features" class="np">Features</a>
+    <a href="marketplace.html" class="np">Marketplace</a>
+    <a href="services.html" class="np">Services</a>
   </div>
   <div class="nav-r">
-    <a href="education.html" class="nb">🎮 Academy</a>
-    <a href="superbroker.html" class="nb nb-a">⚡ Submit a Deal</a>
+    <a href="superbroker.html" class="nb nb-a">Submit a Deal</a>
     <a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="nb nb-p">Join Community</a>
   </div>
 </nav>
@@ -285,12 +284,12 @@ a{color:inherit;text-decoration:none}
   <div class="sec-in">
     <div class="sec-hdr sr"><div class="sec-tag">Platform Tools</div><h2 class="sec-h2">Your <em>unfair advantage</em><br>in every deal</h2><p class="sec-desc">Free tools purpose-built for MCA brokers. No other community has anything like this.</p></div>
     <div class="tools">
-      <a href="deallab.html" class="tool t1 sr srd1"><span class="t-icon">📊</span><div class="t-name">Deal Lab</div><div class="t-desc">Simulate deals in real-time. Tune amount, factor, term, holdback. See payment pressure, risk flags, and deal score instantly.</div><div class="t-link">Open Deal Lab <span>→</span></div></a>
-      <a href="funders.html" class="tool t2 sr srd2"><span class="t-icon">🏦</span><div class="t-name">Funder Directory</div><div class="t-desc">16 funders with fit scoring, deep profiles, editable notebooks, compare mode. Import deals from Deal Lab for instant matching.</div><div class="t-link">Browse Funders <span>→</span></div></a>
-      <a href="education.html" class="tool t3 sr srd3"><span class="t-icon">🎮</span><div class="t-name">Broker Academy</div><div class="t-desc">40 RPG quiz questions, 10 branching objection handler scenarios, commission calculator, career roadmap. Unified XP system.</div><div class="t-link">Enter Academy <span>→</span></div></a>
-      <a href="superbroker.html" class="tool t4 sr srd4"><span class="t-icon">⚡</span><div class="t-name">Superbroker</div><div class="t-desc">Submit your deal directly. Upload bank statements, voided check, and deal details. Matched with 50+ funder relationships.</div><div class="t-link">Submit a Deal <span>→</span></div></a>
-      <a href="marketplace.html" class="tool t5 sr srd5"><span class="t-icon">🏪</span><div class="t-name">Marketplace</div><div class="t-desc">Live deal board with scoring, workflow states, deal rooms, messaging threads, and role-based actions for brokers and funders.</div><div class="t-link">Open Marketplace <span>→</span></div></a>
-      <a href="services.html" class="tool t6 sr srd6"><span class="t-icon">🏗️</span><div class="t-name">Services</div><div class="t-desc">11 services from $249/mo platform access to $25K done-for-you brokerage launches. Infrastructure, growth, and recruiting.</div><div class="t-link">View Services <span>→</span></div></a>
+      <a href="deallab.html" class="tool t1 sr srd1"><span class="t-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--teal4)" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 17l3-6 3 4 4-8"/></svg></span><div class="t-name">Deal Lab</div><div class="t-desc">Simulate deals in real-time. Tune amount, factor, term, holdback. See payment pressure, risk flags, and deal score instantly.</div><div class="t-link">Open Deal Lab <span>→</span></div></a>
+      <a href="funders.html" class="tool t2 sr srd2"><span class="t-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="10" width="18" height="11" rx="1"/><path d="M12 2L2 10h20L12 2z"/><path d="M7 14v4M12 14v4M17 14v4"/></svg></span><div class="t-name">Funder Directory</div><div class="t-desc">16 funders with fit scoring, deep profiles, editable notebooks, compare mode. Import deals from Deal Lab for instant matching.</div><div class="t-link">Browse Funders <span>→</span></div></a>
+      <a href="education.html" class="tool t3 sr srd3"><span class="t-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.8" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span><div class="t-name">Broker Academy</div><div class="t-desc">40 RPG quiz questions, 10 branching objection scenarios, commission calculator, career roadmap. Full XP system.</div><div class="t-link">Enter Academy <span>→</span></div></a>
+      <a href="superbroker.html" class="tool t4 sr srd4"><span class="t-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><div class="t-name">Superbroker</div><div class="t-desc">Submit your deal directly. Upload bank statements, voided check, and deal details. Matched with 50+ funder relationships.</div><div class="t-link">Submit a Deal <span>→</span></div></a>
+      <a href="marketplace.html" class="tool t5 sr srd5"><span class="t-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></span><div class="t-name">Marketplace</div><div class="t-desc">Live deal board with scoring, workflow states, deal rooms, messaging threads, and role-based actions for brokers and funders.</div><div class="t-link">Open Marketplace <span>→</span></div></a>
+      <a href="services.html" class="tool t6 sr srd6"><span class="t-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 00-8 0v2"/><circle cx="12" cy="15" r="2"/></svg></span><div class="t-name">Services</div><div class="t-desc">11 services from $249/mo platform access to $25K done-for-you brokerage launches. Infrastructure, growth, and recruiting.</div><div class="t-link">View Services <span>→</span></div></a>
     </div>
   </div>
 </section>
@@ -331,7 +330,7 @@ a{color:inherit;text-decoration:none}
   <div class="sec-in">
     <div class="sec-hdr sr"><div class="sec-tag">The Signal</div><h2 class="sec-h2">The noise is loud.<br><em>This is the signal.</em></h2><p class="sec-desc">Industry moves, funder shifts, and strategy breakdowns — curated so you never miss what matters.</p></div>
     <div class="intel-grid" id="intelGrid"></div>
-    <div style="text-align:center;margin-top:32px" class="sr srd2"><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" style="font-size:13px;font-weight:700;color:var(--teal4);display:inline-flex;align-items:center;gap:6px">More from The Signal on r/PrivateCreditMCA <span>→</span></a></div>
+    <div style="text-align:center;margin-top:32px" class="sr srd2"><a href="signal.html" style="font-size:13px;font-weight:700;color:var(--teal4);display:inline-flex;align-items:center;gap:6px">Read all articles on The Signal <span>→</span></a></div>
   </div>
 </section>
 
