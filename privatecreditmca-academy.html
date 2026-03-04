@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrivateCreditMCA — MCA Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050A12;--bg2:#0A1020;--bg3:#0F162B;--bgc:#141D36;
+  --srf:#182040;--srf2:#1E2850;
+  --bdr:rgba(255,255,255,.06);--bdr2:rgba(255,255,255,.09);--bdr3:rgba(255,255,255,.14);
+  --tx:#EFF1F5;--tx2:#8892A8;--tx3:#4F5B73;
+  --ac:#635BFF;--acd:#5046E4;--acl:rgba(99,91,255,.1);
+  --em:#00D4AA;--eml:rgba(0,212,170,.1);
+  --gn:#34D399;--gnl:rgba(52,211,153,.1);
+  --rd:#F87171;--rdl:rgba(248,113,113,.08);
+  --am:#FBBF24;--aml:rgba(251,191,36,.08);
+  --cy:#22D3EE;--cyl:rgba(34,211,238,.08);
+  --r:12px;--rs:8px;
+  --sh:0 2px 8px rgba(0,0,0,.4),0 12px 40px rgba(0,0,0,.25);
+  --shl:0 8px 30px rgba(0,0,0,.5),0 24px 80px rgba(0,0,0,.35);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden;font-feature-settings:'cv02','cv03','cv04','cv11'}
+.mono{font-family:'IBM Plex Mono',monospace;font-feature-settings:normal}
+a{text-decoration:none;color:inherit}
+.c{max-width:1200px;margin:0 auto;padding:0 40px}
+
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.018;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(5,10,18,.7);backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid var(--bdr)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:-.3px}
+.logo .mk{width:26px;height:26px;border-radius:7px;background:var(--ac);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 0 16px rgba(99,91,255,.3)}
+.logo .mk::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.25),transparent)}
+.logo .mk svg{width:13px;height:13px}
+.logo .dim{color:var(--tx3);font-weight:500}
+.nv{display:flex;gap:32px}.nv a{color:var(--tx3);font-size:13px;font-weight:500;transition:color .25s}.nv a:hover,.nv a.on{color:var(--tx)}
+.ncta{background:var(--ac);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;transition:all .3s;display:inline-flex;align-items:center;gap:6px;box-shadow:0 0 20px rgba(99,91,255,.2)}
+.ncta:hover{background:var(--acd);box-shadow:0 0 32px rgba(99,91,255,.35)}
+.ncta svg{width:12px;height:12px}
+
+/* HERO */
+.hero{padding:120px 0 60px;text-align:center;position:relative;overflow:hidden}
+.hero .mesh-orb{position:absolute;border-radius:50%;filter:blur(120px);mix-blend-mode:screen;animation:float 20s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(20px,-15px) scale(1.03)}66%{transform:translate(-15px,10px) scale(.97)}}
+.hero .orb-a{width:500px;height:500px;background:radial-gradient(circle,rgba(99,91,255,.12),transparent 70%);top:-20%;left:30%}
+.hero .orb-b{width:400px;height:400px;background:radial-gradient(circle,rgba(0,212,170,.06),transparent 70%);bottom:-10%;right:20%;animation-delay:-7s}
+.hero h1{font-size:clamp(36px,4.5vw,56px);font-weight:800;letter-spacing:-2px;line-height:1.06;margin-bottom:12px;position:relative;z-index:1}
+.hero h1 .em{background:linear-gradient(135deg,var(--ac),var(--em));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:16px;color:var(--tx2);max-width:440px;margin:0 auto;position:relative;z-index:1}
+.hero .pill{display:inline-flex;align-items:center;gap:6px;background:var(--acl);border:1px solid rgba(99,91,255,.15);padding:5px 14px;border-radius:100px;font-size:11px;font-weight:600;color:var(--ac);margin-bottom:24px;position:relative;z-index:1}
+
+/* PROGRESS BAR */
+.prog-sec{padding:0 0 48px;position:relative;z-index:1}
+.prog-wrap{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:24px 28px;display:flex;align-items:center;gap:20px}
+.prog-label{font-size:12px;font-weight:600;color:var(--tx3);white-space:nowrap;letter-spacing:.3px}
+.prog-bar{flex:1;height:6px;background:var(--bdr);border-radius:3px;position:relative;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--ac),var(--em));width:0%;transition:width 1.5s ease}
+.prog-pct{font-size:14px;font-weight:700;color:var(--ac);min-width:40px;text-align:right}
+
+/* TRACKS */
+.tracks{padding:0 0 60px}
+.tracks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:40px}
+.track{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;cursor:pointer;transition:all .4s;position:relative;overflow:hidden}
+.track:hover{border-color:var(--bdr2);transform:translateY(-3px);box-shadow:var(--sh)}
+.track::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;opacity:0;transition:opacity .3s}
+.track:hover::before{opacity:.5}
+.track.t1::before{background:linear-gradient(90deg,transparent,var(--ac),transparent)}
+.track.t2::before{background:linear-gradient(90deg,transparent,var(--em),transparent)}
+.track.t3::before{background:linear-gradient(90deg,transparent,var(--cy),transparent)}
+.track.on{border-color:rgba(99,91,255,.25)}
+.track.on::before{opacity:.5}
+.track .tic{font-size:24px;margin-bottom:12px}
+.track h3{font-size:16px;font-weight:700;letter-spacing:-.2px;margin-bottom:4px}
+.track .td{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:12px}
+.track .tmeta{display:flex;gap:12px;font-size:11px;color:var(--tx3)}
+.track .tmeta span{display:flex;align-items:center;gap:4px}
+
+/* MODULES */
+.modules{padding:0 0 80px}
+.mod-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.mod-header h2{font-size:20px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:8px}
+.mod-count{font-size:12px;color:var(--tx3)}
+
+.mod-list{display:flex;flex-direction:column;gap:8px}
+.mod{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;transition:all .3s}
+.mod:hover{border-color:var(--bdr2)}
+.mod-top{display:flex;align-items:center;gap:16px;padding:18px 22px;cursor:pointer}
+.mod-num{width:32px;height:32px;border-radius:8px;background:var(--acl);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--ac);flex-shrink:0}
+.mod.done .mod-num{background:var(--gnl);color:var(--gn)}
+.mod-info{flex:1}
+.mod-info h4{font-size:14px;font-weight:700;letter-spacing:-.2px}
+.mod-info .msub{font-size:11px;color:var(--tx3);margin-top:2px}
+.mod-meta{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.mod-time{font-size:11px;color:var(--tx3);display:flex;align-items:center;gap:4px}
+.mod-badge{padding:3px 10px;border-radius:5px;font-size:9px;font-weight:600;letter-spacing:.5px}
+.mod-badge.vid{background:var(--acl);color:var(--ac)}
+.mod-badge.read{background:var(--eml);color:var(--em)}
+.mod-badge.quiz{background:var(--aml);color:var(--am)}
+.mod-badge.tmpl{background:var(--cyl);color:var(--cy)}
+.mod-toggle{width:28px;height:28px;border-radius:6px;background:var(--bg);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;color:var(--tx3);font-size:14px;cursor:pointer;transition:all .2s;flex-shrink:0}
+.mod-toggle:hover{border-color:var(--bdr2);color:var(--tx)}
+.mod-body{display:none;padding:0 22px 20px 70px;font-size:13px;color:var(--tx2);line-height:1.7}
+.mod.open .mod-body{display:block}
+.mod.open .mod-toggle{transform:rotate(180deg)}
+.mod-body .key{margin-top:10px}
+.mod-body .key span{display:inline-flex;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:600;margin:2px;background:var(--bg3);border:1px solid var(--bdr);color:var(--tx2)}
+.mod-body .start-btn{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:8px 18px;border-radius:8px;background:var(--ac);color:#fff;font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 0 12px rgba(99,91,255,.15)}
+.mod-body .start-btn:hover{box-shadow:0 0 24px rgba(99,91,255,.3)}
+
+/* CTA */
+.cta-sec{text-align:center;padding:80px 0;border-top:1px solid var(--bdr);position:relative;overflow:hidden}
+.cta-sec h2{font-size:clamp(24px,3vw,36px);font-weight:800;letter-spacing:-1.5px;margin-bottom:10px}
+.cta-sec p{font-size:15px;color:var(--tx2);margin-bottom:32px;max-width:400px;margin-left:auto;margin-right:auto}
+.cta-sec .btn-p{background:var(--ac);color:#fff;padding:14px 30px;border-radius:10px;font-weight:600;font-size:15px;border:none;cursor:pointer;font-family:inherit;transition:all .3s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 0 32px rgba(99,91,255,.2)}
+.cta-sec .btn-p:hover{box-shadow:0 0 48px rgba(99,91,255,.3);transform:translateY(-2px)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--bdr);padding:32px 40px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--tx3)}
+.fl{display:flex;gap:24px}.fl a{color:var(--tx3);transition:color .25s}.fl a:hover{color:var(--tx)}
+
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.rv{animation:fu .6s ease both}
+
+@media(max-width:1000px){.nv{display:none}.tracks-grid{grid-template-columns:1fr}footer{flex-direction:column;gap:12px;text-align:center}}
+@media(max-width:600px){.prog-wrap{flex-direction:column;align-items:flex-start;gap:10px}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="privatecreditmca-landing.html" class="logo"><div class="mk"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="9" width="3" height="5" rx="1" fill="white"/><rect x="6.5" y="6" width="3" height="8" rx="1" fill="white"/><rect x="11" y="3" width="3" height="11" rx="1" fill="white"/></svg></div>PrivateCredit<span class="dim">MCA</span></a>
+  <div class="nv"><a href="privatecreditmca-landing.html">Home</a><a href="privatecreditmca-marketplace.html">Marketplace</a><a href="privatecreditmca-funders.html">Funders</a><a href="privatecreditmca-heatmap.html">Heat Map</a><a href="#" class="on">Academy</a></div>
+  <a href="privatecreditmca-submit.html" class="ncta"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>Go Live</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orb-a mesh-orb"></div><div class="orb-b mesh-orb"></div>
+  <div class="c">
+    <div class="pill rv">🎓 Free for all brokers</div>
+    <h1 class="rv" style="animation-delay:.06s">MCA <span class="em">Academy</span></h1>
+    <p class="rv" style="animation-delay:.12s">Everything you need to know to fund your first 50 deals.</p>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<section class="prog-sec"><div class="c">
+  <div class="prog-wrap rv" style="animation-delay:.18s">
+    <span class="prog-label">Your Progress</span>
+    <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+    <span class="prog-pct mono" id="progPct">0%</span>
+  </div>
+</div></section>
+
+<!-- TRACKS -->
+<section class="tracks"><div class="c">
+  <div class="tracks-grid rv" style="animation-delay:.24s">
+    <div class="track t1 on" onclick="showTrack(0)">
+      <div class="tic">📋</div>
+      <h3>Underwriting Fundamentals</h3>
+      <div class="td">How to read bank statements, calculate risk, and know if a deal will fund before you submit it.</div>
+      <div class="tmeta"><span>📖 6 modules</span><span>⏱ 45 min</span><span style="color:var(--ac)">Start here</span></div>
+    </div>
+    <div class="track t2" onclick="showTrack(1)">
+      <div class="tic">💰</div>
+      <h3>Sales & Closing</h3>
+      <div class="td">Scripts, objection handling, and the psychology behind getting a merchant to sign. Real calls, not theory.</div>
+      <div class="tmeta"><span>📖 5 modules</span><span>⏱ 35 min</span></div>
+    </div>
+    <div class="track t3" onclick="showTrack(2)">
+      <div class="tic">🧩</div>
+      <h3>Deal Structuring</h3>
+      <div class="td">Stacking, renewals, split funding, and how to place deals that other brokers can't figure out.</div>
+      <div class="tmeta"><span>📖 5 modules</span><span>⏱ 40 min</span></div>
+    </div>
+  </div>
+
+  <!-- MODULE LISTS -->
+  <div id="trackContent"></div>
+
+</div></section>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="c rv">
+    <h2>Ready to place your first deal?</h2>
+    <p>Apply what you've learned. The marketplace is free.</p>
+    <a href="privatecreditmca-submit.html"><button class="btn-p">Go Live →</button></a>
+  </div>
+</section>
+
+<footer><div class="fl"><a href="privatecreditmca-marketplace.html">Marketplace</a><a href="privatecreditmca-funders.html">Funder Directory</a><a href="privatecreditmca-pipeline.html">Pipeline</a><a href="privatecreditmca-bankiq.html">AI BankIQ</a><a href="privatecreditmca-heatmap.html">Heat Map</a><a href="privatecreditmca-account.html">Account</a></div><p>© 2026 PrivateCreditMCA</p></footer>
+
+<script>
+const tracks = [
+  {
+    title: "Underwriting Fundamentals",
+    icon: "📋",
+    modules: [
+      {n:1, title:"What Is an MCA?", sub:"The basics — how merchant cash advances work and why businesses use them", time:"6 min", type:"read", typeLbl:"Read",
+       body:"Before you can sell it, you need to understand what you're selling. An MCA isn't a loan — it's a purchase of future receivables. This matters for how you talk to merchants, how funders underwrite, and how regulators view the product.",
+       keys:["Purchase agreement","Factor rate vs APR","Daily vs weekly remittance","Holdback percentage"]},
+      {n:2, title:"Reading Bank Statements", sub:"The single most important skill. This is what funders actually look at.", time:"10 min", type:"vid", typeLbl:"Video",
+       body:"Every deal starts with bank statements. You need to see what the funder sees: average daily balance, deposit consistency, NSF frequency, existing MCA payments, and negative balance days. This module walks through 3 real bank statements line by line.",
+       keys:["Average daily balance","Deposit count","NSF identification","Existing MCA detection","Revenue calculation"]},
+      {n:3, title:"Calculating Monthly Revenue", sub:"How to add up deposits correctly — and the mistakes that kill deals", time:"6 min", type:"read", typeLbl:"Read",
+       body:"Not every deposit is revenue. You need to exclude transfers, loan proceeds, and owner deposits. This module shows you exactly which deposits count, how to handle cash-heavy businesses, and the quick math funders use to verify your numbers.",
+       keys:["Gross vs net deposits","Excluding non-revenue","Cash business adjustment","Cross-referencing months"]},
+      {n:4, title:"Risk Scoring — What Makes an A vs C Deal", sub:"The 6 factors that determine approval and pricing", time:"8 min", type:"vid", typeLbl:"Video",
+       body:"Funders score deals on time in business, monthly revenue, industry, existing positions, NSF history, and balance trends. An A deal gets 5 offers at 1.25. A C deal gets 1 offer at 1.48. Knowing the difference before you submit saves everyone time.",
+       keys:["Time in business","Revenue threshold","Position count","NSF tolerance","Industry risk tiers","Balance trend analysis"]},
+      {n:5, title:"The Deal Packet", sub:"What to include, what to leave out, and why formatting matters", time:"7 min", type:"tmpl", typeLbl:"Template",
+       body:"A clean deal packet gets reviewed faster. A messy one sits in a queue. This module covers the universal packet format: 4 months bank statements, signed application, owner ID, and a deal summary that actually tells the funder what they need to know.",
+       keys:["4-month minimum","Application fields that matter","Deal summary template","Common rejection reasons"]},
+      {n:6, title:"Quiz: Underwriting Basics", sub:"Test what you've learned — 12 questions", time:"8 min", type:"quiz", typeLbl:"Quiz",
+       body:"Scenario-based quiz covering bank statement analysis, revenue calculation, risk grading, and deal packet assembly. Pass with 80% to unlock the next track.",
+       keys:["12 questions","Pass: 80%","Retake: unlimited"]}
+    ]
+  },
+  {
+    title: "Sales & Closing",
+    icon: "💰",
+    modules: [
+      {n:1, title:"The First Call", sub:"What to say in the first 60 seconds to keep them on the line", time:"8 min", type:"vid", typeLbl:"Video",
+       body:"Most brokers lose the deal in the first minute. They pitch too early, talk too much about rates, or sound like every other broker who called that day. This module breaks down the opening that gets merchants to actually talk to you.",
+       keys:["The hook","Qualifying questions","Tone and pacing","When to stop talking"]},
+      {n:2, title:"Objection Handling", sub:"The 8 objections you'll hear on every call and exactly how to respond", time:"7 min", type:"read", typeLbl:"Read",
+       body:"\"I already have a broker.\" \"The rate is too high.\" \"I need to think about it.\" \"Just email me the info.\" Every one of these has a specific response that keeps the deal alive. This module gives you the language.",
+       keys:["Already have a broker","Rate too high","Need to think about it","Send me info","Bad experience before","Not interested","Too much debt","Spouse needs to approve"]},
+      {n:3, title:"Getting the Application Signed", sub:"The transition from conversation to commitment", time:"6 min", type:"vid", typeLbl:"Video",
+       body:"The gap between interest and a signed application is where most new brokers lose deals. This module covers timing, the ask, e-sign tools, and how to follow up without being annoying.",
+       keys:["The soft close","E-sign walkthrough","Follow-up cadence","When to let go"]},
+      {n:4, title:"Managing Merchant Expectations", sub:"What to promise, what not to promise, and how to keep deals alive", time:"6 min", type:"read", typeLbl:"Read",
+       body:"Overpromising kills renewals. Undercommunicating kills the first deal. This module covers how to set realistic expectations on timeline, amount, and terms without losing the merchant's confidence.",
+       keys:["Timeline expectations","Amount vs approval range","Daily payment explanation","Renewal positioning"]},
+      {n:5, title:"Real Call Breakdowns", sub:"3 recorded sales calls annotated with what worked and what didn't", time:"8 min", type:"vid", typeLbl:"Video",
+       body:"Three real broker calls — one that closed, one that didn't, and one that almost did. Each is broken down moment by moment with notes on what the broker did right, where they lost control, and what they should have said instead.",
+       keys:["Successful close","Lost deal analysis","Recovery techniques"]}
+    ]
+  },
+  {
+    title: "Deal Structuring",
+    icon: "🧩",
+    modules: [
+      {n:1, title:"First Position vs Stacking", sub:"When stacking works, when it kills a deal, and how funders view it", time:"8 min", type:"vid", typeLbl:"Video",
+       body:"Stacking isn't always bad — but it changes everything about how a deal gets priced. This module covers first position vs second position, which funders allow stacking, how to calculate remaining capacity, and when to advise a merchant against taking more.",
+       keys:["Position mechanics","Funder stacking policies","Capacity calculation","When to say no"]},
+      {n:2, title:"Renewals and Refinancing", sub:"The economics of bringing a merchant back for round two", time:"7 min", type:"read", typeLbl:"Read",
+       body:"Renewals are where brokers make real money. This module covers when a merchant qualifies, how to time the outreach, the math on payoff vs new advance, and how to position it so the merchant sees value.",
+       keys:["50% payoff rule","Timing the renewal call","Payoff math","Merchant value framing"]},
+      {n:3, title:"Split Funding", sub:"How to structure a deal across two funders when one isn't enough", time:"6 min", type:"read", typeLbl:"Read",
+       body:"When a merchant needs $150K but the best funder only approves $90K, you split it. This module covers how to find a compatible second funder, sync the timing, and make sure the merchant's cash flow can handle both payments.",
+       keys:["When to split","Finding compatible funders","Payment burden math","Sync logistics"]},
+      {n:4, title:"Placing the Tough File", sub:"Low revenue, high NSFs, short time in business — how to still get it funded", time:"8 min", type:"vid", typeLbl:"Video",
+       body:"Not every deal is clean. This module covers which funders specialize in subprime, how to write a deal narrative that addresses red flags upfront, and the difference between a deal that's hard and a deal that shouldn't be done.",
+       keys:["Subprime funders","The deal narrative","Addressing red flags","Ethical boundaries"]},
+      {n:5, title:"Quiz: Structuring Scenarios", sub:"5 real deal scenarios — pick the right structure", time:"10 min", type:"quiz", typeLbl:"Quiz",
+       body:"Each scenario gives you a merchant profile, bank statements summary, and existing positions. You decide: first position, stack, split, renewal, or decline. Detailed explanations for each answer.",
+       keys:["5 scenarios","Multiple choice","Detailed explanations"]}
+    ]
+  }
+];
+
+let currentTrack = 0;
+let completed = new Set();
+
+function showTrack(idx) {
+  currentTrack = idx;
+  document.querySelectorAll('.track').forEach((t,i) => {
+    t.classList.toggle('on', i === idx);
+  });
+  renderModules();
+}
+
+function renderModules() {
+  const t = tracks[currentTrack];
+  const el = document.getElementById('trackContent');
+  el.innerHTML = `
+    <div class="mod-header rv" style="animation-delay:0s">
+      <h2>${t.icon} ${t.title}</h2>
+      <div class="mod-count">${t.modules.length} modules</div>
+    </div>
+    <div class="mod-list">
+      ${t.modules.map((m, i) => {
+        const isDone = completed.has(`${currentTrack}-${i}`);
+        const globalIdx = `${currentTrack}-${i}`;
+        return `<div class="mod ${isDone ? 'done' : ''} rv" style="animation-delay:${(i+1)*0.04}s" id="mod-${globalIdx}">
+          <div class="mod-top" onclick="toggleMod('${globalIdx}')">
+            <div class="mod-num">${isDone ? '✓' : m.n}</div>
+            <div class="mod-info"><h4>${m.title}</h4><div class="msub">${m.sub}</div></div>
+            <div class="mod-meta">
+              <span class="mod-badge ${m.type}">${m.typeLbl}</span>
+              <span class="mod-time">⏱ ${m.time}</span>
+              <div class="mod-toggle">▾</div>
+            </div>
+          </div>
+          <div class="mod-body">
+            <p>${m.body}</p>
+            <div class="key">${m.keys.map(k => `<span>${k}</span>`).join('')}</div>
+            <button class="start-btn" onclick="completeMod('${globalIdx}',event)">${isDone ? 'Completed ✓' : (m.type === 'quiz' ? 'Start Quiz →' : m.type === 'vid' ? 'Watch →' : m.type === 'tmpl' ? 'Get Template →' : 'Read →')}</button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  
+  // Re-observe for animations
+  document.querySelectorAll('.rv').forEach(e => {
+    obs.observe(e);
+  });
+}
+
+function toggleMod(id) {
+  const el = document.getElementById(`mod-${id}`);
+  el.classList.toggle('open');
+}
+
+function completeMod(id, e) {
+  e.stopPropagation();
+  completed.add(id);
+  const btn = e.target;
+  btn.textContent = 'Completed ✓';
+  btn.style.background = 'var(--gn)';
+  btn.style.boxShadow = '0 0 12px rgba(52,211,153,.3)';
+  
+  const modEl = document.getElementById(`mod-${id}`);
+  modEl.classList.add('done');
+  modEl.querySelector('.mod-num').textContent = '✓';
+  
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = tracks.reduce((sum, t) => sum + t.modules.length, 0);
+  const pct = Math.round((completed.size / total) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progPct').textContent = pct + '%';
+}
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('vis');
+  });
+}, {threshold: .05});
+document.querySelectorAll('.rv').forEach(e => obs.observe(e));
+
+// Init
+showTrack(0);
+setTimeout(() => {
+  document.getElementById('progFill').style.width = '0%';
+}, 500);
+</script>
+</body></html>
