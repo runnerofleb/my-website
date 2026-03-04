@@ -3,80 +3,143 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>MCA Broker Simulator • Phase 1</title>
+  <title>MCA Arcade Hustler</title>
   <style>
     html, body { margin: 0; height: 100%; overflow: hidden; background: #040714; font-family: system-ui, -apple-system, sans-serif; color: #eaf1ff; user-select: none; }
     
+    /* UI Styling */
     #ui {
       position: fixed; top: 16px; left: 16px; z-index: 10;
-      background: rgba(10, 15, 30, 0.7); border: 1px solid rgba(50, 80, 200, 0.4);
+      background: rgba(10, 15, 30, 0.85); border: 2px solid rgba(50, 80, 200, 0.6);
       border-radius: 12px; padding: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-      width: min(320px, calc(100vw - 32px)); backdrop-filter: blur(12px);
+      width: 280px; backdrop-filter: blur(12px);
     }
     
-    .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .k { opacity: 0.7; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;}
-    .v { font-weight: 900; font-size: 15px; text-align: right; }
-    .money { color: #22c55e; font-size: 20px; }
+    .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 800;}
+    .k { opacity: 0.8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;}
+    .v { font-size: 16px; text-align: right; }
+    .money { color: #22c55e; font-size: 24px; text-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
     
-    .tip { opacity: 0.7; font-weight: 600; font-size: 12px; line-height: 1.5; margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;}
+    #rent-bar-container { width: 100%; height: 8px; background: #333; border-radius: 4px; overflow: hidden; margin-top: 10px; }
+    #rent-bar { width: 100%; height: 100%; background: #ef4444; transition: width 0.1s linear; }
     
+    /* Upgrade Shop */
+    #shop {
+      position: fixed; top: 16px; right: 16px; z-index: 10;
+      background: rgba(10, 15, 30, 0.85); border: 2px solid rgba(245, 158, 11, 0.6);
+      border-radius: 12px; padding: 16px; width: 220px;
+    }
+    .shop-title { color: #f59e0b; font-weight: 900; margin-bottom: 10px; text-align: center; text-transform: uppercase;}
+    .shop-btn {
+      width: 100%; background: #1c2b66; color: white; border: 1px solid #4466ff;
+      padding: 8px; margin-bottom: 8px; border-radius: 6px; font-weight: bold; cursor: pointer;
+      transition: 0.2s;
+    }
+    .shop-btn:hover { background: #4466ff; }
+    .shop-btn:disabled { background: #333; border-color: #555; color: #777; cursor: not-allowed; }
+
     #interact {
-      position: fixed; left: 50%; transform: translateX(-50%); bottom: 80px; z-index: 10;
-      background: #eaf1ff; color: #040714; padding: 10px 20px; border-radius: 8px;
-      font-weight: 900; font-size: 16px; display: none; box-shadow: 0 0 20px rgba(234, 241, 255, 0.5);
-      cursor: pointer;
+      position: fixed; left: 50%; transform: translateX(-50%); bottom: 60px; z-index: 10;
+      background: #eaf1ff; color: #040714; padding: 12px 24px; border-radius: 8px;
+      font-weight: 900; font-size: 18px; display: none; box-shadow: 0 0 20px rgba(234, 241, 255, 0.8);
+      cursor: pointer; text-transform: uppercase; transition: transform 0.1s;
     }
-    
-    #toast {
-      position: fixed; left: 50%; transform: translateX(-50%); top: 20px; z-index: 10;
-      background: rgba(20, 30, 60, 0.95); border: 1px solid #38bdf8;
-      padding: 12px 24px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      font-weight: 800; opacity: 0; transition: opacity 0.3s, top 0.3s; pointer-events: none;
+    #interact:active { transform: translateX(-50%) scale(0.95); }
+
+    /* Floating Text Container */
+    #floating-container { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 20; }
+    .float-text {
+      position: absolute; font-weight: 900; font-size: 24px; text-shadow: 0 2px 4px rgba(0,0,0,1);
+      animation: floatUp 1.2s ease-out forwards;
     }
-    #toast.show { opacity: 1; top: 40px; }
-    
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-60px) scale(1.2); }
+    }
+
+    /* Game Over Screen */
+    #game-over {
+      position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9);
+      display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 100;
+    }
+    #game-over h1 { color: #ef4444; font-size: 60px; margin: 0; text-transform: uppercase; }
+    #game-over button { margin-top: 20px; padding: 10px 30px; font-size: 20px; font-weight: bold; cursor: pointer; }
+
     canvas { display: block; }
   </style>
 </head>
 <body>
   <div id="ui">
-    <div class="row"><div class="k">Bank</div><div class="v money" id="cash">$500</div></div>
-    <div class="row"><div class="k">Current Task</div><div class="v" id="mission" style="color:#38bdf8">Find Leads</div></div>
-    <div class="tip">
-      <b>LEFT CLICK</b> on the ground to move.<br>
-      <b>CLICK</b> on glowing markers to interact.
-    </div>
+    <div class="row"><div class="k">Bank</div><div class="v money" id="cash">$1,000</div></div>
+    <div class="row"><div class="k">Task</div><div class="v" id="mission" style="color:#38bdf8">Buy Leads</div></div>
+    <div class="row" style="margin-top: 15px;"><div class="k" style="color:#ef4444">Rent Due ($500)</div></div>
+    <div id="rent-bar-container"><div id="rent-bar"></div></div>
+  </div>
+
+  <div id="shop">
+    <div class="shop-title">Hustle Upgrades</div>
+    <button class="shop-btn" id="btn-shoes">Energy Drink ($300)<br><small>Move 50% Faster</small></button>
+    <button class="shop-btn" id="btn-rolex">Fake Rolex ($800)<br><small>+20% Close Rate</small></button>
   </div>
   
-  <div id="interact">CLICK TO BUY LEADS</div>
-  <div id="toast"></div>
+  <div id="interact">CLICK TO ACTION</div>
+  <div id="floating-container"></div>
+
+  <div id="game-over">
+    <h1>Bankrupt!</h1>
+    <p style="font-size: 20px;">You couldn't pay rent.</p>
+    <button onclick="location.reload()">Try Again</button>
+  </div>
 
   <script type="module">
     import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 
-    // ---------- GAME STATE & UI ----------
-    let cash = 500;
+    // ---------- GAME STATE & STATS ----------
+    let cash = 1000;
     let missionState = 0; 
     let currentMarker = null;
+    let gameOver = false;
+    
+    // Stats
+    let moveSpeed = 12.0;
+    let closeRate = 0.60; // 60% chance to succeed a pitch
+    
+    // Rent Timer
+    const RENT_AMOUNT = 500;
+    const RENT_TIME_MAX = 45; // seconds
+    let rentTimer = RENT_TIME_MAX;
 
+    // UI Elements
     const uiCash = document.getElementById("cash");
     const uiMission = document.getElementById("mission");
     const uiInteract = document.getElementById("interact");
-    const toastEl = document.getElementById("toast");
+    const rentBar = document.getElementById("rent-bar");
+    const floatContainer = document.getElementById("floating-container");
 
     const states = [
-      { id: "leads", name: "Buy Leads ($100)", color: 0x38bdf8 },
-      { id: "merchant", name: "Pitch Merchant", color: 0x22c55e },
-      { id: "funder", name: "Secure Funding", color: 0xa78bfa },
-      { id: "bank", name: "Close Deal", color: 0xf59e0b }
+      { id: "leads", name: "Buy Lead ($100)", color: 0x38bdf8, action: "BUY LEAD" },
+      { id: "merchant", name: "Pitch Merchant", color: 0x22c55e, action: "PITCH DEAL" },
+      { id: "funder", name: "Secure Funding", color: 0xa78bfa, action: "NEGOTIATE" },
+      { id: "bank", name: "Wire Funds", color: 0xf59e0b, action: "CLOSE DEAL" }
     ];
 
-    function showToast(msg, color = "#fff") {
-      toastEl.textContent = msg;
-      toastEl.style.color = color;
-      toastEl.classList.add("show");
-      setTimeout(() => toastEl.classList.remove("show"), 2000);
+    // --- Upgrades ---
+    document.getElementById("btn-shoes").onclick = function() {
+      if (cash >= 300) { cash -= 300; moveSpeed = 20.0; this.disabled = true; this.innerText = "SOLD OUT"; spawnFloatingText("- $300", innerWidth/2, 100, "#ef4444"); updateHUD(); }
+    };
+    document.getElementById("btn-rolex").onclick = function() {
+      if (cash >= 800) { cash -= 800; closeRate = 0.85; this.disabled = true; this.innerText = "SOLD OUT"; spawnFloatingText("- $800", innerWidth/2, 100, "#ef4444"); updateHUD(); }
+    };
+
+    function spawnFloatingText(text, x, y, color) {
+      const el = document.createElement("div");
+      el.className = "float-text";
+      el.innerText = text;
+      el.style.left = (x - 20) + "px";
+      el.style.top = y + "px";
+      el.style.color = color;
+      floatContainer.appendChild(el);
+      setTimeout(() => el.remove(), 1200);
     }
 
     function updateHUD() {
@@ -87,67 +150,38 @@
 
     // ---------- SCENE SETUP ----------
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x040714, 0.015);
+    scene.fog = new THREE.FogExp2(0x040714, 0.012);
 
     const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 500);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
     document.body.appendChild(renderer.domElement);
 
-    const hemi = new THREE.HemisphereLight(0x4466ff, 0x040714, 0.6);
-    scene.add(hemi);
+    const hemi = new THREE.HemisphereLight(0x4466ff, 0x040714, 0.8); scene.add(hemi);
+    const sun = new THREE.DirectionalLight(0xffaa55, 1.0);
+    sun.position.set(-20, 50, 20); scene.add(sun);
 
-    const moon = new THREE.DirectionalLight(0x88aaff, 1.2);
-    moon.position.set(-20, 50, -20);
-    moon.castShadow = true;
-    moon.shadow.camera.left = -60; moon.shadow.camera.right = 60;
-    moon.shadow.camera.top = 60; moon.shadow.camera.bottom = -60;
-    scene.add(moon);
-
-    // Ground (Must be interactive for Raycasting)
     const ground = new THREE.Mesh(
       new THREE.PlaneGeometry(800, 800),
-      new THREE.MeshStandardMaterial({ color: 0x0a0f24, roughness: 0.9 })
+      new THREE.MeshStandardMaterial({ color: 0x0a0f24, roughness: 1.0 })
     );
-    ground.rotation.x = -Math.PI/2;
-    ground.receiveShadow = true;
-    scene.add(ground);
+    ground.rotation.x = -Math.PI/2; scene.add(ground);
 
-    const grid = new THREE.GridHelper(400, 80, 0x1c2b66, 0x0a102a);
-    grid.position.y = 0.05;
-    scene.add(grid);
+    const grid = new THREE.GridHelper(200, 40, 0x1c2b66, 0x0a102a);
+    grid.position.y = 0.05; scene.add(grid);
 
-    // Click Visualizer (The "Sims" move-here marker)
     const clickMarker = new THREE.Mesh(
-      new THREE.RingGeometry(0.5, 0.8, 16),
-      new THREE.MeshBasicMaterial({ color: 0x22c55e, transparent: true, opacity: 0.8, side: THREE.DoubleSide })
+      new THREE.RingGeometry(0.8, 1.2, 16),
+      new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 })
     );
-    clickMarker.rotation.x = -Math.PI/2;
-    clickMarker.visible = false;
-    scene.add(clickMarker);
+    clickMarker.rotation.x = -Math.PI/2; clickMarker.visible = false; scene.add(clickMarker);
 
     // ---------- PLAYER ----------
     const human = new THREE.Group();
-    const matSuit = new THREE.MeshStandardMaterial({ color: 0x111111 }); 
-    const matSkin = new THREE.MeshStandardMaterial({ color: 0xffd1b3 });
-
-    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.5, 0.9, 4, 12), matSuit);
-    torso.position.y = 1.6; torso.castShadow = true; human.add(torso);
-
-    const head = new THREE.Mesh(new THREE.SphereGeometry(0.35, 16, 16), matSkin);
-    head.position.y = 2.5; head.castShadow = true; human.add(head);
-
-    const limbGeo = new THREE.CapsuleGeometry(0.18, 0.6, 4, 8);
-    const legL = new THREE.Mesh(limbGeo, matSuit); legL.position.set(-0.25, 0.6, 0); legL.castShadow = true;
-    const legR = new THREE.Mesh(limbGeo, matSuit); legR.position.set(0.25, 0.6, 0); legR.castShadow = true;
-    human.add(legL, legR);
-
-    const armL = new THREE.Mesh(limbGeo, matSuit); armL.position.set(-0.75, 1.6, 0); armL.castShadow = true;
-    const armR = new THREE.Mesh(limbGeo, matSuit); armR.position.set(0.75, 1.6, 0); armR.castShadow = true;
-    human.add(armL, armR);
-
+    const matSuit = new THREE.MeshStandardMaterial({ color: 0x222222 }); 
+    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.6, 1.0, 4, 12), matSuit);
+    torso.position.y = 1.6; human.add(torso);
     scene.add(human);
 
     // ---------- LOCATIONS ----------
@@ -155,144 +189,143 @@
     function createMarker(stateObj, x, z) {
       const g = new THREE.Group();
       const pad = new THREE.Mesh(
-        new THREE.CylinderGeometry(2, 2, 0.2, 32),
-        new THREE.MeshStandardMaterial({ color: stateObj.color, emissive: stateObj.color, emissiveIntensity: 0.4 })
+        new THREE.CylinderGeometry(2.5, 2.5, 0.2, 16),
+        new THREE.MeshBasicMaterial({ color: stateObj.color, transparent: true, opacity: 0.5 })
       );
-      pad.position.y = 0.1;
       g.add(pad);
-      
-      const light = new THREE.PointLight(stateObj.color, 2, 15);
-      light.position.y = 2;
-      g.add(light);
-
       g.position.set(x, 0, z);
       g.userData = { stateIndex: states.indexOf(stateObj) };
       scene.add(g);
       markers.push(g);
     }
 
-    createMarker(states[0], -25, 25);
-    createMarker(states[1], 25, 25);
-    createMarker(states[2], 25, -25);
-    createMarker(states[3], -25, -25);
+    createMarker(states[0], -20, 20); // Leads
+    createMarker(states[1], 20, 20);  // Merchant
+    createMarker(states[2], 20, -20); // Funder
+    createMarker(states[3], -20, -20); // Bank
 
-    // ---------- RAYCASTING & MOVEMENT (THE SIMS ENGINE) ----------
+    // ---------- MOVEMENT & INTERACTION ----------
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     let targetPosition = new THREE.Vector3();
     let isMoving = false;
 
-    window.addEventListener('pointerdown', (event) => {
-      // Don't move if clicking the UI button
-      if (event.target.id === "interact") return;
-
-      // Calculate mouse position in normalized device coordinates (-1 to +1)
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
+    window.addEventListener('pointerdown', (e) => {
+      if (gameOver || e.target.closest('#ui') || e.target.closest('#shop') || e.target.id === 'interact') return;
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(mouse, camera);
-
-      // Check if we clicked the ground
       const intersects = raycaster.intersectObject(ground);
       if (intersects.length > 0) {
-        targetPosition.copy(intersects[0].point);
-        targetPosition.y = 0; // Keep target flat on the ground
+        targetPosition.copy(intersects[0].point); targetPosition.y = 0;
         isMoving = true;
-        
-        // Move the visual marker to the click spot
-        clickMarker.position.copy(targetPosition);
-        clickMarker.position.y = 0.15;
-        clickMarker.visible = true;
-        clickMarker.scale.set(1, 1, 1);
+        clickMarker.position.copy(targetPosition); clickMarker.position.y = 0.1;
+        clickMarker.visible = true; clickMarker.scale.set(1,1,1);
       }
     });
 
-    // Handle clicking the interaction button
-    uiInteract.addEventListener('click', () => {
+    // The Core Game Loop Logic
+    uiInteract.addEventListener('click', (e) => {
       if (!currentMarker) return;
       const targetState = currentMarker.userData.stateIndex;
       
+      // Screen coordinates for floating text
+      const rect = uiInteract.getBoundingClientRect();
+      const tx = rect.left + rect.width/2;
+      const ty = rect.top - 20;
+
       if (targetState !== missionState) {
-        showToast("Finish your current task first!", "#ef4444");
-        return;
-      }
-      if (missionState === 0 && cash < 100) {
-        showToast("You're broke!", "#ef4444");
+        spawnFloatingText("WRONG LOCATION!", tx, ty, "#ef4444");
         return;
       }
 
-      if (missionState === 0) { cash -= 100; showToast("Bought Leads! -$100", "#ef4444"); }
-      if (missionState === 3) { cash += 600; showToast("Deal Funded! Commission: +$600", "#22c55e"); }
+      // 1. Buy Leads
+      if (missionState === 0) {
+        if (cash < 100) { spawnFloatingText("NEED $100!", tx, ty, "#ef4444"); return; }
+        cash -= 100;
+        spawnFloatingText("- $100 (Lead Bought)", tx, ty, "#f59e0b");
+        missionState = 1;
+      }
+      // 2. Pitch Merchant & 3. Funder (The RNG)
+      else if (missionState === 1 || missionState === 2) {
+        if (Math.random() > closeRate) {
+          // FAILED!
+          spawnFloatingText("REJECTED! LOST LEAD!", tx, ty, "#ef4444");
+          missionState = 0; // Go back to start
+        } else {
+          // SUCCESS!
+          spawnFloatingText("SUCCESS!", tx, ty, "#22c55e");
+          missionState++;
+        }
+      }
+      // 4. Close Deal at Bank
+      else if (missionState === 3) {
+        cash += 1200;
+        spawnFloatingText("+ $1,200 COMMISSION!", tx, ty, "#22c55e");
+        missionState = 0; // Loop resets
+      }
 
-      missionState = (missionState + 1) % states.length;
       updateHUD();
+      uiInteract.style.display = "none"; // Hide immediately to prevent double click
     });
 
     function update(dt) {
-      // Click Marker Animation
-      if (clickMarker.visible) {
-        clickMarker.scale.x -= dt * 2;
-        clickMarker.scale.y -= dt * 2;
-        if (clickMarker.scale.x <= 0) clickMarker.visible = false;
-      }
+      if (gameOver) return;
 
-      // Movement Logic
-      const speed = 8.0;
-      let movingAnim = false;
-
-      if (isMoving) {
-        const dist = human.position.distanceTo(targetPosition);
-        if (dist > 0.2) {
-          movingAnim = true;
-          // Calculate direction to walk
-          const dir = new THREE.Vector3().subVectors(targetPosition, human.position).normalize();
-          human.position.addScaledVector(dir, speed * dt);
-          
-          // Rotate smoothly towards target
-          const targetRotation = Math.atan2(dir.x, dir.z);
-          
-          // Smooth rotation (Lerp)
-          let angleDiff = targetRotation - human.rotation.y;
-          // Normalize angle to prevent spinning the long way
-          while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
-          while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
-          
-          human.rotation.y += angleDiff * 10 * dt;
-
+      // Rent Timer Logic
+      rentTimer -= dt;
+      rentBar.style.width = (rentTimer / RENT_TIME_MAX) * 100 + "%";
+      
+      if (rentTimer <= 0) {
+        cash -= RENT_AMOUNT;
+        if (cash < 0) {
+          gameOver = true;
+          document.getElementById("game-over").style.display = "flex";
+          return;
         } else {
-          isMoving = false; // We arrived
+          spawnFloatingText("RENT PAID: -$500", innerWidth/2, innerHeight/2, "#ef4444");
+          rentTimer = RENT_TIME_MAX; // reset clock
+          updateHUD();
         }
       }
 
-      // Animations
-      const t = performance.now() * 0.01;
-      legL.rotation.x = movingAnim ? Math.sin(t) * 0.7 : 0;
-      legR.rotation.x = movingAnim ? -Math.sin(t) * 0.7 : 0;
-      armL.rotation.x = movingAnim ? -Math.sin(t) * 0.5 : 0;
-      armR.rotation.x = movingAnim ? Math.sin(t) * 0.5 : 0;
+      if (clickMarker.visible) {
+        clickMarker.scale.x -= dt * 3; clickMarker.scale.y -= dt * 3;
+        if (clickMarker.scale.x <= 0) clickMarker.visible = false;
+      }
 
-      // Interaction Proximity
+      if (isMoving) {
+        const dist = human.position.distanceTo(targetPosition);
+        if (dist > 0.5) {
+          const dir = new THREE.Vector3().subVectors(targetPosition, human.position).normalize();
+          human.position.addScaledVector(dir, moveSpeed * dt);
+          human.rotation.y = Math.atan2(dir.x, dir.z);
+        } else {
+          isMoving = false;
+        }
+      }
+
+      // Marker Logic
       let nearMarker = null;
       markers.forEach(m => {
-        if (human.position.distanceTo(m.position) < 3.0) nearMarker = m;
+        m.children[0].material.opacity = (m.userData.stateIndex === missionState) ? 0.8 : 0.2;
+        if (human.position.distanceTo(m.position) < 3.5) nearMarker = m;
       });
 
       if (nearMarker !== currentMarker) {
         currentMarker = nearMarker;
-        if (currentMarker) {
-          const s = states[currentMarker.userData.stateIndex];
-          uiInteract.textContent = s.name.toUpperCase();
+        if (currentMarker && currentMarker.userData.stateIndex === missionState) {
+          uiInteract.textContent = states[missionState].action;
+          uiInteract.style.background = "#" + states[missionState].color.toString(16).padStart(6,'0');
           uiInteract.style.display = "block";
         } else {
           uiInteract.style.display = "none";
         }
       }
 
-      // Camera: High-Angle "Sims" Perspective
-      const camOffset = new THREE.Vector3(-10, 15, -15); // Isometric-ish offset
-      const desiredCamPos = human.position.clone().add(camOffset);
-      camera.position.lerp(desiredCamPos, 0.1);
-      camera.lookAt(human.position.clone().add(new THREE.Vector3(0, 1, 0)));
+      const camOffset = new THREE.Vector3(-15, 20, -15);
+      camera.position.lerp(human.position.clone().add(camOffset), 0.1);
+      camera.lookAt(human.position.clone());
     }
 
     let last = performance.now();
@@ -300,14 +333,11 @@
       const now = performance.now();
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
-
       update(dt);
       renderer.render(scene, camera);
       requestAnimationFrame(loop);
     }
-    
-    updateHUD();
-    loop();
+    updateHUD(); loop();
 
     addEventListener("resize", () => {
       camera.aspect = innerWidth / innerHeight;
