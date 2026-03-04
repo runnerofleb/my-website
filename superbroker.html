@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Superbroker — Submit Your Deal | PrivateCreditMCA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-void: #060a10;
+  --bg-deep: #0a0f18;
+  --bg-surface: #0e1422;
+  --bg-elevated: #131b2e;
+  --bg-card: #151e33;
+  --teal-500: #00d4c8;
+  --teal-400: #00e8db;
+  --teal-300: #5cf5ea;
+  --teal-600: #00b0a6;
+  --teal-glow: rgba(0,212,200,0.12);
+  --cyan-400: #00c8ff;
+  --green-500: #00e676;
+  --amber-400: #ffc446;
+  --red-400: #ff5252;
+  --purple-400: #b388ff;
+  --text-100: #f0f4fc;
+  --text-200: #c8d0e0;
+  --text-300: #8b97b0;
+  --text-400: #586580;
+  --text-500: #3a4560;
+  --border-subtle: rgba(255,255,255,0.04);
+  --border-dim: rgba(255,255,255,0.07);
+  --border-teal: rgba(0,212,200,0.15);
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--teal-600) var(--bg-void)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg-void)}::-webkit-scrollbar-thumb{background:var(--teal-600);border-radius:3px}
+body{font-family:'Sora',sans-serif;background:var(--bg-void);color:var(--text-100);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(0,212,200,0.3);color:#fff}
+a{color:inherit;text-decoration:none}
+
+/* GRAIN */
+.grain{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:180px}
+
+/* AMBIENT */
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.aorb{position:absolute;border-radius:50%;filter:blur(100px)}
+.aorb.a{width:800px;height:800px;background:radial-gradient(circle,rgba(0,212,200,0.06) 0%,transparent 70%);top:-300px;right:-200px;animation:fa 20s ease-in-out infinite}
+.aorb.b{width:600px;height:600px;background:radial-gradient(circle,rgba(0,200,255,0.04) 0%,transparent 70%);bottom:-200px;left:-150px;animation:fb 25s ease-in-out infinite}
+@keyframes fa{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,30px)}}
+@keyframes fb{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-40px)}}
+
+.gridL{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
+.gridL .vl{position:absolute;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,rgba(0,212,200,0.04) 30%,rgba(0,212,200,0.04) 70%,transparent)}
+.gridL .vl:nth-child(1){left:20%}.gridL .vl:nth-child(2){left:40%}.gridL .vl:nth-child(3){left:60%}.gridL .vl:nth-child(4){left:80%}
+
+/* NAV */
+.nav{position:fixed;top:0;width:100%;z-index:1000;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,4vw,56px);background:rgba(6,10,16,0.6);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--border-subtle);transition:all .4s}
+.nav.scrolled{background:rgba(6,10,16,0.92);border-bottom-color:var(--border-dim)}
+.nav-left{display:flex;align-items:center;gap:12px}
+.nav-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--teal-500),var(--cyan-400));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.nav-mark::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,0.2))}
+.nav-mark svg{position:relative;z-index:1}
+.nav-wm{font-weight:700;font-size:16px;letter-spacing:-.5px}.nav-wm em{font-style:normal;color:var(--teal-400)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nbg{padding:8px 18px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--text-200);border:1px solid var(--border-dim);background:transparent;transition:all .25s;cursor:pointer;font-family:'Sora',sans-serif}
+.nbg:hover{border-color:var(--border-teal);color:var(--teal-400)}
+.nbp{padding:8px 20px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--bg-void);background:var(--teal-500);border:none;transition:all .25s;cursor:pointer;font-family:'Sora',sans-serif}
+.nbp:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,212,200,0.3)}
+
+/* HERO */
+.sb-hero{position:relative;z-index:1;padding:140px clamp(20px,6vw,80px) 40px;text-align:center;overflow:hidden}
+.sb-hero::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,200,0.045),transparent 70%);pointer-events:none}
+.sb-hero-inner{position:relative;z-index:1;max-width:700px;margin:0 auto}
+.sb-hero-badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(0,212,200,0.08),rgba(0,200,255,0.06));border:1px solid rgba(0,212,200,0.15);border-radius:100px;padding:7px 18px 7px 9px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal-400);margin-bottom:24px;opacity:0;animation:hf .9s var(--ease-out-expo) .2s forwards}
+.sb-hero-badge .bolt{width:26px;height:26px;border-radius:50%;background:var(--teal-500);display:flex;align-items:center;justify-content:center;font-size:13px}
+.sb-hero h1{font-family:'Instrument Serif',serif;font-size:clamp(40px,6vw,72px);font-weight:400;line-height:1.05;letter-spacing:-2px;margin-bottom:20px;opacity:0;animation:hf .9s var(--ease-out-expo) .35s forwards}
+.sb-hero h1 em2{color:var(--teal-400);font-style:italic}
+.sb-hero p{font-size:clamp(15px,1.6vw,18px);color:var(--text-300);line-height:1.7;max-width:540px;margin:0 auto;opacity:0;animation:hf .9s var(--ease-out-expo) .5s forwards}
+
+@keyframes hf{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* MAIN FORM AREA */
+.sb-main{position:relative;z-index:1;padding:40px clamp(20px,6vw,80px) clamp(80px,10vw,120px)}
+.sb-main-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1.3fr;gap:48px;align-items:start}
+
+/* Left sidebar — How it works */
+.sb-sidebar{position:sticky;top:90px;opacity:0;animation:hf .9s var(--ease-out-expo) .6s forwards}
+.sb-hw-title{font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal-500);margin-bottom:24px;display:flex;align-items:center;gap:8px}
+.sb-hw-title::before{content:'';width:20px;height:1px;background:var(--teal-500)}
+
+.sb-hw-steps{display:flex;flex-direction:column;gap:0;position:relative}
+.sb-hw-steps::before{content:'';position:absolute;left:19px;top:40px;bottom:40px;width:1px;background:linear-gradient(180deg,var(--teal-500),var(--cyan-400),var(--green-500));opacity:.15}
+
+.sb-hw-step{display:flex;gap:16px;align-items:flex-start;padding:18px 0;position:relative}
+.sb-hw-step-icon{width:40px;height:40px;border-radius:12px;background:var(--bg-surface);border:1px solid var(--border-dim);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;z-index:1;transition:all .4s}
+.sb-hw-step-icon.active-step{border-color:var(--teal-500);background:rgba(0,212,200,0.06);box-shadow:0 0 16px rgba(0,212,200,0.1)}
+.sb-hw-step-icon.done-step{border-color:var(--green-500);background:rgba(0,230,118,0.06)}
+.sb-hw-step h4{font-size:15px;font-weight:600;margin-bottom:3px;letter-spacing:-.2px}
+.sb-hw-step p{font-size:12.5px;color:var(--text-400);line-height:1.5}
+
+/* Trust signals */
+.sb-trust{margin-top:36px;padding:24px;background:var(--bg-surface);border:1px solid var(--border-dim);border-radius:var(--radius-md)}
+.sb-trust-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-400);margin-bottom:14px}
+.sb-trust-items{display:flex;flex-direction:column;gap:10px}
+.sb-trust-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-300)}
+.sb-trust-item .ti-icon{font-size:16px}
+
+/* Right — Form card */
+.sb-form-wrap{background:var(--bg-surface);border:1px solid var(--border-dim);border-radius:var(--radius-lg);padding:40px 36px;position:relative;overflow:hidden;opacity:0;animation:hf .9s var(--ease-out-expo) .7s forwards}
+.sb-form-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal-500),var(--cyan-400),var(--green-500))}
+
+/* Step indicator */
+.sb-step-indicator{display:flex;align-items:center;gap:8px;margin-bottom:32px}
+.sb-si-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.06);transition:all .4s var(--ease-out-expo);position:relative}
+.sb-si-dot.active{background:var(--teal-500);box-shadow:0 0 12px rgba(0,212,200,0.35)}
+.sb-si-dot.active::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(0,212,200,0.2);animation:pulse-ring 2s infinite}
+.sb-si-dot.done{background:var(--green-500)}
+.sb-si-line{flex:1;height:2px;background:rgba(255,255,255,0.04);border-radius:1px;position:relative;overflow:hidden}
+.sb-si-line .si-fill{height:100%;background:var(--teal-500);border-radius:1px;width:0%;transition:width .6s var(--ease-out-expo)}
+.sb-si-label{font-size:12px;font-weight:600;color:var(--text-300);letter-spacing:.5px;margin-left:10px}
+
+@keyframes pulse-ring{0%{transform:scale(1);opacity:1}100%{transform:scale(1.8);opacity:0}}
+
+/* Panels */
+.sb-panel{display:none;animation:panelIn .5s var(--ease-out-expo)}
+.sb-panel.active{display:block}
+@keyframes panelIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+
+.sb-panel-title{font-family:'Instrument Serif',serif;font-size:24px;font-weight:400;letter-spacing:-.5px;margin-bottom:6px}
+.sb-panel-title em{font-style:italic;color:var(--teal-400)}
+.sb-panel-sub{font-size:13px;color:var(--text-400);margin-bottom:28px}
+
+/* Fields */
+.sb-field{margin-bottom:18px}
+.sb-label{display:block;font-size:12px;font-weight:600;color:var(--text-300);letter-spacing:.3px;margin-bottom:7px}
+.sb-label .req{color:var(--teal-500);margin-left:2px}
+.sb-input{width:100%;padding:13px 16px;border-radius:10px;background:var(--bg-elevated);border:1px solid var(--border-dim);color:var(--text-100);font-size:14px;font-family:'Sora',sans-serif;outline:none;transition:all .25s}
+.sb-input:focus{border-color:var(--teal-500);box-shadow:0 0 0 3px rgba(0,212,200,0.08)}
+.sb-input::placeholder{color:var(--text-500)}
+select.sb-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23586580' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;cursor:pointer}
+select.sb-input option{background:var(--bg-elevated);color:var(--text-100)}
+textarea.sb-input{resize:vertical;min-height:90px}
+.sb-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* Upload */
+.sb-upload-zone{border:2px dashed var(--border-dim);border-radius:16px;padding:40px 24px;text-align:center;cursor:pointer;transition:all .3s;position:relative;background:rgba(0,0,0,0.12)}
+.sb-upload-zone:hover,.sb-upload-zone.dragover{border-color:var(--teal-500);background:rgba(0,212,200,0.025)}
+.sb-upload-zone.dragover{transform:scale(1.01)}
+.sb-upload-zone .uz-icon{font-size:40px;margin-bottom:14px;display:block;opacity:.5;transition:all .3s}
+.sb-upload-zone:hover .uz-icon{opacity:.8;transform:translateY(-2px)}
+.sb-upload-zone .uz-title{font-size:15px;font-weight:600;color:var(--text-200);margin-bottom:4px}
+.sb-upload-zone .uz-title span{color:var(--teal-400)}
+.sb-upload-zone .uz-sub{font-size:12px;color:var(--text-400)}
+.sb-upload-zone .uz-hint{font-size:11px;color:var(--text-500);margin-top:10px;padding:6px 14px;background:rgba(0,212,200,0.04);border-radius:100px;display:inline-block}
+.sb-upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+
+.sb-files{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.sb-file{display:flex;align-items:center;gap:10px;background:var(--bg-elevated);border:1px solid var(--border-dim);border-radius:10px;padding:11px 14px;animation:fadeUp .3s var(--ease-out-expo)}
+.sb-file .sf-icon{font-size:18px}
+.sb-file .sf-name{flex:1;font-size:13px;font-weight:500;color:var(--text-200);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-file .sf-size{font-size:11px;color:var(--text-400)}
+.sb-file .sf-remove{width:26px;height:26px;border-radius:7px;background:rgba(255,82,82,0.08);border:none;color:var(--red-400);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'Sora',sans-serif}
+.sb-file .sf-remove:hover{background:rgba(255,82,82,0.2)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Actions */
+.sb-actions{display:flex;justify-content:space-between;align-items:center;margin-top:32px;gap:12px}
+.sb-btn{padding:14px 28px;border-radius:10px;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:'Sora',sans-serif;transition:all .3s var(--ease-out-quart);display:inline-flex;align-items:center;gap:8px}
+.sb-btn-next{background:var(--teal-500);color:var(--bg-void)}
+.sb-btn-next:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,212,200,0.25)}
+.sb-btn-back{background:transparent;color:var(--text-300);border:1px solid var(--border-dim)}
+.sb-btn-back:hover{border-color:rgba(255,255,255,0.12);color:var(--text-100)}
+.sb-btn-submit{background:linear-gradient(135deg,var(--teal-500),var(--green-500));color:var(--bg-void);padding:16px 36px;font-size:15px;box-shadow:0 4px 24px rgba(0,212,200,0.2)}
+.sb-btn-submit:hover{transform:translateY(-2px);box-shadow:0 12px 48px rgba(0,212,200,0.35)}
+.sb-btn-submit:disabled{opacity:.5;pointer-events:none}
+.sb-btn .arr{transition:transform .3s}.sb-btn:hover .arr{transform:translateX(3px)}
+
+/* Submitting */
+.sb-submitting{text-align:center;padding:60px 24px;display:none}
+.sb-submitting.show{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+.sb-spinner{width:44px;height:44px;border:3px solid var(--border-dim);border-top-color:var(--teal-500);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sb-submitting .sm-text{font-size:15px;color:var(--text-300)}
+.sb-submitting .sm-sub{font-size:12px;color:var(--text-500)}
+
+/* Success */
+.sb-success{text-align:center;padding:60px 24px;display:none;animation:successIn .8s var(--ease-out-expo)}
+.sb-success.show{display:block}
+@keyframes successIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+.sb-success .ss-check{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(0,212,200,0.1),rgba(0,230,118,0.08));border:2px solid rgba(0,230,118,0.2);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 20px;animation:checkBounce .8s var(--ease-out-expo) .2s both}
+@keyframes checkBounce{0%{transform:scale(0) rotate(-20deg);opacity:0}60%{transform:scale(1.1) rotate(5deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+.sb-success .ss-title{font-family:'Instrument Serif',serif;font-size:32px;font-weight:400;margin-bottom:10px;letter-spacing:-.5px}
+.sb-success .ss-title em{font-style:italic;color:var(--teal-400)}
+.sb-success .ss-desc{font-size:15px;color:var(--text-300);line-height:1.65;max-width:420px;margin:0 auto 28px}
+.sb-success .ss-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.sb-success .ss-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:10px;font-size:14px;font-weight:700;transition:all .25s;font-family:'Sora',sans-serif}
+.ss-btn-primary{background:var(--teal-500);color:var(--bg-void)}
+.ss-btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,212,200,0.25)}
+.ss-btn-secondary{background:transparent;color:var(--text-200);border:1px solid var(--border-dim)}
+.ss-btn-secondary:hover{border-color:var(--border-teal);color:var(--teal-400)}
+
+/* FOOTER */
+.foot{position:relative;z-index:1;border-top:1px solid var(--border-subtle);padding:40px clamp(20px,6vw,80px);margin-top:40px}
+.foot-in{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+.foot-l{display:flex;align-items:center;gap:20px}
+.foot-wm{font-weight:700;font-size:14px;letter-spacing:-.3px}.foot-wm em{font-style:normal;color:var(--teal-400)}
+.foot-cp{font-size:11px;color:var(--text-500)}
+.foot-lk{display:flex;gap:24px;list-style:none}
+.foot-lk a{font-size:12.5px;color:var(--text-400);transition:color .2s}
+.foot-lk a:hover{color:var(--teal-400)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .sb-main-inner{grid-template-columns:1fr}
+  .sb-sidebar{position:static}
+}
+@media(max-width:768px){
+  .sb-row{grid-template-columns:1fr}
+  .sb-form-wrap{padding:28px 20px}
+  .sb-hero h1{letter-spacing:-1px}
+  .foot-in{flex-direction:column;text-align:center}.foot-l{flex-direction:column}
+  .sb-success .ss-actions{flex-direction:column;align-items:center}
+}
+@media(max-width:480px){.nbg{display:none}}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="ambient"><div class="aorb a"></div><div class="aorb b"></div></div>
+<div class="gridL"><div class="vl"></div><div class="vl"></div><div class="vl"></div><div class="vl"></div></div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-left">
+    <a href="index.html" style="display:flex;align-items:center;gap:12px">
+      <div class="nav-mark"><svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M3 14L6 5L9 10L12 3L15 8" stroke="#060a10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="nav-wm">Private<em>Credit</em>MCA</div>
+    </a>
+  </div>
+  <div class="nav-right">
+    <a href="index.html" class="nbg">← Back to Home</a>
+    <a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="nbp">Join Community</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="sb-hero">
+  <div class="sb-hero-inner">
+    <div class="sb-hero-badge"><span class="bolt">⚡</span> Superbroker Service</div>
+    <h1>Submit your deal.<br>I'll <em2>Superbroker</em2> it.</h1>
+    <p>Upload your merchant's bank statements and deal details. I'll review the file personally, match it with the best funders, and help you structure it for maximum approval and commission.</p>
+  </div>
+</section>
+
+<!-- MAIN FORM AREA -->
+<section class="sb-main">
+  <div class="sb-main-inner">
+
+    <!-- Left sidebar -->
+    <div class="sb-sidebar">
+      <div class="sb-hw-title">How It Works</div>
+      <div class="sb-hw-steps">
+        <div class="sb-hw-step">
+          <div class="sb-hw-step-icon active-step" id="hwIcon1">📋</div>
+          <div><h4>Your Info</h4><p>Name, email, and role so I can get back to you</p></div>
+        </div>
+        <div class="sb-hw-step">
+          <div class="sb-hw-step-icon" id="hwIcon2">💼</div>
+          <div><h4>Deal Details</h4><p>Merchant info, revenue, industry, amount needed</p></div>
+        </div>
+        <div class="sb-hw-step">
+          <div class="sb-hw-step-icon" id="hwIcon3">📄</div>
+          <div><h4>Upload Docs</h4><p>Bank statements, voided check — I review everything</p></div>
+        </div>
+        <div class="sb-hw-step">
+          <div class="sb-hw-step-icon" id="hwIcon4">⚡</div>
+          <div><h4>Get Your Game Plan</h4><p>Funder matches, deal structure, and next steps within 24hrs</p></div>
+        </div>
+      </div>
+
+      <div class="sb-trust">
+        <div class="sb-trust-title">Why Superbroker?</div>
+        <div class="sb-trust-items">
+          <div class="sb-trust-item"><span class="ti-icon">🔒</span> Your data stays confidential</div>
+          <div class="sb-trust-item"><span class="ti-icon">⏱️</span> 24-hour turnaround on all deals</div>
+          <div class="sb-trust-item"><span class="ti-icon">🤝</span> Access to 50+ funder relationships</div>
+          <div class="sb-trust-item"><span class="ti-icon">💰</span> Structured for max approval & commission</div>
+          <div class="sb-trust-item"><span class="ti-icon">🆓</span> 100% free — no hidden fees</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right — Form -->
+    <div class="sb-form-wrap">
+      <div class="sb-step-indicator">
+        <div class="sb-si-dot active" id="siDot1"></div>
+        <div class="sb-si-line"><div class="si-fill" id="siFill1"></div></div>
+        <div class="sb-si-dot" id="siDot2"></div>
+        <div class="sb-si-line"><div class="si-fill" id="siFill2"></div></div>
+        <div class="sb-si-dot" id="siDot3"></div>
+        <div class="sb-si-label" id="siLabel">Step 1 of 3</div>
+      </div>
+
+      <!-- Panel 1: Your Info -->
+      <div class="sb-panel active" id="sbPanel1">
+        <div class="sb-panel-title">Let's start with <em>your info</em></div>
+        <div class="sb-panel-sub">So I know who to send the game plan to.</div>
+        <div class="sb-row">
+          <div class="sb-field">
+            <label class="sb-label">Your Name<span class="req">*</span></label>
+            <input class="sb-input" type="text" id="sbName" placeholder="Full name">
+          </div>
+          <div class="sb-field">
+            <label class="sb-label">Email<span class="req">*</span></label>
+            <input class="sb-input" type="email" id="sbEmail" placeholder="you@company.com">
+          </div>
+        </div>
+        <div class="sb-row">
+          <div class="sb-field">
+            <label class="sb-label">Phone</label>
+            <input class="sb-input" type="tel" id="sbPhone" placeholder="(555) 123-4567">
+          </div>
+          <div class="sb-field">
+            <label class="sb-label">Your Role</label>
+            <select class="sb-input" id="sbRole"><option value="">Select your role</option><option value="broker">Broker</option><option value="iso">ISO</option><option value="funder">Funder</option><option value="merchant">Merchant (Direct)</option><option value="other">Other</option></select>
+          </div>
+        </div>
+        <div class="sb-actions">
+          <div></div>
+          <button class="sb-btn sb-btn-next" onclick="sbNext(1)">Next: Deal Details <span class="arr">→</span></button>
+        </div>
+      </div>
+
+      <!-- Panel 2: Deal Details -->
+      <div class="sb-panel" id="sbPanel2">
+        <div class="sb-panel-title">Tell me about <em>the deal</em></div>
+        <div class="sb-panel-sub">The more detail, the better I can match you.</div>
+        <div class="sb-field">
+          <label class="sb-label">Business Name<span class="req">*</span></label>
+          <input class="sb-input" type="text" id="sbBiz" placeholder="Merchant's business name">
+        </div>
+        <div class="sb-row">
+          <div class="sb-field">
+            <label class="sb-label">Industry</label>
+            <select class="sb-input" id="sbIndustry"><option value="">Select industry</option><option value="restaurant">Restaurant / Food</option><option value="retail">Retail</option><option value="construction">Construction</option><option value="trucking">Trucking / Transport</option><option value="medical">Medical / Healthcare</option><option value="ecommerce">E-Commerce</option><option value="services">Professional Services</option><option value="auto">Auto / Repair</option><option value="other">Other</option></select>
+          </div>
+          <div class="sb-field">
+            <label class="sb-label">Monthly Revenue<span class="req">*</span></label>
+            <select class="sb-input" id="sbRevenue"><option value="">Select range</option><option value="10-25k">$10K – $25K</option><option value="25-50k">$25K – $50K</option><option value="50-100k">$50K – $100K</option><option value="100-250k">$100K – $250K</option><option value="250k+">$250K+</option></select>
+          </div>
+        </div>
+        <div class="sb-row">
+          <div class="sb-field">
+            <label class="sb-label">Time in Business</label>
+            <select class="sb-input" id="sbTIB"><option value="">Select</option><option value="<6mo">Less than 6 months</option><option value="6-12mo">6 – 12 months</option><option value="1-2yr">1 – 2 years</option><option value="2-5yr">2 – 5 years</option><option value="5yr+">5+ years</option></select>
+          </div>
+          <div class="sb-field">
+            <label class="sb-label">Amount Needed</label>
+            <select class="sb-input" id="sbAmount"><option value="">Select range</option><option value="5-15k">$5K – $15K</option><option value="15-30k">$15K – $30K</option><option value="30-75k">$30K – $75K</option><option value="75-150k">$75K – $150K</option><option value="150k+">$150K+</option></select>
+          </div>
+        </div>
+        <div class="sb-row">
+          <div class="sb-field">
+            <label class="sb-label">Credit Score Range</label>
+            <select class="sb-input" id="sbCredit"><option value="">Select</option><option value="500-">Below 500</option><option value="500-580">500 – 580</option><option value="580-650">580 – 650</option><option value="650-720">650 – 720</option><option value="720+">720+</option><option value="unknown">Unknown</option></select>
+          </div>
+          <div class="sb-field">
+            <label class="sb-label">Existing Positions?</label>
+            <select class="sb-input" id="sbPositions"><option value="">Select</option><option value="none">No current positions</option><option value="1">1 position</option><option value="2">2 positions</option><option value="3+">3+ positions</option><option value="unknown">Not sure</option></select>
+          </div>
+        </div>
+        <div class="sb-field">
+          <label class="sb-label">Additional Notes</label>
+          <textarea class="sb-input" id="sbNotes" placeholder="Anything else — urgency, special circumstances, what you've already tried..."></textarea>
+        </div>
+        <div class="sb-actions">
+          <button class="sb-btn sb-btn-back" onclick="sbBack(2)">← Back</button>
+          <button class="sb-btn sb-btn-next" onclick="sbNext(2)">Next: Upload Docs <span class="arr">→</span></button>
+        </div>
+      </div>
+
+      <!-- Panel 3: Upload -->
+      <div class="sb-panel" id="sbPanel3">
+        <div class="sb-panel-title">Upload <em>bank statements</em></div>
+        <div class="sb-panel-sub">3 months of statements gets you the best funder match.</div>
+
+        <div class="sb-field">
+          <label class="sb-label">Bank Statements (Last 3 Months)<span class="req">*</span></label>
+          <div class="sb-upload-zone" id="uploadZone">
+            <span class="uz-icon">📄</span>
+            <div class="uz-title">Drop files here or <span>click to browse</span></div>
+            <div class="uz-sub">PDF, JPG, PNG — up to 10MB each</div>
+            <div class="uz-hint">💡 3 months = best funder match</div>
+            <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+          </div>
+          <div class="sb-files" id="fileList"></div>
+        </div>
+
+        <div class="sb-field">
+          <label class="sb-label">Voided Check or Bank Letter <span style="color:var(--text-500)">(optional)</span></label>
+          <div class="sb-upload-zone" id="uploadZone2" style="padding:24px">
+            <span class="uz-icon" style="font-size:28px;margin-bottom:8px">🏦</span>
+            <div class="uz-sub">PDF, JPG, PNG — up to 10MB</div>
+            <input type="file" id="fileInput2" accept=".pdf,.jpg,.jpeg,.png">
+          </div>
+          <div class="sb-files" id="fileList2"></div>
+        </div>
+
+        <div class="sb-actions">
+          <button class="sb-btn sb-btn-back" onclick="sbBack(3)">← Back</button>
+          <button class="sb-btn sb-btn-submit" id="sbSubmitBtn" onclick="sbSubmit()">⚡ Submit for Superbrokering</button>
+        </div>
+      </div>
+
+      <!-- Submitting -->
+      <div class="sb-submitting" id="sbSubmitting">
+        <div class="sb-spinner"></div>
+        <div class="sm-text">Submitting your deal...</div>
+        <div class="sm-sub">Uploading files and logging your deal</div>
+      </div>
+
+      <!-- Success -->
+      <div class="sb-success" id="sbSuccess">
+        <div class="ss-check">⚡</div>
+        <div class="ss-title">Deal <em>submitted!</em></div>
+        <div class="ss-desc">I've got your deal and docs. I'll review everything personally and get back to you within 24 hours with funder matches, deal structure, and next steps. Check your email.</div>
+        <div class="ss-actions">
+          <a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank" class="ss-btn ss-btn-primary">Join the Community →</a>
+          <a href="index.html" class="ss-btn ss-btn-secondary">Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <div class="foot-in">
+    <div class="foot-l"><div class="foot-wm">Private<em>Credit</em>MCA</div><div class="foot-cp">© 2026 PrivateCreditMCA</div></div>
+    <ul class="foot-lk">
+      <li><a href="https://www.reddit.com/r/PrivateCreditMCA/" target="_blank">Reddit</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">GitHub</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll', () => {
+  $('nav').classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// ── FORM STATE ──
+let sbStep = 1;
+let sbFiles = [];
+let sbFiles2 = [];
+
+function updateUI() {
+  // Step dots
+  for (let i = 1; i <= 3; i++) {
+    const dot = $('siDot' + i);
+    dot.classList.remove('active','done');
+    if (i === sbStep) dot.classList.add('active');
+    else if (i < sbStep) dot.classList.add('done');
+  }
+  // Fill lines
+  $('siFill1').style.width = sbStep > 1 ? '100%' : '0%';
+  $('siFill2').style.width = sbStep > 2 ? '100%' : '0%';
+  // Label
+  $('siLabel').textContent = 'Step ' + sbStep + ' of 3';
+
+  // Sidebar icons
+  const icons = ['hwIcon1','hwIcon2','hwIcon3'];
+  icons.forEach((id, i) => {
+    const el = $(id);
+    el.classList.remove('active-step','done-step');
+    if (i + 1 === sbStep) el.classList.add('active-step');
+    else if (i + 1 < sbStep) el.classList.add('done-step');
+  });
+  // If done (success), mark all done
+  if (sbStep > 3) {
+    icons.forEach(id => { $(id).classList.remove('active-step'); $(id).classList.add('done-step'); });
+    $('hwIcon4').classList.add('active-step');
+  }
+}
+
+function showPanel(n) {
+  for (let i = 1; i <= 3; i++) {
+    const p = $('sbPanel' + i);
+    if (p) p.classList.toggle('active', i === n);
+  }
+}
+
+function sbNext(from) {
+  if (from === 1) {
+    if (!$('sbName').value.trim()) return shakeField('sbName');
+    if (!$('sbEmail').value.trim()) return shakeField('sbEmail');
+  }
+  if (from === 2) {
+    if (!$('sbBiz').value.trim()) return shakeField('sbBiz');
+    if (!$('sbRevenue').value) return shakeField('sbRevenue');
+  }
+  sbStep = from + 1;
+  showPanel(sbStep);
+  updateUI();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function sbBack(from) {
+  sbStep = from - 1;
+  showPanel(sbStep);
+  updateUI();
+}
+
+function shakeField(id) {
+  const el = $(id);
+  el.style.borderColor = 'var(--red-400)';
+  el.style.animation = 'shake .4s';
+  el.focus();
+  setTimeout(() => { el.style.borderColor = ''; el.style.animation = ''; }, 500);
+}
+
+// ── FILE UPLOAD ──
+function setupUploadZone(zoneId, inputId, listId, filesArr) {
+  const zone = $(zoneId);
+  const input = $(inputId);
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('dragover'); addFiles(e.dataTransfer.files, filesArr, listId); });
+  input.addEventListener('change', e => addFiles(e.target.files, filesArr, listId));
+}
+
+function addFiles(files, arr, listId) {
+  Array.from(files).forEach(f => {
+    if (f.size > 10 * 1024 * 1024) { alert('File too large: ' + f.name + ' (max 10MB)'); return; }
+    arr.push(f);
+  });
+  renderFiles(arr, listId);
+}
+
+function renderFiles(arr, listId) {
+  const list = $(listId);
+  list.innerHTML = arr.map((f, i) => {
+    const ext = f.name.split('.').pop().toLowerCase();
+    const icon = ext === 'pdf' ? '📕' : ['doc','docx'].includes(ext) ? '📘' : '🖼️';
+    const size = f.size > 1048576 ? (f.size/1048576).toFixed(1)+' MB' : (f.size/1024).toFixed(0)+' KB';
+    const arrName = arr === sbFiles ? 'sbFiles' : 'sbFiles2';
+    const listName = listId;
+    return `<div class="sb-file"><span class="sf-icon">${icon}</span><span class="sf-name">${f.name}</span><span class="sf-size">${size}</span><button class="sf-remove" onclick="${arrName}.splice(${i},1);renderFiles(${arrName},'${listName}')">×</button></div>`;
+  }).join('');
+}
+
+setupUploadZone('uploadZone', 'fileInput', 'fileList', sbFiles);
+setupUploadZone('uploadZone2', 'fileInput2', 'fileList2', sbFiles2);
+
+// ── SUBMIT ──
+async function sbSubmit() {
+  if (sbFiles.length === 0) { shakeField('uploadZone'); return; }
+
+  $('sbPanel3').classList.remove('active');
+  $('sbSubmitting').classList.add('show');
+  $('sbSubmitBtn').disabled = true;
+
+  const dealData = {
+    name: $('sbName').value.trim(),
+    email: $('sbEmail').value.trim(),
+    phone: $('sbPhone').value.trim(),
+    role: $('sbRole').value,
+    business: $('sbBiz').value.trim(),
+    industry: $('sbIndustry').value,
+    revenue: $('sbRevenue').value,
+    tib: $('sbTIB').value,
+    amount: $('sbAmount').value,
+    credit: $('sbCredit').value,
+    positions: $('sbPositions').value,
+    notes: $('sbNotes').value.trim(),
+    files: sbFiles.map(f => f.name).join(', '),
+    files2: sbFiles2.map(f => f.name).join(', '),
+    submitted: new Date().toISOString()
+  };
+
+  const formData = new FormData();
+  Object.entries(dealData).forEach(([k,v]) => formData.append(k,v));
+  sbFiles.forEach(f => formData.append('attachment', f));
+  sbFiles2.forEach(f => formData.append('attachment', f));
+
+  // ── EMAIL: Replace YOUR_EMAIL with your actual email ──
+  try {
+    await fetch('https://formsubmit.co/ajax/YOUR_EMAIL@gmail.com', { method:'POST', body:formData });
+  } catch(e) { console.log('FormSubmit:', e); }
+
+  // ── GOOGLE SHEETS: Replace with your Apps Script URL ──
+  try {
+    await fetch('https://script.google.com/macros/s/YOUR_APPS_SCRIPT_ID/exec', {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(dealData)
+    });
+  } catch(e) { console.log('Sheets:', e); }
+
+  setTimeout(() => {
+    $('sbSubmitting').classList.remove('show');
+    $('sbSuccess').classList.add('show');
+    document.querySelector('.sb-step-indicator').style.display = 'none';
+    sbStep = 4;
+    updateUI();
+  }, 1800);
+}
+
+// Keyboard: shake animation
+const style = document.createElement('style');
+style.textContent = '@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}';
+document.head.appendChild(style);
+
+updateUI();
+</script>
+</body>
+</html>
