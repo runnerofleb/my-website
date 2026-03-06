@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrivateCreditMCA — Turn One MCA Deal Into Multiple Competing Offers</title>
+  <meta name="description" content="The live MCA marketplace for brokers. Submit once, stay protected, and let funders compete side by side." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#06101f;
+      --bg-soft:#0b1529;
+      --panel:#0f1b34;
+      --panel-2:#132142;
+      --card:#101c36;
+      --line:rgba(255,255,255,.08);
+      --line-2:rgba(255,255,255,.14);
+      --text:#f3f6fb;
+      --muted:#9aa7bd;
+      --muted-2:#6d7890;
+      --brand:#6d5efc;
+      --brand-2:#4f46e5;
+      --green:#19d3a6;
+      --green-soft:rgba(25,211,166,.12);
+      --blue:#3abff8;
+      --amber:#f7b84b;
+      --red:#f57f7f;
+      --shadow:0 24px 80px rgba(0,0,0,.35);
+      --shadow-soft:0 10px 30px rgba(0,0,0,.25);
+      --radius:18px;
+      --radius-sm:12px;
+      --container:1180px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 85% 10%, rgba(109,94,252,.18), transparent 30%),
+        radial-gradient(circle at 10% 30%, rgba(25,211,166,.10), transparent 28%),
+        linear-gradient(180deg, #050c18 0%, #071120 30%, #07101d 100%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.03;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      z-index:9999;
+    }
+    a{text-decoration:none;color:inherit}
+    button{font:inherit}
+    .mono{font-family:"IBM Plex Mono", monospace}
+    .container{width:min(var(--container), calc(100% - 40px));margin:0 auto}
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      min-height:34px;
+      padding:8px 14px;
+      border:1px solid rgba(109,94,252,.22);
+      border-radius:999px;
+      background:rgba(109,94,252,.10);
+      color:#c8c3ff;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.03em;
+    }
+    .eyebrow .live-dot,
+    .status-dot{
+      width:8px;height:8px;border-radius:50%;background:var(--green);
+      box-shadow:0 0 0 0 rgba(25,211,166,.5);
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse{
+      0%{box-shadow:0 0 0 0 rgba(25,211,166,.4)}
+      70%{box-shadow:0 0 0 10px rgba(25,211,166,0)}
+      100%{box-shadow:0 0 0 0 rgba(25,211,166,0)}
+    }
+
+    .section-head{max-width:760px;margin:0 auto 28px;text-align:center}
+    .section-kicker{
+      color:#afa7ff;
+      text-transform:uppercase;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.24em;
+      margin-bottom:14px;
+    }
+    .section-head h2{
+      font-size:clamp(34px, 5vw, 56px);
+      line-height:1.02;
+      letter-spacing:-.04em;
+      margin-bottom:14px;
+    }
+    .section-head p{
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.7;
+    }
+
+    .btn-row{display:flex;flex-wrap:wrap;gap:14px}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-height:52px;
+      padding:0 22px;
+      border-radius:14px;
+      border:1px solid transparent;
+      font-size:15px;
+      font-weight:700;
+      transition:transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      cursor:pointer;
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{
+      color:white;
+      background:linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow:0 16px 40px rgba(79,70,229,.30);
+    }
+    .btn-primary:hover{box-shadow:0 20px 48px rgba(79,70,229,.38)}
+    .btn-secondary{
+      background:rgba(255,255,255,.04);
+      border-color:var(--line);
+      color:var(--text);
+      backdrop-filter:blur(10px);
+    }
+    .btn-secondary:hover{background:rgba(255,255,255,.07);border-color:var(--line-2)}
+
+    nav{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      backdrop-filter:blur(18px) saturate(1.3);
+      background:rgba(6,16,31,.68);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav-inner{
+      width:min(var(--container), calc(100% - 40px));
+      margin:0 auto;
+      min-height:74px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:-.03em}
+    .brand-mark{
+      width:34px;height:34px;border-radius:11px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg, var(--brand), #8f83ff);
+      box-shadow:0 12px 30px rgba(109,94,252,.32);
+      position:relative;overflow:hidden;
+    }
+    .brand-mark::before{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(135deg, rgba(255,255,255,.30), transparent 55%);
+    }
+    .brand svg{width:16px;height:16px;position:relative;z-index:1}
+    .brand span small{color:var(--muted-2);font-weight:700}
+    .nav-links{display:flex;align-items:center;gap:26px;color:var(--muted);font-size:14px;font-weight:600}
+    .nav-links a:hover{color:var(--text)}
+    .nav-cta{display:flex;align-items:center;gap:12px}
+
+    .hero{padding:72px 0 48px;position:relative}
+    .hero-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);
+      gap:42px;
+      align-items:center;
+    }
+    .hero-copy h1{
+      font-size:clamp(48px, 8vw, 84px);
+      line-height:.95;
+      letter-spacing:-.06em;
+      margin:18px 0 20px;
+      max-width:760px;
+    }
+    .hero-copy h1 .gradient{
+      background:linear-gradient(135deg,#ffffff 0%, #c7c2ff 30%, #7eead3 68%, #79d5ff 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .hero-copy .sub{
+      font-size:20px;
+      line-height:1.7;
+      color:var(--muted);
+      max-width:640px;
+      margin-bottom:28px;
+    }
+    .hero-proof{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:14px;
+      margin-top:28px;
+    }
+    .proof{
+      padding:14px 16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      border-radius:14px;
+    }
+    .proof strong{display:block;font-size:15px;margin-bottom:4px}
+    .proof span{font-size:13px;color:var(--muted)}
+
+    .hero-side{position:relative}
+    .hero-card{
+      position:relative;
+      background:linear-gradient(180deg, rgba(20,33,66,.92), rgba(10,18,35,.96));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .hero-card::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(122,110,255,.85), rgba(25,211,166,.7), transparent);
+    }
+    .hero-card-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 22px;
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+    }
+    .hero-card-top .label{
+      text-transform:uppercase;
+      font-size:11px;
+      letter-spacing:.18em;
+      font-weight:800;
+      color:var(--muted-2);
+    }
+    .hero-card-top .live{
+      display:flex;align-items:center;gap:8px;
+      font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#bdf7e9;
+    }
+    .hero-card-body{padding:24px}
+    .deal-head{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:20px;
+    }
+    .deal-head h3{font-size:24px;letter-spacing:-.03em;margin-bottom:6px}
+    .deal-head p{color:var(--muted);font-size:14px;line-height:1.6}
+    .deal-request{display:flex;flex-direction:column;align-items:flex-end;white-space:nowrap}
+    .deal-request .amount{font-size:40px;font-weight:900;letter-spacing:-.06em;color:#d7d4ff}
+    .deal-request .meta{font-size:12px;color:var(--muted-2);text-transform:uppercase;letter-spacing:.10em}
+
+    .offer-table{
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      background:rgba(255,255,255,.02);
+    }
+    .offer-row{
+      display:grid;
+      grid-template-columns:1.2fr 1fr auto;
+      gap:14px;
+      align-items:center;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+    }
+    .offer-row:last-child{border-bottom:none}
+    .offer-row strong{font-size:14px}
+    .offer-row span{font-size:13px;color:var(--muted)}
+    .chip{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:28px;padding:0 10px;border-radius:999px;
+      font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+    }
+    .chip-success{background:var(--green-soft);color:#8cf0d1}
+    .chip-warn{background:rgba(247,184,75,.12);color:#ffd890}
+
+    .deal-metrics{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:10px;
+    }
+    .metric{
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+    }
+    .metric .k{font-size:11px;text-transform:uppercase;letter-spacing:.10em;color:var(--muted-2);margin-bottom:6px}
+    .metric .v{font-size:17px;font-weight:800;letter-spacing:-.02em}
+    .metric .v.good{color:#9ef1d8}
+
+    .trust-strip{padding:16px 0 4px}
+    .trust-grid{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:14px}
+    .trust-item{
+      padding:16px 18px;
+      border-radius:14px;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:14px;
+    }
+    .trust-item strong{display:block;color:var(--text);font-size:14px;margin-bottom:4px}
+
+    .ticker-wrap{
+      overflow:hidden;
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      margin-top:38px;
+    }
+    .ticker{
+      display:flex;
+      width:max-content;
+      gap:38px;
+      padding:14px 0;
+      animation:ticker 34s linear infinite;
+    }
+    @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .ticker-item{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;white-space:nowrap}
+    .ticker-item strong{color:var(--text)}
+
+    section{padding:110px 0}
+    .surface{
+      background:linear-gradient(180deg, rgba(255,255,255,.015), rgba(255,255,255,.025));
+      border-top:1px solid rgba(255,255,255,.04);
+      border-bottom:1px solid rgba(255,255,255,.04);
+    }
+
+    .results-grid{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:18px;margin-top:42px}
+    .result-card{
+      padding:24px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(18,28,53,.9), rgba(12,21,40,.96));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
+      transition:transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+    .result-card:hover{transform:translateY(-4px);border-color:var(--line-2);box-shadow:var(--shadow)}
+    .result-card-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .result-card .time{font-size:12px;color:var(--muted-2)}
+    .result-card h3{font-size:20px;letter-spacing:-.03em;margin-bottom:6px}
+    .result-card p{font-size:14px;color:var(--muted);margin-bottom:14px;line-height:1.6}
+    .result-card .ask{font-size:30px;font-weight:900;letter-spacing:-.05em;margin-bottom:14px}
+    .mini-offers{display:grid;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
+    .mini-offer{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;font-size:13px}
+    .mini-offer span{color:var(--muted)}
+    .mini-foot{margin-top:14px;font-weight:700;color:#cfcaff;font-size:13px}
+
+    .compare{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:stretch;margin-top:42px}
+    .compare-box{
+      padding:28px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.03));
+    }
+    .compare-box.bad{background:rgba(245,127,127,.06);border-color:rgba(245,127,127,.10)}
+    .compare-box.good{background:linear-gradient(180deg, rgba(109,94,252,.12), rgba(25,211,166,.08));border-color:rgba(109,94,252,.18)}
+    .compare-box h3{font-size:15px;text-transform:uppercase;letter-spacing:.14em;margin-bottom:18px}
+    .compare-box.bad h3{color:#ffb9b9}
+    .compare-box.good h3{color:#cec9ff}
+    .compare-list{display:grid;gap:12px}
+    .compare-item{display:flex;align-items:flex-start;gap:12px;color:var(--muted);font-size:15px;line-height:1.65}
+    .compare-item .icon{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;flex:0 0 30px;background:rgba(255,255,255,.05)}
+    .compare-box.good .compare-item{color:#e9eef9}
+    .compare-arrow{display:grid;place-items:center;font-size:30px;color:#a79fff;padding:0 8px}
+
+    .protect-grid{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:18px;margin-top:42px}
+    .protect-card,.feature-card,.path-card,.stat-card{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg, rgba(17,29,56,.92), rgba(12,20,39,.96))}
+    .protect-card{padding:28px}
+    .protect-icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:rgba(109,94,252,.12);margin-bottom:18px;font-size:20px}
+    .protect-card h3{font-size:18px;letter-spacing:-.02em;margin-bottom:8px}
+    .protect-card p{color:var(--muted);line-height:1.7;font-size:14px}
+
+    .steps{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:18px;margin-top:42px}
+    .step{position:relative;padding:24px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.03))}
+    .step-num{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:rgba(109,94,252,.12);color:#d3d0ff;font-weight:900;margin-bottom:16px}
+    .step h3{font-size:18px;letter-spacing:-.02em;margin-bottom:8px}
+    .step p{font-size:14px;line-height:1.7;color:var(--muted)}
+    .mini-panel{margin-top:16px;padding:14px;border-radius:14px;border:1px solid var(--line);background:rgba(6,16,31,.45)}
+    .mini-panel .title{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:#c7c0ff;margin-bottom:10px;font-weight:800}
+    .mini-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px}
+    .mini-row:last-child{border-bottom:none}
+    .mini-row .left{color:var(--muted)}
+    .mini-row .good{color:#92f0d2;font-weight:800}
+
+    .paths{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:42px}
+    .path-card{padding:30px;position:relative;overflow:hidden}
+    .path-card.featured{border-color:rgba(109,94,252,.25);box-shadow:0 24px 60px rgba(79,70,229,.14)}
+    .badge{position:absolute;top:18px;right:18px;padding:7px 10px;border-radius:999px;background:linear-gradient(135deg, var(--brand), var(--brand-2));font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+    .path-card h3{font-size:24px;letter-spacing:-.03em;margin-bottom:10px}
+    .path-card p{font-size:15px;line-height:1.7;color:var(--muted);margin-bottom:18px;max-width:520px}
+    .bullet-list{display:grid;gap:10px;margin:18px 0 26px}
+    .bullet{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.6}
+    .bullet .check{color:#93eed3;font-weight:900;margin-top:1px}
+
+    .stats{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:18px;margin-top:42px}
+    .stat-card{padding:26px;text-align:center}
+    .stat-value{font-size:clamp(34px,4vw,52px);line-height:1;letter-spacing:-.06em;font-weight:900;background:linear-gradient(135deg, #d5d1ff, #8ef2d2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+    .stat-label{font-size:13px;color:var(--muted);line-height:1.6}
+
+    .features-wrap{display:grid;gap:26px;margin-top:42px}
+    .feature-group-title{display:flex;align-items:center;gap:14px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.18em;color:#b6aeff}
+    .feature-group-title::after{content:"";height:1px;flex:1;background:var(--line)}
+    .feature-grid{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:18px}
+    .feature-grid.two{grid-template-columns:repeat(2, minmax(0,1fr))}
+    .feature-card{padding:24px;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+    .feature-card:hover{transform:translateY(-4px);border-color:var(--line-2);box-shadow:var(--shadow-soft)}
+    .feature-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:rgba(109,94,252,.12);font-size:18px;margin-bottom:16px}
+    .feature-card h3{font-size:18px;letter-spacing:-.02em;margin-bottom:8px}
+    .feature-card p{font-size:14px;line-height:1.7;color:var(--muted);margin-bottom:16px}
+    .feature-link{font-size:13px;font-weight:800;color:#cdc8ff}
+    .feature-link.muted{color:var(--muted-2)}
+    .feature-preview{padding:14px;border-radius:14px;border:1px solid var(--line);background:rgba(6,16,31,.45);font-size:13px}
+    .tag-row{display:flex;flex-wrap:wrap;gap:8px}
+    .tag{display:inline-flex;align-items:center;justify-content:center;min-height:28px;padding:0 10px;border-radius:999px;font-size:11px;font-weight:800;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.04);color:#d8deea}
+
+    .cta{text-align:center;position:relative;overflow:hidden}
+    .cta-panel{position:relative;padding:64px 24px;border-radius:30px;border:1px solid rgba(255,255,255,.09);background:radial-gradient(circle at 50% 0%, rgba(109,94,252,.20), transparent 30%), linear-gradient(180deg, rgba(18,31,59,.94), rgba(10,18,34,.98));box-shadow:var(--shadow)}
+    .cta-panel h2{font-size:clamp(34px,5vw,62px);line-height:1.02;letter-spacing:-.05em;margin-bottom:14px}
+    .cta-panel p{max-width:640px;margin:0 auto 28px;color:var(--muted);font-size:18px;line-height:1.7}
+    .cta-proof{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:22px}
+    .cta-proof .tag{background:rgba(255,255,255,.05)}
+
+    footer{padding:28px 0 44px;border-top:1px solid rgba(255,255,255,.06)}
+    .footer-inner{width:min(var(--container), calc(100% - 40px));margin:0 auto;display:flex;justify-content:space-between;gap:20px;align-items:center;color:var(--muted-2);font-size:13px}
+    .footer-links{display:flex;flex-wrap:wrap;gap:18px}
+    .footer-links a:hover{color:var(--text)}
+
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease, transform .7s ease}
+    .reveal.visible{opacity:1;transform:none}
+
+    @media (max-width: 1100px){
+      .hero-grid,.paths,.compare,.feature-grid.two,.feature-grid,.results-grid,.protect-grid,.stats,.steps,.trust-grid{grid-template-columns:1fr 1fr}
+      .hero-grid{grid-template-columns:1fr}
+      .compare{grid-template-columns:1fr}
+      .compare-arrow{display:none}
+      .nav-links{display:none}
+    }
+
+    @media (max-width: 720px){
+      .container,.nav-inner,.footer-inner{width:min(var(--container), calc(100% - 24px))}
+      .hero{padding-top:36px}
+      .hero-proof,.trust-grid,.results-grid,.protect-grid,.steps,.paths,.stats,.feature-grid,.feature-grid.two,.deal-metrics{grid-template-columns:1fr}
+      .nav-inner{min-height:68px}
+      .nav-cta .btn-secondary{display:none}
+      .deal-head,.offer-row,.footer-inner{display:flex;flex-direction:column;align-items:flex-start}
+      .deal-request{align-items:flex-start}
+      .hero-card-body,.result-card,.protect-card,.path-card,.feature-card,.stat-card,.compare-box,.step{padding:20px}
+      .btn-row{width:100%}
+      .btn-row .btn{width:100%}
+      .cta-panel{padding:44px 18px}
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="privatecreditmca-landing.html" class="brand" aria-label="PrivateCreditMCA home">
+        <div class="brand-mark">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <rect x="2" y="9" width="3" height="5" rx="1" fill="white"/>
+            <rect x="6.5" y="6" width="3" height="8" rx="1" fill="white"/>
+            <rect x="11" y="3" width="3" height="11" rx="1" fill="white"/>
+          </svg>
+        </div>
+        <span>PrivateCredit<small>MCA</small></span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#market">Marketplace</a>
+        <a href="#how">How it works</a>
+        <a href="#protection">Protection</a>
+        <a href="#platform">Platform</a>
+        <a href="privatecreditmca-funders.html">Funders</a>
+      </div>
+
+      <div class="nav-cta">
+        <a href="privatecreditmca-account.html" class="btn btn-secondary">Create account</a>
+        <a href="privatecreditmca-submit.html" class="btn btn-primary">Submit a deal</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-copy reveal">
+            <div class="eyebrow"><span class="live-dot"></span> 136 deals live right now</div>
+            <h1>Submit once.<br><span class="gradient">Let funders compete.</span></h1>
+            <p class="sub">
+              The MCA marketplace built for brokers who want more offers, faster responses, and tighter control over every file.
+              One upload puts your deal in front of active funders without exposing your merchant.
+            </p>
+            <div class="btn-row">
+              <a href="privatecreditmca-submit.html" class="btn btn-primary">Go live now →</a>
+              <a href="#how" class="btn btn-secondary">See how it works</a>
+            </div>
+            <div class="hero-proof">
+              <div class="proof"><strong>Free for brokers</strong><span>No subscription. No paywall to submit deals.</span></div>
+              <div class="proof"><strong>2.4 hour first offer</strong><span>Average time to first response on live submissions.</span></div>
+              <div class="proof"><strong>Merchant stays protected</strong><span>Contact details remain hidden until you choose.</span></div>
+            </div>
+          </div>
+
+          <div class="hero-side reveal">
+            <div class="hero-card" aria-label="Live marketplace preview">
+              <div class="hero-card-top">
+                <div class="label">Live deal preview</div>
+                <div class="live"><span class="status-dot"></span> Live marketplace</div>
+              </div>
+              <div class="hero-card-body">
+                <div class="deal-head">
+                  <div>
+                    <h3>Peak Roofing Co.</h3>
+                    <p>Construction · Florida · $128K monthly revenue · 0 NSFs</p>
+                  </div>
+                  <div class="deal-request">
+                    <div class="amount">$110K</div>
+                    <div class="meta">requested</div>
+                  </div>
+                </div>
+
+                <div class="offer-table">
+                  <div class="offer-row">
+                    <div><strong>Rapid Finance</strong><br><span>Strong fit · responded first</span></div>
+                    <div class="mono">$105K @ 1.32</div>
+                    <div class="chip chip-success">Offer</div>
+                  </div>
+                  <div class="offer-row">
+                    <div><strong>National Funding</strong><br><span>Competitive advance</span></div>
+                    <div class="mono">$108K @ 1.34</div>
+                    <div class="chip chip-success">Offer</div>
+                  </div>
+                  <div class="offer-row">
+                    <div><strong>Libertas Funding</strong><br><span>Manual review underway</span></div>
+                    <div class="mono">$110K @ 1.36</div>
+                    <div class="chip chip-warn">Reviewing</div>
+                  </div>
+                </div>
+
+                <div class="deal-metrics">
+                  <div class="metric"><div class="k">Revenue</div><div class="v">$128K/mo</div></div>
+                  <div class="metric"><div class="k">Risk score</div><div class="v good">85 / A</div></div>
+                  <div class="metric"><div class="k">NSFs</div><div class="v good">0</div></div>
+                  <div class="metric"><div class="k">Likely range</div><div class="v">$80K–$110K</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="trust-strip reveal">
+          <div class="trust-grid">
+            <div class="trust-item"><strong>One upload</strong> Build one universal packet instead of emailing funders one by one.</div>
+            <div class="trust-item"><strong>More leverage</strong> Compare amount, factor, and speed side by side.</div>
+            <div class="trust-item"><strong>Stay in control</strong> Your deal stays yours until you decide to move forward.</div>
+            <div class="trust-item"><strong>Designed for brokers</strong> Built around placement speed, visibility, and protection.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ticker-wrap" aria-hidden="true">
+        <div class="ticker">
+          <div class="ticker-item"><span class="status-dot"></span><strong>QuickFix Auto</strong> TX · 3 offers · $80K requested</div>
+          <div class="ticker-item"><span class="status-dot"></span><strong>Nonna’s Trattoria</strong> NY · 2 offers · $65K requested</div>
+          <div class="ticker-item"><span class="status-dot"></span><strong>Peak Roofing</strong> FL · reviewing · $110K requested</div>
+          <div class="ticker-item"><span class="status-dot"></span><strong>Metro Logistics</strong> NJ · 4 offers · $92K requested</div>
+          <div class="ticker-item"><span class="status-dot"></span><strong>Bright Smile Dental</strong> CA · new · $45K requested</div>
+          <div class="ticker-item"><span class="status-dot"></span><strong>QuickFix Auto</strong> TX · 3 offers · $80K requested</div>
+          <div class="ticker-item"><span class="status-dot"></span><strong>Nonna’s Trattoria</strong> NY · 2 offers · $65K requested</div>
+          <div class="ticker-item"><span class="status-dot"></span><strong>Peak Roofing</strong> FL · reviewing · $110K requested</div>
+          <div class="ticker-item"><span class="status-dot"></span><strong>Metro Logistics</strong> NJ · 4 offers · $92K requested</div>
+          <div class="ticker-item"><span class="status-dot"></span><strong>Bright Smile Dental</strong> CA · new · $45K requested</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="surface" id="market">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-kicker">Live marketplace</div>
+          <h2>This is happening right now.</h2>
+          <p>Not static mockups. Live-style deal cards that show the core value proposition instantly: brokers post once, funders respond, offers stack up.</p>
+        </div>
+
+        <div class="results-grid reveal">
+          <article class="result-card">
+            <div class="result-card-top">
+              <div class="eyebrow" style="padding:6px 12px;min-height:auto"><span class="live-dot"></span> Live</div>
+              <div class="time mono">2m ago</div>
+            </div>
+            <h3>QuickFix Auto Repair</h3>
+            <p>Auto Repair · Texas · $74K monthly revenue</p>
+            <div class="ask">$80,000</div>
+            <div class="mini-offers">
+              <div class="mini-offer"><strong>Apex Funding</strong><span class="mono">$60K @ 1.37</span><div class="chip chip-success">Offer</div></div>
+              <div class="mini-offer"><strong>Capital Group</strong><span class="mono">$58K @ 1.35</span><div class="chip chip-success">Offer</div></div>
+              <div class="mini-offer"><strong>Atlas Capital</strong><span class="mono">$62K @ 1.40</span><div class="chip chip-success">Offer</div></div>
+            </div>
+            <div class="mini-foot">3 funders competing</div>
+          </article>
+
+          <article class="result-card">
+            <div class="result-card-top">
+              <div class="eyebrow" style="padding:6px 12px;min-height:auto"><span class="live-dot"></span> Live</div>
+              <div class="time mono">8m ago</div>
+            </div>
+            <h3>Nonna’s Trattoria</h3>
+            <p>Restaurant · New York · $70K monthly revenue</p>
+            <div class="ask">$65,000</div>
+            <div class="mini-offers">
+              <div class="mini-offer"><strong>Forward Financing</strong><span class="mono">$52K @ 1.36</span><div class="chip chip-success">Offer</div></div>
+              <div class="mini-offer"><strong>BridgeCap</strong><span class="mono">$55K @ 1.38</span><div class="chip chip-success">Offer</div></div>
+            </div>
+            <div class="mini-foot">2 funders competing</div>
+          </article>
+
+          <article class="result-card">
+            <div class="result-card-top">
+              <div class="eyebrow" style="padding:6px 12px;min-height:auto"><span class="live-dot"></span> Live</div>
+              <div class="time mono">14m ago</div>
+            </div>
+            <h3>Peak Roofing Co.</h3>
+            <p>Construction · Florida · $128K monthly revenue</p>
+            <div class="ask">$110,000</div>
+            <div class="mini-offers">
+              <div class="mini-offer"><strong>Rapid Finance</strong><span class="mono">$105K @ 1.32</span><div class="chip chip-success">Offer</div></div>
+              <div class="mini-offer"><strong>Libertas</strong><span class="mono">$110K @ 1.36</span><div class="chip chip-warn">Reviewing</div></div>
+            </div>
+            <div class="mini-foot">2 funders competing</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-kicker">The shift</div>
+          <h2>From chasing funders to creating competition.</h2>
+          <p>Your current process is slow because each deal has to be pushed manually. The marketplace flips that dynamic and makes the deal pull funders in instead.</p>
+        </div>
+
+        <div class="compare reveal">
+          <div class="compare-box bad">
+            <h3>What brokers do now</h3>
+            <div class="compare-list">
+              <div class="compare-item"><div class="icon">📧</div><div>Email the same packet to funders one by one.</div></div>
+              <div class="compare-item"><div class="icon">⏳</div><div>Wait 24 to 72 hours for scattered replies.</div></div>
+              <div class="compare-item"><div class="icon">🔁</div><div>Follow up repeatedly just to get visibility.</div></div>
+              <div class="compare-item"><div class="icon">🤷</div><div>Take the first workable offer because time kills the deal.</div></div>
+              <div class="compare-item"><div class="icon">📉</div><div>Never know whether a better structure was available.</div></div>
+            </div>
+          </div>
+          <div class="compare-arrow">→</div>
+          <div class="compare-box good">
+            <h3>What changes here</h3>
+            <div class="compare-list">
+              <div class="compare-item"><div class="icon">⚡</div><div>Upload once and put the file in front of active funders instantly.</div></div>
+              <div class="compare-item"><div class="icon">⏱️</div><div>Get responses faster, with a 2.4 hour average time to first offer.</div></div>
+              <div class="compare-item"><div class="icon">📊</div><div>Review offers side by side instead of chasing them across inboxes.</div></div>
+              <div class="compare-item"><div class="icon">🏆</div><div>Choose the best terms, not just the fastest response.</div></div>
+              <div class="compare-item"><div class="icon">🔒</div><div>Keep merchant identity protected until you decide to proceed.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="surface" id="protection">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-kicker">Broker protection</div>
+          <h2>Your merchant stays yours until you say otherwise.</h2>
+          <p>Protection should not be a footnote. It should be one of the strongest reasons to use the platform.</p>
+        </div>
+
+        <div class="protect-grid reveal">
+          <article class="protect-card">
+            <div class="protect-icon">🔒</div>
+            <h3>Merchant contact stays hidden</h3>
+            <p>Phone, email, and personal identifiers remain locked while the deal is being reviewed, so funders can evaluate the file without bypassing you.</p>
+          </article>
+          <article class="protect-card">
+            <div class="protect-icon">🛡️</div>
+            <h3>No reach-arounds</h3>
+            <p>The workflow is designed so communication and access stay broker-controlled until an offer is accepted and you intentionally move the file forward.</p>
+          </article>
+          <article class="protect-card">
+            <div class="protect-icon">🔐</div>
+            <h3>Centralized file control</h3>
+            <p>Instead of forwarding sensitive packets through inbox chains, documents live inside a controlled system with clearer visibility and tighter handling.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-kicker">How it works</div>
+          <h2>Upload to funded in four steps.</h2>
+          <p>The workflow is simple enough for first-time users, but strong enough to support serious volume.</p>
+        </div>
+
+        <div class="steps reveal">
+          <article class="step">
+            <div class="step-num">1</div>
+            <h3>Upload the deal packet</h3>
+            <p>Bank statements, application, ID, and supporting documents go into one standardized submission flow.</p>
+          </article>
+
+          <article class="step">
+            <div class="step-num">2</div>
+            <h3>Analyze instantly</h3>
+            <p>Use built-in intelligence to understand revenue, NSFs, risk, and likely approval range before the deal goes live.</p>
+            <div class="mini-panel">
+              <div class="title mono">AI BankIQ preview</div>
+              <div class="mini-row"><span class="left">Revenue</span><strong>$82K/mo</strong></div>
+              <div class="mini-row"><span class="left">NSFs</span><strong class="good">2</strong></div>
+              <div class="mini-row"><span class="left">Risk</span><strong class="good">78 / B</strong></div>
+              <div class="mini-row"><span class="left">Approval range</span><strong>$45K–$62K</strong></div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-num">3</div>
+            <h3>Go live in one click</h3>
+            <p>Funders are notified immediately, so the clock starts working for you instead of against you.</p>
+          </article>
+
+          <article class="step">
+            <div class="step-num">4</div>
+            <h3>Review and choose</h3>
+            <p>Offers appear in a structured format so you can compare amount, factor, and speed without digging through threads or texts.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="surface">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-kicker">Get started</div>
+          <h2>Two clear ways in.</h2>
+          <p>Whether you want direct marketplace access or white-glove placement help, the path should feel obvious.</p>
+        </div>
+
+        <div class="paths reveal">
+          <article class="path-card featured">
+            <div class="badge">Recommended</div>
+            <h3>Submit to the marketplace</h3>
+            <p>Put the deal in front of active funders, collect competing responses, and decide when to move forward.</p>
+            <div class="bullet-list">
+              <div class="bullet"><span class="check">✓</span><span>Access to 50+ active funders</span></div>
+              <div class="bullet"><span class="check">✓</span><span>Multiple offers in hours, not days</span></div>
+              <div class="bullet"><span class="check">✓</span><span>Compare amount, factor, and speed side by side</span></div>
+              <div class="bullet"><span class="check">✓</span><span>You choose when to accept and who to move forward with</span></div>
+            </div>
+            <a href="privatecreditmca-submit.html" class="btn btn-primary">Submit a deal →</a>
+          </article>
+
+          <article class="path-card">
+            <h3>Work with a superbroker</h3>
+            <p>Hand the file to a senior broker who can help structure and place tougher deals while you stay attached to the economics.</p>
+            <div class="bullet-list">
+              <div class="bullet"><span class="check">✓</span><span>Experienced eyes on challenging files</span></div>
+              <div class="bullet"><span class="check">✓</span><span>Better placement strategy on borderline approvals</span></div>
+              <div class="bullet"><span class="check">✓</span><span>White-glove support through funding</span></div>
+              <div class="bullet"><span class="check">✓</span><span>You remain part of the deal and preserve your upside</span></div>
+            </div>
+            <a href="privatecreditmca-account.html" class="btn btn-secondary">Talk to a superbroker →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-kicker">Performance snapshot</div>
+          <h2>Built to feel active, competitive, and credible.</h2>
+          <p>The page should communicate momentum quickly, even before someone scrolls deep into the product details.</p>
+        </div>
+
+        <div class="stats reveal">
+          <article class="stat-card"><div class="stat-value">136</div><div class="stat-label">Deals live in the marketplace right now</div></article>
+          <article class="stat-card"><div class="stat-value">2.4h</div><div class="stat-label">Average time to first offer</div></article>
+          <article class="stat-card"><div class="stat-value">50+</div><div class="stat-label">Active funders competing for submissions</div></article>
+          <article class="stat-card"><div class="stat-value">$0</div><div class="stat-label">Cost for brokers to create an account and start</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="surface" id="platform">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-kicker">Platform</div>
+          <h2>The tools that make the marketplace work.</h2>
+          <p>Instead of one giant undifferentiated grid, the platform is grouped into how deals move, how you get smarter
