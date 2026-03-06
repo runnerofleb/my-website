@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrivateCreditMCA — Where MCA Deals Get Bid Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: #0c1830;
+      --panel: rgba(13, 24, 45, 0.82);
+      --panel-2: rgba(17, 31, 59, 0.9);
+      --line: rgba(255,255,255,0.08);
+      --line-strong: rgba(255,255,255,0.14);
+      --text: #eff4ff;
+      --muted: #9cabcb;
+      --muted-2: #72819f;
+      --brand: #7c73ff;
+      --brand-2: #5c8dff;
+      --green: #27d6a2;
+      --green-soft: rgba(39,214,162,0.14);
+      --red: #ff7c86;
+      --amber: #ffcb66;
+      --shadow: 0 20px 80px rgba(0,0,0,0.35);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --container: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(900px 600px at 90% -10%, rgba(124,115,255,0.20), transparent 55%),
+        radial-gradient(700px 500px at 0% 20%, rgba(39,214,162,0.10), transparent 55%),
+        linear-gradient(180deg, #07111f 0%, #091426 30%, #07111f 100%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at center, black 45%, transparent 85%);
+      opacity: 0.45;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(var(--container), calc(100% - 40px)); margin: 0 auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px) saturate(140%);
+      background: rgba(7, 17, 31, 0.68);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      display: grid;
+      place-items: center;
+      box-shadow: 0 10px 30px rgba(124,115,255,0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.24), transparent 45%, transparent);
+    }
+
+    .brand-wordmark {
+      font-size: 1rem;
+    }
+
+    .brand-wordmark span {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn, .btn-ghost {
+      border: none;
+      border-radius: 999px;
+      padding: 13px 18px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 180ms ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .btn {
+      color: white;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: 0 12px 34px rgba(92,141,255,0.18), 0 8px 24px rgba(124,115,255,0.22);
+    }
+
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.04); }
+
+    .btn-ghost {
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: var(--line-strong);
+    }
+
+    .hero {
+      padding: 56px 0 84px;
+    }
+
+    .hero-shell {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 42px;
+      align-items: center;
+      min-height: calc(100vh - 140px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(124,115,255,0.10);
+      border: 1px solid rgba(124,115,255,0.22);
+      color: #c7c2ff;
+      font-weight: 700;
+      font-size: 0.84rem;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 6px rgba(39,214,162,0.10), 0 0 22px rgba(39,214,162,0.4);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3rem, 7vw, 5.7rem);
+      line-height: 0.96;
+      letter-spacing: -0.06em;
+      max-width: 9ch;
+    }
+
+    .headline-accent {
+      background: linear-gradient(135deg, #d8d5ff 0%, #8faeff 40%, #2ae0b3 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-copy {
+      margin: 22px 0 0;
+      max-width: 600px;
+      color: var(--muted);
+      font-size: 1.15rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .proof-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .proof-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .proof-pill strong {
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .hero-card {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -14px;
+      background: linear-gradient(135deg, rgba(124,115,255,0.24), rgba(39,214,162,0.08), transparent 65%);
+      filter: blur(22px);
+      z-index: -1;
+      opacity: 0.85;
+    }
+
+    .market-window {
+      background: linear-gradient(180deg, rgba(18,30,58,0.94), rgba(10,20,38,0.98));
+      border: 1px solid var(--line-strong);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .window-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .window-top-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .window-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #ffb8be;
+      font-weight: 800;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .live-badge i {
+      width: 8px;
+      height: 8px;
+      display: inline-block;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 0 6px rgba(255,124,134,0.10), 0 0 16px rgba(255,124,134,0.3);
+    }
+
+    .window-body {
+      padding: 24px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .deal-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .deal-name {
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 6px;
+    }
+
+    .deal-meta {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.97rem;
+    }
+
+    .deal-request {
+      text-align: right;
+      min-width: 130px;
+    }
+
+    .deal-request strong {
+      display: block;
+      font-size: 2.3rem;
+      letter-spacing: -0.06em;
+      color: white;
+    }
+
+    .deal-request span {
+      color: var(--muted-2);
+      font-size: 0.88rem;
+    }
+
+    .offer-board {
+      display: grid;
+      gap: 10px;
+    }
+
+    .offer-row {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .offer-row strong {
+      display: block;
+      font-size: 0.97rem;
+    }
+
+    .offer-row small {
+      color: var(--muted-2);
+      font-size: 0.83rem;
+    }
+
+    .offer-terms {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .status {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.76rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .status.offer {
+      color: #8ff0ce;
+      background: rgba(39,214,162,0.12);
+      border: 1px solid rgba(39,214,162,0.18);
+    }
+
+    .status.review {
+      color: #ffd990;
+      background: rgba(255,203,102,0.10);
+      border: 1px solid rgba(255,203,102,0.18);
+    }
+
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .signal {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .signal label {
+      display: block;
+      color: var(--muted-2);
+      font-size: 0.78rem;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+
+    .signal strong {
+      font-size: 1rem;
+      letter-spacing: -0.03em;
+    }
+
+    .signal .good { color: #8ff0ce; }
+
+    .section {
+      padding: 92px 0;
+    }
+
+    .section-head {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 34px;
+    }
+
+    .section-kicker {
+      color: #c9c3ff;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      font-weight: 800;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+      margin: 0;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      max-width: 700px;
+      font-size: 1.06rem;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .metric {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 22px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      letter-spacing: -0.06em;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #e7e4ff, #9db8ff 55%, #61e7c1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .metric span {
+      color: var(--muted);
+      line-height: 1.6;
+      display: block;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 18px;
+      background: rgba(124,115,255,0.12);
+      color: #d5d2ff;
+      font-size: 1.2rem;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+      letter-spacing: -0.03em;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 88px 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .compare-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px;
+    }
+
+    .compare-panel.bad {
+      border-color: rgba(255,124,134,0.14);
+      background: linear-gradient(180deg, rgba(255,124,134,0.05), rgba(255,255,255,0.02));
+    }
+
+    .compare-panel.good {
+      border-color: rgba(124,115,255,0.20);
+      background: linear-gradient(180deg, rgba(124,115,255,0.10), rgba(39,214,162,0.05));
+    }
+
+    .compare-label {
+      display: inline-block;
+      margin-bottom: 18px;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 800;
+    }
+
+    .compare-panel.bad .compare-label { color: #ffb3ba; }
+    .compare-panel.good .compare-label { color: #c9c3ff; }
+
+    .compare-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .compare-list div {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .compare-list b {
+      color: var(--text);
+      display: inline-block;
+      min-width: 20px;
+    }
+
+    .compare-arrow {
+      height: 72px;
+      width: 72px;
+      margin: 0 auto;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(124,115,255,0.10);
+      border: 1px solid rgba(124,115,255,0.20);
+      color: #d9d6ff;
+      font-size: 1.8rem;
+      font-weight: 900;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .step {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px;
+      position: relative;
+    }
+
+    .step-number {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(124,115,255,0.12);
+      border: 1px solid rgba(124,115,255,0.18);
+      color: #d8d5ff;
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
+
+    .step h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+      letter-spacing: -0.03em;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.97rem;
+    }
+
+    .mini-insight {
+      margin-top: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .mini-insight strong {
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #c9c3ff;
+    }
+
+    .mini-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.9rem;
+    }
+
+    .mini-row span:first-child { color: var(--muted-2); }
+
+    .path-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 16px;
+    }
+
+    .path-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .path-card.featured {
+      border-color: rgba(124,115,255,0.24);
+      box-shadow: 0 20px 80px rgba(41, 45, 120, 0.18);
+    }
+
+    .path-card.featured::before {
+      content: "Best starting point";
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(124,115,255,0.14);
+      border: 1px solid rgba(124,115,255,0.22);
+      color: #d8d5ff;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .path-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+      letter-spacing: -0.04em;
+    }
+
+    .path-card p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .path-list {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .path-list div {
+      display: flex;
+      gap: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .path-list b { color: #8ff0ce; }
+
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .feature {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .span-6 { grid-column: span 6; }
+    .span-4 { grid-column: span 4; }
+
+    .feature-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    .feature h3 {
+      margin: 0 0 8px;
+      font-size: 1.24rem;
+      letter-spacing: -0.04em;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .feature-ui {
+      margin-top: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .ui-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .ui-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .ui-row strong { color: var(--text); font-weight: 700; }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .badge {
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .cta {
+      padding: 110px 0 96px;
+    }
+
+    .cta-panel {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(800px 300px at 50% -10%, rgba(124,115,255,0.24), transparent 60%),
+        linear-gradient(180deg, rgba(18,30,58,0.95), rgba(11,20,39,0.98));
+      border: 1px solid var(--line-strong);
+      border-radius: 34px;
+      padding: 56px 28px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .cta-panel h2 {
+      margin: 0 auto 14px;
+      max-width: 12ch;
+      font-size: clamp(2.3rem, 5vw, 4.3rem);
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+    }
+
+    .cta-panel p {
+      margin: 0 auto 28px;
+      max-width: 600px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.75;
+    }
+
+    footer {
+      padding: 28px 0 42px;
+      border-top: 1px solid var(--line);
+      color: var(--muted-2);
+    }
+
+    .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .footer-links a:hover { color: var(--text); }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    [data-reveal].visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1080px) {
+      .hero-shell,
+      .path-grid,
+      .compare {
+        grid-template-columns: 1fr;
+      }
+
+      .compare-arrow { transform: rotate(90deg); }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .platform-grid { grid-template-columns: repeat(2, 1fr); }
+      .span-6, .span-4 { grid-column: span 1; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 720px) {
+      .container { width: min(var(--container), calc(100% - 24px)); }
+      .hero { padding-top: 30px; }
+      .nav { height: 72px; }
+      .nav-actions .btn-ghost { display: none; }
+      .proof-row,
+      .hero-actions,
+      .signal-grid,
+      .metrics,
+      .steps,
+      .platform-grid {
+        grid-template-columns: 1fr;
+      }
+      .signal-grid { display: grid; }
+      .deal-head,
+      .offer-row {
+        grid-template-columns: 1fr;
+      }
+      .deal-request { text-align: left; }
+      .window-body { padding: 18px; }
+      .path-card.featured::before {
+        position: static;
+        display: inline-block;
+        margin-bottom: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container nav">
+      <a href="privatecreditmca-landing.html" class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+            <rect x="1.5" y="9" width="3" height="5" rx="1" fill="white"/>
+            <rect x="6.5" y="6" width="3" height="8" rx="1" fill="white"/>
+            <rect x="11.5" y="2.5" width="3" height="11.5" rx="1" fill="white"/>
+          </svg>
+        </span>
+        <span class="brand-wordmark">PrivateCredit<span>MCA</span></span>
+      </a>
+
+      <div class="nav-links">
+        <a href="privatecreditmca-marketplace.html">Marketplace</a>
+        <a href="#how">How it works</a>
+        <a href="#platform">Platform</a>
+        <a href="privatecreditmca-funders.html">Funders</a>
+        <a href="privatecreditmca-account.html">Account</a>
+      </div>
+
+      <div class="nav-actions">
+        <a href="privatecreditmca-account.html" class="btn-ghost">Create free account</a>
+        <a href="privatecreditmca-submit.html" class="btn">Submit a deal →</a>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-shell">
+        <div data-reveal>
+          <div class="eyebrow"><span class="eyebrow-dot"></span>136 active deals in marketplace right now</div>
+          <h1>Submit once.<br><span class="headline-accent">Let funders bid.</span></h1>
+          <p class="hero-copy">The live marketplace for MCA brokers who want faster responses, cleaner comparisons, and more leverage on every deal.</p>
+
+          <div class="hero-actions">
+            <a href="privatecreditmca-submit.html" class="btn">Go live now →</a>
+            <a href="#platform" class="btn-ghost">See the platform</a>
+          </div>
+
+          <div class="proof-row">
+            <div class="proof-pill"><strong>Free</strong> for brokers, always</div>
+            <div class="proof-pill"><strong>2.4 hrs</strong> average to first offer</div>
+            <div class="proof-pill"><strong>Protected</strong> merchant identity stays hidden</div>
+          </div>
+        </div>
+
+        <div class="hero-card" data-reveal>
+          <div class="market-window">
+            <div class="window-top">
+              <div class="window-top-left">
+                <div class="window-dots"><span></span><span></span><span></span></div>
+                Live marketplace view
+              </div>
+              <div class="live-badge"><i></i> live</div>
+            </div>
+
+            <div class="window-body">
+              <div class="deal-head">
+                <div>
+                  <div class="deal-name">Peak Roofing Co</div>
+                  <div class="deal-meta">Construction · Florida · $128K / month revenue<br>Clean file · 0 NSFs · broker protected</div>
+                </div>
+                <div class="deal-request">
+                  <strong>$110K</strong>
+                  <span>requested</span>
+                </div>
+              </div>
+
+              <div class="offer-board">
+                <div class="offer-row">
+                  <div>
+                    <strong>Rapid Finance</strong>
+                    <small>Offer arrived 19 min ago</small>
+                  </div>
+                  <div class="offer-terms">$105K @ 1.32</div>
+                  <div class="status offer">Offer</div>
+                </div>
+                <div class="offer-row">
+                  <div>
+                    <strong>Libertas Funding</strong>
+                    <small>Actively underwriting</small>
+                  </div>
+                  <div class="offer-terms">$110K @ 1.36</div>
+                  <div class="status review">Reviewing</div>
+                </div>
+                <div class="offer-row">
+                  <div>
+                    <strong>National Funding</strong>
+                    <small>Offer arrived 7 min ago</small>
+                  </div>
+                  <div class="offer-terms">$108K @ 1.34</div>
+                  <div class="status offer">Offer</div>
+                </div>
+              </div>
+
+              <div class="signal-grid">
+                <div class="signal">
+                  <label>Revenue</label>
+                  <strong>$128K/mo</strong>
+                </div>
+                <div class="signal">
+                  <label>Risk score</label>
+                  <strong class="good">85 / A</strong>
+                </div>
+                <div class="signal">
+                  <label>NSFs</label>
+                  <strong class="good">0</strong>
+                </div>
+                <div class="signal">
+                  <label>Approval range</label>
+                  <strong>$80K–$110K</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="section-kicker">Why this works</div>
+          <h2 class="section-title">A better process creates better offers.</h2>
+          <p class="section-desc">The current MCA workflow leaks time and negotiating power. PrivateCreditMCA turns every deal into a live, competitive process where funders can see the opportunity quickly and you can choose from real options instead of chasing replies.</p>
+        </div>
+
+        <div class="metrics" data-reveal>
+          <div class="metric"><strong>50+</strong><span>Active funders can review one submission instantly.</span></div>
+          <div class="metric"><strong>1 upload</strong><span>A single universal packet instead of emailing the same file again and again.</span></div>
+          <div class="metric"><strong>2.4 hrs</strong><span>Average time to the first offer on live marketplace submissions.</span></div>
+          <div class="metric"><strong>100%</strong><span>Broker-controlled flow until you choose an offer and release the deal.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="section-kicker">The shift</div>
+          <h2 class="section-title">From chasing funders to running the room.</h2>
+        </div>
+
+        <div class="compare" data-reveal>
+          <div class="compare-panel bad">
+            <div class="compare-label">What brokers do now</div>
+            <div class="compare-list">
+              <div><b>—</b><span>Email the same file to 10 funders one by one.</span></div>
+              <div><b>—</b><span>Wait 24 to 72 hours hoping someone responds.</span></div>
+              <div><b>—</b><span>Follow up manually and still wonder who actually looked.</span></div>
+              <div><b>—</b><span>Take the first workable offer because there is no time left.</span></div>
+            </div>
+          </div>
+
+          <div class="compare-arrow">→</div>
+
+          <div class="compare-panel good">
+            <div class="compare-label">What changes here</div>
+            <div class="compare-list">
+              <div><b>+</b><span>Upload once and broadcast the deal to the marketplace.</span></div>
+              <div><b>+</b><span>Funders compete in parallel instead of responding in sequence.</span></div>
+              <div><b>+</b><span>Compare terms side by side as offers come in.</span></div>
+              <div><b>+</b><span>Choose the strongest structure, not just the fastest reply.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="section-kicker">Broker protection</div>
+          <h2 class="section-title">Your merchant stays yours until you say otherwise.</h2>
+          <p class="section-desc">The platform is designed around broker control. Funders can evaluate the deal without getting direct access to the merchant until you accept an offer.</p>
+        </div>
+
+        <div class="grid-3" data-reveal>
+          <div class="card">
+            <div class="card-icon">🔒</div>
+            <h3>Merchant contact stays hidden</h3>
+            <p>Phone, email, and sensitive merchant details remain protected until you decide to move forward with an offer.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🛡️</div>
+            <h3>No reach-arounds</h3>
+            <p>Funders can review the opportunity, but they cannot work around you while the deal is live in the marketplace.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📁</div>
+            <h3>Controlled packet access</h3>
+            <p>Your submission lives inside the platform experience instead of getting endlessly forwarded around inboxes and desktops.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="section-kicker">How it works</div>
+          <h2 class="section-title">Four steps from upload to funded.</h2>
+          <p class="section-desc">Designed to reduce manual work at every stage and surface the information that matters fastest.</p>
+        </div>
+
+        <div class="steps" data-reveal>
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3>Upload the deal packet</h3>
+            <p>Bank statements, application, ID, and deal context all go into one standardized file.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3>Analyze instantly</h3>
+            <p>AI BankIQ summarizes risk, revenue, NSFs, and likely approval range before you go live.</p>
+            <div class="mini-insight">
+              <strong>AI BankIQ</strong>
+              <div class="mini-row"><span>Revenue</span><span>$82K/mo</span></div>
+              <div class="mini-row"><span>NSFs</span><span>2</span></div>
+              <div class="mini-row"><span>Risk</span><span style="color:#8ff0ce">78 / B</span></div>
+              <div class="mini-row"><span>Approval</span><span>$45K–$62K</span></div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3>Send it live</h3>
+            <p>Qualified funders are notified immediately and underwriting begins in parallel.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <h3>Choose the best offer</h3>
+            <p>Compare structure, amount, and speed side by side, then accept the one you want.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="section-kicker">Get started</div>
+          <h2 class="section-title">Two ways to place a deal.</h2>
+        </div>
+
+        <div class="path-grid" data-reveal>
+          <div class="path-card featured">
+            <h3>Submit to marketplace</h3>
+            <p>Let funders compete for your deal in a structured live process, then choose the best terms when the offers stack up.</p>
+            <div class="path-list">
+              <div><b>✓</b><span>Marketplace visibility across active funders</span></div>
+              <div><b>✓</b><span>Competing offers in hours, not days</span></div>
+              <div><b>✓</b><span>Cleaner side-by-side comparison</span></div>
+              <div><b>✓</b><span>You decide when to release the deal</span></div>
+            </div>
+            <a href="privatecreditmca-submit.html" class="btn">Submit a deal →</a>
+          </div>
+
+          <div class="path-card">
+            <h3>Hand it to a superbroker</h3>
+            <p>For tougher files, a senior broker can help structure the deal, position it correctly, and get it in front of the right funding partners.</p>
+            <div class="path-list">
+              <div><b>✓</b><span>Experienced review on difficult deals</span></div>
+              <div><b>✓</b><span>Better positioning for edge-case approvals</span></div>
+              <div><b>✓</b><span>White-glove support through funding</span></div>
+              <div><b>✓</b><span>You still keep the relationship and commission</span></div>
+            </div>
+            <a href="privatecreditmca-account.html" class="btn-ghost">Talk to a superbroker</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="platform">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="section-kicker">Platform</div>
+          <h2 class="section-title">Everything a broker needs in one place.</h2>
+          <p class="section-desc">The product should feel like one focused system, not a pile of separate tools. This layout organizes the core platform around what brokers actually need to do: package deals, create competition, track progress, and improve outcomes.</p>
+        </div>
+
+        <div class="platform-grid" data-reveal>
+          <a href="privatecreditmca-submit.html" class="feature span-6">
+            <div>
+              <div class="feature-top">
+                <div class="card-icon">📦</div>
+              </div>
+              <h3>Universal deal packet</h3>
+              <p>Upload once and create a clean, standardized file that funders can review immediately.</p>
+            </div>
+            <div class="feature-ui">
+              <div class="ui-list">
+                <div class="ui-row"><span>Bank statements</span><strong>4 months ✓</strong></div>
+                <div class="ui-row"><span>Application</span><strong>Signed ✓</strong></div>
+                <div class="ui-row"><span>Owner ID</span><strong>Verified ✓</strong></div>
+                <div class="ui-row"><span>Deal summary</span><strong>Auto-generated ✓</strong></div>
+              </div>
+            </div>
+          </a>
+
+          <a href="privatecreditmca-offerbattle.html" class="feature span-6">
+            <div>
+              <div class="feature-top">
+                <div class="card-icon">⚔️</div>
+              </div>
+              <h3>Offer battle</h3>
+              <p>See multiple structures side by side and pick the strongest terms instead of sorting through inbox replies.</p>
+            </div>
+            <div class="feature-ui">
+              <div class="ui-list">
+                <div class="ui-row"><span>Credibly</span><strong>$160K · 1.29</strong></div>
+                <div class="ui-row"><span>Rapid</span><strong>$165K · 1.31</strong></div>
+                <div class="ui-row"><span>Fora</span><strong>$170K · 1.33</strong></div>
+                <div class="ui-row"><span>National</span><strong style="color:#8ff0ce">$175K · 1.35</strong></div>
+              </div>
+            </div>
+          </a>
+
+          <a href="privatecreditmca-pipeline.html" class="feature span-4">
+            <div>
+              <div class="card-icon">📈</div>
+              <h3>Pipeline CRM</h3>
+              <p>Track every file from lead to funded with clear status, activity, and offer visibility.</p>
+            </div>
+            <div class="badge-row">
+              <span class="badge">Lead</span>
+              <span class="badge">Docs</span>
+              <span class="badge">UW</span>
+              <span class="badge">Live</span>
+              <span class="badge">Offers</span>
+              <span class="badge">Funded</span>
+            </div>
+          </a>
+
+          <a href="privatecreditmca-bankiq.html" class="feature span-4">
+            <div>
+              <div class="card-icon">🧠</div>
+              <h3>AI BankIQ</h3>
+              <p>Turn raw bank statements into fast underwriting signals before you submit.</p>
+            </div>
+            <div class="feature-ui">
+              <div class="ui-list">
+                <div class="ui-row"><span>Revenue</span><strong>$74K/mo</strong></div>
+                <div class="ui-row"><span>NSFs</span><strong>2</strong></div>
+                <div class="ui-row"><span>Risk</span><strong style="color:#8ff0ce">78 / B</strong></div>
+                <div class="ui-row"><span>Approval</span><strong>$45K–$62K</strong></div>
+              </div>
+            </div>
+          </a>
+
+          <a href="privatecreditmca-funders.html" class="feature span-4">
+            <div>
+              <div class="card-icon">📚</div>
+              <h3>Funder directory</h3>
+              <p>Browse active funding partners by product type, speed, and underwriting fit.</p>
+            </div>
+            <div class="badge-row">
+              <span class="badge">MCA</span>
+              <span class="badge">Term</span>
+              <span class="badge">LOC</span>
+              <span class="badge">Prime</span>
+              <span class="badge">Subprime</span>
+              <span class="badge">Fast-turn</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <div class="cta-panel" data-reveal>
+          <div class="section-kicker">Ready to go live?</div>
+          <h2>Put your next deal in front of competing funders.</h2>
+          <p>One upload. Faster responses. Better negotiating position. No credit card required to get started as a broker.</p>
+          <div class="hero-actions" style="justify-content:center; margin-top:0;">
+            <a href="privatecreditmca-submit.html" class="btn">Submit a deal →</a>
+            <a href="privatecreditmca-account.html" class="btn-ghost">Create free account</a>
+          </div>
+          <div class="proof-row" style="justify-content:center; margin-top:22px;">
+            <div class="proof-pill"><strong>Free</strong> for brokers</div>
+            <div class="proof-pill"><strong>No card</strong> required</div>
+            <div class="proof-pill"><strong>50+</strong> funders competing</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <div class="footer-links">
+        <a href="privatecreditmca-marketplace.html">Marketplace</a>
+        <a href="privatecreditmca-funders.html">Funders</a>
+        <a href="privatecreditmca-pipeline.html">Pipeline</a>
+        <a href="privatecreditmca-bankiq.html">AI BankIQ</a>
+        <a href="privatecreditmca-offerbattle.html">Offer Battle</a>
+      </div>
+      <div>© 2026 PrivateCreditMCA</div>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>
