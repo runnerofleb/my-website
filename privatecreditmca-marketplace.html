@@ -1,201 +1,1616 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PrivateCreditMCA — Live Marketplace</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#050A12;--bg2:#0A1020;--bg3:#0F162B;--bgc:#141D36;
-  --srf:#182040;--srf2:#1E2850;
-  --bdr:rgba(255,255,255,.06);--bdr2:rgba(255,255,255,.09);--bdr3:rgba(255,255,255,.14);
-  --tx:#EFF1F5;--tx2:#8892A8;--tx3:#4F5B73;
-  --ac:#635BFF;--acd:#5046E4;--acl:rgba(99,91,255,.1);--acg:rgba(99,91,255,.04);
-  --em:#00D4AA;--eml:rgba(0,212,170,.1);
-  --gn:#34D399;--gnl:rgba(52,211,153,.1);
-  --rd:#F87171;--rdl:rgba(248,113,113,.08);
-  --am:#FBBF24;--aml:rgba(251,191,36,.08);
-  --cy:#22D3EE;--cyl:rgba(34,211,238,.08);
-  --r:12px;--rs:8px;--sw:272px;
-  --sh:0 2px 8px rgba(0,0,0,.4),0 12px 40px rgba(0,0,0,.25);
-  --shl:0 8px 30px rgba(0,0,0,.5),0 24px 80px rgba(0,0,0,.35);
-}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;font-feature-settings:'cv02','cv03','cv04','cv11'}
-.mono{font-family:'IBM Plex Mono',monospace;font-feature-settings:normal}
-a{text-decoration:none;color:inherit}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrivateCreditMCA — Live Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08111b;
+      --bg-2: #0b1521;
+      --bg-3: #101c2b;
+      --panel: rgba(12, 21, 34, 0.92);
+      --panel-2: rgba(16, 28, 43, 0.96);
+      --panel-3: rgba(20, 34, 52, 0.98);
+      --line: rgba(255,255,255,0.07);
+      --line-strong: rgba(255,255,255,0.12);
+      --text: #edf3fb;
+      --muted: #97a7bc;
+      --muted-2: #6f8098;
+      --brand: #5f6fff;
+      --brand-strong: #4f5fe9;
+      --brand-soft: rgba(95,111,255,0.12);
+      --green: #22c58b;
+      --green-soft: rgba(34,197,139,0.12);
+      --amber: #d7a850;
+      --amber-soft: rgba(215,168,80,0.12);
+      --red: #ff7d87;
+      --red-soft: rgba(255,125,135,0.12);
+      --cyan: #7fc2ff;
+      --shadow: 0 28px 80px rgba(0,0,0,0.36);
+      --shadow-soft: 0 12px 30px rgba(0,0,0,0.24);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --sidebar: 300px;
+    }
 
-/* noise */
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.018;
-background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1000px 600px at 88% -10%, rgba(95,111,255,0.16), transparent 56%),
+        radial-gradient(800px 520px at 0% 18%, rgba(255,255,255,0.03), transparent 54%),
+        linear-gradient(180deg, #08111b 0%, #0a1320 36%, #08111b 100%);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
 
-/* ═══ NAV ═══ */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(5,10,18,.7);backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid var(--bdr)}
-.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:-.3px}
-.logo .mk{width:26px;height:26px;border-radius:7px;background:var(--ac);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 0 16px rgba(99,91,255,.3)}
-.logo .mk::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.25),transparent)}
-.logo .mk svg{width:13px;height:13px}
-.logo .dim{color:var(--tx3);font-weight:500}
-.nc{display:flex;gap:28px}.nc a{font-size:13px;font-weight:500;color:var(--tx3);transition:color .25s;letter-spacing:.1px}.nc a:hover,.nc a.on{color:var(--tx)}
-.nr{display:flex;gap:10px}.nb{padding:7px 18px;border-radius:8px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit;border:none;display:inline-flex;align-items:center;gap:6px;transition:all .25s;letter-spacing:.1px}.nb.p{background:var(--ac);color:#fff;box-shadow:0 0 16px rgba(99,91,255,.2)}.nb.p:hover{background:var(--acd);box-shadow:0 0 24px rgba(99,91,255,.3)}.nb.s{background:transparent;color:var(--tx2);border:1px solid var(--bdr2)}.nb.s:hover{border-color:var(--bdr3)}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,0.016) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.016) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 82%);
+      opacity: 0.22;
+    }
 
-@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 6px rgba(248,113,113,.4)}50%{opacity:.4;box-shadow:0 0 2px rgba(248,113,113,.1)}}
-.fi2{animation:fu .5s ease both}
+    a { color: inherit; text-decoration: none; }
+    .mono { font-family: "IBM Plex Mono", monospace; }
 
-/* ═══ LAYOUT ═══ */
-.app{display:flex;padding-top:60px;min-height:100vh}
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      backdrop-filter: blur(18px) saturate(125%);
+      background: rgba(8, 17, 27, 0.76);
+      border-bottom: 1px solid var(--line);
+    }
 
-/* ═══ SIDEBAR ═══ */
-.side{width:var(--sw);min-width:var(--sw);border-right:1px solid var(--bdr);padding:24px 20px;position:fixed;top:60px;bottom:0;left:0;overflow-y:auto;background:var(--bg2)}
-.side::-webkit-scrollbar{width:4px}.side::-webkit-scrollbar-thumb{background:var(--bdr3);border-radius:4px}
-.ss{margin-bottom:24px}.sl{font-size:9px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--tx3);margin-bottom:10px}
-.si{width:100%;padding:10px 14px;border-radius:var(--rs);background:var(--bg3);border:1px solid var(--bdr);color:var(--tx);font-family:inherit;font-size:12px;outline:none;transition:border-color .2s}.si::placeholder{color:var(--tx3)}.si:focus{border-color:rgba(99,91,255,.3);box-shadow:0 0 12px rgba(99,91,255,.06)}
-.cg{display:flex;flex-wrap:wrap;gap:5px}.ch{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:500;border:1px solid var(--bdr);background:transparent;color:var(--tx3);cursor:pointer;font-family:inherit;transition:all .2s}.ch:hover{border-color:var(--bdr2);color:var(--tx2)}.ch.on{border-color:rgba(99,91,255,.3);color:var(--ac);background:var(--acl)}
-.sr input[type=range]{width:100%;-webkit-appearance:none;background:transparent;margin:8px 0}.sr input[type=range]::-webkit-slider-track{height:3px;border-radius:2px;background:var(--bdr2)}.sr input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--ac);margin-top:-5px;cursor:pointer;box-shadow:0 0 10px rgba(99,91,255,.3)}
-.srl{display:flex;justify-content:space-between;font-size:11px;color:var(--tx3);margin-top:4px}.srl .v{color:var(--ac);font-weight:600}
-.sg{display:grid;grid-template-columns:1fr 1fr;gap:6px}.sb{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--rs);padding:14px;text-align:center}.sb .n{font-size:20px;font-weight:800;background:linear-gradient(135deg,var(--ac),var(--em));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.sb .l{font-size:9px;color:var(--tx3);margin-top:2px;letter-spacing:.3px}
+    .nav {
+      width: min(1400px, calc(100% - 32px));
+      margin: 0 auto;
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
 
-/* ═══ MAIN ═══ */
-.main{flex:1;margin-left:var(--sw);padding:24px}
-.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.mh h1{font-size:22px;font-weight:800;display:flex;align-items:center;gap:12px;letter-spacing:-.5px}
-.lb{display:inline-flex;align-items:center;gap:6px;background:var(--rdl);border:1px solid rgba(248,113,113,.1);padding:3px 10px;border-radius:6px;font-size:9px;font-weight:600;color:var(--rd);text-transform:uppercase;letter-spacing:1.5px}.lb .bk{width:5px;height:5px;border-radius:50%;background:var(--rd);box-shadow:0 0 6px rgba(248,113,113,.4);animation:pulse 1.2s infinite}
-.sbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:12px}.sbar .c{color:var(--tx3)}.sbar .c strong{color:var(--tx2)}
-.ssel{background:var(--bg3);border:1px solid var(--bdr);color:var(--tx2);padding:6px 12px;border-radius:var(--rs);font-family:inherit;font-size:11px;cursor:pointer;outline:none}
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      min-width: max-content;
+    }
 
-/* ═══ DEAL CARDS ═══ */
-.dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
-.dc{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:22px;cursor:pointer;transition:all .4s;position:relative;overflow:hidden}
-.dc:hover{border-color:var(--bdr2);transform:translateY(-4px);box-shadow:var(--shl),0 0 40px rgba(99,91,255,.03)}
-.dc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ac),var(--em),transparent);opacity:0;transition:opacity .3s}.dc:hover::before{opacity:.5}
-.dt{display:flex;justify-content:space-between;margin-bottom:10px}
-.ds{display:flex;align-items:center;gap:5px;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px}
-.ds.live{color:var(--rd)}.ds.live .dot{width:4px;height:4px;border-radius:50%;background:var(--rd);box-shadow:0 0 4px rgba(248,113,113,.4);animation:pulse 1.2s infinite}
-.ds.new{color:var(--ac)}.ds.funded{color:var(--gn)}.ds.reviewing{color:var(--am)}
-.dtm{font-size:10px;color:var(--tx3)}
-.dbz{font-size:16px;font-weight:700;margin-bottom:3px;letter-spacing:-.2px}
-.dts{display:flex;gap:5px;margin-bottom:10px}
-.tg{display:inline-flex;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:600}
-.tg.i{border:1px solid rgba(99,91,255,.1);color:var(--ac);background:var(--acl)}
-.tg.s{border:1px solid rgba(34,211,238,.08);color:var(--cy);background:var(--cyl)}
-.rr{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.rs{display:inline-flex;align-items:center;justify-content:center;width:28px;height:18px;border-radius:4px;font-size:10px;font-weight:700}
-.rs.a{background:var(--gnl);color:var(--gn)}.rs.b{background:var(--acl);color:var(--ac)}.rs.c{background:var(--aml);color:var(--am)}
-.rt{flex:1;height:3px;border-radius:2px;background:var(--bdr)}.rf{height:100%;border-radius:2px}.rf.h{background:var(--gn)}.rf.m{background:var(--am)}.rf.lo{background:var(--rd)}
-.df{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
-.dfi{background:var(--bg2);border:1px solid var(--bdr);border-radius:var(--rs);padding:10px 12px}
-.dfi .fl{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;font-weight:600}
-.dfi .fv{font-size:17px;font-weight:800;margin-top:1px}.dfi .fv.ac{color:var(--ac)}
-.dbot{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--bdr)}
-.doc{font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;color:var(--tx2)}.doc .cn{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:5px;background:var(--acl);color:var(--ac);font-size:11px;font-weight:700}
-.dvb{font-size:11px;font-weight:600;color:var(--ac);background:none;border:none;cursor:pointer;font-family:inherit;transition:color .2s}.dvb:hover{color:var(--em)}
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #6978ff, #4f5fe9);
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 12px 26px rgba(79,95,233,0.24);
+    }
 
-/* ═══ MODAL ═══ */
-.mo{position:fixed;inset:0;z-index:500;background:rgba(5,10,18,.6);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:24px}.mo.open{display:flex}
-.md{background:var(--bg2);border:1px solid var(--bdr2);border-radius:16px;width:100%;max-width:860px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:var(--shl)}
-.md::-webkit-scrollbar{width:4px}.md::-webkit-scrollbar-thumb{background:var(--bdr3);border-radius:4px}
-.mx{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:8px;background:var(--bg3);border:1px solid var(--bdr);color:var(--tx3);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;transition:all .2s}.mx:hover{color:var(--tx);border-color:var(--bdr2)}
-.mh2{padding:28px 28px 0}
-.mst{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--rd);margin-bottom:10px}
-.mst .dot{width:5px;height:5px;border-radius:50%;background:var(--rd);box-shadow:0 0 4px rgba(248,113,113,.4);animation:pulse 1.2s infinite}
-.mbz{font-size:26px;font-weight:800;margin-bottom:6px;letter-spacing:-.5px}
-.mts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
-.mfg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:24px}
-.mf{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--rs);padding:14px;text-align:center}
-.mf .l{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;font-weight:600}
-.mf .v{font-size:20px;font-weight:800;margin-top:3px}.mf .v.ac{color:var(--ac)}
-.mai{margin:0 28px 24px;background:var(--acl);border:1px solid rgba(99,91,255,.1);border-radius:var(--r);padding:20px;position:relative;overflow:hidden}
-.mai::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,91,255,.4),transparent)}
-.mai-l{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ac);margin-bottom:12px}
-.mai-g{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.mai-i .al{font-size:11px;color:var(--tx3)}.mai-i .av{font-size:17px;font-weight:700}.mai-i .av.g{color:var(--gn)}.mai-i .av.w{color:var(--am)}
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(255,255,255,0.26), transparent 40%, transparent);
+    }
 
-/* ═══ OFFER TABLE ═══ */
-.mof{margin:0 28px 24px}.mof-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.mof-h h3{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;letter-spacing:-.2px}
-.ocb{display:inline-flex;padding:2px 10px;border-radius:5px;background:var(--acl);color:var(--ac);font-size:11px;font-weight:700}
-.ot{width:100%;border-collapse:collapse}
-.ot th{text-align:left;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--tx3);padding:10px 14px;border-bottom:1px solid var(--bdr)}
-.ot td{padding:12px 14px;border-bottom:1px solid var(--bdr);font-size:13px}.ot tr:last-child td{border-bottom:none}
-.ot tr:hover td{background:rgba(99,91,255,.02)}
-.ofn{font-weight:600}.oam{font-weight:700}
-.obg{display:inline-flex;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:600}
-.obg.ac{background:var(--gnl);color:var(--gn)}.obg.rv{background:var(--aml);color:var(--am)}
-.oac{background:var(--ac);color:#fff;border:none;padding:5px 14px;border-radius:6px;font-weight:600;font-size:11px;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 0 10px rgba(99,91,255,.15)}.oac:hover{box-shadow:0 0 20px rgba(99,91,255,.3)}
+    .brand-wordmark {
+      font-size: 1rem;
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+    }
 
-/* ═══ TIMELINE ═══ */
-.mtl{margin:0 28px 28px}.mtl h3{font-size:16px;font-weight:700;margin-bottom:12px;letter-spacing:-.2px}
-.tll{position:relative;padding-left:24px}.tll::before{content:'';position:absolute;left:5px;top:4px;bottom:4px;width:1px;background:var(--bdr2)}
-.tli{position:relative;padding:0 0 16px 16px;font-size:12px}.tli:last-child{padding-bottom:0}
-.tli::before{content:'';position:absolute;left:-22px;top:5px;width:7px;height:7px;border-radius:50%;background:var(--ac);box-shadow:0 0 8px rgba(99,91,255,.2);border:2px solid var(--bg2)}
-.tli .tt{font-size:10px;color:var(--tx3)}.tli .te{color:var(--tx2)}.tli .te strong{color:var(--tx)}
+    .brand-wordmark span { color: var(--muted); font-weight: 600; }
 
-/* ═══ ACTIVITY FEED ═══ */
-.ap{position:fixed;top:80px;right:24px;width:240px;z-index:50}
-.ac2{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:12px;animation:si .4s ease both;margin-bottom:6px;box-shadow:var(--sh)}
-@keyframes si{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-.ac2 .ah{display:flex;align-items:center;gap:6px;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--ac);margin-bottom:4px}
-.ac2 .ah .bk{width:4px;height:4px;border-radius:50%;background:var(--ac);box-shadow:0 0 6px rgba(99,91,255,.3);animation:pulse 1.5s infinite}
-.ac2 .at{font-size:12px;color:var(--tx2);line-height:1.4}.ac2 .at strong{color:var(--tx)}
-.ac2 .atm{font-size:10px;color:var(--tx3);margin-top:3px}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
 
-@media(max-width:1100px){.ap{display:none}}
-@media(max-width:900px){.side{display:none}.main{margin-left:0}.mfg,.mai-g{grid-template-columns:1fr 1fr}.nc{display:none}}
-@media(max-width:600px){.dg{grid-template-columns:1fr}}
-</style>
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--text); }
+
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+
+    .btn, .btn-ghost {
+      border-radius: 999px;
+      padding: 13px 18px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 180ms ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+      border: 1px solid var(--line);
+    }
+
+    .btn {
+      color: white;
+      background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+      border-color: rgba(95,111,255,0.2);
+      box-shadow: 0 12px 28px rgba(79,95,233,0.22);
+    }
+
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 16px 30px rgba(79,95,233,0.26); }
+
+    .btn-ghost {
+      color: var(--text);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: var(--line-strong);
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: var(--sidebar) 1fr;
+      min-height: calc(100vh - 78px);
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 78px;
+      align-self: start;
+      height: calc(100vh - 78px);
+      padding: 24px 18px 24px 20px;
+      border-right: 1px solid var(--line);
+      background: rgba(9, 18, 30, 0.76);
+      backdrop-filter: blur(16px);
+      overflow-y: auto;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 999px; }
+
+    .side-section { margin-bottom: 22px; }
+
+    .side-label {
+      color: #c8d0ff;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+      letter-spacing: 0.16em;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.35rem;
+      letter-spacing: -0.05em;
+      margin-bottom: 4px;
+      background: linear-gradient(180deg, #f0f4ff 0%, #c6d0ff 42%, #8f9eff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .stat-card span {
+      color: var(--muted-2);
+      font-size: 0.76rem;
+      line-height: 1.4;
+    }
+
+    .search {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+    }
+
+    .search::placeholder { color: var(--muted-2); }
+    .search:focus {
+      border-color: rgba(95,111,255,0.24);
+      box-shadow: 0 0 0 4px rgba(95,111,255,0.08);
+    }
+
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 9px 12px;
+      font: inherit;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+
+    .chip:hover { color: var(--text); border-color: var(--line-strong); }
+    .chip.active {
+      color: #d7ddff;
+      background: rgba(95,111,255,0.10);
+      border-color: rgba(95,111,255,0.18);
+    }
+
+    .slider-wrap {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      -webkit-appearance: none;
+      background: transparent;
+      margin: 6px 0;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+      margin-top: -6px;
+      box-shadow: 0 0 0 5px rgba(95,111,255,0.12);
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .slider-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--muted-2);
+      margin-top: 6px;
+    }
+
+    .slider-meta strong { color: #cad2ff; }
+
+    .content {
+      padding: 26px 24px 40px;
+      position: relative;
+    }
+
+    .hero-row {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .hero-panel,
+    .pulse-panel,
+    .toolbar,
+    .deal-card,
+    .modal-card,
+    .feed-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), var(--shadow-soft);
+    }
+
+    .hero-panel {
+      padding: 22px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-panel::before,
+    .pulse-panel::before,
+    .deal-card::before,
+    .modal-subpanel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(95,111,255,0.35), transparent);
+    }
+
+    .hero-panel::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -90px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(95,111,255,0.18), transparent 65%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(95,111,255,0.08);
+      border: 1px solid rgba(95,111,255,0.16);
+      color: #cad2ff;
+      font-weight: 700;
+      font-size: 0.84rem;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 0 5px rgba(255,125,135,0.08), 0 0 12px rgba(255,125,135,0.18);
+    }
+
+    .hero-panel h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+      max-width: 10ch;
+    }
+
+    .hero-panel p {
+      margin: 12px 0 0;
+      max-width: 60ch;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .hero-metric {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .hero-metric span {
+      display: block;
+      color: var(--muted-2);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .hero-metric strong {
+      display: block;
+      font-size: 1.25rem;
+      letter-spacing: -0.04em;
+    }
+
+    .pulse-panel {
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel-kicker {
+      color: #c8d0ff;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+      letter-spacing: 0.16em;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .pulse-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .pulse-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .pulse-item:last-child { border-bottom: none; }
+    .pulse-item strong { display: block; font-size: 0.96rem; }
+    .pulse-item small { color: var(--muted-2); }
+
+    .trend {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      min-width: 86px;
+      text-align: center;
+    }
+
+    .trend.up {
+      color: #91e5c4;
+      background: rgba(34,197,139,0.08);
+      border: 1px solid rgba(34,197,139,0.14);
+    }
+
+    .trend.down {
+      color: #ffb9be;
+      background: rgba(255,125,135,0.08);
+      border: 1px solid rgba(255,125,135,0.14);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar h2 {
+      margin: 0;
+      font-size: 1.35rem;
+      letter-spacing: -0.04em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,125,135,0.08);
+      border: 1px solid rgba(255,125,135,0.14);
+      color: #ffc4c8;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 800;
+    }
+
+    .live-pill i {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 0 5px rgba(255,125,135,0.08);
+    }
+
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      flex-wrap: wrap;
+    }
+
+    .select {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      font: inherit;
+      padding: 10px 14px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .deal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 14px;
+    }
+
+    .deal-card {
+      position: relative;
+      overflow: hidden;
+      padding: 20px;
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .deal-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--line-strong);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 18px 40px rgba(0,0,0,0.26);
+    }
+
+    .deal-top,
+    .deal-bottom,
+    .risk-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .deal-top { margin-bottom: 12px; }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      border: 1px solid transparent;
+    }
+
+    .status-pill.live {
+      color: #ffc4c8;
+      background: rgba(255,125,135,0.08);
+      border-color: rgba(255,125,135,0.14);
+    }
+
+    .status-pill.live i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 0 4px rgba(255,125,135,0.08);
+    }
+
+    .status-pill.new {
+      color: #d8ddff;
+      background: rgba(95,111,255,0.08);
+      border-color: rgba(95,111,255,0.14);
+    }
+
+    .status-pill.reviewing {
+      color: #e8d09c;
+      background: rgba(215,168,80,0.08);
+      border-color: rgba(215,168,80,0.14);
+    }
+
+    .status-pill.funded {
+      color: #91e5c4;
+      background: rgba(34,197,139,0.08);
+      border-color: rgba(34,197,139,0.14);
+    }
+
+    .time {
+      color: var(--muted-2);
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+    }
+
+    .deal-title {
+      font-size: 1.18rem;
+      letter-spacing: -0.04em;
+      margin: 0 0 8px;
+    }
+
+    .meta-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .meta-badge {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
+    }
+
+    .meta-badge.brand {
+      background: rgba(95,111,255,0.08);
+      border-color: rgba(95,111,255,0.14);
+      color: #cbd2ff;
+    }
+
+    .meta-badge.cyan {
+      background: rgba(127,194,255,0.08);
+      border-color: rgba(127,194,255,0.14);
+      color: #cfe7ff;
+    }
+
+    .risk-row { margin-bottom: 14px; }
+
+    .risk-badge {
+      min-width: 62px;
+      text-align: center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      border: 1px solid transparent;
+    }
+
+    .risk-badge.a {
+      color: #91e5c4;
+      background: rgba(34,197,139,0.08);
+      border-color: rgba(34,197,139,0.14);
+    }
+
+    .risk-badge.b {
+      color: #d8ddff;
+      background: rgba(95,111,255,0.08);
+      border-color: rgba(95,111,255,0.14);
+    }
+
+    .risk-badge.c {
+      color: #e8d09c;
+      background: rgba(215,168,80,0.08);
+      border-color: rgba(215,168,80,0.14);
+    }
+
+    .risk-track {
+      position: relative;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .risk-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      border-radius: 999px;
+    }
+
+    .risk-fill.high { background: linear-gradient(90deg, #1bb97f, #2fe1a1); }
+    .risk-fill.mid { background: linear-gradient(90deg, #b98a31, #e1ba58); }
+    .risk-fill.low { background: linear-gradient(90deg, #c5636d, #ff8d96); }
+
+    .risk-score {
+      font-size: 0.82rem;
+      color: var(--muted-2);
+      min-width: 28px;
+      text-align: right;
+    }
+
+    .deal-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .deal-metric {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .deal-metric span {
+      display: block;
+      color: var(--muted-2);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .deal-metric strong {
+      display: block;
+      font-size: 1.15rem;
+      letter-spacing: -0.04em;
+    }
+
+    .deal-metric strong.brand { color: #cad2ff; }
+
+    .deal-bottom {
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .offer-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .offer-count-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: rgba(95,111,255,0.10);
+      border: 1px solid rgba(95,111,255,0.14);
+      color: #d7ddff;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .view-link {
+      color: #cad2ff;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .feed {
+      position: fixed;
+      right: 20px;
+      top: 98px;
+      width: 260px;
+      z-index: 40;
+      display: grid;
+      gap: 8px;
+    }
+
+    .feed-card {
+      padding: 12px 14px;
+      animation: slideIn 300ms ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(16px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .feed-label {
+      color: #cad2ff;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      font-weight: 800;
+      margin-bottom: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feed-label i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--brand);
+      display: inline-block;
+    }
+
+    .feed-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .feed-card time {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted-2);
+      font-size: 0.76rem;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      background: rgba(5,10,18,0.72);
+      backdrop-filter: blur(16px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-card {
+      width: min(960px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      padding: 26px;
+      background: linear-gradient(180deg, rgba(16,28,43,0.98), rgba(10,18,30,0.99));
+    }
+
+    .modal-card::-webkit-scrollbar { width: 8px; }
+    .modal-card::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 999px; }
+
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .close-btn:hover { color: var(--text); border-color: var(--line-strong); }
+
+    .modal-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-weight: 800;
+    }
+
+    .modal-status.live { color: #ffc4c8; }
+    .modal-status.new { color: #d7ddff; }
+    .modal-status.reviewing { color: #e8d09c; }
+    .modal-status.funded { color: #91e5c4; }
+
+    .modal-status i {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+      background: currentColor;
+      opacity: 0.9;
+    }
+
+    .modal-title {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 4vw, 2.7rem);
+      letter-spacing: -0.06em;
+    }
+
+    .modal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .modal-metric {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .modal-metric span {
+      display: block;
+      color: var(--muted-2);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .modal-metric strong {
+      display: block;
+      font-size: 1.35rem;
+      letter-spacing: -0.04em;
+    }
+
+    .modal-subpanel {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.022);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .ai-item span {
+      display: block;
+      color: var(--muted-2);
+      font-size: 0.76rem;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 800;
+    }
+
+    .ai-item strong {
+      display: block;
+      font-size: 1.2rem;
+      letter-spacing: -0.04em;
+    }
+
+    .ai-item strong.good { color: #91e5c4; }
+    .ai-item strong.warn { color: #e8d09c; }
+
+    .offers-head,
+    .timeline-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .offers-head h3,
+    .timeline-head h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      letter-spacing: -0.04em;
+    }
+
+    .count-pill {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      background: rgba(95,111,255,0.10);
+      border: 1px solid rgba(95,111,255,0.14);
+      color: #d7ddff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      color: var(--muted-2);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 800;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    td {
+      padding: 14px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    tr:last-child td { border-bottom: none; }
+    td strong { color: var(--text); }
+
+    .row-status {
+      display: inline-flex;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .row-status.active {
+      color: #91e5c4;
+      background: rgba(34,197,139,0.08);
+      border: 1px solid rgba(34,197,139,0.14);
+    }
+
+    .row-status.reviewing {
+      color: #e8d09c;
+      background: rgba(215,168,80,0.08);
+      border: 1px solid rgba(215,168,80,0.14);
+    }
+
+    .accept-btn {
+      border: 1px solid rgba(95,111,255,0.18);
+      background: linear-gradient(180deg, var(--brand), var(--brand-strong));
+      color: white;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(79,95,233,0.18);
+    }
+
+    .accept-btn.accepted {
+      background: rgba(34,197,139,0.12);
+      border-color: rgba(34,197,139,0.16);
+      color: #91e5c4;
+      box-shadow: none;
+      cursor: default;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 34px 12px 10px;
+      color: var(--muted);
+    }
+
+    .empty-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 14px;
+      border-radius: 20px;
+      background: rgba(95,111,255,0.08);
+      border: 1px solid rgba(95,111,255,0.14);
+      display: grid;
+      place-items: center;
+      color: #d7ddff;
+      font-size: 1.4rem;
+      font-weight: 900;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 6px;
+      bottom: 6px;
+      width: 1px;
+      background: rgba(255,255,255,0.10);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 16px 16px;
+    }
+
+    .timeline-item:last-child { padding-bottom: 0; }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -18px;
+      top: 5px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--brand);
+      box-shadow: 0 0 0 4px rgba(95,111,255,0.08);
+    }
+
+    .timeline-item time {
+      display: block;
+      color: var(--muted-2);
+      font-size: 0.76rem;
+      margin-bottom: 4px;
+    }
+
+    .timeline-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .timeline-item p strong { color: var(--text); }
+
+    @media (max-width: 1280px) {
+      .feed { display: none; }
+      .hero-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 1080px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .hero-metrics,
+      .modal-grid,
+      .ai-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 760px) {
+      .nav { width: calc(100% - 20px); height: 72px; }
+      .nav-links { display: none; }
+      .nav-actions .btn-ghost { display: none; }
+      .content { padding: 18px 12px 28px; }
+      .sidebar { padding: 18px 12px; }
+      .toolbar { align-items: flex-start; flex-direction: column; }
+      .deal-grid { grid-template-columns: 1fr; }
+      .hero-metrics,
+      .modal-grid,
+      .ai-grid,
+      .stats-grid,
+      .deal-metrics { grid-template-columns: 1fr; }
+      .modal-card { padding: 18px; }
+      .hero-panel, .pulse-panel { padding: 18px; }
+      .offer-row,
+      .deal-top,
+      .deal-bottom,
+      .risk-row { flex-direction: column; align-items: stretch; }
+      th:nth-child(5), td:nth-child(5) { text-align: right; }
+    }
+  </style>
 </head>
 <body>
-<nav>
-  <a href="privatecreditmca-landing.html" class="logo"><div class="mk"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="9" width="3" height="5" rx="1" fill="white"/><rect x="6.5" y="6" width="3" height="8" rx="1" fill="white"/><rect x="11" y="3" width="3" height="11" rx="1" fill="white"/></svg></div>PrivateCredit<span class="dim">MCA</span></a>
-  <div class="nc"><a href="privatecreditmca-landing.html">Home</a><a href="#" class="on">Marketplace</a><a href="privatecreditmca-account.html?view=profile">Dashboard</a><a href="privatecreditmca-funders.html">Funder Directory</a></div>
-  <div class="nr"><a href="privatecreditmca-account.html?view=login" class="nb s">Log In</a><a href="privatecreditmca-submit.html" class="nb p">+ Submit a Deal</a></div>
-</nav>
-<div class="app">
-<aside class="side">
-  <div class="ss"><div class="sl">Marketplace Stats</div><div class="sg"><div class="sb"><div class="n" id="sd">136</div><div class="l">Active Deals</div></div><div class="sb"><div class="n">$9.9M</div><div class="l">Pipeline</div></div><div class="sb"><div class="n">50+</div><div class="l">Funders</div></div><div class="sb"><div class="n">4.2h</div><div class="l">Avg 1st Offer</div></div></div></div>
-  <div class="ss"><div class="sl">Search</div><input class="si" placeholder="Search deals..." id="sI" oninput="fD()"></div>
-  <div class="ss"><div class="sl">Industry</div><div class="cg"><button class="ch on" onclick="tf(this,'i')" data-v="all">All</button><button class="ch" onclick="tf(this,'i')" data-v="Restaurant">Restaurant</button><button class="ch" onclick="tf(this,'i')" data-v="Auto Repair">Auto</button><button class="ch" onclick="tf(this,'i')" data-v="Construction">Construction</button><button class="ch" onclick="tf(this,'i')" data-v="Retail">Retail</button><button class="ch" onclick="tf(this,'i')" data-v="Medical">Medical</button><button class="ch" onclick="tf(this,'i')" data-v="Trucking">Trucking</button><button class="ch" onclick="tf(this,'i')" data-v="Services">Services</button></div></div>
-  <div class="ss"><div class="sl">Status</div><div class="cg"><button class="ch on" onclick="tf(this,'s')" data-v="all">All</button><button class="ch" onclick="tf(this,'s')" data-v="live">Live</button><button class="ch" onclick="tf(this,'s')" data-v="new">New</button><button class="ch" onclick="tf(this,'s')" data-v="reviewing">Reviewing</button><button class="ch" onclick="tf(this,'s')" data-v="funded">Funded</button></div></div>
-  <div class="ss"><div class="sl">Funding Amount</div><div class="sr"><input type="range" min="10" max="500" value="500" id="aR" oninput="uR()"><div class="srl"><span>$10K</span><span class="v" id="rV">$500K</span></div></div></div>
-  <div class="ss"><div class="sl">Risk Grade</div><div class="cg"><button class="ch on" onclick="tf(this,'r')" data-v="all">All</button><button class="ch" onclick="tf(this,'r')" data-v="A">A</button><button class="ch" onclick="tf(this,'r')" data-v="B">B</button><button class="ch" onclick="tf(this,'r')" data-v="C">C</button></div></div>
-</aside>
-<main class="main">
-  <div class="mh fi2"><h1>Live Marketplace <span class="lb"><span class="bk"></span>Live</span></h1></div>
-  <div class="sbar fi2" style="animation-delay:.06s"><div class="c">Showing <strong id="dC">12</strong> deals</div><select class="ssel" id="sS" onchange="fD()"><option value="newest">Newest</option><option value="amount-high">Highest Amount</option><option value="amount-low">Lowest Amount</option><option value="offers">Most Offers</option><option value="risk">Best Risk</option></select></div>
-  <div class="dg" id="dG"></div>
-</main>
-</div>
-<div class="mo" id="mO" onclick="cM(event)"><div class="md" onclick="event.stopPropagation()"><button class="mx" onclick="cMF()">✕</button><div id="mB"></div></div></div>
-<div class="ap" id="aP"></div>
-<script>
-const D=[
-{id:1,biz:"QuickFix Auto Repair",ind:"Auto Repair",st:"TX",rev:74000,req:80000,status:"live",time:"2m ago",rg:"B",rs:78,offers:[{f:"Apex Funding",a:60000,fc:1.37,s:"active"},{f:"Capital Group",a:58000,fc:1.35,s:"active"},{f:"Atlas Capital",a:62000,fc:1.40,s:"active"}],ai:{rev:"$74K",nsf:2,rs:"78/B",ar:"$45K-$62K"},tl:[{t:"2m ago",e:"<strong>Atlas Capital</strong> offer: $62K @ 1.40"},{t:"18m ago",e:"<strong>Capital Group</strong> offer submitted"},{t:"1h ago",e:"Deal posted"}]},
-{id:2,biz:"Nonna's Trattoria",ind:"Restaurant",st:"NY",rev:70000,req:65000,status:"live",time:"8m ago",rg:"B",rs:74,offers:[{f:"Forward Financing",a:52000,fc:1.36,s:"active"},{f:"BridgeCap",a:55000,fc:1.38,s:"active"}],ai:{rev:"$70K",nsf:3,rs:"74/B",ar:"$40K-$55K"},tl:[{t:"8m ago",e:"<strong>BridgeCap</strong> offer submitted"},{t:"42m ago",e:"<strong>Forward Financing</strong> offer submitted"}]},
-{id:3,biz:"Peak Roofing Co",ind:"Construction",st:"FL",rev:128000,req:110000,status:"live",time:"14m ago",rg:"A",rs:85,offers:[{f:"Rapid Finance",a:105000,fc:1.32,s:"active"},{f:"Libertas",a:110000,fc:1.36,s:"reviewing"}],ai:{rev:"$128K",nsf:0,rs:"85/A",ar:"$80K-$110K"},tl:[{t:"14m ago",e:"<strong>Libertas</strong> reviewing"},{t:"28m ago",e:"<strong>Rapid Finance</strong> offer submitted"}]},
-{id:4,biz:"Bright Smile Dental",ind:"Medical",st:"CA",rev:95000,req:75000,status:"new",time:"22m ago",rg:"A",rs:82,offers:[],ai:{rev:"$95K",nsf:1,rs:"82/A",ar:"$55K-$75K"},tl:[{t:"22m ago",e:"Deal posted"}]},
-{id:5,biz:"Metro Logistics LLC",ind:"Trucking",st:"NJ",rev:210000,req:180000,status:"live",time:"35m ago",rg:"A",rs:88,offers:[{f:"Credibly",a:160000,fc:1.29,s:"active"},{f:"Fora Financial",a:170000,fc:1.33,s:"active"},{f:"Rapid Finance",a:165000,fc:1.31,s:"active"},{f:"National Funding",a:175000,fc:1.35,s:"reviewing"}],ai:{rev:"$210K",nsf:0,rs:"88/A",ar:"$130K-$180K"},tl:[{t:"35m ago",e:"<strong>National Funding</strong> reviewing"}]},
-{id:6,biz:"Casa Verde Landscaping",ind:"Services",st:"AZ",rev:42000,req:35000,status:"reviewing",time:"1h ago",rg:"C",rs:58,offers:[{f:"BridgeCap",a:22000,fc:1.45,s:"active"}],ai:{rev:"$42K",nsf:6,rs:"58/C",ar:"$18K-$28K"},tl:[{t:"1h ago",e:"<strong>BridgeCap</strong> offer submitted"}]},
-{id:7,biz:"TechServe IT",ind:"Services",st:"IL",rev:155000,req:120000,status:"funded",time:"3h ago",rg:"A",rs:91,offers:[{f:"Libertas",a:120000,fc:1.28,s:"active"},{f:"Forward Financing",a:115000,fc:1.30,s:"active"}],ai:{rev:"$155K",nsf:0,rs:"91/A",ar:"$95K-$125K"},tl:[{t:"3h ago",e:"Deal <strong>funded</strong> via Libertas $120K"}]},
-{id:8,biz:"Harbor Fish Market",ind:"Restaurant",st:"MA",rev:62000,req:50000,status:"new",time:"38m ago",rg:"B",rs:71,offers:[],ai:{rev:"$62K",nsf:4,rs:"71/B",ar:"$30K-$45K"},tl:[{t:"38m ago",e:"Deal posted"}]},
-{id:9,biz:"Sunrise Auto Body",ind:"Auto Repair",st:"GA",rev:58000,req:45000,status:"live",time:"1.5h ago",rg:"B",rs:73,offers:[{f:"Credibly",a:38000,fc:1.38,s:"active"},{f:"Capital Group",a:40000,fc:1.41,s:"active"}],ai:{rev:"$58K",nsf:3,rs:"73/B",ar:"$30K-$42K"},tl:[{t:"1.5h ago",e:"<strong>Capital Group</strong> offer submitted"}]},
-{id:10,biz:"Prestige Plumbing",ind:"Construction",st:"OH",rev:87000,req:70000,status:"live",time:"45m ago",rg:"B",rs:76,offers:[{f:"Fora Financial",a:62000,fc:1.36,s:"active"}],ai:{rev:"$87K",nsf:2,rs:"76/B",ar:"$50K-$68K"},tl:[{t:"45m ago",e:"<strong>Fora Financial</strong> offer submitted"}]},
-{id:11,biz:"Golden Dragon",ind:"Restaurant",st:"CA",rev:92000,req:85000,status:"live",time:"52m ago",rg:"A",rs:80,offers:[{f:"Forward Financing",a:72000,fc:1.34,s:"active"},{f:"National Funding",a:78000,fc:1.37,s:"active"},{f:"Rapid Finance",a:75000,fc:1.33,s:"reviewing"}],ai:{rev:"$92K",nsf:1,rs:"80/A",ar:"$60K-$82K"},tl:[{t:"52m ago",e:"<strong>Rapid Finance</strong> reviewing"}]},
-{id:12,biz:"AllStar Retail",ind:"Retail",st:"TX",rev:115000,req:95000,status:"reviewing",time:"2h ago",rg:"B",rs:70,offers:[{f:"Apex Funding",a:80000,fc:1.42,s:"active"},{f:"BridgeCap",a:75000,fc:1.39,s:"active"}],ai:{rev:"$115K",nsf:5,rs:"70/B",ar:"$60K-$85K"},tl:[{t:"2h ago",e:"<strong>BridgeCap</strong> offer submitted"}]}
-];
-let fl={i:'all',s:'all',r:'all'};
-function tf(b,t){b.parentElement.querySelectorAll('.ch').forEach(c=>c.classList.remove('on'));b.classList.add('on');fl[t]=b.dataset.v;fD()}
-function uR(){document.getElementById('rV').textContent='$'+document.getElementById('aR').value+'K';fD()}
-function fm(n){return n>=1000?'$'+(n/1000).toFixed(0)+'K':'$'+n}
-function fD(){const q=document.getElementById('sI').value.toLowerCase(),mx=parseInt(document.getElementById('aR').value)*1000,so=document.getElementById('sS').value;let r=D.filter(d=>{if(fl.i!=='all'&&d.ind!==fl.i)return false;if(fl.s!=='all'&&d.status!==fl.s)return false;if(fl.r!=='all'&&d.rg!==fl.r)return false;if(d.req>mx)return false;if(q&&!d.biz.toLowerCase().includes(q)&&!d.ind.toLowerCase().includes(q)&&!d.st.toLowerCase().includes(q))return false;return true});if(so==='amount-high')r.sort((a,b)=>b.req-a.req);else if(so==='amount-low')r.sort((a,b)=>a.req-b.req);else if(so==='offers')r.sort((a,b)=>b.offers.length-a.offers.length);else if(so==='risk')r.sort((a,b)=>b.rs-a.rs);rD(r)}
-function rD(list){document.getElementById('dC').textContent=list.length;document.getElementById('dG').innerHTML=list.map((d,i)=>{const rc=d.rg==='A'?'a':d.rg==='B'?'b':'c',bc=d.rs>=75?'h':d.rs>=60?'m':'lo',sl=d.status[0].toUpperCase()+d.status.slice(1);return '<div class="dc fi2" style="animation-delay:'+(i*.04)+'s" onclick="oD('+d.id+')"><div class="dt"><div class="ds '+d.status+'">'+(d.status==='live'?'<span class="dot"></span>':'')+sl+'</div><div class="dtm mono">'+d.time+'</div></div><div class="dbz">'+d.biz+'</div><div class="dts"><span class="tg i">'+d.ind+'</span><span class="tg s">'+d.st+'</span></div><div class="rr"><span class="rs '+rc+'">'+d.rg+'</span><div class="rt"><div class="rf '+bc+'" style="width:'+d.rs+'%"></div></div><span class="mono" style="font-size:10px;color:var(--tx3)">'+d.rs+'</span></div><div class="df"><div class="dfi"><div class="fl">Requested</div><div class="fv">'+fm(d.req)+'</div></div><div class="dfi"><div class="fl">Monthly Rev</div><div class="fv ac">'+fm(d.rev)+'/mo</div></div></div><div class="dbot"><div class="doc"><span class="cn">'+d.offers.length+'</span>'+(d.offers.length===1?'offer':'offers')+'</div><button class="dvb">View Deal →</button></div></div>'}).join('')}
-function oD(id){const d=D.find(x=>x.id===id);if(!d)return;const oH=d.offers.length>0?'<div class="mof"><div class="mof-h"><h3>Competing Offers <span class="ocb">'+d.offers.length+'</span></h3></div><table class="ot"><thead><tr><th>Funder</th><th>Amount</th><th>Factor</th><th>Status</th><th></th></tr></thead><tbody>'+d.offers.map(o=>'<tr><td class="ofn">'+o.f+'</td><td class="oam mono">'+fm(o.a)+'</td><td class="mono" style="color:var(--tx2)">'+o.fc.toFixed(2)+'</td><td><span class="obg '+(o.s==='active'?'ac':'rv')+'">'+(o.s[0].toUpperCase()+o.s.slice(1))+'</span></td><td>'+(o.s==='active'?'<button class="oac" onclick="aO(event)">Accept</button>':'')+'</td></tr>').join('')+'</tbody></table></div>':'<div class="mof" style="text-align:center;padding:40px"><div style="font-size:40px;margin-bottom:12px">⏳</div><div style="font-weight:600;margin-bottom:6px">Waiting for Offers</div><div style="font-size:13px;color:var(--tx3)">Funders are reviewing. Offers typically arrive within 4 hours.</div></div>';document.getElementById('mB').innerHTML='<div class="mh2"><div class="mst '+d.status+'">'+(d.status==='live'?'<span class="dot"></span>':'')+d.status.toUpperCase()+' · '+d.time+'</div><div class="mbz">'+d.biz+'</div><div class="mts"><span class="tg i">'+d.ind+'</span><span class="tg s">'+d.st+'</span><span class="rs '+(d.rg==='A'?'a':'b')+'" style="font-size:11px">'+d.rg+' · '+d.rs+'</span></div><div class="mfg"><div class="mf"><div class="l">Requested</div><div class="v">'+fm(d.req)+'</div></div><div class="mf"><div class="l">Monthly Rev</div><div class="v ac">'+fm(d.rev)+'</div></div><div class="mf"><div class="l">Offers</div><div class="v">'+d.offers.length+'</div></div><div class="mf"><div class="l">Best Factor</div><div class="v ac">'+(d.offers.length>0?Math.min(...d.offers.filter(o=>o.s==='active').map(o=>o.fc)).toFixed(2):'—')+'</div></div></div></div><div class="mai"><div class="mai-l">🧠 AI BankIQ</div><div class="mai-g"><div class="mai-i"><div class="al">Revenue</div><div class="av">'+d.ai.rev+'</div></div><div class="mai-i"><div class="al">NSFs</div><div class="av '+(d.ai.nsf<=2?'g':'w')+'">'+d.ai.nsf+'</div></div><div class="mai-i"><div class="al">Risk</div><div class="av g">'+d.ai.rs+'</div></div><div class="mai-i"><div class="al">Approval</div><div class="av">'+d.ai.ar+'</div></div></div></div>'+oH+'<div class="mtl"><h3>Timeline</h3><div class="tll">'+d.tl.map(t=>'<div class="tli"><div class="tt mono">'+t.t+'</div><div class="te">'+t.e+'</div></div>').join('')+'</div></div>';document.getElementById('mO').classList.add('open');document.body.style.overflow='hidden'}
-function cM(e){if(e.target===document.getElementById('mO'))cMF()}
-function cMF(){document.getElementById('mO').classList.remove('open');document.body.style.overflow=''}
-function aO(e){e.stopPropagation();e.target.textContent='Accepted ✓';e.target.style.pointerEvents='none';e.target.style.background='var(--gn)';e.target.style.boxShadow='0 0 12px rgba(52,211,153,.3)';e.target.closest('tr').style.background='var(--gnl)'}
-const msgs=[{t:'<strong>Apex Funding</strong> offer on <strong>QuickFix Auto</strong>'},{t:'New deal: <strong>Bright Smile Dental</strong> — $75K'},{t:'<strong>Forward Financing</strong> reviewing <strong>Golden Dragon</strong>'},{t:'<strong>Credibly</strong> offer on <strong>Metro Logistics</strong>'},{t:'Deal <strong>funded</strong>: TechServe IT — $120K'},{t:'<strong>National Funding</strong> offer on <strong>AllStar Retail</strong>'}];
-let ai=0;function sA(){const c=document.getElementById('aP'),m=msgs[ai++%msgs.length],d=document.createElement('div');d.className='ac2';d.innerHTML='<div class="ah"><span class="bk"></span>Activity</div><div class="at">'+m.t+'</div><div class="atm mono">Just now</div>';c.prepend(d);while(c.children.length>3)c.lastChild.remove()}
-setTimeout(()=>sA(),3000);setInterval(()=>sA(),8000);
-rD(D);
-</script>
-</body></html>
+  <div class="topbar">
+    <div class="nav">
+      <a href="privatecreditmca-landing.html" class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M5 16.5V11.5C5 10.67 5.67 10 6.5 10H8.5C9.33 10 10 10.67 10 11.5V16.5C10 17.33 9.33 18 8.5 18H6.5C5.67 18 5 17.33 5 16.5Z" fill="white"/>
+            <path d="M11 16.5V7.5C11 6.67 11.67 6 12.5 6H14.5C15.33 6 16 6.67 16 7.5V16.5C16 17.33 15.33 18 14.5 18H12.5C11.67 18 11 17.33 11 16.5Z" fill="white" fill-opacity="0.92"/>
+            <path d="M17 16.5V4.5C17 3.67 17.67 3 18.5 3H20.5C21.33 3 22 3.67 22 4.5V16.5C22 17.33 21.33 18 20.5 18H18.5C17.67 18 17 17.33 17 16.5Z" fill="white" fill-opacity="0.82"/>
+            <path d="M4 20H22" stroke="white" stroke-opacity="0.45" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-wordmark">PrivateCredit<span>MCA</span></span>
+      </a>
+
+      <div class="nav-links">
+        <a href="privatecreditmca-landing.html">Home</a>
+        <a href="#" class="active">Marketplace</a>
+        <a href="privatecreditmca-account.html?view=profile">Dashboard</a>
+        <a href="privatecreditmca-funders.html">Funder Directory</a>
+      </div>
+
+      <div class="nav-actions">
+        <a href="privatecreditmca-account.html?view=login" class="btn-ghost">Log in</a>
+        <a href="privatecreditmca-submit.html" class="btn">Submit a deal →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="app">
+    <aside class="sidebar">
+      <div class="side-section">
+        <div class="side-label">Marketplace stats</div>
+        <div class="stats-grid">
+          <div class="stat-card"><strong id="statDeals">136</strong><span>Active deals</span></div>
+          <div class="stat-card"><strong>$9.9M</strong><span>Pipeline value</span></div>
+          <div class="stat-card"><strong>50+</strong><span>Funders active</span></div>
+          <div class="stat-card"><strong>4.2h</strong><span>Average first offer</span></div>
+        </div>
+      </div>
+
+      <div class="side-section">
+        <div class="side-label">Search</div>
+        <input class="search" placeholder="Search deals, industry, state..." id="searchInput" oninput="filterDeals()">
+      </div>
+
+      <div class="side-section">
+        <div class="side-label">Industry</div>
+        <div class="chip-group" id="industryChips">
+          <button class="chip active" data-type="industry" data-value="all">All</button>
+          <button class="chip" data-type="industry" data-value="Restaurant">Restaurant</button>
+          <button class="chip" data-type="industry" data-value="Auto Repair">Auto</button>
+          <button class="chip" data-type="industry" data-value="Construction">Construction</button>
+          <button class="chip" data-type="industry" data-value="Retail">Retail</button>
+          <button class="chip" data-type="industry" data-value="Medical">Medical</button>
+          <button class="chip" data-type="industry" data-value="Trucking">Trucking</button>
+          <button class="chip" data-type="industry" data-value="Services">Services</button>
+        </div>
+      </div>
+
+      <div class="side-section">
+        <div class="side-label">Status</div>
+        <div class="chip-group" id="statusChips">
+          <button class="chip active" data-type="status" data-value="all">All</button>
+          <button class="chip" data-type="status" data-value="live">Live</button>
+          <button class="chip" data-type="status" data-value="new">New</button>
+          <button class="chip" data-type="status" data-value="reviewing">Reviewing</button>
+          <button class="chip" data-type="status" data-value="funded">Funded</button>
+        </div>
+      </div>
+
+      <div class="side-section">
+        <div class="side-label">Funding amount</div>
+        <div class="slider-wrap">
+          <input type="range" min="10" max="500" value="500" id="amountRange" oninput="updateRange()">
+          <div class="slider-meta"><span>$10K</span><strong id="rangeValue">$500K</strong></div>
+        </div>
+      </div>
+
+      <div class="side-section">
+        <div class="side-label">Risk grade</div>
+        <div class="chip-group" id="riskChips">
+          <button class="chip active" data-type="risk" data-value="all">All</button>
+          <button class="chip" data-type="risk" data-value="A">A</button>
+          <button class="chip" data-type="risk" data-value="B">B</button>
+          <button class="chip" data-type="risk" data-value="C">C</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="hero-row">
+        <div class="hero-panel">
+          <div class="eyebrow"><span class="eyebrow-dot"></span>Live market now</div>
+          <h1>See where funders are moving.</h1>
+          <p>Browse active MCA opportunities, compare live competition, and drill into risk, structure, and velocity from one marketplace surface.</p>
+          <div class="hero-metrics">
+            <div class="hero-metric"><span>Deals live now</span><strong>136</strong></div>
+            <div class="hero-metric"><span>Avg. offers / deal</span><strong>2.8</strong></div>
+            <div class="hero-metric"><span>Best active pocket</span><strong>Construction</strong></div>
+          </div>
+        </div>
+
+        <div class="pulse-panel">
+          <div class="panel-kicker">Market pulse</div>
+          <div class="pulse-list">
+            <div class="pulse-item">
+              <div><strong>Construction</strong><small>High competition this hour</small></div>
+              <div class="trend up">↑ 12%</div>
+            </div>
+            <div class="pulse-item">
+              <div><strong>Restaurant</strong><small>Offers accelerating</small></div>
+              <div class="trend up">↑ 23%</div>
+            </div>
+            <div class="pulse-item">
+              <div><strong>Retail</strong><small>More selective underwriting</small></div>
+              <div class="trend down">↓ 5%</div>
+            </div>
+            <div class="pulse-item">
+              <div><strong>Trucking</strong><small>Large-ticket demand</small></div>
+              <div class="trend up">↑ 18%</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="toolbar">
+        <div class="toolbar-left">
+          <h2>Live Marketplace <span class="live-pill"><i></i> live</span></h2>
+        </div>
+        <div class="toolbar-right">
+          <span>Showing <strong id="dealCount">12</strong> deals</span>
+          <select class="select" id="sortSelect" onchange="filterDeals()">
+            <option value="newest">Newest</option>
+            <option value="amount-high">Highest amount</option>
+            <option value="amount-low">Lowest amount</option>
+            <option value="offers">Most offers</option>
+            <option value="risk">Best risk</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="deal-grid" id="dealGrid"></section>
+    </main>
+  </div>
+
+  <aside class="feed" id="activityFeed"></aside>
+
+  <div class="modal" id="modal" onclick="closeModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="closeModalForce()">✕</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const DEALS = [
+      {id:1,biz:"QuickFix Auto Repair",ind:"Auto Repair",st:"TX",rev:74000,req:80000,status:"live",time:"2m ago",rg:"B",rs:78,offers:[{f:"Apex Funding",a:60000,fc:1.37,s:"active"},{f:"Capital Group",a:58000,fc:1.35,s:"active"},{f:"Atlas Capital",a:62000,fc:1.40,s:"active"}],ai:{rev:"$74K",nsf:2,rs:"78/B",ar:"$45K–$62K"},tl:[{t:"2m ago",e:"<strong>Atlas Capital</strong> offer: $62K @ 1.40"},{t:"18m ago",e:"<strong>Capital Group</strong> offer submitted"},{t:"1h ago",e:"Deal posted"}]},
+      {id:2,biz:"Nonna's Trattoria",ind:"Restaurant",st:"NY",rev:70000,req:65000,status:"live",time:"8m ago",rg:"B",rs:74,offers:[{f:"Forward Financing",a:52000,fc:1.36,s:"active"},{f:"BridgeCap",a:55000,fc:1.38,s:"active"}],ai:{rev:"$70K",nsf:3,rs:"74/B",ar:"$40K–$55K"},tl:[{t:"8m ago",e:"<strong>BridgeCap</strong> offer submitted"},{t:"42m ago",e:"<strong>Forward Financing</strong> offer submitted"}]},
+      {id:3,biz:"Peak Roofing Co",ind:"Construction",st:"FL",rev:128000,req:110000,status:"live",time:"14m ago",rg:"A",rs:85,offers:[{f:"Rapid Finance",a:105000,fc:1.32,s:"active"},{f:"Libertas",a:110000,fc:1.36,s:"reviewing"}],ai:{rev:"$128K",nsf:0,rs:"85/A",ar:"$80K–$110K"},tl:[{t:"14m ago",e:"<strong>Libertas</strong> reviewing"},{t:"28m ago",e:"<strong>Rapid Finance</strong> offer submitted"}]},
+      {id:4,biz:"Bright Smile Dental",ind:"Medical",st:"CA",rev:95000,req:75000,status:"new",time:"22m ago",rg:"A",rs:82,offers:[],ai:{rev:"$95K",nsf:1,rs:"82/A",ar:"$55K–$75K"},tl:[{t:"22m ago",e:"Deal posted"}]},
+      {id:5,biz:"Metro Logistics LLC",ind:"Trucking",st:"NJ",rev:210000,req:180000,status:"live",time:"35m ago",rg:"A",rs:88,offers:[{f:"Credibly",a:160000,fc:1.29,s:"active"},{f:"Fora Financial",a:170000,fc:1.33,s:"active"},{f:"Rapid Finance",a:165000,fc:1.31,s:"active"},{f:"National Funding",a:175000,fc:1.35,s:"reviewing"}],ai:{rev:"$210K",nsf:0,rs:"88/A",ar:"$130K–$180K"},tl:[{t:"35m ago",e:"<strong>National Funding</strong> reviewing"}]},
+      {id:6,biz:"Casa Verde Landscaping",ind:"Services",st:"AZ",rev:42000,req:35000,status:"reviewing",time:"1h ago",rg:"C",rs:58,offers:[{f:"BridgeCap",a:22000,fc:1.45,s:"active"}],ai:{rev:"$42K",nsf:6,rs:"58/C",ar:"$18K–$28K"},tl:[{t:"1h ago",e:"<strong>BridgeCap</strong> offer submitted"}]},
+      {id:7,biz:"TechServe IT",ind:"Services",st:"IL",rev:155000,req:120000,status:"funded",time:"3h ago",rg:"A",rs:91,offers:[{f:"Libertas",a:120000,fc:1.28,s:"active"},{f:"Forward Financing",a:115000,fc:1.30,s:"active"}],ai:{rev:"$155K",nsf:0,rs:"91/A",ar:"$95K–$125K"},tl:[{t:"3h ago",e:"Deal <strong>funded</strong> via Libertas $120K"}]},
+      {id:8,biz:"Harbor Fish Market",ind:"Restaurant",st:"MA",rev:62000,req:50000,status:"new",time:"38m ago",rg:"B",rs:71,offers:[],ai:{rev:"$62K",nsf:4,rs:"71/B",ar:"$30K–$45K"},tl:[{t:"38m ago",e:"Deal posted"}]},
+      {id:9,biz:"Sunrise Auto Body",ind:"Auto Repair",st:"GA",rev:58000,req:45000,status:"live",time:"1.5h ago",rg:"B",rs:73,offers:[{f:"Credibly",a:38000,fc:1.38,s:"active"},{f:"Capital Group",a:40000,fc:1.41,s:"active"}],ai:{rev:"$58K",nsf:3,rs:"73/B",ar:"$30K–$42K"},tl:[{t:"1.5h ago",e:"<strong>Capital Group</strong> offer submitted"}]},
+      {id:10,biz:"Prestige Plumbing",ind:"Construction",st:"OH",rev:87000,req:70000,status:"live",time:"45m ago",rg:"B",rs:76,offers:[{f:"Fora Financial",a:62000,fc:1.36,s:"active"}],ai:{rev:"$87K",nsf:2,rs:"76/B",ar:"$50K–$68K"},tl:[{t:"45m ago",e:"<strong>Fora Financial</strong> offer submitted"}]},
+      {id:11,biz:"Golden Dragon",ind:"Restaurant",st:"CA",rev:92000,req:85000,status:"live",time:"52m ago",rg:"A",rs:80,offers:[{f:"Forward Financing",a:72000,fc:1.34,s:"active"},{f:"National Funding",a:78000,fc:1.37,s:"active"},{f:"Rapid Finance",a:75000,fc:1.33,s:"reviewing"}],ai:{rev:"$92K",nsf:1,rs:"80/A",ar:"$60K–$82K"},tl:[{t:"52m ago",e:"<strong>Rapid Finance</strong> reviewing"}]},
+      {id:12,biz:"AllStar Retail",ind:"Retail",st:"TX",rev:115000,req:95000,status:"reviewing",time:"2h ago",rg:"B",rs:70,offers:[{f:"Apex Funding",a:80000,fc:1.42,s:"active"},{f:"BridgeCap",a:75000,fc:1.39,s:"active"}],ai:{rev:"$115K",nsf:5,rs:"70/B",ar:"$60K–$85K"},tl:[{t:"2h ago",e:"<strong>BridgeCap</strong> offer submitted"}]}
+    ];
+
+    const filters = { industry: 'all', status: 'all', risk: 'all' };
+
+    function formatMoney(n) {
+      return n >= 1000 ? '$' + (n / 1000).toFixed(0) + 'K' : '$' + n;
+    }
+
+    function riskClass(score) {
+      return score >= 75 ? 'high' : score >= 60 ? 'mid' : 'low';
+    }
+
+    function riskBadge(grade) {
+      return grade === 'A' ? 'a' : grade === 'B' ? 'b' : 'c';
+    }
+
+    function bestFactor(offers) {
+      const active = offers.filter(o => o.s === 'active');
+      return active.length ? Math.min(...active.map(o => o.fc)).toFixed(2) : '—';
+    }
+
+    function bindChips() {
+      document.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const type = chip.dataset.type;
+          chip.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          filters[type] = chip.dataset.value;
+          filterDeals();
+        });
+      });
+    }
+
+    function updateRange() {
+      const value = document.getElementById('amountRange').value;
+      document.getElementById('rangeValue').textContent = '$' + value + 'K';
+      filterDeals();
+    }
+
+    function filterDeals() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const max = parseInt(document.getElementById('amountRange').value, 10) * 1000;
+      const sort = document.getElementById('sortSelect').value;
+
+      let results = DEALS.filter(d => {
+        if (filters.industry !== 'all' && d.ind !== filters.industry) return false;
+        if (filters.status !== 'all' && d.status !== filters.status) return false;
+        if (filters.risk !== 'all' && d.rg !== filters.risk) return false;
+        if (d.req > max) return false;
+        if (query && ![d.biz, d.ind, d.st].some(v => v.toLowerCase().includes(query))) return false;
+        return true;
+      });
+
+      if (sort === 'amount-high') results.sort((a, b) => b.req - a.req);
+      else if (sort === 'amount-low') results.sort((a, b) => a.req - b.req);
+      else if (sort === 'offers') results.sort((a, b) => b.offers.length - a.offers.length);
+      else if (sort === 'risk') results.sort((a, b) => b.rs - a.rs);
+
+      renderDeals(results);
+    }
+
+    function renderDeals(list) {
+      document.getElementById('dealCount').textContent = list.length;
+      document.getElementById('dealGrid').innerHTML = list.map((deal) => `
+        <article class="deal-card" onclick="openDeal(${deal.id})">
+          <div class="deal-top">
+            <div class="status-pill ${deal.status}">${deal.status === 'live' ? '<i></i>' : ''}${deal.status}</div>
+            <div class="time mono">${deal.time}</div>
+          </div>
+
+          <h3 class="deal-title">${deal.biz}</h3>
+
+          <div class="meta-badges">
+            <span class="meta-badge brand">${deal.ind}</span>
+            <span class="meta-badge cyan">${deal.st}</span>
+          </div>
+
+          <div class="risk-row">
+            <div class="risk-badge ${riskBadge(deal.rg)}">${deal.rg}</div>
+            <div class="risk-track"><div class="risk-fill ${riskClass(deal.rs)}" style="width:${deal.rs}%"></div></div>
+            <div class="risk-score mono">${deal.rs}</div>
+          </div>
+
+          <div class="deal-metrics">
+            <div class="deal-metric"><span>Requested</span><strong>${formatMoney(deal.req)}</strong></div>
+            <div class="deal-metric"><span>Monthly revenue</span><strong class="brand">${formatMoney(deal.rev)}/mo</strong></div>
+          </div>
+
+          <div class="deal-bottom">
+            <div class="offer-count"><span class="offer-count-badge">${deal.offers.length}</span>${deal.offers.length} ${deal.offers.length === 1 ? 'offer' : 'offers'}</div>
+            <div class="view-link">View deal →</div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function openDeal(id) {
+      const d = DEALS.find(x => x.id === id);
+      if (!d) return;
+
+      const offersHtml = d.offers.length ? `
+        <div class="modal-subpanel">
+          <div class="offers-head">
+            <h3>Competing offers</h3>
+            <span class="count-pill">${d.offers.length}</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Funder</th>
+                <th>Amount</th>
+                <th>Factor</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              ${d.offers.map(o => `
+                <tr>
+                  <td><strong>${o.f}</strong></td>
+                  <td class="mono">${formatMoney(o.a)}</td>
+                  <td class="mono">${o.fc.toFixed(2)}</td>
+                  <td><span class="row-status ${o.s}">${o.s}</span></td>
+                  <td>${o.s === 'active' ? `<button class="accept-btn" onclick="acceptOffer(event)">Accept</button>` : ''}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      ` : `
+        <div class="modal-subpanel">
+          <div class="empty-state">
+            <div class="empty-icon">⏳</div>
+            <strong>Waiting for offers</strong>
+            <p style="margin-top:8px;">Funders are reviewing. Offers typically arrive within 4 hours.</p>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('modalBody').innerHTML = `
+        <div class="modal-status ${d.status}">${d.status === 'live' ? '<i></i>' : '<i></i>'}${d.status} · ${d.time}</div>
+        <h2 class="modal-title">${d.biz}</h2>
+        <div class="modal-tags">
+          <span class="meta-badge brand">${d.ind}</span>
+          <span class="meta-badge cyan">${d.st}</span>
+          <span class="risk-badge ${riskBadge(d.rg)}">${d.rg} · ${d.rs}</span>
+        </div>
+
+        <div class="modal-grid">
+          <div class="modal-metric"><span>Requested</span><strong>${formatMoney(d.req)}</strong></div>
+          <div class="modal-metric"><span>Monthly revenue</span><strong>${formatMoney(d.rev)}</strong></div>
+          <div class="modal-metric"><span>Offers</span><strong>${d.offers.length}</strong></div>
+          <div class="modal-metric"><span>Best factor</span><strong>${bestFactor(d.offers)}</strong></div>
+        </div>
+
+        <div class="modal-subpanel">
+          <div class="panel-kicker">AI BankIQ</div>
+          <div class="ai-grid">
+            <div class="ai-item"><span>Revenue</span><strong>${d.ai.rev}</strong></div>
+            <div class="ai-item"><span>NSFs</span><strong class="${d.ai.nsf <= 2 ? 'good' : 'warn'}">${d.ai.nsf}</strong></div>
+            <div class="ai-item"><span>Risk</span><strong class="good">${d.ai.rs}</strong></div>
+            <div class="ai-item"><span>Approval</span><strong>${d.ai.ar}</strong></div>
+          </div>
+        </div>
+
+        ${offersHtml}
+
+        <div class="modal-subpanel">
+          <div class="timeline-head">
+            <h3>Timeline</h3>
+          </div>
+          <div class="timeline">
+            ${d.tl.map(item => `
+              <div class="timeline-item">
+                <time class="mono">${item.t}</time>
+                <p>${item.e}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      document.getElementById('modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(e) {
+      if (e.target === document.getElementById('modal')) closeModalForce();
+    }
+
+    function closeModalForce() {
+      document.getElementById('modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function acceptOffer(e) {
+      e.stopPropagation();
+      const btn = e.currentTarget;
+      btn.textContent = 'Accepted ✓';
+      btn.classList.add('accepted');
+      btn.disabled = true;
+    }
+
+    const activityMessages = [
+      { t: '<strong>Apex Funding</strong> offer on <strong>QuickFix Auto</strong>' },
+      { t: 'New deal: <strong>Bright Smile Dental</strong> — $75K' },
+      { t: '<strong>Forward Financing</strong> reviewing <strong>Golden Dragon</strong>' },
+      { t: '<strong>Credibly</strong> offer on <strong>Metro Logistics</strong>' },
+      { t: 'Deal <strong>funded</strong>: TechServe IT — $120K' },
+      { t: '<strong>National Funding</strong> offer on <strong>AllStar Retail</strong>' }
+    ];
+
+    let feedIndex = 0;
+    function pushActivity() {
+      const feed = document.getElementById('activityFeed');
+      const msg = activityMessages[feedIndex++ % activityMessages.length];
+      const card = document.createElement('div');
+      card.className = 'feed-card';
+      card.innerHTML = `
+        <div class="feed-label"><i></i> Activity</div>
+        <p>${msg.t}</p>
+        <time class="mono">Just now</time>
+      `;
+      feed.prepend(card);
+      while (feed.children.length > 3) feed.lastChild.remove();
+    }
+
+    bindChips();
+    renderDeals(DEALS);
+    setTimeout(pushActivity, 2000);
+    setInterval(pushActivity, 8000);
+  </script>
+</body>
+</html>
